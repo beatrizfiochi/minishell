@@ -1,0 +1,5 @@
+*.o
+*.d
+.cache/
+compile_commands.json
+tests/btree/btree_test
