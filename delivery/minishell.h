@@ -1,24 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/31 18:59:31 by djunho            #+#    #+#             */
-/*   Updated: 2025/04/21 14:33:06 by bfiochi-         ###   ########.fr       */
+/*   Created: 2025/04/21 13:37:40 by bfiochi-          #+#    #+#             */
+/*   Updated: 2025/04/21 17:35:19 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft/libft.h"
-#include "minishell.h"
+#ifndef MINISHELL_H
+# define MINISHELL_H
 
-int	main(int argc, char *argv[], char *envp[])
-{
-	(void)argc;
-	(void)argv;
-	(void)envp;
-	ft_printf("Hello, World of minishell!\n");
-	run_minishell();
-	return (0);
-}
+# define PROMPT "My shell > "
+
+# include "libft/libft.h"
+
+int		run_minishell(void);
+
+void	printf_error(const char *error);
+
+char	*clean_string(char *str);           //APAGAR
+
+bool	are_closed_single_quotes(char *str);
+bool	are_closed_db_quotes(char *str);
+
+#endif
