@@ -6,7 +6,7 @@
 #    By: djunho <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/27 13:09:33 by djunho            #+#    #+#              #
-#    Updated: 2025/04/21 18:25:44 by djunho           ###   ########.fr        #
+#    Updated: 2025/04/21 18:49:14 by djunho           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -64,7 +64,7 @@ norminette:
 re: fclean all
 
 valgrind: all
-	valgrind --track-origins=yes ./$(NAME) $(RUN_ARGS)
+	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --suppressions=valgrind-supression ./$(NAME) $(RUN_ARGS)
 
 test: all
 	./$(NAME) $(RUN_ARGS)
