@@ -3,19 +3,18 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: djunho <marvin@42.fr>                      +#+  +:+       +#+         #
+#    By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/27 13:09:33 by djunho            #+#    #+#              #
-#    Updated: 2025/03/31 19:02:49 by djunho           ###   ########.fr        #
+#    Updated: 2025/04/21 14:08:38 by bfiochi-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME= minishell
 SRCS = main.c
 OBJS_DIR = objs
-OBJS = $(OBJS_DIR)/$(SRCS:.c=.o)
-
-DEPENDS = $(OBJS_DIR)/$(patsubst %.c,%.d,$(SRCS))
+OBJS = $(patsubst %.c,$(OBJS_DIR)/%.o,$(SRCS))
+DEPENDS = $(patsubst %.c,$(OBJS_DIR)/%.d,$(SRCS))
 
 CC = cc
 CFLAGS = -Wall -Werror -Wextra -ggdb
