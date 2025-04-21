@@ -12,9 +12,10 @@
 
 NAME= minishell
 SRCS = main.c
-OBJS = $(SRCS:.c=.o)
+OBJS_DIR = objs
+OBJS = $(OBJS_DIR)/$(SRCS:.c=.o)
 
-DEPENDS = $(patsubst %.c,%.d,$(SRCS))
+DEPENDS = $(OBJS_DIR)/$(patsubst %.c,%.d,$(SRCS))
 
 CC = cc
 CFLAGS = -Wall -Werror -Wextra -ggdb
@@ -43,8 +44,12 @@ $(NAME): $(OBJS)
 
 -include $(DEPENDS)
 
-%.o:%.c Makefile
+$(OBJS_DIR)/%.o:%.c Makefile | $(OBJS_DIR)
 	$(CC) $(CFLAGS) -MMD -MP -c $< -o $@
+
+# Create the object directory if it doesn't exist
+$(OBJS_DIR):
+	mkdir -p $(OBJS_DIR)
 
 libft:
 	make -C ./libft/ all
@@ -53,7 +58,7 @@ clean: soft_clean
 	make -C ./libft/ clean
 
 soft_clean:
-	rm -rf $(OBJS) $(DEPENDS)
+	rm -rf $(OBJS) $(DEPENDS) $(OBJS_DIR)
 
 fclean: soft_fclean
 	make -C ./libft/ fclean
