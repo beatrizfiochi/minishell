@@ -6,7 +6,7 @@
 /*   By: djunho <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 11:40:35 by djunho            #+#    #+#             */
-/*   Updated: 2025/04/21 15:02:34 by djunho           ###   ########.fr       */
+/*   Updated: 2025/04/21 19:03:05 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef BTREE_H
@@ -22,7 +22,9 @@ typedef struct s_btnode
 }	t_btnode;
 
 // Create a new btree node
-t_btnode	btree_new(void *content);
+t_btnode	*btree_new(void *content);
+void		btree_delete(t_btnode *node, void (*content_free)(void *));
+void		btree_clear(t_btnode *node, void (*content_free)(void *));
 
 typedef	int (*t_foreach_node_cb)(t_btnode *node, int ret_left);
 typedef	int (*t_foreach_leaf_cb)(t_btnode *node);

@@ -6,7 +6,7 @@
 /*   By: djunho <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 12:00:26 by djunho            #+#    #+#             */
-/*   Updated: 2025/04/21 17:29:15 by djunho           ###   ########.fr       */
+/*   Updated: 2025/04/21 19:10:06 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "btree.h"
@@ -44,34 +44,34 @@ bool	test2(void)
 		.str = "\tright",
 		ret = 0,
 	};
-	t_btnode right = btree_new(&c_right);
+	t_btnode *right = btree_new(&c_right);
 	t_content c_left = {
 		.str = "\tleft parent",
 		ret = 0,
 	};
-	t_btnode left = btree_new(&c_left);
+	t_btnode *left = btree_new(&c_left);
 	t_content c_parent = {
 		.str = "\tparent",
 		ret = 0,
 	};
-	t_btnode parent = btree_new(&c_parent);
-	parent.left = &left;
-	parent.right = &right;
+	t_btnode *parent = btree_new(&c_parent);
+	parent->left = left;
+	parent->right = right;
 
 	t_content c_left_right = {
 		.str = "\tleft right",
 		ret = 0,
 	};
-	t_btnode left_right = btree_new(&c_left_right);
+	t_btnode *left_right = btree_new(&c_left_right);
 	t_content c_left_left = {
 		.str = "\tleft left",
 		ret = 0,
 	};
-	t_btnode left_left = btree_new(&c_left_left);
-	left.left = &left_left;
-	left.right = &left_right;
+	t_btnode *left_left = btree_new(&c_left_left);
+	left->left = left_left;
+	left->right = left_right;
 	printf(MAGENTA);
-	btree_foreach_dfs(&parent, printf_string_node, printf_string_leaf);
+	btree_foreach_dfs(parent, printf_string_node, printf_string_leaf);
 	printf(RESET);
 	char *answer = readline("Do you see \"left, right, parent\" order? Y/n:");
 	if ((strcmp(answer, "y") == 0) || (strcmp(answer, "Y") == 0) || (strcmp(answer, "") == 0))
@@ -79,5 +79,6 @@ bool	test2(void)
 	else
 		ret = false;
 	free(answer);
+	btree_clear(parent, NULL);
 	return (ret);
 }

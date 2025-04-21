@@ -6,7 +6,7 @@
 /*   By: djunho <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 12:00:26 by djunho            #+#    #+#             */
-/*   Updated: 2025/04/21 18:19:52 by djunho           ###   ########.fr       */
+/*   Updated: 2025/04/21 19:28:07 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include <stdio.h>
@@ -30,12 +30,14 @@
 
 int	main(int argc, char* argv[])
 {
+	DECL_TEST(0);
 	DECL_TEST(1);
 	DECL_TEST(2);
 	DECL_TEST(3);
 	DECL_TEST(4);
 
 	bool (*func[])(void) = {
+		TEST(0),
 		TEST(1),
 		TEST(2),
 		TEST(3),

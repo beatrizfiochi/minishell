@@ -6,20 +6,41 @@
 /*   By: djunho <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 11:56:03 by djunho            #+#    #+#             */
-/*   Updated: 2025/04/21 17:41:27 by djunho           ###   ########.fr       */
+/*   Updated: 2025/04/21 19:02:31 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include <stddef.h>
+#include <stdlib.h>		// malloc
 #include "btree.h"
 
-t_btnode	btree_new(void *content)
+t_btnode	*btree_new(void *content)
 {
-	t_btnode node = {
+	t_btnode *node = malloc(sizeof(t_btnode));
+	*node = (t_btnode){
 		.content = content,
 		.left = NULL,
 		.right = NULL,
 	};
 	return (node);
+}
+
+void	btree_delete(t_btnode *node, void (*content_free)(void *))
+{
+	if (content_free != NULL)
+		content_free(node->content);
+	free(node);
+}
+
+void	btree_clear(t_btnode *node, void (*content_free)(void *))
+{
+	if (node == NULL)
+		return ;
+	if (node->left != NULL)
+		btree_clear(node->left, content_free);
+	if (node->right != NULL)
+		btree_clear(node->right, content_free);
+	btree_delete(node, content_free);
+	return ;
 }
 
 bool	btree_is_leaf(t_btnode *node)

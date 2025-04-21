@@ -6,14 +6,14 @@
 #    By: djunho <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/27 13:09:33 by djunho            #+#    #+#              #
-#    Updated: 2025/04/21 18:49:14 by djunho           ###   ########.fr        #
+#    Updated: 2025/04/21 19:27:48 by djunho           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME= btree_test
 BTREE_SRC = ../../delivery/btree/
 VPATH := . $(BTREE_SRC)
-SRCS = main.c test1.c test2.c test3.c test4.c $(BTREE_SRC)/btree.c
+SRCS = main.c test0.c test1.c test2.c test3.c test4.c $(BTREE_SRC)/btree.c
 OBJS_DIR = objs
 OBJS = $(patsubst %.c,$(OBJS_DIR)/%.o,$(notdir $(SRCS)))
 DEPENDS = $(patsubst %.c,$(OBJS_DIR)/%.d,$(SRCS))
