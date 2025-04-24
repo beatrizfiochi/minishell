@@ -6,14 +6,14 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 15:26:54 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/04/24 14:29:38 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/04/24 15:46:20 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 #include <stdio.h>       //printf
 #include <stdlib.h>
-#include "libft/libft.h"
+#include "../libft/libft.h"
 
 t_tokens	*create_token(const char *start, int len)
 {

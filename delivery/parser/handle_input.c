@@ -6,12 +6,12 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 17:01:04 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/04/22 15:27:33 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/04/24 15:45:51 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
-#include "libft/libft.h"
+#include "../minishell.h"
+#include "../libft/libft.h"
 #include <stdio.h>            //printf
 #include <stdbool.h>          //booleans
 
