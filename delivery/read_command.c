@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 17:00:20 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/04/21 17:35:31 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/04/24 14:30:02 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,20 +17,31 @@
 #include <unistd.h>				//write
 
 
+//APAGAR
+void printList(t_tokens* head)
+{
+    while (head != NULL) {
+        printf("Nó: %s\n", head->content);
+        head = head->next;
+    }
+}
+
 // 0 -> success
 // -1 -> error
 static int	read_command(void)
 {
-	char	*line;
-	char	*clean_line;
+	char		*line;
+	char		*clean_line;
+	t_tokens	*token_list;  //APAGAR
 
 	line = readline(PROMPT);
 	clean_line = clean_string(line);
 	if (clean_line == NULL)
 		return (-1);
 	printf("COMMAND RECEIVED: %s\n", clean_line);
-	are_closed_single_quotes(clean_line);
-	are_closed_db_quotes(clean_line);
+	token_list = tokenization(clean_line);
+	printList(token_list);         //APAGAR
+	free_tokens(token_list);
 	free(line);
 	free(clean_line);
 	return (0);

@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: djunho <marvin@42.fr>                      +#+  +:+       +#+         #
+#    By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/27 13:09:33 by djunho            #+#    #+#              #
-#    Updated: 2025/03/02 18:37:50 by djunho           ###   ########.fr        #
+#    Updated: 2025/04/22 17:04:38 by bfiochi-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,24 +29,28 @@ SRCSPRINTF = ft_printf/ft_printf.c ft_printf/ft_putnbr_base_fd.c \
 		ft_printf/ft_printf_specifier.c ft_printf/ft_printf_args_numbers_helper.c
 SRCSGETNEXTLINE = get_next_line/get_next_line_bonus.c \
 		get_next_line/get_next_line_utils_bonus.c
+SRCSUTILSMINISHELL = ft_strndup.c
 
 OBJS = $(SRCS:.c=.o)
 OBJSPARTTWO = $(SRCSPARTTWO:.c=.o)
 OBJSBONUS = $(SRCSBONUS:.c=.o)
 OBJSPRINTF = $(SRCSPRINTF:.c=.o)
 OBJSGETNEXTLINE = $(SRCSGETNEXTLINE:.c=.o)
+OBJSUTILSMINISHELL = $(SRCSUTILSMINISHELL:.c=.o)
 
 all: $(NAME)
 
-$(NAME): $(OBJS) $(OBJSPARTTWO) $(OBJSBONUS) $(OBJSPRINTF) $(OBJSGETNEXTLINE)
+$(NAME): $(OBJS) $(OBJSPARTTWO) $(OBJSBONUS) $(OBJSPRINTF) $(OBJSGETNEXTLINE) \
+	$(OBJSUTILSMINISHELL)
 	ar rc $(NAME) $(OBJS) $(OBJSPARTTWO) $(OBJSBONUS) $(OBJSPRINTF) \
-		$(OBJSGETNEXTLINE)
+		$(OBJSGETNEXTLINE) $(OBJSUTILSMINISHELL)
 
 %.o:%.c
 	$(CC) $(CFLAGS) -c $^ -o $@
 
 clean:
-	rm -rf $(OBJS) $(OBJSPARTTWO) $(OBJSBONUS) $(OBJSPRINTF) $(OBJSGETNEXTLINE)
+	rm -rf $(OBJS) $(OBJSPARTTWO) $(OBJSBONUS) $(OBJSPRINTF) $(OBJSGETNEXTLINE) \
+		$(OBJSUTILSMINISHELL)
 
 fclean: clean
 	rm -rf $(NAME)

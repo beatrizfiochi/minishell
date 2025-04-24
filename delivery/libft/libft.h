@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: djunho <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/27 13:09:15 by djunho            #+#    #+#             */
-/*   Updated: 2025/03/02 18:18:46 by djunho           ###   ########.fr       */
+/*   Updated: 2025/04/22 17:03:40 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 # include <stdbool.h>
 # include "ft_printf/ft_printf.h"
 # include "get_next_line/get_next_line_bonus.h"
+# include <stdlib.h>
 
 typedef struct s_list
 {
@@ -80,5 +81,8 @@ t_list		*ft_lstfind(t_list *lst, void *content,
 				bool (*f)(void *base, void *list_content));
 // Remove the node from the list
 void		ft_lstremove(t_list **lst, t_list *node);
+
+//utils for minishell
+char	*ft_strndup(const char *s, int len);
 
 #endif // LIBFT_H

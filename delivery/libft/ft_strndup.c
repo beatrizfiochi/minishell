@@ -1,28 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   handle_input.c                                     :+:      :+:    :+:   */
+/*   ft_strndup.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/21 17:01:04 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/04/22 15:27:33 by bfiochi-         ###   ########.fr       */
+/*   Created: 2025/04/22 16:45:56 by bfiochi-          #+#    #+#             */
+/*   Updated: 2025/04/23 10:51:19 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
-#include "libft/libft.h"
-#include <stdio.h>            //printf
-#include <stdbool.h>          //booleans
+#include "libft.h"
 
-char	*clean_string(char *str)    //APAGAR
+char	*ft_strndup(const char *s, int len)
 {
-	char *clean_input;
+    char	*dup;
 
-	if (str == NULL)
-		return (NULL);
-	clean_input = ft_strtrim(str, " ");
-	printf("%s.\n", clean_input);
-	return (clean_input);
+	dup = malloc(len + 1);
+    if (dup == NULL)
+        return NULL;
+    ft_strlcpy(dup, s, len + 1);
+    return (dup);
 }
-

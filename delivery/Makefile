@@ -6,12 +6,12 @@
 #    By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/27 13:09:33 by djunho            #+#    #+#              #
-#    Updated: 2025/04/21 17:01:10 by bfiochi-         ###   ########.fr        #
+#    Updated: 2025/04/23 10:48:59 by bfiochi-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME= minishell
-SRCS = main.c read_command.c utils.c handle_input.c
+SRCS = main.c read_command.c utils.c handle_input.c tokenization.c
 OBJS_DIR = objs
 OBJS = $(patsubst %.c,$(OBJS_DIR)/%.o,$(SRCS))
 DEPENDS = $(patsubst %.c,$(OBJS_DIR)/%.d,$(SRCS))
