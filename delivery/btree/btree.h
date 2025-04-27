@@ -12,7 +12,7 @@
 #ifndef BTREE_H
 # define BTREE_H
 
-#include "stdbool.h"
+# include "stdbool.h"
 
 typedef struct s_btnode
 {
@@ -26,11 +26,13 @@ t_btnode	*btree_new(void *content);
 void		btree_delete(t_btnode *node, void (*content_free)(void *));
 void		btree_clear(t_btnode *node, void (*content_free)(void *));
 
-typedef	int (*t_foreach_node_cb)(t_btnode *node, int ret_left);
-typedef	int (*t_foreach_leaf_cb)(t_btnode *node);
+typedef int	(*t_foreach_node_cb)(t_btnode *node, int ret_left);
+typedef int	(*t_foreach_leaf_cb)(t_btnode *node);
+
 // Runs a DFS approach
 // https://www.geeksforgeeks.org/dfs-traversal-of-a-tree-using-recursion/
 // Implements the In-order Traversal (left, root, right)
-int	btree_foreach_dfs(t_btnode *node, t_foreach_node_cb cb_node, t_foreach_leaf_cb cb_leaf);
+int			btree_foreach_dfs(t_btnode *node,
+				t_foreach_node_cb cb_node, t_foreach_leaf_cb cb_leaf);
 
 #endif // BTREE_H

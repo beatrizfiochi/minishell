@@ -83,6 +83,6 @@ t_list		*ft_lstfind(t_list *lst, void *content,
 void		ft_lstremove(t_list **lst, t_list *node);
 
 //utils for minishell
-char	*ft_strndup(const char *s, int len);
+char		*ft_strndup(const char *s, int len);
 
 #endif // LIBFT_H

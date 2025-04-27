@@ -15,7 +15,9 @@
 
 t_btnode	*btree_new(void *content)
 {
-	t_btnode *node = malloc(sizeof(t_btnode));
+	t_btnode	*node;
+
+	node = malloc(sizeof(t_btnode));
 	*node = (t_btnode){
 		.content = content,
 		.left = NULL,
@@ -50,14 +52,15 @@ bool	btree_is_leaf(t_btnode *node)
 	return ((node->left == NULL) && (node->right == NULL));
 }
 
-int	btree_foreach_dfs(t_btnode *node, t_foreach_node_cb cb_node, t_foreach_leaf_cb cb_leaf)
+int	btree_foreach_dfs(t_btnode *node,
+			t_foreach_node_cb cb_node, t_foreach_leaf_cb cb_leaf)
 {
 	int	ret;
 
 	if (node == NULL)
 		return (-1);
 	if (btree_is_leaf(node) && (cb_leaf != NULL))
-		return cb_leaf(node);
+		return (cb_leaf(node));
 	ret = 0;
 	if (node->left != NULL)
 		ret = btree_foreach_dfs(node->left, cb_node, cb_leaf);
