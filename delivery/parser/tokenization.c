@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 15:26:54 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/04/24 17:21:02 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/04/27 15:12:21 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,18 +15,18 @@
 #include <stdlib.h>
 #include "../libft/libft.h"
 
-t_tokens	*create_token(const char *start, int len)
+t_list	*create_token(const char *start, int len)
 {
-    t_tokens	*new;
+    t_list	*new;
 
-	new = malloc(sizeof(t_tokens));
+	new = malloc(sizeof(t_list));
     if (new == NULL)
         return NULL;
     new->content = ft_strndup(start, len);
     new->next = NULL;
     return (new);
 }
-int	append_token(t_tokens **head, t_tokens **tail, t_tokens *new)
+int	append_token(t_list **head, t_list **tail, t_list *new)
 {
 	if (new == NULL)
 		return (0);
@@ -38,9 +38,9 @@ int	append_token(t_tokens **head, t_tokens **tail, t_tokens *new)
 	return (1);
 }
 
-void	free_tokens(t_tokens *list)
+void	free_tokens(t_list *list)
 {
-	t_tokens	*tmp;
+	t_list	*tmp;
 	while (list != NULL)
 	{
 		tmp = list;
@@ -71,11 +71,11 @@ void	search_quotes(char *line, char *c, int *len)
 	}
 }
 
-t_tokens	*tokenization(char *line)
+t_list	*tokenization(char *line)
 {
-	t_tokens	*head_token;
-	t_tokens	*tail_token;
-	t_tokens	*new_token;
+	t_list	*head_token;
+	t_list	*tail_token;
+	t_list	*new_token;
 	char		*start;
 	char		quote;
 	int			len;

@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 17:00:20 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/04/24 16:55:55 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/04/27 15:12:51 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 
 
 //APAGAR
-void printList(t_tokens* head)
+void printList(t_list* head)
 {
     while (head != NULL) {
         printf("Nó: %s\n", head->content);
@@ -32,7 +32,7 @@ static int	read_command(void)
 {
 	char		*line;
 	char		*clean_line;
-	t_tokens	*token_list;  //APAGAR
+	t_list	*token_list;  //APAGAR
 
 	line = readline(PROMPT);
 	clean_line = clean_string(line);
