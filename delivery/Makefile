@@ -39,6 +39,9 @@ all: libft $(NAME)
 
 bonus: all
 
+debug: CFLAGS += -DTEST
+debug: all
+
 $(NAME): $(OBJS) libft/libft.a
 	$(CC) $(CFLAGS) $(OBJS) -Llibft -lft -lreadline -o $(NAME)
 
