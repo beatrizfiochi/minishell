@@ -6,13 +6,12 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 14:51:22 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/04/22 16:46:47 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/04/27 16:54:12 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft/libft.h"
 #include <unistd.h>           //write
-#include <stdlib.h>           //malloc
 
 void	printf_error(const char *error)
 {
@@ -22,4 +21,11 @@ void	printf_error(const char *error)
 		return ;
 	len = ft_strlen(error);
 	write(2, error, len);
+}
+
+char	*go_next_char(char *line, char c)
+{
+	while (*line != c && *line != '\0')
+		line++;
+	return (line);
 }

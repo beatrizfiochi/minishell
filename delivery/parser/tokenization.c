@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 15:26:54 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/04/27 15:12:21 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/04/27 16:51:26 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,30 +17,18 @@
 
 t_list	*create_token(const char *start, int len)
 {
-    t_list	*new;
+	char	*content;
 
-	new = malloc(sizeof(t_list));
-    if (new == NULL)
-        return NULL;
-    new->content = ft_strndup(start, len);
-    new->next = NULL;
-    return (new);
-}
-int	append_token(t_list **head, t_list **tail, t_list *new)
-{
-	if (new == NULL)
-		return (0);
-	if (*head == NULL)
-		*head = new;
-	else
-		(*tail)->next = new;
-	*tail = new;
-	return (1);
+	content = ft_strndup(start, len);
+	if (content == NULL)
+		return (NULL);
+	return (ft_lstnew(content));
 }
 
 void	free_tokens(t_list *list)
 {
 	t_list	*tmp;
+
 	while (list != NULL)
 	{
 		tmp = list;
@@ -50,51 +38,46 @@ void	free_tokens(t_list *list)
 	}
 }
 
-void	search_quotes(char *line, char *c, int *len)
+static void	search_token(char *line, char *c, int *len)
 {
 	if (line == NULL)
 		return ;
 	while (line[*len] != '\0' && (line[*len] != ' ' || *len == 0))
 	{
 		if (line[*len] == '\'' || line[*len] == '"')
-			{
-				*c = line[*len];
+		{
+			*c = line[*len];
+			(*len)++;
+			*len = go_next_char(&line[*len], *c) - line;
+			if (line[*len] == *c)
 				(*len)++;
-				while (line[*len] != '\0'&& line[*len] != *c)
-					(*len)++;
-				if (line[*len] == *c)
-					(*len)++;
-				return ;
-			}
-			else
-				(*len)++;
+			return ;
+		}
+		else
+			(*len)++;
 	}
 }
 
 t_list	*tokenization(char *line)
 {
 	t_list	*head_token;
-	t_list	*tail_token;
 	t_list	*new_token;
-	char		*start;
-	char		quote;
-	int			len;
+	char	quote;
+	int		len;
 
 	head_token = NULL;
-	tail_token = NULL;
 	quote = 0;
-    while (*line != '\0')
+	while (*line != '\0')
 	{
-        while (*line == ' ')
-            line++;
-        if (*line == '\0')
-            break;
-        start = line;
+		while (*line == ' ')
+			line++;
+		if (*line == '\0')
+			break ;
 		len = 0;
-		search_quotes(line, &quote, &len);
-		new_token = create_token(start, len);
-		if (append_token(&head_token, &tail_token, new_token) == 1)
-			line+= len;
-    }
-    return (head_token);
+		search_token(line, &quote, &len);
+		new_token = create_token(line, len);
+		ft_lstadd_back(&head_token, new_token);
+		line += len;
+	}
+	return (head_token);
 }

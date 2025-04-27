@@ -6,20 +6,13 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 15:52:57 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/04/27 15:26:46 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/04/27 16:34:37 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 #include <stdbool.h>					//bool
 
-
-static char	*go_next_char(char *line, char c)
-{
-	while (*line != c && *line != '\0')
-		line++;
-	return (line);
-}
 
 bool	search_op(char *line)
 {
