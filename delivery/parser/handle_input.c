@@ -22,7 +22,6 @@ char	*clean_string(char *str)    //APAGAR
 	if (str == NULL)
 		return (NULL);
 	clean_input = ft_strtrim(str, " ");
-	printf("%s.\n", clean_input);
 	return (clean_input);
 }
 

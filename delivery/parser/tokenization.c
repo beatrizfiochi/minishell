@@ -25,19 +25,6 @@ t_list	*create_token(const char *line, int len)
 	return (ft_lstnew(content));
 }
 
-void	free_tokens(t_list *list)
-{
-	t_list	*tmp;
-
-	while (list != NULL)
-	{
-		tmp = list;
-		list = list->next;
-		free(tmp->content);
-		free(tmp);
-	}
-}
-
 static int	is_op(char *line)
 {
 	if (*line == '\0')
