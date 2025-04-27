@@ -6,13 +6,13 @@
 #    By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/27 13:09:33 by djunho            #+#    #+#              #
-#    Updated: 2025/04/24 15:43:53 by bfiochi-         ###   ########.fr        #
+#    Updated: 2025/04/24 15:53:50 by bfiochi-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME= minishell
 SRCS = main.c parser/read_command.c utils.c parser/handle_input.c \
-	parser/tokenization.c
+	parser/tokenization.c parser/parse_cmd.c
 OBJS_DIR = objs
 OBJS = $(patsubst %.c,$(OBJS_DIR)/%.o,$(SRCS))
 DEPENDS = $(patsubst %.c,$(OBJS_DIR)/%.d,$(SRCS))

@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 17:00:20 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/04/24 15:45:32 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/04/24 16:55:55 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ static int	read_command(void)
 	if (clean_line == NULL)
 		return (-1);
 	printf("COMMAND RECEIVED: %s\n", clean_line);
+	printf("%s\n", search_op(line) ? "true" : "false");     //APAGAR
 	token_list = tokenization(clean_line);
 	printList(token_list);         //APAGAR
 	free_tokens(token_list);

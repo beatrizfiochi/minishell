@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 15:26:54 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/04/24 15:46:20 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/04/24 17:21:02 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,7 @@ void	search_quotes(char *line, char *c, int *len)
 					(*len)++;
 				if (line[*len] == *c)
 					(*len)++;
+				return ;
 			}
 			else
 				(*len)++;
