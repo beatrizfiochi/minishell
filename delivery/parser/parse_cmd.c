@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 15:52:57 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/04/27 14:29:08 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/04/27 14:59:07 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,21 +48,3 @@ bool	search_op(char *line)
 	}
 	return (false);
 }
-
-// t_commands	*parse_cmd(char *line)
-// {
-// 	t_commands	*head;
-// 	t_commands	*tail;
-// 	t_commands	*new;
-// 	char		*start;
-// 	char		*operator;
-// 	int			len;
-
-// 	head = NULL;
-// 	tail = NULL;
-// 	operator = "\0";
-// 	while (*line != '\0')
-// 	{
-// 		while
-// 	}
-// }
