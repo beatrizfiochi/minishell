@@ -6,30 +6,29 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 15:52:57 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/04/27 14:59:07 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/04/27 15:26:46 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-#include "../libft/libft.h"
 #include <stdbool.h>					//bool
+
+
+static char	*go_next_char(char *line, char c)
+{
+	while (*line != c && *line != '\0')
+		line++;
+	return (line);
+}
 
 bool	search_op(char *line)
 {
-	char	quote;
-
-	quote = 0;
 	if (line == NULL)
 		return (false);
 	while (*line != '\0')
 	{
 		if (*line == '\'' || *line == '"')
-		{
-			quote = *line;
-			line++;
-			while (*line != quote && *line != '\0')
-				line++;
-		}
+			line = go_next_char(line + 1, *line);
 		if (*line == '|')
 		{
 			if ((*(line + 1) != '|' && *(line + 1) != '&') && *(line + 1) != '\0')
