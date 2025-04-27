@@ -2,3 +2,4 @@
 *.d
 libft/*.a
 minishell
+compile_commands.json
