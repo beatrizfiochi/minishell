@@ -56,7 +56,9 @@ $(OBJS_DIR):
 $(OBJS_DIR)/%:
 	mkdir -p $(dir $@)
 
-libft/libft.a:
+libft/libft.a: libft
+
+libft:
 	make -C ./libft/ all
 
 clean: soft_clean
