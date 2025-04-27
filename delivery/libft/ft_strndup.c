@@ -1,24 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_strndup.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/31 18:59:31 by djunho            #+#    #+#             */
-/*   Updated: 2025/04/22 15:55:56 by bfiochi-         ###   ########.fr       */
+/*   Created: 2025/04/22 16:45:56 by bfiochi-          #+#    #+#             */
+/*   Updated: 2025/04/23 10:51:19 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft/libft.h"
-#include "minishell.h"
+#include "libft.h"
 
-int	main(int argc, char *argv[], char *envp[])
+char	*ft_strndup(const char *s, int len)
 {
-	(void)argc;
-	(void)argv;
-	(void)envp;
-	ft_printf("Hello, World of minishell!\n");
-	run_minishell();
-	return (0);
+    char	*dup;
+
+	dup = malloc(len + 1);
+    if (dup == NULL)
+        return NULL;
+    ft_strlcpy(dup, s, len + 1);
+    return (dup);
 }

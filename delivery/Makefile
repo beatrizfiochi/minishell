@@ -6,12 +6,13 @@
 #    By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/27 13:09:33 by djunho            #+#    #+#              #
-#    Updated: 2025/04/21 14:08:38 by bfiochi-         ###   ########.fr        #
+#    Updated: 2025/04/24 15:53:50 by bfiochi-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME= minishell
-SRCS = main.c
+SRCS = main.c parser/read_command.c utils.c parser/handle_input.c \
+	parser/tokenization.c parser/parse_cmd.c
 OBJS_DIR = objs
 OBJS = $(patsubst %.c,$(OBJS_DIR)/%.o,$(SRCS))
 DEPENDS = $(patsubst %.c,$(OBJS_DIR)/%.d,$(SRCS))
@@ -38,19 +39,24 @@ all: libft $(NAME)
 
 bonus: all
 
-$(NAME): $(OBJS)
-	$(CC) $(CFLAGS) $(OBJS) -Llibft -lft -o $(NAME)
+$(NAME): $(OBJS) libft/libft.a
+	$(CC) $(CFLAGS) $(OBJS) -Llibft -lft -lreadline -o $(NAME)
 
 -include $(DEPENDS)
 
-$(OBJS_DIR)/%.o:%.c Makefile | $(OBJS_DIR)
+# Rule for creating object files in $(OBJS_DIR)
+$(OBJS_DIR)/%.o:%.c Makefile | $(OBJS_DIR) $(dir $@)
 	$(CC) $(CFLAGS) -MMD -MP -c $< -o $@
 
 # Create the object directory if it doesn't exist
+# Create the directory for the object file if it doesn't exist
 $(OBJS_DIR):
 	mkdir -p $(OBJS_DIR)
 
-libft:
+$(OBJS_DIR)/%:
+	mkdir -p $(dir $@)
+
+libft/libft.a:
 	make -C ./libft/ all
 
 clean: soft_clean
@@ -73,7 +79,7 @@ re: fclean all
 soft_re: soft_fclean all
 
 valgrind: all
-	valgrind --track-origins=yes ./$(NAME) $(RUN_ARGS)
+	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --suppressions=valgrind-supression ./$(NAME) $(RUN_ARGS)
 
 test: all
 	./$(NAME) $(RUN_ARGS)

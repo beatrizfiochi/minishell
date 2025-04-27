@@ -1,24 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/31 18:59:31 by djunho            #+#    #+#             */
-/*   Updated: 2025/04/22 15:55:56 by bfiochi-         ###   ########.fr       */
+/*   Created: 2025/04/21 14:51:22 by bfiochi-          #+#    #+#             */
+/*   Updated: 2025/04/27 16:54:12 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft/libft.h"
-#include "minishell.h"
+#include <unistd.h>           //write
 
-int	main(int argc, char *argv[], char *envp[])
+void	printf_error(const char *error)
 {
-	(void)argc;
-	(void)argv;
-	(void)envp;
-	ft_printf("Hello, World of minishell!\n");
-	run_minishell();
-	return (0);
+	int	len;
+
+	if (error == NULL)
+		return ;
+	len = ft_strlen(error);
+	write(2, error, len);
+}
+
+char	*go_next_char(char *line, char c)
+{
+	while (*line != c && *line != '\0')
+		line++;
+	return (line);
 }

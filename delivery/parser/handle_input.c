@@ -1,24 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   handle_input.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/31 18:59:31 by djunho            #+#    #+#             */
-/*   Updated: 2025/04/22 15:55:56 by bfiochi-         ###   ########.fr       */
+/*   Created: 2025/04/21 17:01:04 by bfiochi-          #+#    #+#             */
+/*   Updated: 2025/04/24 15:45:51 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft/libft.h"
-#include "minishell.h"
+#include "../minishell.h"
+#include "../libft/libft.h"
+#include <stdio.h>            //printf
+#include <stdbool.h>          //booleans
 
-int	main(int argc, char *argv[], char *envp[])
+char	*clean_string(char *str)    //APAGAR
 {
-	(void)argc;
-	(void)argv;
-	(void)envp;
-	ft_printf("Hello, World of minishell!\n");
-	run_minishell();
-	return (0);
+	char *clean_input;
+
+	if (str == NULL)
+		return (NULL);
+	clean_input = ft_strtrim(str, " ");
+	printf("%s.\n", clean_input);
+	return (clean_input);
 }
+
