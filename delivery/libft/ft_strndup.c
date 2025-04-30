@@ -14,11 +14,11 @@
 
 char	*ft_strndup(const char *s, int len)
 {
-    char	*dup;
+	char	*dup;
 
 	dup = malloc(len + 1);
-    if (dup == NULL)
-        return NULL;
-    ft_strlcpy(dup, s, len + 1);
-    return (dup);
+	if (dup == NULL)
+		return (NULL);
+	ft_strlcpy(dup, s, len + 1);
+	return (dup);
 }

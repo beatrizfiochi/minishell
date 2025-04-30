@@ -11,14 +11,14 @@
 # **************************************************************************** #
 
 NAME= minishell
-SRCS = main.c parser/read_command.c utils.c parser/handle_input.c \
+SRCS = main.c read_command.c utils.c parser/handle_input.c \
 	parser/tokenization.c parser/parse_cmd.c
 OBJS_DIR = objs
 OBJS = $(patsubst %.c,$(OBJS_DIR)/%.o,$(SRCS))
 DEPENDS = $(patsubst %.c,$(OBJS_DIR)/%.d,$(SRCS))
 
 CC = cc
-CFLAGS = -Wall -Werror -Wextra -ggdb
+CFLAGS += -Wall -Werror -Wextra -ggdb
 
 # Check https://stackoverflow.com/questions/2214575/passing-arguments-to-make-run
 # If the first argument is "run"...
@@ -38,6 +38,9 @@ endif
 all: libft $(NAME)
 
 bonus: all
+
+debug: CFLAGS += -DTEST
+debug: all
 
 $(NAME): $(OBJS) libft/libft.a
 	$(CC) $(CFLAGS) $(OBJS) -Llibft -lft -lreadline -o $(NAME)

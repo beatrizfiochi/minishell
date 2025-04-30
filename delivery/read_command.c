@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "minishell.h"
 #include <stdio.h>				//printf
 #include <readline/readline.h>
 #include <stdlib.h>				//free
@@ -19,31 +19,49 @@
 #define PROMPT "My shell > "
 
 //APAGAR
-static void	printList(t_list* node)
+#ifndef TEST
+
+static void	debug_print_read_command(t_list *node, char *line)
 {
-    while (node != NULL) {
-        printf("Nó: %s\n", (char *)node->content);
-        node = node->next;
-    }
+	(void)node;
+	(void)line;
 }
+#else
+
+static void	debug_print_read_command(t_list *node, char *line)
+{
+	(void)node;
+	(void)line;
+	printf("Command received: %s\n", line);
+	printf("Found operator: %d\n", search_op(line));
+	while (node != NULL)
+	{
+		printf("Nodes: %s\n", (char *)node->content);
+		node = node->next;
+	}
+}
+#endif
 
 // 0 -> success
 // -1 -> error
 static int	read_command(void)
 {
-	char		*line;
-	char		*clean_line;
-	t_list	*token_list;  //APAGAR
+	char	*line;
+	char	*clean_line;
+	t_list	*token_list;
+	char	*prompt;
 
-	line = readline(PROMPT);
+	if (isatty(STDIN_FILENO))
+		prompt = PROMPT;
+	else
+		prompt = "";
+	line = readline(prompt);
 	clean_line = clean_string(line);
 	if (clean_line == NULL)
 		return (-1);
-	printf("COMMAND RECEIVED: %s\n", clean_line);
-	printf("%s\n", search_op(line) ? "true" : "false");     //APAGAR
 	token_list = tokenization(clean_line);
-	printList(token_list);         //APAGAR
-	free_tokens(token_list);
+	debug_print_read_command(token_list, clean_line);
+	ft_lstclear(&token_list, free);
 	free(line);
 	free(clean_line);
 	return (0);
@@ -56,10 +74,7 @@ int	run_minishell(void)
 	ret = read_command();
 	while (ret == 0)
 	{
-		printf("EXECUTANDO COMANDOS\n");
 		ret = read_command();
 	}
-	if (ret != 0)
-		printf_error("EOF\n");
 	return (ret);
 }

@@ -24,8 +24,6 @@ char	*clean_string(char *str);
 
 t_list	*tokenization(char *line);
 
-void	free_tokens(t_list *token);
-
 bool	search_op(char *line);
 
 char	*go_next_char(char *line, char c);
