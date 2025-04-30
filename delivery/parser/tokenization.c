@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 15:26:54 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/04/27 20:24:25 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/04/30 18:09:52 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ static void	search_token(char *line, char *c, int *len)
 		(*len)++;
 	while (line[*len] != '\0' && line[*len] != ' ' && is_op(&line[*len]) == 0)
 	{
-		if (line[*len] == '\'' || line[*len] == '"')
+		if ((line[*len] == '\'' || line[*len] == '"') && line[*len] != '\0')
 		{
 			*c = line[*len];
 			(*len)++;
@@ -74,9 +74,11 @@ t_list	*tokenization(char *line)
 
 	head_token = NULL;
 	quote = 0;
+	if (line == NULL)
+		return (NULL);
 	while (*line != '\0')
 	{
-		while (*line == ' ')
+		while (*line == ' ' && *line != '\0')
 			line++;
 		if (*line == '\0')
 			break ;

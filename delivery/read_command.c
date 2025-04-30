@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 17:00:20 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/04/27 16:26:42 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/04/30 18:15:04 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ static void	debug_print_read_command(t_list *node, char *line)
 	(void)node;
 	(void)line;
 	printf("Command received: %s\n", line);
-	printf("Found operator: %d\n", search_op(line));
+	printf("Found operator: %s\n", search_op(line)  ? "true" : "false");
 	while (node != NULL)
 	{
 		printf("Nodes: %s\n", (char *)node->content);
