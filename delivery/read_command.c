@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 17:00:20 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/05/04 16:43:07 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/05/04 17:03:26 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,8 @@ static int	read_command(void)
 	if (token_list != NULL)
 	{
 		btree = create_tree(token_list);
+		if (btree == NULL)
+			printf_error("Error to parse\n");
 		btree_foreach_dfs(btree, printf_string_node, printf_string_leaf);
 		btree_clear(btree, free);
 	}

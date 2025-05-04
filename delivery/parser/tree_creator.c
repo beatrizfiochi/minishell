@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 18:34:50 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/05/04 16:48:33 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/05/04 16:59:02 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,8 @@ t_btnode	*create_tree(t_list *token_list)
 	if (op_node == NULL)
 		return (create_node(token_list));
 	aux = prev_token(token_list, op_node);
+	if (aux == NULL)
+		return (NULL);
 	aux->next = NULL;
 	aux = op_node->next;
 	op_node->next = NULL;
