@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 17:00:20 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/05/05 18:50:38 by djunho           ###   ########.fr       */
+/*   Updated: 2025/05/06 10:44:55 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include <stdio.h>				//printf
 #include <unistd.h>				//write
 #include <readline/readline.h>
+#include <readline/history.h>
 #include "libft/libft.h"
 #include "minishell.h"
 #include "parser/parser.h"
@@ -56,6 +57,8 @@ static int	read_command(void)
 		line = readline(NULL);
 	if (line == NULL)
 		return (-1);
+	if (line != NULL && *line != '\0')
+		add_history (line);
 	token_list = tokenization(line);
 	debug_print_read_command(token_list, line);
 	if (token_list != NULL)
