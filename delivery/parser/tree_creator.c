@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 18:34:50 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/05/04 16:17:03 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/05/04 16:48:33 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ t_btnode	*create_node(t_list *token_list)
 	tree_node = btree_new(content);
 	return (tree_node);
 }
+
 t_list	*prev_token(t_list *token_list, t_list *current_token)
 {
 	if (token_list == NULL || token_list == current_token)

@@ -6,12 +6,12 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 14:14:02 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/05/04 16:12:06 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/05/04 16:48:08 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef	PARSER_H
-# define	PARSER_H
+#ifndef PARSER_H
+# define PARSER_H
 
 # include "../btree/btree.h"
 # include "../libft/libft.h"

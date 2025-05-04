@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 17:00:20 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/05/04 15:42:44 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/05/04 16:43:07 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,6 @@ static void	debug_print_read_command(t_list *node, char *line)
 	(void)node;
 	(void)line;
 	printf("Command received: %s\n", line);
-	// printf("Found operator: %s\n", search_op(line)  ? "true" : "false");
 	while (node != NULL)
 	{
 		printf("Nodes: %s\n", (char *)node->content);
@@ -69,7 +68,6 @@ static int	printf_string_leaf(t_btnode *node)
 static int	read_command(void)
 {
 	char		*line;
-	char		*clean_line;
 	t_list		*token_list;
 	char		*prompt;
 	t_btnode	*btree;
@@ -79,17 +77,18 @@ static int	read_command(void)
 	else
 		prompt = "";
 	line = readline(prompt);
-	clean_line = clean_string(line);
-	if (clean_line == NULL)
+	if (line == NULL)
 		return (-1);
-	token_list = tokenization(clean_line);
-	debug_print_read_command(token_list, clean_line);
-	btree = create_tree(token_list);
-	btree_foreach_dfs(btree, printf_string_node, printf_string_leaf);
-	btree_clear(btree, free);
+	token_list = tokenization(line);
+	debug_print_read_command(token_list, line);
+	if (token_list != NULL)
+	{
+		btree = create_tree(token_list);
+		btree_foreach_dfs(btree, printf_string_node, printf_string_leaf);
+		btree_clear(btree, free);
+	}
 	ft_lstclear(&token_list, free);
 	free(line);
-	free(clean_line);
 	return (0);
 }
 
