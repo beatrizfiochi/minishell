@@ -3,12 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   cmd.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: djunho <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 11:23:29 by djunho            #+#    #+#             */
-/*   Updated: 2025/04/21 11:46:21 by djunho           ###   ########.fr       */
+/*   Updated: 2025/05/04 16:37:39 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 #ifndef CMD_H
 # define CMD_H
 
@@ -16,6 +17,7 @@
 
 typedef enum e_node_op
 {
+	OP_INVALID,
 	OP_AND,
 	OP_OR,
 	OP_PIPE,
@@ -24,7 +26,7 @@ typedef enum e_node_op
 
 typedef struct s_cmd
 {
-	t_list	tokens;		// cmd followed by args
+	t_list	*tokens;		// cmd followed by args
 }	t_cmd;
 
 typedef struct s_content_node

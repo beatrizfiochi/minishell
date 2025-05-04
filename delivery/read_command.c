@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 17:00:20 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/04/27 16:26:42 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/05/04 17:03:26 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 #include <readline/readline.h>
 #include <stdlib.h>				//free
 #include <unistd.h>				//write
+#include "parser/parser.h"
+#include "cmd.h"
 
 #define PROMPT "My shell > "
 
@@ -33,7 +35,6 @@ static void	debug_print_read_command(t_list *node, char *line)
 	(void)node;
 	(void)line;
 	printf("Command received: %s\n", line);
-	printf("Found operator: %d\n", search_op(line));
 	while (node != NULL)
 	{
 		printf("Nodes: %s\n", (char *)node->content);
@@ -42,28 +43,54 @@ static void	debug_print_read_command(t_list *node, char *line)
 }
 #endif
 
+static void	each_list_node(void *content)
+{
+	printf("%s ", (char *)content);
+}
+
+static int	printf_string_node(t_btnode *node, int ret)
+{
+	(void)ret;
+	ft_lstiter(((t_content_node *)node->content)->cmd.tokens, each_list_node);
+	printf("\nOperator node> %d\n", ((t_content_node *)node->content)->op);
+	return (0);
+}
+
+static int	printf_string_leaf(t_btnode *node)
+{
+	ft_lstiter(((t_content_node *)node->content)->cmd.tokens, each_list_node);
+	printf("\nOperator leaf> %d\n", ((t_content_node *)node->content)->op);
+	return (0);
+}
+
 // 0 -> success
 // -1 -> error
 static int	read_command(void)
 {
-	char	*line;
-	char	*clean_line;
-	t_list	*token_list;
-	char	*prompt;
+	char		*line;
+	t_list		*token_list;
+	char		*prompt;
+	t_btnode	*btree;
 
 	if (isatty(STDIN_FILENO))
 		prompt = PROMPT;
 	else
 		prompt = "";
 	line = readline(prompt);
-	clean_line = clean_string(line);
-	if (clean_line == NULL)
+	if (line == NULL)
 		return (-1);
-	token_list = tokenization(clean_line);
-	debug_print_read_command(token_list, clean_line);
+	token_list = tokenization(line);
+	debug_print_read_command(token_list, line);
+	if (token_list != NULL)
+	{
+		btree = create_tree(token_list);
+		if (btree == NULL)
+			printf_error("Error to parse\n");
+		btree_foreach_dfs(btree, printf_string_node, printf_string_leaf);
+		btree_clear(btree, free);
+	}
 	ft_lstclear(&token_list, free);
 	free(line);
-	free(clean_line);
 	return (0);
 }
 

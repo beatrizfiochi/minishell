@@ -1,27 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   handle_input.c                                     :+:      :+:    :+:   */
+/*   parser.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/21 17:01:04 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/04/24 15:45:51 by bfiochi-         ###   ########.fr       */
+/*   Created: 2025/05/04 14:14:02 by bfiochi-          #+#    #+#             */
+/*   Updated: 2025/05/04 16:48:08 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
-#include "../libft/libft.h"
-#include <stdio.h>            //printf
-#include <stdbool.h>          //booleans
+#ifndef PARSER_H
+# define PARSER_H
 
-char	*clean_string(char *str)    //APAGAR
-{
-	char *clean_input;
+# include "../btree/btree.h"
+# include "../libft/libft.h"
+# include "../cmd.h"
 
-	if (str == NULL)
-		return (NULL);
-	clean_input = ft_strtrim(str, " ");
-	return (clean_input);
-}
+t_btnode	*create_node(t_list *token_list);
+t_btnode	*create_tree(t_list *token_list);
 
+t_node_op	op(char *token_str);
+
+t_list		*search_op(t_list *tokens);
+t_list		*tokenization(char *line);
+
+char		*go_next_char(char *line, char c);
+
+#endif
