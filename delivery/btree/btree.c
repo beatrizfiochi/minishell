@@ -6,7 +6,7 @@
 /*   By: djunho <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 11:56:03 by djunho            #+#    #+#             */
-/*   Updated: 2025/04/21 19:02:31 by djunho           ###   ########.fr       */
+/*   Updated: 2025/05/04 18:55:30 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include <stddef.h>
@@ -28,6 +28,8 @@ t_btnode	*btree_new(void *content)
 
 void	btree_delete(t_btnode *node, void (*content_free)(void *))
 {
+	if (node == NULL)
+		return ;
 	if (content_free != NULL)
 		content_free(node->content);
 	free(node);
