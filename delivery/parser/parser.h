@@ -1,25 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   parser.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/21 13:37:40 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/05/04 16:11:56 by bfiochi-         ###   ########.fr       */
+/*   Created: 2025/05/04 14:14:02 by bfiochi-          #+#    #+#             */
+/*   Updated: 2025/05/04 16:12:06 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-# define MINISHELL_H
+#ifndef	PARSER_H
+# define	PARSER_H
 
-# include "libft/libft.h"
+# include "../btree/btree.h"
+# include "../libft/libft.h"
+# include "../cmd.h"
 
-int		run_minishell(void);
+t_btnode	*create_node(t_list *token_list);
+t_btnode	*create_tree(t_list *token_list);
 
-void	printf_error(const char *error);
+t_node_op	op(char *token_str);
 
-//TODO: APAGAR
-char	*clean_string(char *str);
+t_list		*search_op(t_list *tokens);
+t_list		*tokenization(char *line);
+
+char		*go_next_char(char *line, char c);
 
 #endif

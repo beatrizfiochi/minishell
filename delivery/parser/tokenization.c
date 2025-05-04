@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 15:26:54 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/04/30 18:09:52 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/05/04 16:12:25 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include <stdio.h>       //printf
 #include <stdlib.h>
 #include "../libft/libft.h"
+#include "parser.h"
 
 t_list	*create_token(const char *line, int len)
 {
