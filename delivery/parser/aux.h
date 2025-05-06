@@ -1,25 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parser.h                                           :+:      :+:    :+:   */
+/*   aux.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: djunho <djunho@student.42porto.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/04 14:14:02 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/05/04 16:48:08 by bfiochi-         ###   ########.fr       */
+/*   Created: 2025/05/05 18:10:01 by djunho            #+#    #+#             */
+/*   Updated: 2025/05/05 18:10:54 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+#ifndef AUX_H
+# define AUX_H
 
-#ifndef PARSER_H
-# define PARSER_H
-
-# include "../btree/btree.h"
 # include "../libft/libft.h"
 
-t_btnode	*create_tree(t_list *token_list);
+// Find the previous item of the current_node
+t_list	*prev_list_item(t_list *first_node, t_list *current_node);
 
-t_list		*tokenization(char *line);
-
-char		*go_next_char(char *line, char c);
-
-#endif
+#endif // AUX_H

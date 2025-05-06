@@ -6,16 +6,30 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 18:34:50 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/05/04 16:59:02 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/05/05 18:12:14 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../btree/btree.h"
 #include "../minishell.h"
 #include "../cmd.h"
+#include "aux.h"
 #include "parser.h"
 
-t_list	*search_op(t_list *tokens)
+static t_node_op	op(char *token_str)
+{
+	if (*token_str == '\0')
+		return (OP_INVALID);
+	if (*token_str == '&' && *(token_str + 1) == '&')
+		return (OP_AND);
+	if (*token_str == '|' && *(token_str + 1) == '|')
+		return (OP_OR);
+	if (*token_str == '|')
+		return (OP_PIPE);
+	return (OP_CMD);
+}
+
+static t_list	*search_op(t_list *tokens)
 {
 	char		*content_token;
 	t_node_op	operator;
@@ -32,20 +46,7 @@ t_list	*search_op(t_list *tokens)
 	return (NULL);
 }
 
-t_node_op	op(char *token_str)
-{
-	if (*token_str == '\0')
-		return (OP_INVALID);
-	if (*token_str == '&' && *(token_str + 1) == '&')
-		return (OP_AND);
-	if (*token_str == '|' && *(token_str + 1) == '|')
-		return (OP_OR);
-	if (*token_str == '|')
-		return (OP_PIPE);
-	return (OP_CMD);
-}
-
-t_btnode	*create_node(t_list *token_list)
+static t_btnode	*create_node(t_list *token_list)
 {
 	t_content_node	*content;
 	t_btnode		*tree_node;
@@ -59,15 +60,19 @@ t_btnode	*create_node(t_list *token_list)
 	return (tree_node);
 }
 
-t_list	*prev_token(t_list *token_list, t_list *current_token)
+static void	delete_btree_node(t_btnode *node, t_list *left,
+								t_list *cur, t_list *right)
 {
-	if (token_list == NULL || token_list == current_token)
-		return (NULL);
-	while (token_list->next != NULL && token_list->next != current_token)
-		token_list = token_list->next;
-	return (token_list);
+	ft_lstclear(&left, free);
+	ft_lstclear(&cur, free);
+	ft_lstclear(&right, free);
+	btree_delete(node->left, free);
+	btree_delete(node->right, free);
+	btree_delete(node, free);
 }
 
+// Search for and operator
+// Every operator must be placed between 2 commands
 t_btnode	*create_tree(t_list *token_list)
 {
 	t_list		*op_node;
@@ -77,14 +82,22 @@ t_btnode	*create_tree(t_list *token_list)
 	op_node = search_op(token_list);
 	if (op_node == NULL)
 		return (create_node(token_list));
-	aux = prev_token(token_list, op_node);
-	if (aux == NULL)
+	aux = prev_list_item(token_list, op_node);
+	if ((op_node->next == NULL) || (aux == NULL))
+	{
+		ft_lstclear(&token_list, free);
 		return (NULL);
+	}
 	aux->next = NULL;
 	aux = op_node->next;
 	op_node->next = NULL;
 	tree = create_node(op_node);
 	tree->left = create_tree(token_list);
 	tree->right = create_tree(aux);
+	if ((tree->left == NULL) || (tree->right == NULL))
+	{
+		delete_btree_node(tree, token_list, op_node, aux);
+		tree = NULL;
+	}
 	return (tree);
 }

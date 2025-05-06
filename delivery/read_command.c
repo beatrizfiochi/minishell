@@ -6,61 +6,40 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 17:00:20 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/05/04 17:03:26 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/05/05 18:50:38 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
-#include <stdio.h>				//printf
-#include <readline/readline.h>
 #include <stdlib.h>				//free
+#include <stdio.h>				//printf
 #include <unistd.h>				//write
+#include <readline/readline.h>
+#include "libft/libft.h"
+#include "minishell.h"
 #include "parser/parser.h"
 #include "cmd.h"
+#include "debug.h"
 
 #define PROMPT "My shell > "
 
-//APAGAR
-#ifndef TEST
+__attribute__((weak)) void	debug_print_tree(t_btnode *tree)
+{
+	(void)tree;
+}
 
-static void	debug_print_read_command(t_list *node, char *line)
+__attribute__((weak)) void	debug_print_read_command(t_list *node, char *line)
 {
 	(void)node;
 	(void)line;
 }
-#else
 
-static void	debug_print_read_command(t_list *node, char *line)
+static void	free_btree_node(void *content)
 {
-	(void)node;
-	(void)line;
-	printf("Command received: %s\n", line);
-	while (node != NULL)
-	{
-		printf("Nodes: %s\n", (char *)node->content);
-		node = node->next;
-	}
-}
-#endif
+	t_content_node	*node_content;
 
-static void	each_list_node(void *content)
-{
-	printf("%s ", (char *)content);
-}
-
-static int	printf_string_node(t_btnode *node, int ret)
-{
-	(void)ret;
-	ft_lstiter(((t_content_node *)node->content)->cmd.tokens, each_list_node);
-	printf("\nOperator node> %d\n", ((t_content_node *)node->content)->op);
-	return (0);
-}
-
-static int	printf_string_leaf(t_btnode *node)
-{
-	ft_lstiter(((t_content_node *)node->content)->cmd.tokens, each_list_node);
-	printf("\nOperator leaf> %d\n", ((t_content_node *)node->content)->op);
-	return (0);
+	node_content = (t_content_node *)content;
+	ft_lstclear(&(node_content->cmd.tokens), free);
+	free(node_content);
 }
 
 // 0 -> success
@@ -69,14 +48,12 @@ static int	read_command(void)
 {
 	char		*line;
 	t_list		*token_list;
-	char		*prompt;
 	t_btnode	*btree;
 
 	if (isatty(STDIN_FILENO))
-		prompt = PROMPT;
+		line = readline(PROMPT);
 	else
-		prompt = "";
-	line = readline(prompt);
+		line = readline(NULL);
 	if (line == NULL)
 		return (-1);
 	token_list = tokenization(line);
@@ -86,10 +63,11 @@ static int	read_command(void)
 		btree = create_tree(token_list);
 		if (btree == NULL)
 			printf_error("Error to parse\n");
-		btree_foreach_dfs(btree, printf_string_node, printf_string_leaf);
-		btree_clear(btree, free);
+		debug_print_tree(btree);
+		btree_clear(btree, free_btree_node);
 	}
-	ft_lstclear(&token_list, free);
+	else
+		ft_lstclear(&token_list, free);
 	free(line);
 	return (0);
 }

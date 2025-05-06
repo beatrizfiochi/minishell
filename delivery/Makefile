@@ -6,13 +6,14 @@
 #    By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/27 13:09:33 by djunho            #+#    #+#              #
-#    Updated: 2025/05/04 16:45:37 by bfiochi-         ###   ########.fr        #
+#    Updated: 2025/05/05 18:34:47 by djunho           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME= minishell
-SRCS = main.c read_command.c utils.c parser/tokenization.c \
-	parser/tree_creator.c btree/btree.c
+SRCS = main.c read_command.c utils.c debug.c \
+	parser/tokenization.c parser/tree_creator.c parser/aux.c \
+	btree/btree.c
 OBJS_DIR = objs
 OBJS = $(patsubst %.c,$(OBJS_DIR)/%.o,$(SRCS))
 DEPENDS = $(patsubst %.c,$(OBJS_DIR)/%.d,$(SRCS))
