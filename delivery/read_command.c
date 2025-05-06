@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 17:00:20 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/05/06 10:44:55 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/05/06 17:44:46 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ static void	free_btree_node(void *content)
 
 // 0 -> success
 // -1 -> error
-static int	read_command(void)
+static int	read_command(t_list *var_list)
 {
 	char		*line;
 	t_list		*token_list;
@@ -61,6 +61,7 @@ static int	read_command(void)
 		add_history (line);
 	token_list = tokenization(line);
 	debug_print_read_command(token_list, line);
+	search_and_expand(token_list, var_list);
 	if (token_list != NULL)
 	{
 		btree = create_tree(token_list);
@@ -78,11 +79,20 @@ static int	read_command(void)
 int	run_minishell(void)
 {
 	int	ret;
+	t_list	*variable_list;
+	char	*name_1 = "oi";
+	char	*value_1 = "hi";
+	char	*name_2 = "tchau";
+	char	*value_2 = "bye";
 
-	ret = read_command();
+	variable_list = create_var_node(name_1, value_1);
+	variable_list->next = create_var_node(name_2, value_2);
+	ret = read_command(variable_list);
 	while (ret == 0)
 	{
-		ret = read_command();
+		printf("var_name = %s, var_value = %s\n", ((t_content_var *)(variable_list->content))->var_name, ((t_content_var *)(variable_list->content))->var_value);
+		printf("var_name = %s, var_value = %s\n", ((t_content_var *)(variable_list->next->content))->var_name, ((t_content_var *)(variable_list->next->content))->var_value);
+		ret = read_command(variable_list);
 	}
 	return (ret);
 }
