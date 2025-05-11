@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 18:15:43 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/05/06 18:00:44 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/05/11 15:23:26 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,17 @@ t_list	*create_var_node(char *name, char *value)
 	content->var_name = var_name;
 	content->var_value = var_value;
 	return (ft_lstnew(content));
+}
+
+void	free_var_content(void *var_content)
+{
+	t_content_var	*content;
+	if (var_content == NULL)
+		return ;
+	content = (t_content_var *)var_content;
+	free(content->var_name);
+	free(content->var_value);
+	free(content);
 }
 
 char	*search_var(const char *variable, t_list *var_list, int len)

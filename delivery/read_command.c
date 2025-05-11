@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 17:00:20 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/05/06 17:44:46 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/05/11 15:24:41 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ static int	read_command(t_list *var_list)
 	search_and_expand(token_list, var_list);
 	if (token_list != NULL)
 	{
-		btree = create_tree(token_list);
+		btree = create_tree(&token_list);
 		if (btree == NULL)
 			printf_error("Error to parse\n");
 		debug_print_tree(btree);
@@ -94,5 +94,6 @@ int	run_minishell(void)
 		printf("var_name = %s, var_value = %s\n", ((t_content_var *)(variable_list->next->content))->var_name, ((t_content_var *)(variable_list->next->content))->var_value);
 		ret = read_command(variable_list);
 	}
+	ft_lstclear(&variable_list, free_var_content);
 	return (ret);
 }
