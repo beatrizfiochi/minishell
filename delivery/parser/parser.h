@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 14:14:02 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/05/11 15:23:38 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/05/12 17:30:50 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,10 @@ t_btnode	*create_tree(t_list **token_list);
 t_list		*tokenization(char *line);
 t_list		*create_var_node(char *name, char *value);
 
-void	free_var_content(void *var_content);
+void		free_var_content(void *var_content);
 
 char		*go_next_char(char *line, char c);
 
-int			search_and_expand(t_list *token_list, t_list *var_list);
+void		search_and_expand(t_list *token_list, t_list *var_list);
 
 #endif
