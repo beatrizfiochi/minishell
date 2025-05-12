@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 18:15:43 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/05/12 18:40:34 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/05/12 18:47:34 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,11 +55,13 @@ void	free_var_content(void *var_content)
 char	*search_var(const char *variable, t_list *var_list, int len)
 {
 	const char	*tmp;
+	const char	*v_name;
 
 	tmp = variable;
+	v_name = (const char *)(((t_content_var *)(var_list->content))->var_name);
 	while (var_list != NULL)
 	{
-		if (ft_strncmp(tmp, (const char *)(((t_content_var *)(var_list->content))->var_name), len) == 0)
+		if (ft_strncmp(tmp, v_name, len) == 0)
 			return (((t_content_var *)(var_list->content))->var_value);
 		var_list = var_list->next;
 	}
@@ -89,7 +91,9 @@ void	search_and_expand(t_list *token_list, t_list *var_list)
 				var_len = 0;
 				var = content;
 				content++;
-				while (*content != '\0' && ((*content >= 'a' && *content <= 'z') || (*content >= 'A' && *content <= 'Z') || (*content >= '0' && *content <= '9')))
+				while (*content != '\0' && ((*content >= 'a' && *content <= 'z')
+					|| (*content >= 'A' && *content <= 'Z')
+						|| (*content >= '0' && *content <= '9')))
 				{
 					content++;
 					var_len++;
