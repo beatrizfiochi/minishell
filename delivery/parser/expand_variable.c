@@ -6,23 +6,13 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 18:15:43 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/05/12 17:54:51 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/05/12 18:40:34 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdbool.h>              //bool
 #include "../libft/libft.h"
 #include "parser.h"
-
-bool	is_metachar(char *content)
-{
-	if (content == NULL)
-		return (false);
-	if ((*content == '$' && *(content + 1) != ' ') && *(content + 1) != '\0'
-		&& *(content + 1) != '&' && *(content + 1) != '|')
-		return (true);
-	return (false);
-}
 
 t_list	*create_var_node(char *name, char *value)
 {
@@ -61,7 +51,6 @@ void	free_var_content(void *var_content)
 	free(content->var_value);
 	free(content);
 }
-
 
 char	*search_var(const char *variable, t_list *var_list, int len)
 {
@@ -117,6 +106,18 @@ void	search_and_expand(t_list *token_list, t_list *var_list)
 					ft_strlcat(new_content, (const char *)(var_value_found), len);
 					ft_strlcat(new_content, (const char *)(content), len);
 					content = new_content + (var - (char *)(token_list->content)) + value_len;
+					free(token_list->content);
+					token_list->content = new_content;
+				}
+				else
+				{
+					len = len - (var_len + 1) + 1;
+					new_content = malloc(sizeof(len));
+					if (new_content == NULL)
+						return ;
+					ft_strlcpy(new_content, (char *)(token_list->content), (var - (char *)(token_list->content)) + 1);
+					ft_strlcat(new_content, (const char *)(content), len);
+					content = new_content + (var - (char *)(token_list->content));
 					free(token_list->content);
 					token_list->content = new_content;
 				}
