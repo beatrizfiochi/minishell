@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 17:00:20 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/05/14 11:21:13 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/05/14 11:50:49 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ static int	read_command(t_list *var_list)
 	token_list = tokenization(line);
 	debug_print_read_command(token_list, line);
 	search_and_expand(token_list, var_list);
+	clean_token_quotes(token_list);
 	if (token_list != NULL)
 	{
 		btree = create_tree(&token_list);
