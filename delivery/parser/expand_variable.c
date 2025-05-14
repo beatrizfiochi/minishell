@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 18:15:43 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/05/12 18:47:34 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/05/14 11:08:51 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,82 +52,81 @@ void	free_var_content(void *var_content)
 	free(content);
 }
 
-char	*search_var(const char *variable, t_list *var_list, int len)
+static char *search_var(const char *variable, t_list *var_list, int len)
 {
-	const char	*tmp;
-	const char	*v_name;
+	t_content_var	*content;
+	int				var_name_len;
 
-	tmp = variable;
-	v_name = (const char *)(((t_content_var *)(var_list->content))->var_name);
 	while (var_list != NULL)
 	{
-		if (ft_strncmp(tmp, v_name, len) == 0)
-			return (((t_content_var *)(var_list->content))->var_value);
+		content = (t_content_var *)var_list->content;
+		var_name_len = (int)ft_strlen(content->var_name);
+		if (var_name_len == len && ft_strncmp(variable, content->var_name, len) == 0)
+			return (content->var_value);
 		var_list = var_list->next;
 	}
 	return (NULL);
 }
 
-void	search_and_expand(t_list *token_list, t_list *var_list)
+
+static void	expand_variable(t_list *token_list, char *var, char **content, char *var_value_found, int var_len)
 {
-	char	*content;
-	char	*var_value_found;
-	char	*var;
 	char	*new_content;
 	int		len;
+	
+	if (var_value_found != NULL)
+	{
+		len = ft_strlen(token_list->content) - (var_len + 1) + ((int)ft_strlen(var_value_found) + 1);
+		new_content = malloc(sizeof(int) * len);
+		if (new_content == NULL)
+			return ;
+		ft_strlcpy(new_content, (char *)(token_list->content), (var - (char *)(token_list->content)) + 1);
+		ft_strlcat(new_content, var_value_found, len);
+		ft_strlcat(new_content, *content, len);
+		*content = new_content + (var - (char *)(token_list->content)) + (int)ft_strlen(var_value_found);
+	}
+	else
+	{
+		len = ft_strlen(token_list->content) - (var_len + 1) + 1;
+		new_content = malloc(len);
+		if (new_content == NULL)
+			return ;
+		ft_strlcpy(new_content, (char *)(token_list->content), (var - (char *)(token_list->content)) + 1);
+		ft_strlcat(new_content, *content, len);
+		*content = new_content + (var - (char *)(token_list->content));
+	}
+	free(token_list->content);
+	token_list->content = new_content;
+}
+
+void	search_and_expand(t_list *token_list, t_list *var_list)
+{
+	char	*cnt;
+	char	*var_value_found;
+	char	*var;
 	int		var_len;
-	int		value_len;
 
 	var_value_found = NULL;
-	new_content = NULL;
 	while (token_list != NULL)
 	{
-		content = (char *)(token_list->content);
-		len = ft_strlen(content);
-		while (*content != '\0' && (content[0] != '\'' && content[len] != '\''))
+		cnt = (char *)(token_list->content);
+		while (*cnt != '\0' && (cnt[0] != '\'' && cnt[(int)ft_strlen(cnt)] != '\''))
 		{
-			if (*content == '$')
+			if (*cnt == '$')
 			{
 				var_len = 0;
-				var = content;
-				content++;
-				while (*content != '\0' && ((*content >= 'a' && *content <= 'z')
-					|| (*content >= 'A' && *content <= 'Z')
-						|| (*content >= '0' && *content <= '9')))
+				var = cnt;
+				cnt++;
+				while (*cnt != '\0' && ((*cnt >= 'a' && *cnt <= 'z') || (*cnt >= 'A' && *cnt <= 'Z') || (*cnt >= '0' && *cnt <= '9')))
 				{
-					content++;
+					cnt++;
 					var_len++;
 				}
 				var_value_found = search_var((const char*)(var + 1), var_list, var_len);
-				if (var_value_found != NULL)
-				{
-					value_len = ft_strlen(var_value_found);
-					len = len - (var_len + 1) + value_len + 1;
-					new_content = malloc(sizeof(len));
-					if (new_content == NULL)
-						return ;
-					ft_strlcpy(new_content, (char *)(token_list->content), (var - (char *)(token_list->content)) + 1);
-					ft_strlcat(new_content, (const char *)(var_value_found), len);
-					ft_strlcat(new_content, (const char *)(content), len);
-					content = new_content + (var - (char *)(token_list->content)) + value_len;
-					free(token_list->content);
-					token_list->content = new_content;
-				}
-				else
-				{
-					len = len - (var_len + 1) + 1;
-					new_content = malloc(sizeof(len));
-					if (new_content == NULL)
-						return ;
-					ft_strlcpy(new_content, (char *)(token_list->content), (var - (char *)(token_list->content)) + 1);
-					ft_strlcat(new_content, (const char *)(content), len);
-					content = new_content + (var - (char *)(token_list->content));
-					free(token_list->content);
-					token_list->content = new_content;
-				}
+				expand_variable(token_list, var, &cnt, var_value_found, var_len);
 			}
 			else
-				content++;
+				cnt++;
 		}
 		token_list = token_list->next;
 	}

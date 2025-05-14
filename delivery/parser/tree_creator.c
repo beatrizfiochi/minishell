@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 18:34:50 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/05/11 14:45:03 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/05/14 10:35:26 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,14 @@ static t_node_op	op(char *token_str)
 		return (OP_PIPE);
 	if (*token_str == '=')
 		return (OP_EQUAL);
+	if (*token_str == '<' && *(token_str + 1) == '<')
+		return (OP_HEREDOC);
+	if (*token_str == '<')
+		return (OP_RD_INPUT);
+	if (*token_str == '>' && *(token_str + 1) == '>')
+		return (OP_APPEND_RD_OUTPUT);
+	if (*token_str == '>')
+		return (OP_RD_OUTPUT);
 	return (OP_CMD);
 }
 
@@ -41,7 +49,10 @@ static t_list	*search_op(t_list *tokens)
 	{
 		content_token = tokens->content;
 		operator = op(content_token);
-		if (operator == OP_AND || operator == OP_OR || operator == OP_PIPE || operator == OP_EQUAL)
+		if (operator == OP_AND || operator == OP_OR || operator == OP_PIPE
+				|| operator == OP_EQUAL || operator == OP_HEREDOC
+				|| operator == OP_RD_INPUT || operator == OP_APPEND_RD_OUTPUT
+				|| operator == OP_RD_OUTPUT)
 			return (tokens);
 		tokens = tokens->next;
 	}

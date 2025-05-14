@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 17:00:20 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/05/11 15:24:41 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/05/14 11:21:13 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,14 +84,22 @@ int	run_minishell(void)
 	char	*value_1 = "hi";
 	char	*name_2 = "tchau";
 	char	*value_2 = "bye";
+	char	*name_3 = "oooi";
+	char	*value_3 = "hhhi";
+	char	*name_4 = "oiii";
+	char	*value_4 = "hiii";
 
 	variable_list = create_var_node(name_1, value_1);
 	variable_list->next = create_var_node(name_2, value_2);
+	variable_list->next->next = create_var_node(name_3, value_3);
+	variable_list->next->next->next = create_var_node(name_4, value_4);
 	ret = read_command(variable_list);
 	while (ret == 0)
 	{
 		printf("var_name = %s, var_value = %s\n", ((t_content_var *)(variable_list->content))->var_name, ((t_content_var *)(variable_list->content))->var_value);
 		printf("var_name = %s, var_value = %s\n", ((t_content_var *)(variable_list->next->content))->var_name, ((t_content_var *)(variable_list->next->content))->var_value);
+		printf("var_name = %s, var_value = %s\n", ((t_content_var *)(variable_list->next->next->content))->var_name, ((t_content_var *)(variable_list->next->next->content))->var_value);
+		printf("var_name = %s, var_value = %s\n", ((t_content_var *)(variable_list->next->next->next->content))->var_name, ((t_content_var *)(variable_list->next->next->next->content))->var_value);
 		ret = read_command(variable_list);
 	}
 	ft_lstclear(&variable_list, free_var_content);

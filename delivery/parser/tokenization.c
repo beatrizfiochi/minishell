@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 15:26:54 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/05/11 13:17:57 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/05/14 10:25:48 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,14 @@ static int	is_op(char *line)
 	if (*line == '|')
 		return (1);
 	if (*line == '=')
+		return (1);
+	if (*line == '<' && *(line + 1) == '<')
+		return (2);
+	if (*line == '<')
+		return (1);
+	if (*line == '>' && *(line + 1) == '>')
+		return (2);
+	if (*line == '>')
 		return (1);
 	return (0);
 }
