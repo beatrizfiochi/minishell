@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 14:25:49 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/05/15 14:28:40 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/05/15 14:50:00 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ char	*replace_var_name_by_value(char *content, int var_pos,
 
 	var_len = *cnt - (content + var_pos) - 1;
 	len = ft_strlen(content) - (var_len + 1) + (ft_strlen(var_value) + 1);
-	new_content = malloc(sizeof(int) * len);
+	new_content = malloc(sizeof(char) * len);
 	if (new_content == NULL)
 		return (NULL);
 	ft_strlcpy(new_content, content, var_pos + 1);
