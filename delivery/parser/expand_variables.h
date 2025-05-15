@@ -1,0 +1,27 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   expand_variables.h                                 :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/15 14:26:44 by bfiochi-          #+#    #+#             */
+/*   Updated: 2025/05/15 14:32:40 by bfiochi-         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#ifndef EXPAND_VARIABLES_H
+# define EXPAND_VARIABLES_H
+
+# include "../libft/libft.h"
+
+char	*search_var(const char *variable, t_list *var_list, int len);
+char	*remove_var_name(char *content, int var_pos, char **cnt);
+char	*replace_var_name_by_value(char *content, int var_pos,
+			char **cnt, char *var_value);
+char	*expand_variable(char *content, int var_pos,
+			char **cnt, char *var_value);
+
+void	search_and_expand_content(char **content, t_list *var_list);
+
+#endif

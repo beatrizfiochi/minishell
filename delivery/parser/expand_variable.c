@@ -6,13 +6,13 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 18:15:43 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/05/14 12:18:38 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/05/15 14:28:19 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdbool.h>              //bool
 #include "../libft/libft.h"
 #include "parser.h"
+#include "expand_variables.h"
 
 t_list	*create_var_node(char *name, char *value)
 {
@@ -53,91 +53,11 @@ void	free_var_content(void *var_content)
 	free(content);
 }
 
-static char	*search_var(const char *variable, t_list *var_list, int len)
-{
-	t_content_var	*content;
-	int				var_name_len;
-
-	while (var_list != NULL)
-	{
-		content = (t_content_var *)var_list->content;
-		var_name_len = (int)ft_strlen(content->var_name);
-		if (var_name_len == len
-			&& ft_strncmp(variable, content->var_name, len) == 0)
-			return (content->var_value);
-		var_list = var_list->next;
-	}
-	return (NULL);
-}
-
-static void	expand_variable(t_list *tk_lst, char *var, char **cnt, char *var_value, int var_len)
-{
-	char	*new_content;
-	int		len;
-
-	if (var_value != NULL)
-	{
-		len = ft_strlen(tk_lst->content) - (var_len + 1)
-			+ ((int)ft_strlen(var_value) + 1);
-		new_content = malloc(sizeof(int) * len);
-		if (new_content == NULL)
-			return ;
-		ft_strlcpy(new_content, (char *)(tk_lst->content),
-			(var - (char *)(tk_lst->content)) + 1);
-		ft_strlcat(new_content, var_value, len);
-		ft_strlcat(new_content, *cnt, len);
-		*cnt = new_content + (var - (char *)(tk_lst->content))
-			+ (int)ft_strlen(var_value);
-	}
-	else
-	{
-		len = ft_strlen(tk_lst->content) - (var_len + 1) + 1;
-		new_content = malloc(len);
-		if (new_content == NULL)
-			return ;
-		ft_strlcpy(new_content, (char *)(tk_lst->content),
-			(var - (char *)(tk_lst->content)) + 1);
-		ft_strlcat(new_content, *cnt, len);
-		*cnt = new_content + (var - (char *)(tk_lst->content));
-	}
-	free(tk_lst->content);
-	tk_lst->content = new_content;
-}
-
 void	search_and_expand(t_list *token_list, t_list *var_list)
 {
-	char	*cnt;
-	char	*var_value_found;
-	char	*var;
-	int		var_len;
-
-	var_value_found = NULL;
 	while (token_list != NULL)
 	{
-		cnt = (char *)(token_list->content);
-		while (*cnt != '\0' && (cnt[0] != '\''
-				&& cnt[(int)ft_strlen(cnt)] != '\''))
-		{
-			if (*cnt == '$')
-			{
-				var_len = 0;
-				var = cnt;
-				cnt++;
-				while (*cnt != '\0' && ((*cnt >= 'a' && *cnt <= 'z')
-						|| (*cnt >= 'A' && *cnt <= 'Z')
-						|| (*cnt >= '0' && *cnt <= '9')))
-				{
-					cnt++;
-					var_len++;
-				}
-				var_value_found = search_var((const char *)(var + 1),
-						var_list, var_len);
-				expand_variable(token_list, var, &cnt,
-					var_value_found, var_len);
-			}
-			else
-				cnt++;
-		}
+		search_and_expand_content((char **)(&(token_list->content)), var_list);
 		token_list = token_list->next;
 	}
 }
