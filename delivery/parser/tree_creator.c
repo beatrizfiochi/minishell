@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 18:34:50 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/05/14 10:35:26 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/05/14 12:09:27 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,9 +50,9 @@ static t_list	*search_op(t_list *tokens)
 		content_token = tokens->content;
 		operator = op(content_token);
 		if (operator == OP_AND || operator == OP_OR || operator == OP_PIPE
-				|| operator == OP_EQUAL || operator == OP_HEREDOC
-				|| operator == OP_RD_INPUT || operator == OP_APPEND_RD_OUTPUT
-				|| operator == OP_RD_OUTPUT)
+			|| operator == OP_EQUAL || operator == OP_HEREDOC
+			|| operator == OP_RD_INPUT || operator == OP_APPEND_RD_OUTPUT
+			|| operator == OP_RD_OUTPUT)
 			return (tokens);
 		tokens = tokens->next;
 	}

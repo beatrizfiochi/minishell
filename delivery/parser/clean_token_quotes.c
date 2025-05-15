@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 11:33:43 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/05/14 12:00:27 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/05/14 12:09:03 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,8 @@ void	clean_token_quotes(t_list *token_list)
 	{
 		content = (char *)(token_list->content);
 		len = ft_strlen(content);
-		if (len >= 2 && ((content[0] == '\'' && content[len - 1] == '\'') ||
-			 (content[0] == '"'  && content[len - 1] == '"')))
+		if (len >= 2 && ((content[0] == '\'' && content[len - 1] == '\'')
+				|| (content[0] == '"' && content[len - 1] == '"')))
 		{
 			new_content = malloc(len - 1);
 			if (new_content == NULL)
@@ -37,4 +37,3 @@ void	clean_token_quotes(t_list *token_list)
 		token_list = token_list->next;
 	}
 }
-
