@@ -6,14 +6,15 @@
 #    By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/27 13:09:33 by djunho            #+#    #+#              #
-#    Updated: 2025/05/05 18:34:47 by djunho           ###   ########.fr        #
+#    Updated: 2025/05/15 14:26:07 by bfiochi-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME= minishell
 SRCS = main.c read_command.c utils.c debug.c \
 	parser/tokenization.c parser/tree_creator.c parser/aux.c \
-	btree/btree.c
+	btree/btree.c parser/expand_variable.c parser/clean_token_quotes.c \
+	parser/expand_variable_utils.c
 OBJS_DIR = objs
 OBJS = $(patsubst %.c,$(OBJS_DIR)/%.o,$(SRCS))
 DEPENDS = $(patsubst %.c,$(OBJS_DIR)/%.d,$(SRCS))
@@ -93,4 +94,4 @@ test: all
 gdb: all
 	gdb $(NAME) -ex 'run $(RUN_ARGS)'
 
-.PHONY: all clean fclean re bonus libft test gdb
+.PHONY: all clean fclean re bonus libft test gdb debug

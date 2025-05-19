@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 11:23:29 by djunho            #+#    #+#             */
-/*   Updated: 2025/05/04 16:37:39 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/05/13 18:37:25 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,11 @@ typedef enum e_node_op
 	OP_AND,
 	OP_OR,
 	OP_PIPE,
+	OP_EQUAL,
+	OP_RD_INPUT,
+	OP_RD_OUTPUT,
+	OP_HEREDOC,
+	OP_APPEND_RD_OUTPUT,
 	OP_CMD,
 }	t_node_op;
 
