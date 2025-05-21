@@ -6,13 +6,14 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 17:00:20 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/05/21 10:33:30 by djunho           ###   ########.fr       */
+/*   Updated: 2025/05/21 21:34:41 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>				//free
 #include <stdio.h>				//printf
 #include <unistd.h>				//write
+#include <signal.h>
 #include <readline/readline.h>
 #include <readline/history.h>
 #include "libft/libft.h"
@@ -21,8 +22,11 @@
 #include "cmd.h"
 #include "debug.h"
 #include "execute/execution.h"
+#include "signals/signals.h"
 
 #define PROMPT "My shell > "
+
+int	g_signal;
 
 __attribute__((weak)) void	debug_print_tree(t_btnode *tree)
 {
@@ -61,6 +65,7 @@ int	read_command(t_list *var_list, char *envp[])
 	t_btnode	*btree;
 	int			ret;
 
+	init_signals();
 	line = read_line();
 	if (line == NULL)
 		return (-1);
