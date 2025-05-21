@@ -6,15 +6,17 @@
 #    By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/27 13:09:33 by djunho            #+#    #+#              #
-#    Updated: 2025/05/15 14:26:07 by bfiochi-         ###   ########.fr        #
+#    Updated: 2025/05/21 10:44:39 by djunho           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME= minishell
 SRCS = main.c read_command.c utils.c debug.c \
 	parser/tokenization.c parser/tree_creator.c parser/aux.c \
-	btree/btree.c parser/expand_variable.c parser/clean_token_quotes.c \
-	parser/expand_variable_utils.c
+	btree/btree.c btree/btree_count.c btree/debug.c \
+	parser/expand_variable.c parser/clean_token_quotes.c \
+	parser/expand_variable_utils.c \
+	execute/execution.c execute/process.c execute/utils.c execute/debug.c
 OBJS_DIR = objs
 OBJS = $(patsubst %.c,$(OBJS_DIR)/%.o,$(SRCS))
 DEPENDS = $(patsubst %.c,$(OBJS_DIR)/%.d,$(SRCS))

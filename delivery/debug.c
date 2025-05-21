@@ -6,40 +6,39 @@
 /*   By: djunho <djunho@student.42porto.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 18:22:37 by djunho            #+#    #+#             */
-/*   Updated: 2025/05/05 18:44:21 by djunho           ###   ########.fr       */
+/*   Updated: 2025/05/21 11:00:29 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <assert.h>
 #include <stdio.h>
 #include "libft/libft.h"
-#include "btree/btree.h"
 #include "cmd.h"
 
 #ifdef TEST
 
-static void	each_list_node(void *content)
+const char	*op_str(t_node_op op)
 {
-	printf("%s ", (char *)content);
-}
+	const char	*op_strs[] = {
+		"OP_INVALID",
+		"OP_AND",
+		"OP_OR",
+		"OP_PIPE",
+		"OP_EQUAL",
+		"OP_RD_INPUT",
+		"OP_RD_OUTPUT",
+		"OP_HEREDOC",
+		"OP_APPEND_RD_OUTPUT",
+		"OP_CMD",
+		"OP_SIZE_DO_NOT_USE",
+	};
 
-static int	printf_string_node(t_btnode *node, int ret)
-{
-	(void)ret;
-	ft_lstiter(((t_content_node *)node->content)->cmd.tokens, each_list_node);
-	printf("\nOperator node> %d\n", ((t_content_node *)node->content)->op);
-	return (0);
-}
-
-static int	printf_string_leaf(t_btnode *node)
-{
-	ft_lstiter(((t_content_node *)node->content)->cmd.tokens, each_list_node);
-	printf("\nOperator leaf> %d\n", ((t_content_node *)node->content)->op);
-	return (0);
-}
-
-void	debug_print_tree(t_btnode *tree)
-{
-	btree_foreach_dfs(tree, printf_string_node, printf_string_leaf);
+	static_assert((sizeof(op_strs) / sizeof(op_strs[0]))
+		== (OP_SIZE_DO_NOT_USE + 1),
+		"op_strs must be equal to the t_node_op enum");
+	if (op > OP_CMD)
+		return ("OP_INVALID");
+	return (op_strs[op]);
 }
 
 void	debug_print_read_command(t_list *node, char *line)
