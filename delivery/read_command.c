@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 17:00:20 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/05/14 11:50:49 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/05/21 10:33:30 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 #include "parser/parser.h"
 #include "cmd.h"
 #include "debug.h"
+#include "execute/execution.h"
 
 #define PROMPT "My shell > "
 
@@ -43,18 +44,24 @@ static void	free_btree_node(void *content)
 	free(node_content);
 }
 
+static char	*read_line(void)
+{
+	if (isatty(STDIN_FILENO))
+		return (readline(PROMPT));
+	else
+		return (readline(NULL));
+}
+
 // 0 -> success
 // -1 -> error
-static int	read_command(t_list *var_list)
+int	read_command(t_list *var_list, char *envp[])
 {
 	char		*line;
 	t_list		*token_list;
 	t_btnode	*btree;
+	int			ret;
 
-	if (isatty(STDIN_FILENO))
-		line = readline(PROMPT);
-	else
-		line = readline(NULL);
+	line = read_line();
 	if (line == NULL)
 		return (-1);
 	if (line != NULL && *line != '\0')
@@ -69,40 +76,12 @@ static int	read_command(t_list *var_list)
 		if (btree == NULL)
 			printf_error("Error to parse\n");
 		debug_print_tree(btree);
+		ret = execute(btree, envp);
+		(void)ret;
 		btree_clear(btree, free_btree_node);
 	}
 	else
 		ft_lstclear(&token_list, free);
 	free(line);
 	return (0);
-}
-
-int	run_minishell(void)
-{
-	int	ret;
-	t_list	*variable_list;
-	char	*name_1 = "oi";
-	char	*value_1 = "hi";
-	char	*name_2 = "tchau";
-	char	*value_2 = "bye";
-	char	*name_3 = "oooi";
-	char	*value_3 = "hhhi";
-	char	*name_4 = "oiii";
-	char	*value_4 = "hiii";
-
-	variable_list = create_var_node(name_1, value_1);
-	variable_list->next = create_var_node(name_2, value_2);
-	variable_list->next->next = create_var_node(name_3, value_3);
-	variable_list->next->next->next = create_var_node(name_4, value_4);
-	ret = read_command(variable_list);
-	while (ret == 0)
-	{
-		printf("var_name = %s, var_value = %s\n", ((t_content_var *)(variable_list->content))->var_name, ((t_content_var *)(variable_list->content))->var_value);
-		printf("var_name = %s, var_value = %s\n", ((t_content_var *)(variable_list->next->content))->var_name, ((t_content_var *)(variable_list->next->content))->var_value);
-		printf("var_name = %s, var_value = %s\n", ((t_content_var *)(variable_list->next->next->content))->var_name, ((t_content_var *)(variable_list->next->next->content))->var_value);
-		printf("var_name = %s, var_value = %s\n", ((t_content_var *)(variable_list->next->next->next->content))->var_name, ((t_content_var *)(variable_list->next->next->next->content))->var_value);
-		ret = read_command(variable_list);
-	}
-	ft_lstclear(&variable_list, free_var_content);
-	return (ret);
 }

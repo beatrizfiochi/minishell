@@ -1,23 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   debug.h                                            :+:      :+:    :+:   */
+/*   btree_count.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: djunho <djunho@student.42porto.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/05 18:34:16 by djunho            #+#    #+#             */
-/*   Updated: 2025/05/18 21:26:28 by djunho           ###   ########.fr       */
+/*   Created: 2025/05/18 20:28:58 by djunho            #+#    #+#             */
+/*   Updated: 2025/05/18 20:59:23 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#ifndef DEBUG_H
-# define DEBUG_H
+#include <stddef.h>
+#include "btree.h"
 
-# include "libft/libft.h"
-# include "btree/btree.h"
-# include "cmd.h"
+int	btree_count_leaves(t_btnode *node)
+{
+	int	size;
 
-void		debug_print_tree(t_btnode *tree);
-void		debug_print_read_command(t_list *node, char *line);
-const char	*op_str(t_node_op op);
-
-#endif // DEBUG_H
+	if (node == NULL)
+		return (0);
+	size = 0;
+	if (btree_is_leaf(node))
+		return (1);
+	size = 0;
+	if (node->left != NULL)
+		size = btree_count_leaves(node->left);
+	if (node->right != NULL)
+		size += btree_count_leaves(node->right);
+	return (size);
+}

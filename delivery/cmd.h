@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 11:23:29 by djunho            #+#    #+#             */
-/*   Updated: 2025/05/13 18:37:25 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/05/21 09:55:05 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 
 typedef enum e_node_op
 {
-	OP_INVALID,
+	OP_INVALID = 0,
 	OP_AND,
 	OP_OR,
 	OP_PIPE,
@@ -27,6 +27,7 @@ typedef enum e_node_op
 	OP_HEREDOC,
 	OP_APPEND_RD_OUTPUT,
 	OP_CMD,
+	OP_SIZE_DO_NOT_USE,
 }	t_node_op;
 
 typedef struct s_cmd

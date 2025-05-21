@@ -6,19 +6,60 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 18:59:31 by djunho            #+#    #+#             */
-/*   Updated: 2025/04/22 15:55:56 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/05/21 10:47:21 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <unistd.h>				// isatty
+#include <stdio.h>				// printf
 #include "libft/libft.h"
 #include "minishell.h"
+#include "parser/parser.h"
+
+static int	run_minishell(char *envp[])
+{
+	int		ret;
+	t_list	*variable_list;
+	t_list	*variable_iter;
+	char	*name_1 = "oi";
+	char	*value_1 = "hi";
+	char	*name_2 = "tchau";
+	char	*value_2 = "bye";
+	char	*name_3 = "oooi";
+	char	*value_3 = "hhhi";
+	char	*name_4 = "oiii";
+	char	*value_4 = "hiii";
+
+	variable_list = create_var_node(name_1, value_1);
+	variable_list->next = create_var_node(name_2, value_2);
+	variable_list->next->next = create_var_node(name_3, value_3);
+	variable_list->next->next->next = create_var_node(name_4, value_4);
+	ret = read_command(variable_list, envp);
+	while (ret == 0)
+	{
+		variable_iter = variable_list;
+		while (variable_iter != NULL)
+		{
+			printf("var_name = %s, var_value = %s\n",
+				((t_content_var *)(variable_iter->content))->var_name,
+				((t_content_var *)(variable_iter->content))->var_value);
+			variable_iter = variable_iter->next;
+		}
+		ret = read_command(variable_list, envp);
+	}
+	ft_lstclear(&variable_list, free_var_content);
+	return (ret);
+}
 
 int	main(int argc, char *argv[], char *envp[])
 {
 	(void)argc;
 	(void)argv;
 	(void)envp;
-	ft_printf("Hello, World of minishell!\n");
-	run_minishell();
+	if (isatty(STDIN_FILENO))
+	{
+		ft_printf("Hello, World of minishell!\n");
+	}
+	run_minishell(envp);
 	return (0);
 }

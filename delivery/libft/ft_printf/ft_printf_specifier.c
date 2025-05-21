@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_printf.c                                        :+:      :+:    :+:   */
+/*   ft_printf_specifier.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: djunho <djunho@student.42porto.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/21 22:23:32 by djunho            #+#    #+#             */
-/*   Updated: 2024/12/01 16:50:49 by djunho           ###   ########.fr       */
+/*   Updated: 2025/05/18 20:54:49 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,8 @@
 
 static bool	get_specifier(const char c, t_flags *flag)
 {
-	if (!((c == ' ') || (c == '+') || (c == '#') || (c == '.') \
-	|| (c == '-') || (c == '0') || ((c >= '1') && (c <= '9'))))
+	if (!((c == ' ') || (c == '+') || (c == '#') || (c == '.')
+			|| (c == '-') || (c == '0') || ((c >= '1') && (c <= '9'))))
 		return (false);
 	if (!flag->space)
 		flag->space = ((c == ' ') || ((c >= '1') && (c <= '9')));
@@ -32,7 +32,7 @@ static bool	get_specifier(const char c, t_flags *flag)
 		flag->precision = (c == '.');
 	if (!flag->prefix)
 		flag->prefix = (c == '#');
-	return ((c == ' ') || (c == '+') || (c == '#') || (c == '.') \
+	return ((c == ' ') || (c == '+') || (c == '#') || (c == '.')
 		|| (c == '-') || (c == '0') || ((c >= '1') && (c <= '9')));
 }
 
@@ -42,7 +42,7 @@ static void	get_specifier_width(const char **fmt, t_flags *flag)
 	int				*value;
 
 	value = NULL;
-	if ((**fmt == ' ') || ((**fmt >= '0') && (**fmt <= '9')) \
+	if ((**fmt == ' ') || ((**fmt >= '0') && (**fmt <= '9'))
 		|| (**fmt == '+') || (**fmt == '-'))
 		value = &flag->width;
 	else if (**fmt == '.')
@@ -94,7 +94,7 @@ void	normalize_flag(t_flags *flag, char conv_spec)
 {
 	if (flag->precision_width < 0)
 	{
-		if ((conv_spec == 'd') || (conv_spec == 'i') || (conv_spec == 'u') \
+		if ((conv_spec == 'd') || (conv_spec == 'i') || (conv_spec == 'u')
 			|| (conv_spec == 'x') || (conv_spec == 'X'))
 			flag->precision_width = 1;
 		else
