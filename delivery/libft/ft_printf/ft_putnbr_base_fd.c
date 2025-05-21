@@ -6,7 +6,7 @@
 /*   By: djunho <djunho@student.42porto.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/21 22:46:44 by djunho            #+#    #+#             */
-/*   Updated: 2025/01/05 14:02:45 by djunho           ###   ########.fr       */
+/*   Updated: 2025/05/18 20:55:06 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ static int	ft_putnbr_recursive(unsigned long long int nb, const char *base_str,
 	}
 	else
 	{
-		return (ft_putnbr_recursive(nb / base, base_str, base, fd) \
+		return (ft_putnbr_recursive(nb / base, base_str, base, fd)
 			+ ft_putnbr_recursive(nb % base, base_str, base, fd));
 	}
 }

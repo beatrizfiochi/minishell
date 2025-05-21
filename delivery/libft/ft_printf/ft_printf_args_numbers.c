@@ -6,7 +6,7 @@
 /*   By: djunho <djunho@student.42porto.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/21 22:43:39 by djunho            #+#    #+#             */
-/*   Updated: 2025/01/05 14:03:13 by djunho           ###   ########.fr       */
+/*   Updated: 2025/05/18 20:55:24 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,6 +98,6 @@ int	print_x(unsigned long int u, bool is_upper, t_flags *const flag)
 	print_pad(flag->precision, '0', flag->precision_width);
 	ft_putunbr_base_fd(u, base, STDOUT_FILENO);
 	print_pad(flag->left_aligned, ' ', printed_specifier);
-	return (printed + printed_specifier \
-			+ (flag->precision * flag->precision_width));
+	return (printed + printed_specifier
+		+ (flag->precision * flag->precision_width));
 }
