@@ -13,7 +13,6 @@
 #include <stdlib.h>				//free
 #include <stdio.h>				//printf
 #include <unistd.h>				//write
-#include <signal.h>
 #include <readline/readline.h>
 #include <readline/history.h>
 #include "libft/libft.h"
@@ -44,7 +43,17 @@ static void	free_btree_node(void *content)
 	t_content_node	*node_content;
 
 	node_content = (t_content_node *)content;
-	ft_lstclear(&(node_content->cmd.tokens), free);
+	if (node_content->op == OP_CMD)
+	{
+		ft_lstclear(&(node_content->cmd.tokens), free);
+	}
+	else if (node_content->op == OP_PIPE)
+	{
+		if (node_content->pipe.pipe[0] != -1)
+			close(node_content->pipe.pipe[0]);
+		if (node_content->pipe.pipe[1] != -1)
+			close(node_content->pipe.pipe[1]);
+	}
 	free(node_content);
 }
 
@@ -58,7 +67,7 @@ static char	*read_line(void)
 
 // 0 -> success
 // -1 -> error
-int	read_command(t_list *var_list, char *envp[])
+int	read_command(t_shell *shell, char *envp[])
 {
 	char		*line;
 	t_list		*token_list;
@@ -73,15 +82,15 @@ int	read_command(t_list *var_list, char *envp[])
 		add_history (line);
 	token_list = tokenization(line);
 	debug_print_read_command(token_list, line);
-	search_and_expand(token_list, var_list);
+	search_and_expand(token_list, shell->variable_list);
 	clean_token_quotes(token_list);
 	if (token_list != NULL)
 	{
-		btree = create_tree(&token_list);
+		btree = create_tree(&token_list, NULL);
 		if (btree == NULL)
 			printf_error("Error to parse\n");
 		debug_print_tree(btree);
-		ret = execute(btree, envp);
+		ret = execute(btree, shell, envp);
 		(void)ret;
 		btree_clear(btree, free_btree_node);
 	}
