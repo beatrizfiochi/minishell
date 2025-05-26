@@ -6,7 +6,7 @@
 /*   By: djunho <djunho@student.42porto.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/21 20:35:44 by djunho            #+#    #+#             */
-/*   Updated: 2025/05/25 17:02:29 by djunho           ###   ########.fr       */
+/*   Updated: 2025/05/26 10:36:18 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,7 @@ static int	process_leaf(t_foreach_leaf_cb func, t_btnode *node, void *ctx)
 }
 
 int	btree_foreach_before_and_between_dfs(t_btnode *node,
-			t_foreach_node_cb cb_node_before, t_foreach_node_cb cb_node_after,
-			t_foreach_leaf_cb cb_leaf, void *ctx)
+		const t_btree_foreach_dfs_cb *const cfg)
 {
 	int	ret;
 	int	node_ret;
@@ -30,22 +29,20 @@ int	btree_foreach_before_and_between_dfs(t_btnode *node,
 	if (node == NULL)
 		return (-1);
 	node_ret = 0;
-	if (cb_node_before != NULL)
-		node_ret = cb_node_before(node, 0, ctx);
+	if (cfg->cb_node_before != NULL)
+		node_ret = cfg->cb_node_before(node, 0, cfg->ctx);
 	if (node_ret != 0)
 		return (node_ret);
 	if (btree_is_leaf(node))
-		return (process_leaf(cb_leaf, node, ctx));
+		return (process_leaf(cfg->cb_leaf, node, cfg->ctx));
 	ret = 0;
 	if (node->left != NULL)
-		ret = btree_foreach_before_and_between_dfs(node->left, cb_node_before,
-										cb_node_after, cb_leaf, ctx);
+		ret = btree_foreach_before_and_between_dfs(node->left, cfg);
 	node_ret = ret;
-	if (cb_node_after != NULL)
-		node_ret = cb_node_after(node, ret, ctx);
+	if (cfg->cb_node_between != NULL)
+		node_ret = cfg->cb_node_between(node, ret, cfg->ctx);
 	if ((node_ret == 0) && (node->right != NULL))
-		ret = btree_foreach_before_and_between_dfs(node->right, cb_node_before,
-										cb_node_after, cb_leaf, ctx);
+		ret = btree_foreach_before_and_between_dfs(node->right, cfg);
 	return (ret);
 }
 

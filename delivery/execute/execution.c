@@ -6,7 +6,7 @@
 /*   By: djunho <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/05 13:53:41 by djunho            #+#    #+#             */
-/*   Updated: 2025/05/21 21:37:03 by djunho           ###   ########.fr       */
+/*   Updated: 2025/05/26 12:06:58 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,6 @@
 
 int	execute(t_btnode *tree, t_shell *shell, char *envp[])
 {
-
 	shell->ncmds = btree_count_leaves(tree);
 	shell->cmds = tree;
 	shell->envp = envp;

@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 18:59:31 by djunho            #+#    #+#             */
-/*   Updated: 2025/05/21 10:47:21 by djunho           ###   ########.fr       */
+/*   Updated: 2025/05/26 10:12:12 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,14 +16,15 @@
 #include "minishell.h"
 #include "parser/parser.h"
 
-static void clear_minishell(t_shell *shell){
+static void	clear_minishell(t_shell *shell)
+{
 	ft_lstclear(&shell->variable_list, free_var_content);
 }
 
 static int	run_minishell(char *envp[])
 {
 	int		ret;
-	t_shell shell;
+	t_shell	shell;
 	t_list	*variable_iter;
 	char	*name_1 = "oi";
 	char	*value_1 = "hi";
@@ -51,7 +52,7 @@ static int	run_minishell(char *envp[])
 		}
 		ret = read_command(&shell, envp);
 	}
-    clear_minishell(&shell);
+	clear_minishell(&shell);
 	return (ret);
 }
 

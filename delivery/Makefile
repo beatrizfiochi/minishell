@@ -18,6 +18,7 @@ SRCS = main.c read_command.c utils.c debug.c \
 	parser/expand_variable.c parser/clean_token_quotes.c \
 	parser/expand_variable_utils.c \
 	execute/execution.c execute/process.c execute/utils.c execute/debug.c \
+	execute/execution_operations.c \
 	signals/handle_signals.c
 OBJS_DIR = objs
 OBJS = $(patsubst %.c,$(OBJS_DIR)/%.o,$(SRCS))
