@@ -45,11 +45,10 @@ typedef struct s_pipe
 typedef struct s_content_node
 {
 	t_node_op	op;
-	// union {
-	//TODO: fix the access of cmd when creating the node tree_creator.c
-	t_cmd		cmd;
-	t_pipe		pipe;
-	// };
+	union {
+		t_cmd		cmd;
+		t_pipe		pipe;
+	};
 }	t_content_node;
 
 #endif // CMD_H

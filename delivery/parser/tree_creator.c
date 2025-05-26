@@ -68,7 +68,10 @@ static t_btnode	*create_node(t_list *token_list, t_btnode *parent)
 	if (content == NULL)
 		return (NULL);
 	content->op = op((char *)(token_list->content));
-	content->cmd.tokens = token_list;
+	if (content->op == OP_CMD)
+		content->cmd.tokens = token_list;
+	else
+		ft_lstclear(&token_list, free);
 	tree_node = btree_new(content);
 	tree_node->parent = parent;
 	return (tree_node);
