@@ -257,12 +257,26 @@ if [[ $? -ne 0 ]]; then
 	exit 1
 fi
 
+# Test a normal command
 tester_with_real "ls"
 tester_with_real "echo opa"
+
+# test AND
 tester_with_real "ls && pwd"
+tester_with_real "ls aaa && pwd"
+
+# test OR
 tester_with_real "ls || pwd"
 tester_with_real "ls aaa || pwd"
-tester_with_real "ls aaa && pwd"
+
+# Test PIPE
+tester_with_real "ls | cat -e"
+tester_with_real "ls aaa | cat -e"
+tester_with_real "ls ../delivery | cat -e"
+tester_with_real "ls ../delivery | grep mini | cat -e"
+tester_with_real "ls ../delivery | grep mini | cat -e | grep '\.h'"
+tester_with_real "ls ../delivery | grep mini | cat -e | grep '\.h' | cat -e"
+
 
 
 
