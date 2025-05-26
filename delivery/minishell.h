@@ -13,9 +13,10 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
+# include <stdbool.h>		// bool
+# include <sys/types.h>		// pid_t
 # include "libft/libft.h"
 # include "btree/btree.h"
-# include "cmd.h"
 
 typedef struct s_shell
 {

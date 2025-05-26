@@ -31,7 +31,7 @@ static int	btree_operator_before_callback(t_btnode *node,
 	content = (t_content_node *)node->content;
 	if (content->op != OP_PIPE)
 		return (0);
-	if (node->left == NULL && node->left->content == NULL)
+	if ((node->left == NULL) || (node->left->content == NULL))
 		return (1);
 	if (((t_content_node *)node->left->content)->op != OP_CMD)
 		return (0);
@@ -96,7 +96,6 @@ static int	btree_cmd_callback(t_btnode *node, void *_shell)
 		if ((node->parent != NULL) && (node->parent->content != NULL)
 			&& (((t_content_node *)node->parent->content)->op == OP_PIPE))
 		{
-			parent_content = (t_content_node *)node->parent->content;
 			parent_content = (t_content_node *)node->parent->content;
 			configure_pipe(parent_content->pipe.pipe,
 				parent_content->pipe.carry_over_fd,

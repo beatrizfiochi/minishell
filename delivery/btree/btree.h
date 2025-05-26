@@ -45,11 +45,11 @@ int			btree_foreach_dfs(t_btnode *node, t_foreach_node_cb cb_node,
 typedef struct s_btree_foreach_dfs_cb
 {
 	// Runs at the following order:
-	// cb_node_before for the parent node before calling the left node
+	// cb_node_before	for the parent node before calling the left node
 	t_foreach_node_cb	cb_node_before;
-	// cb_node_after  for the parent node between the left and the right calls
+	// cb_node_between	for the parent node between the left and the right calls
 	t_foreach_node_cb	cb_node_between;
-	// cb_leaf        for a leaf node
+	// cb_leaf			for a leaf node
 	t_foreach_leaf_cb	cb_leaf;
 	// ctx is the context passed to all callbacks
 	void				*ctx;

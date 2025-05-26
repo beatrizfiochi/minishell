@@ -17,6 +17,7 @@
 # include "../libft/libft.h"
 # include "../btree/btree.h"
 # include "../minishell.h"
+# include "../cmd.h"
 
 void	free_join(char **args);
 bool	create_cmd_path(char *cmd, char **envp, char **path);
