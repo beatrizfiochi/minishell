@@ -14,6 +14,7 @@ NAME= minishell
 SRCS = main.c read_command.c utils.c debug.c \
 	parser/tokenization.c parser/tree_creator.c parser/aux.c \
 	btree/btree.c btree/btree_count.c btree/debug.c \
+	btree/btree_foreach.c \
 	parser/expand_variable.c parser/clean_token_quotes.c \
 	parser/expand_variable_utils.c \
 	execute/execution.c execute/process.c execute/utils.c execute/debug.c \

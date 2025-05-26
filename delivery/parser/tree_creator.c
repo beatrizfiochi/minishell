@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 18:34:50 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/05/14 12:09:27 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/05/25 22:58:12 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ static t_list	*search_op(t_list *tokens)
 	return (NULL);
 }
 
-static t_btnode	*create_node(t_list *token_list)
+static t_btnode	*create_node(t_list *token_list, t_btnode *parent)
 {
 	t_content_node	*content;
 	t_btnode		*tree_node;
@@ -70,6 +70,7 @@ static t_btnode	*create_node(t_list *token_list)
 	content->op = op((char *)(token_list->content));
 	content->cmd.tokens = token_list;
 	tree_node = btree_new(content);
+	tree_node->parent = parent;
 	return (tree_node);
 }
 
@@ -86,7 +87,7 @@ static void	delete_btree_node(t_btnode *node, t_list *left,
 
 // Search for and operator
 // Every operator must be placed between 2 commands
-t_btnode	*create_tree(t_list **token_list)
+t_btnode	*create_tree(t_list **token_list, t_btnode *parent)
 {
 	t_list		*op_node;
 	t_list		*aux;
@@ -94,7 +95,7 @@ t_btnode	*create_tree(t_list **token_list)
 
 	op_node = search_op(*token_list);
 	if (op_node == NULL)
-		return (create_node(*token_list));
+		return (create_node(*token_list, parent));
 	aux = prev_list_item(*token_list, op_node);
 	if ((op_node->next == NULL) || (aux == NULL))
 	{
@@ -104,9 +105,9 @@ t_btnode	*create_tree(t_list **token_list)
 	aux->next = NULL;
 	aux = op_node->next;
 	op_node->next = NULL;
-	tree = create_node(op_node);
-	tree->left = create_tree(token_list);
-	tree->right = create_tree(&aux);
+	tree = create_node(op_node, parent);
+	tree->left = create_tree(token_list, tree);
+	tree->right = create_tree(&aux, tree);
 	if ((tree->left == NULL) || (tree->right == NULL))
 	{
 		delete_btree_node(tree, *token_list, op_node, aux);
