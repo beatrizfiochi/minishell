@@ -25,6 +25,7 @@ static int	run_minishell(char *envp[])
 {
 	int		ret;
 	t_shell	shell;
+	#ifdef TEST
 	t_list	*variable_iter;
 	char	*name_1 = "oi";
 	char	*value_1 = "hi";
@@ -34,14 +35,18 @@ static int	run_minishell(char *envp[])
 	char	*value_3 = "hhhi";
 	char	*name_4 = "oiii";
 	char	*value_4 = "hiii";
+	#endif // TEST
 
+	#ifdef TEST
 	shell.variable_list = create_var_node(name_1, value_1);
 	shell.variable_list->next = create_var_node(name_2, value_2);
 	shell.variable_list->next->next = create_var_node(name_3, value_3);
 	shell.variable_list->next->next->next = create_var_node(name_4, value_4);
+	#endif // TEST
 	ret = read_command(&shell, envp);
 	while (ret == 0)
 	{
+		#ifdef TEST
 		variable_iter = shell.variable_list;
 		while (variable_iter != NULL)
 		{
@@ -50,6 +55,7 @@ static int	run_minishell(char *envp[])
 				((t_content_var *)(variable_iter->content))->var_value);
 			variable_iter = variable_iter->next;
 		}
+		#endif // TEST
 		ret = read_command(&shell, envp);
 	}
 	clear_minishell(&shell);

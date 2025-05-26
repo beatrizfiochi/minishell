@@ -115,10 +115,10 @@ function tester() {
 			# expected print
 			# Btree: Node content: ||
 			# Btree: Operator node> OP_OR
-			found=$(cat $OUT_FILE | grep -A 1 "Btree: Node content: $item")
+			found=$(cat $OUT_FILE | grep -A 1 "Btree: Operator node> $item")
 			echo "$found" | grep -E "OP_OR|OP_AND|OP_PIPE" > /dev/null
 			if [[ $? -ne 0 ]]; then
-				echo -e "${RED}Error to find the command $item in the output${RESET}"
+				echo -e "${RED}Error to find the operator $item in the output${RESET}"
 				cat $OUT_FILE
 				exit 1
 			fi
@@ -211,14 +211,14 @@ tester "oi 'hi \"asas\" oioioi' oi"   0      3
 tester 'oi "&&" oi'         0       3
 tester "oi '&&' oi"         0       3
 cmds=("oi" "oi")
-ops=("&&")
+ops=("OP_AND")
 tester "oi && oi"           "&&"    3      "cmds"     "ops"
 tester "oi & oi"            0       3
 tester "oi &&& oi"          0       4
 tester "oi &&&& oi"         0       4
 tester "oi &&&&& oi"        0       5
 cmds=("oi" "oi")
-ops=("&&")
+ops=("OP_AND")
 tester "oi&&oi"             "&&"    3      "cmds"     "ops"
 tester "oioi&&"             0       2
 tester "&&oioi"             0       2
@@ -227,13 +227,13 @@ tester "&&oioi"             0       2
 tester 'oi "||" oi'         0       3
 tester "oi '||' oi"         0       3
 cmds=("oi" "oi")
-ops=("||")
+ops=("OP_OR")
 tester "oi || oi"           "||"    3      "cmds"     "ops"
 tester "oi ||| oi"          0       4
 tester "oi |||| oi"         0       4
 tester "oi ||||| oi"        0       5
 cmds=("oi" "oi")
-ops=("||")
+ops=("OP_OR")
 tester "oi||oi"             "||"    3      "cmds"     "ops"
 tester "oioi||"             0       2
 tester "||oioi"             0       2
@@ -242,10 +242,10 @@ tester "||oioi"             0       2
 tester 'oi "|" oi'         0       3
 tester "oi '|' oi"         0       3
 cmds=("oi" "oi")
-ops=("|")
+ops=("OP_PIPE")
 tester "oi | oi"           "|"     3      "cmds"     "ops"
 cmds=("oi" "oi")
-ops=("|")
+ops=("OP_PIPE")
 tester "oi|oi"             "|"     3      "cmds"     "ops"
 tester "oioi|"             0       2
 
