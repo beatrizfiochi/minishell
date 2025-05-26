@@ -115,10 +115,10 @@ function tester() {
 			# expected print
 			# Btree: Node content: ||
 			# Btree: Operator node> OP_OR
-			found=$(cat $OUT_FILE | grep -A 1 "Btree: Node content: $item")
+			found=$(cat $OUT_FILE | grep -A 1 "Btree: Operator node> $item")
 			echo "$found" | grep -E "OP_OR|OP_AND|OP_PIPE" > /dev/null
 			if [[ $? -ne 0 ]]; then
-				echo -e "${RED}Error to find the command $item in the output${RESET}"
+				echo -e "${RED}Error to find the operator $item in the output${RESET}"
 				cat $OUT_FILE
 				exit 1
 			fi
@@ -211,14 +211,14 @@ tester "oi 'hi \"asas\" oioioi' oi"   0      3
 tester 'oi "&&" oi'         0       3
 tester "oi '&&' oi"         0       3
 cmds=("oi" "oi")
-ops=("&&")
+ops=("OP_AND")
 tester "oi && oi"           "&&"    3      "cmds"     "ops"
 tester "oi & oi"            0       3
 tester "oi &&& oi"          0       4
 tester "oi &&&& oi"         0       4
 tester "oi &&&&& oi"        0       5
 cmds=("oi" "oi")
-ops=("&&")
+ops=("OP_AND")
 tester "oi&&oi"             "&&"    3      "cmds"     "ops"
 tester "oioi&&"             0       2
 tester "&&oioi"             0       2
@@ -227,13 +227,13 @@ tester "&&oioi"             0       2
 tester 'oi "||" oi'         0       3
 tester "oi '||' oi"         0       3
 cmds=("oi" "oi")
-ops=("||")
+ops=("OP_OR")
 tester "oi || oi"           "||"    3      "cmds"     "ops"
 tester "oi ||| oi"          0       4
 tester "oi |||| oi"         0       4
 tester "oi ||||| oi"        0       5
 cmds=("oi" "oi")
-ops=("||")
+ops=("OP_OR")
 tester "oi||oi"             "||"    3      "cmds"     "ops"
 tester "oioi||"             0       2
 tester "||oioi"             0       2
@@ -242,10 +242,10 @@ tester "||oioi"             0       2
 tester 'oi "|" oi'         0       3
 tester "oi '|' oi"         0       3
 cmds=("oi" "oi")
-ops=("|")
+ops=("OP_PIPE")
 tester "oi | oi"           "|"     3      "cmds"     "ops"
 cmds=("oi" "oi")
-ops=("|")
+ops=("OP_PIPE")
 tester "oi|oi"             "|"     3      "cmds"     "ops"
 tester "oioi|"             0       2
 
@@ -257,12 +257,26 @@ if [[ $? -ne 0 ]]; then
 	exit 1
 fi
 
+# Test a normal command
 tester_with_real "ls"
 tester_with_real "echo opa"
+
+# test AND
 tester_with_real "ls && pwd"
+tester_with_real "ls aaa && pwd"
+
+# test OR
 tester_with_real "ls || pwd"
 tester_with_real "ls aaa || pwd"
-tester_with_real "ls aaa && pwd"
+
+# Test PIPE
+tester_with_real "ls | cat -e"
+tester_with_real "ls aaa | cat -e"
+tester_with_real "ls ../delivery | cat -e"
+tester_with_real "ls ../delivery | grep mini | cat -e"
+tester_with_real "ls ../delivery | grep mini | cat -e | grep '\.h'"
+tester_with_real "ls ../delivery | grep mini | cat -e | grep '\.h' | cat -e"
+
 
 
 

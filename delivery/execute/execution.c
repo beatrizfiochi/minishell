@@ -6,7 +6,7 @@
 /*   By: djunho <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/05 13:53:41 by djunho            #+#    #+#             */
-/*   Updated: 2025/05/18 20:31:30 by djunho           ###   ########.fr       */
+/*   Updated: 2025/05/26 12:06:58 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,13 +70,12 @@
 // 	return (true);
 // }
 
-int	execute(t_btnode *tree, char *envp[])
+int	execute(t_btnode *tree, t_shell *shell, char *envp[])
 {
-	t_pipex	pipex;
-
-	pipex.ncmds = btree_count_leaves(tree);
-	pipex.cmds = tree;
-	pipex.envp = envp;
-	pipex.append_fd2 = false;
-	return (process(&pipex));
+	shell->ncmds = btree_count_leaves(tree);
+	shell->cmds = tree;
+	shell->envp = envp;
+	shell->last_fd = STDIN_FILENO;
+	shell->append_fd2 = false;
+	return (process(shell));
 }

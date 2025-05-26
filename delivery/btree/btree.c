@@ -6,7 +6,7 @@
 /*   By: djunho <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 11:56:03 by djunho            #+#    #+#             */
-/*   Updated: 2025/05/18 20:28:47 by djunho           ###   ########.fr       */
+/*   Updated: 2025/05/25 20:15:56 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include <stddef.h>
@@ -20,6 +20,7 @@ t_btnode	*btree_new(void *content)
 	node = malloc(sizeof(t_btnode));
 	*node = (t_btnode){
 		.content = content,
+		.parent = NULL,
 		.left = NULL,
 		.right = NULL,
 	};
@@ -52,26 +53,4 @@ bool	btree_is_leaf(t_btnode *node)
 	if (node == NULL)
 		return (false);
 	return ((node->left == NULL) && (node->right == NULL));
-}
-
-int	btree_foreach_dfs(t_btnode *node,
-			t_foreach_node_cb cb_node, t_foreach_leaf_cb cb_leaf, void *ctx)
-{
-	int	ret;
-	int	node_ret;
-
-	if (node == NULL)
-		return (-1);
-	if (btree_is_leaf(node) && (cb_leaf != NULL))
-		return (cb_leaf(node, ctx));
-	ret = 0;
-	if (node->left != NULL)
-		ret = btree_foreach_dfs(node->left, cb_node, cb_leaf, ctx);
-	if (cb_node != NULL)
-		node_ret = cb_node(node, ret, ctx);
-	else
-		node_ret = ret;
-	if ((node_ret == 0) && (node->right != NULL))
-		ret = btree_foreach_dfs(node->right, cb_node, cb_leaf, ctx);
-	return (ret);
 }

@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 14:14:02 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/05/14 11:50:26 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/05/25 20:19:31 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ typedef struct s_content_var
 	char		*var_value;
 }	t_content_var;
 
-t_btnode	*create_tree(t_list **token_list);
+t_btnode	*create_tree(t_list **token_list, t_btnode *parent);
 
 t_list		*tokenization(char *line);
 t_list		*create_var_node(char *name, char *value);

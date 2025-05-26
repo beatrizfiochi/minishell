@@ -27,9 +27,6 @@ static int	printf_string_node(t_btnode *node, int ret, void *ctx)
 {
 	(void)ret;
 	(void)ctx;
-	printf("Btree: Node content: ");
-	ft_lstiter(((t_content_node *)node->content)->cmd.tokens, each_list_node);
-	printf("\n");
 	printf("Btree: Operator node> %s\n",
 		op_str(((t_content_node *)node->content)->op));
 	return (0);
