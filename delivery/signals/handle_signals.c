@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/21 19:54:13 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/05/21 22:01:39 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/05/22 20:45:19 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,4 +30,11 @@ void	handle_sigint(int signal)
 void	init_signals(void)
 {
 	signal(SIGINT, handle_sigint);
+	signal(SIGQUIT, SIG_IGN);
+}
+
+void	reset_signals(void)
+{
+	// signal(SIGINT, SIG_DFL);
+	signal(SIGQUIT, SIG_DFL);
 }

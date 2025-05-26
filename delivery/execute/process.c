@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   process.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: djunho <djunho@student.42porto.com>        +#+  +:+       +#+        */
+/*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 19:55:45 by djunho            #+#    #+#             */
-/*   Updated: 2025/05/26 12:04:34 by djunho           ###   ########.fr       */
+/*   Updated: 2025/05/29 16:45:28 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 #include "../debug.h"
 #include "../minishell.h"
 #include "execution.h"
+#include "../signals/signals.h"
 
 static int	btree_operator_before_callback(t_btnode *node,
 				int ret, void *_shell)

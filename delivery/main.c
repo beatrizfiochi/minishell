@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 18:59:31 by djunho            #+#    #+#             */
-/*   Updated: 2025/05/26 10:12:12 by djunho           ###   ########.fr       */
+/*   Updated: 2025/05/29 16:47:24 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,15 +50,16 @@ static int	run_minishell(char *envp[])
 		variable_iter = shell.variable_list;
 		while (variable_iter != NULL)
 		{
-			printf("var_name = %s, var_value = %s\n",
-				((t_content_var *)(variable_iter->content))->var_name,
-				((t_content_var *)(variable_iter->content))->var_value);
+			// printf("var_name = %s, var_value = %s\n",
+			// 	((t_content_var *)(variable_iter->content))->var_name,
+			// 	((t_content_var *)(variable_iter->content))->var_value);
 			variable_iter = variable_iter->next;
 		}
 		#endif // TEST
 		ret = read_command(&shell, envp);
 	}
 	clear_minishell(&shell);
+	write(1, "exit\n", 5);
 	return (ret);
 }
 
