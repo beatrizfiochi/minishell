@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/21 19:54:13 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/05/29 16:25:33 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/05/29 20:07:32 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,4 +37,10 @@ void	reset_signals(void)
 {
 	signal(SIGINT, SIG_DFL);
 	signal(SIGQUIT, SIG_DFL);
+}
+
+void	ignore_signals(void)
+{
+	signal(SIGINT, SIG_IGN);
+	signal(SIGQUIT, SIG_IGN);
 }

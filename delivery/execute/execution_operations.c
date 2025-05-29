@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution_operations.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: djunho <djunho@student.42porto.com>        +#+  +:+       +#+        */
+/*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 11:59:00 by djunho            #+#    #+#             */
-/*   Updated: 2025/05/26 12:05:59 by djunho           ###   ########.fr       */
+/*   Updated: 2025/05/29 19:23:29 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 #include "../minishell.h"
 #include "../cmd.h"
 #include "execution.h"
+#include "../signals/signals.h"
 
 int	run_child(t_cmd *cmd, t_shell *shell)
 {
@@ -33,6 +34,7 @@ int	run_child(t_cmd *cmd, t_shell *shell)
 		free_join(args);
 		return (0);
 	}
+	reset_signals();
 	execve(args[0], args, envp);
 	if (create_cmd_path(args[0], envp, &path))
 		execve(path, args, envp);
