@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/21 19:54:13 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/05/29 20:07:32 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/05/29 20:41:49 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@ void	handle_sigint(int signal)
 		rl_on_new_line();
 		write(STDOUT_FILENO, "\n", 1);
 		rl_redisplay();
-		// g_signal = SIGINT;
 	}
 }
 

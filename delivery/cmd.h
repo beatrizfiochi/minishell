@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 11:23:29 by djunho            #+#    #+#             */
-/*   Updated: 2025/05/26 10:16:58 by djunho           ###   ########.fr       */
+/*   Updated: 2025/05/29 20:41:19 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,8 @@ typedef struct s_pipe
 typedef struct s_content_node
 {
 	t_node_op	op;
-	union {
+	union
+	{
 		t_cmd		cmd;
 		t_pipe		pipe;
 	};
