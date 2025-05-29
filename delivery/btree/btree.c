@@ -27,25 +27,25 @@ t_btnode	*btree_new(void *content)
 	return (node);
 }
 
-void	btree_delete(t_btnode *node, void (*content_free)(void *))
+void	btree_delete(t_btnode **node, void (*content_free)(void *))
 {
-	if (node == NULL)
+	if ((node == NULL) || (*node == NULL))
 		return ;
 	if (content_free != NULL)
-		content_free(node->content);
-	free(node);
+		content_free((*node)->content);
+	free(*node);
+	*node = NULL;
 }
 
-void	btree_clear(t_btnode *node, void (*content_free)(void *))
+void	btree_clear(t_btnode **node, void (*content_free)(void *))
 {
-	if (node == NULL)
+	if ((node == NULL) || (*node == NULL))
 		return ;
-	if (node->left != NULL)
-		btree_clear(node->left, content_free);
-	if (node->right != NULL)
-		btree_clear(node->right, content_free);
+	if ((*node)->left != NULL)
+		btree_clear(&(*node)->left, content_free);
+	if ((*node)->right != NULL)
+		btree_clear(&(*node)->right, content_free);
 	btree_delete(node, content_free);
-	return ;
 }
 
 bool	btree_is_leaf(t_btnode *node)

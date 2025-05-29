@@ -99,6 +99,6 @@ bool	test4(void)
 	else
 		printf(GREEN"Success: btree_count_leaves()\n"RESET);
 
-	btree_clear(parent, NULL);
+	btree_clear(&parent, NULL);
 	return (ret);
 }

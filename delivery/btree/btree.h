@@ -25,8 +25,8 @@ typedef struct s_btnode
 // Create a new btree node
 t_btnode	*btree_new(void *content);
 bool		btree_is_leaf(t_btnode *node);
-void		btree_delete(t_btnode *node, void (*content_free)(void *));
-void		btree_clear(t_btnode *node, void (*content_free)(void *));
+void		btree_delete(t_btnode **node, void (*content_free)(void *));
+void		btree_clear(t_btnode **node, void (*content_free)(void *));
 
 typedef int	(*t_foreach_node_cb)(t_btnode *node, int ret_left, void *ctx);
 typedef int	(*t_foreach_leaf_cb)(t_btnode *node, void *ctx);

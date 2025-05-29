@@ -87,7 +87,7 @@ bool	test0(void)
 		printf(GREEN"Success: btree_count_leaves()\n"RESET);
 
 	printf(MAGENTA);
-	btree_clear(parent, my_free);
+	btree_clear(&parent, my_free);
 	printf(RESET);
 	char *answer = readline("Do you see only \"left:left, left:right, left, right, parent\" messages? Y/n:");
 	if ((strcmp(answer, "y") == 0) || (strcmp(answer, "Y") == 0) || (strcmp(answer, "") == 0))

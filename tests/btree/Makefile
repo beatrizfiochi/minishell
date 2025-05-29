@@ -13,7 +13,9 @@
 NAME= btree_test
 BTREE_SRC = ../../delivery/btree/
 VPATH := . $(BTREE_SRC)
-SRCS = main.c test0.c test1.c test2.c test3.c test4.c $(BTREE_SRC)/btree.c
+SRCS = main.c test0.c test1.c test2.c test3.c test4.c \
+		$(BTREE_SRC)/btree.c $(BTREE_SRC)/btree_count.c \
+		$(BTREE_SRC)/btree_foreach.c
 OBJS_DIR = objs
 OBJS = $(patsubst %.c,$(OBJS_DIR)/%.o,$(notdir $(SRCS)))
 DEPENDS = $(patsubst %.c,$(OBJS_DIR)/%.d,$(SRCS))

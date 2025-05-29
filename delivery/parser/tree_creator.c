@@ -77,14 +77,14 @@ static t_btnode	*create_node(t_list *token_list, t_btnode *parent)
 	return (tree_node);
 }
 
-static void	delete_btree_node(t_btnode *node, t_list *left,
+static void	delete_btree_node(t_btnode **node, t_list *left,
 								t_list *cur, t_list *right)
 {
 	ft_lstclear(&left, free);
 	ft_lstclear(&cur, free);
 	ft_lstclear(&right, free);
-	btree_delete(node->left, free);
-	btree_delete(node->right, free);
+	btree_delete(&(*node)->left, free);
+	btree_delete(&(*node)->right, free);
 	btree_delete(node, free);
 }
 
@@ -112,9 +112,6 @@ t_btnode	*create_tree(t_list **token_list, t_btnode *parent)
 	tree->left = create_tree(token_list, tree);
 	tree->right = create_tree(&aux, tree);
 	if ((tree->left == NULL) || (tree->right == NULL))
-	{
-		delete_btree_node(tree, *token_list, op_node, aux);
-		tree = NULL;
-	}
+		delete_btree_node(&tree, *token_list, op_node, aux);
 	return (tree);
 }

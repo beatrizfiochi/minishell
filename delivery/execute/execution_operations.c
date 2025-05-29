@@ -31,7 +31,8 @@ int	run_child(t_cmd *cmd, t_shell *shell)
 		return (0);
 	if (args[0] == NULL)
 	{
-		free_join(args);
+		clear_minishell(shell);
+		free(args);
 		return (0);
 	}
 	reset_signals();
@@ -39,7 +40,8 @@ int	run_child(t_cmd *cmd, t_shell *shell)
 	if (create_cmd_path(args[0], envp, &path))
 		execve(path, args, envp);
 	perror(args[0]);
-	free_join(args);
+	clear_minishell(shell);
+	free(args);
 	return (127);
 }
 

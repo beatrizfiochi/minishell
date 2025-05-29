@@ -15,11 +15,13 @@
 #include "libft/libft.h"
 #include "minishell.h"
 #include "parser/parser.h"
+#include "signals/signals.h"
 
-static void	clear_minishell(t_shell *shell)
+void	clear_minishell(t_shell *shell)
 {
-	(void)shell;
-	// ft_lstclear(&shell->variable_list, free_var_content);
+	btree_clear(&shell->cmds, free_btree_node);
+	if (shell->variable_list != NULL)
+		ft_lstclear(&shell->variable_list, free_var_content);
 }
 
 static int	run_minishell(char *envp[])
@@ -38,11 +40,14 @@ static int	run_minishell(char *envp[])
 	char	*value_4 = "hiii";
 	#endif // TEST
 
+	shell.variable_list = NULL;
+	shell.cmds = NULL;
 	#ifdef TEST
 	shell.variable_list = create_var_node(name_1, value_1);
 	shell.variable_list->next = create_var_node(name_2, value_2);
 	shell.variable_list->next->next = create_var_node(name_3, value_3);
 	shell.variable_list->next->next->next = create_var_node(name_4, value_4);
+	shell.variable_list->next->next->next->next = NULL;
 	#endif // TEST
 	ret = read_command(&shell, envp);
 	while (ret == 0)
@@ -60,7 +65,8 @@ static int	run_minishell(char *envp[])
 		ret = read_command(&shell, envp);
 	}
 	clear_minishell(&shell);
-	write(STDOUT_FILENO, "exit\n", 5);
+	if (isatty(STDIN_FILENO))
+		write(STDOUT_FILENO, "exit\n", 5);
 	return (ret);
 }
 
