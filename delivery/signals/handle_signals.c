@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/21 19:54:13 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/05/29 20:41:49 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/05/29 21:04:30 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,13 +31,14 @@ void	init_signals(void)
 	signal(SIGINT, handle_sigint);
 	signal(SIGQUIT, SIG_IGN);
 }
-
+// Reset SIGINT and SIGQUIT to Default
 void	reset_signals(void)
 {
 	signal(SIGINT, SIG_DFL);
 	signal(SIGQUIT, SIG_DFL);
 }
-
+// Ignore SIGINT and SIGQUIT
+//		used to ignore signals in the parent process before forking
 void	ignore_signals(void)
 {
 	signal(SIGINT, SIG_IGN);
