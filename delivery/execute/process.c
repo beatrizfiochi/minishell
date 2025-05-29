@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   process.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: djunho <djunho@student.42porto.com>        +#+  +:+       +#+        */
+/*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 19:55:45 by djunho            #+#    #+#             */
-/*   Updated: 2025/05/26 12:04:34 by djunho           ###   ########.fr       */
+/*   Updated: 2025/05/29 20:13:56 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 #include "../cmd.h"
 #include "../debug.h"
 #include "../minishell.h"
+#include "../signals/signals.h"
 #include "execution.h"
 
 static int	btree_operator_before_callback(t_btnode *node,
@@ -29,6 +30,7 @@ static int	btree_operator_before_callback(t_btnode *node,
 	(void)ret;
 	(void)_shell;
 	content = (t_content_node *)node->content;
+	ignore_signals();
 	if (content->op != OP_PIPE)
 		return (0);
 	if ((node->left == NULL) || (node->left->content == NULL))
@@ -58,6 +60,7 @@ static int	btree_operator_between_callback(t_btnode *node,
 		return (0);
 	if (node->content != NULL)
 	{
+		ignore_signals();
 		if (((t_content_node *)node->content)->op == OP_AND)
 		{
 			return (process_and(shell));

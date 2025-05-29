@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 18:59:31 by djunho            #+#    #+#             */
-/*   Updated: 2025/05/26 10:12:12 by djunho           ###   ########.fr       */
+/*   Updated: 2025/05/29 20:36:24 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,8 @@
 
 static void	clear_minishell(t_shell *shell)
 {
-	ft_lstclear(&shell->variable_list, free_var_content);
+	(void)shell;
+	// ft_lstclear(&shell->variable_list, free_var_content);
 }
 
 static int	run_minishell(char *envp[])
@@ -59,6 +60,7 @@ static int	run_minishell(char *envp[])
 		ret = read_command(&shell, envp);
 	}
 	clear_minishell(&shell);
+	write(STDOUT_FILENO, "exit\n", 5);
 	return (ret);
 }
 
