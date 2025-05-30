@@ -23,16 +23,14 @@ typedef struct s_shell
 	char		**paths;
 	char		**envp;
 	t_btnode	*cmds;
-	int			last_fd;
 	int			ncmds;
-	int			fd1;
-	int			fd2;
-	bool		append_fd2;
 	pid_t		last_pid;
 	t_list		*variable_list;
 }	t_shell;
 
 int		read_command(t_shell *shell, char *envp[]);
+void	free_btree_node(void *content);
+void	clear_minishell(t_shell *shell);
 void	printf_error(const char *error);
 
 #endif

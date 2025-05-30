@@ -70,12 +70,9 @@
 // 	return (true);
 // }
 
-int	execute(t_btnode *tree, t_shell *shell, char *envp[])
+int	execute(t_shell *shell, char *envp[])
 {
-	shell->ncmds = btree_count_leaves(tree);
-	shell->cmds = tree;
+	shell->ncmds = btree_count_leaves(shell->cmds);
 	shell->envp = envp;
-	shell->last_fd = STDIN_FILENO;
-	shell->append_fd2 = false;
 	return (process(shell));
 }

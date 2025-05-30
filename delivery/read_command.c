@@ -38,7 +38,7 @@ __attribute__((weak)) void	debug_print_read_command(t_list *node, char *line)
 	(void)line;
 }
 
-static void	free_btree_node(void *content)
+void	free_btree_node(void *content)
 {
 	t_content_node	*node_content;
 
@@ -71,7 +71,6 @@ int	read_command(t_shell *shell, char *envp[])
 {
 	char		*line;
 	t_list		*token_list;
-	t_btnode	*btree;
 	int			ret;
 
 	init_signals();
@@ -86,13 +85,13 @@ int	read_command(t_shell *shell, char *envp[])
 	clean_token_quotes(token_list);
 	if (token_list != NULL)
 	{
-		btree = create_tree(&token_list, NULL);
-		if (btree == NULL)
+		shell->cmds = create_tree(&token_list, NULL);
+		if (shell->cmds == NULL)
 			printf_error("Error to parse\n");
-		debug_print_tree(btree);
-		ret = execute(btree, shell, envp);
+		debug_print_tree(shell->cmds);
+		ret = execute(shell, envp);
 		(void)ret;
-		btree_clear(btree, free_btree_node);
+		btree_clear(&shell->cmds, free_btree_node);
 	}
 	else
 		ft_lstclear(&token_list, free);

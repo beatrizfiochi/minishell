@@ -22,7 +22,7 @@
 void	free_join(char **args);
 bool	create_cmd_path(char *cmd, char **envp, char **path);
 int		process(t_shell *shell);
-int		execute(t_btnode *tree, t_shell *shell, char *envp[]);
+int		execute(t_shell *shell, char *envp[]);
 char	**convert_list_to_vector(t_list *list);
 void	create_op_list(t_btnode *tree, t_list **op_list);
 

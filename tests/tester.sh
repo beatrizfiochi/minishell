@@ -26,32 +26,40 @@ function tester() {
 	fi
 
 	echo -e "${GREEN}Running ./minishell $cmd${RESET}"
-	echo "$cmd" | valgrind --trace-children=yes --child-silent-after-fork=yes --leak-check=full --log-file="$OUT_FILE_VALGRIND" ../delivery/minishell &> $OUT_FILE
+	echo "$cmd" | valgrind --trace-children=yes --child-silent-after-fork=no --leak-check=full --show-leak-kinds=all --suppressions=../delivery/valgrind-supression --log-file="$OUT_FILE_VALGRIND" ../delivery/minishell &> $OUT_FILE
 	if [[ $? -ne 0 ]]; then
 		echo -e "${RED}Test failed: $cmd${RESET}"
 		exit 1
 	fi
 
 	# Check leaks
-	leak_def_lost=$(cat $OUT_FILE_VALGRIND | grep "definitely lost: " | sed 's/.*definitely lost: //')
-	if [[ "$leak_def_lost" != "0 bytes in 0 blocks" ]]; then
-		echo -e "${RED}LEAK detected!!!${RESET}"
+	leak_still_reachable=$(cat $OUT_FILE_VALGRIND | grep "still reachable: " | grep -v "0 bytes in 0 blocks")
+	if [[ ! -z "$leak_still_reachable" ]]; then
+		echo -e "${RED}LEAK detected!!! (still reachable)${RESET}"
 		echo -e "${BLUE}CMD send is: \"$cmd\"${RESET}"
 		echo -e "${BLUE}Output is:${RESET}"
 		cat $OUT_FILE
 		exit 1
 	fi;
-	leak_indir_lost=$(cat $OUT_FILE_VALGRIND | grep "indirectly lost: " | sed 's/.*indirectly lost: //')
-	if [[ "$leak_indir_lost" != "0 bytes in 0 blocks" ]]; then
-		echo -e "${RED}LEAK detected!!!${RESET}"
+	leak_def_lost=$(cat $OUT_FILE_VALGRIND | grep "definitely lost: " | grep -v "0 bytes in 0 blocks")
+	if [[ ! -z "$leak_def_lost" ]]; then
+		echo -e "${RED}LEAK detected!!! (definitely lost)${RESET}"
 		echo -e "${BLUE}CMD send is: \"$cmd\"${RESET}"
 		echo -e "${BLUE}Output is:${RESET}"
 		cat $OUT_FILE
 		exit 1
 	fi;
-	leak_poss_lost=$(cat $OUT_FILE_VALGRIND | grep "possibly lost: " | sed 's/.*possibly lost: //')
-	if [[ "$leak_poss_lost" != "0 bytes in 0 blocks" ]]; then
-		echo -e "${RED}LEAK detected!!!${RESET}"
+	leak_indir_lost=$(cat $OUT_FILE_VALGRIND | grep "indirectly lost: " | grep -v "0 bytes in 0 blocks")
+	if [[ ! -z "$leak_indir_lost" ]]; then
+		echo -e "${RED}LEAK detected!!! (indirectly lost)${RESET}"
+		echo -e "${BLUE}CMD send is: \"$cmd\"${RESET}"
+		echo -e "${BLUE}Output is:${RESET}"
+		cat $OUT_FILE
+		exit 1
+	fi;
+	leak_poss_lost=$(cat $OUT_FILE_VALGRIND | grep "possibly lost: " | grep -v "0 bytes in 0 blocks")
+	if [[ ! -z "$leak_poss_lost" ]]; then
+		echo -e "${RED}LEAK detected!!! (possibly lost)${RESET}"
 		echo -e "${BLUE}CMD send is: \"$cmd\"${RESET}"
 		echo -e "${BLUE}Output is:${RESET}"
 		cat $OUT_FILE
