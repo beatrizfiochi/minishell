@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 19:55:45 by djunho            #+#    #+#             */
-/*   Updated: 2025/06/01 20:33:26 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/06/01 20:35:10 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,21 +65,13 @@ static int	btree_operator_between_callback(t_btnode *node,
 	{
 		ignore_signals();
 		if (((t_content_node *)node->content)->op == OP_AND)
-		{
 			return (process_and(shell, should_continue));
-		}
 		else if (((t_content_node *)node->content)->op == OP_OR)
-		{
 			return (process_or(shell, should_continue));
-		}
 		else if (((t_content_node *)node->content)->op == OP_PIPE)
-		{
 			return (process_pipe(node));
-		}
 		else if (((t_content_node *)node->content)->op == OP_VAR_ASSIGN)
-		{
 			return (process_var_assign(node, shell));
-		}
 	}
 	return (-1);
 }
