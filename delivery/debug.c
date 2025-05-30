@@ -24,7 +24,7 @@ const char	*op_str(t_node_op op)
 		"OP_AND",
 		"OP_OR",
 		"OP_PIPE",
-		"OP_EQUAL",
+		"OP_VAR_ASSIGN",
 		"OP_RD_INPUT",
 		"OP_RD_OUTPUT",
 		"OP_HEREDOC",

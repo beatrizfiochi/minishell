@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 11:23:29 by djunho            #+#    #+#             */
-/*   Updated: 2025/05/29 20:41:19 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/05/30 16:19:36 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define CMD_H
 
 # include "libft/libft.h"
+# include "parser/parser.h"
 
 typedef enum e_node_op
 {
@@ -21,7 +22,7 @@ typedef enum e_node_op
 	OP_AND,
 	OP_OR,
 	OP_PIPE,
-	OP_EQUAL,
+	OP_VAR_ASSIGN,
 	OP_RD_INPUT,
 	OP_RD_OUTPUT,
 	OP_HEREDOC,
