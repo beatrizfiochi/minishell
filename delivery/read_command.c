@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 17:00:20 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/05/22 18:03:13 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/06/01 14:38:15 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,6 @@ int	read_command(t_shell *shell, char *envp[])
 {
 	char		*line;
 	t_list		*token_list;
-	int			ret;
 
 	init_signals();
 	line = read_line();
@@ -89,12 +88,9 @@ int	read_command(t_shell *shell, char *envp[])
 		if (shell->cmds == NULL)
 			printf_error("Error to parse\n");
 		debug_print_tree(shell->cmds);
-		ret = execute(shell, envp);
-		(void)ret;
+		shell->last_exit_status = execute(shell, envp);
 		btree_clear(&shell->cmds, free_btree_node);
 	}
-	else
-		ft_lstclear(&token_list, free);
 	free(line);
-	return (0);
+	return (shell->last_exit_status);
 }

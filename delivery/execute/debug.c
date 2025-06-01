@@ -6,13 +6,14 @@
 /*   By: djunho <djunho@student.42porto.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/18 14:11:46 by djunho            #+#    #+#             */
-/*   Updated: 2025/05/18 20:30:13 by djunho           ###   ########.fr       */
+/*   Updated: 2025/06/01 14:15:57 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>
 #include "../cmd.h"
 #include "../btree/btree.h"
+#include "../minishell.h"
 
 #ifdef TEST
 
@@ -40,5 +41,16 @@ void	debug_btree_print(t_btnode *node)
 	if (node->right != NULL)
 		debug_btree_print(node->right);
 	fflush(stdout);
+}
+
+void	debug_execution_pos(t_shell *shell)
+{
+	printf("Execution exit status = %d\n", shell->last_exit_status);
+}
+#else
+
+__attribute__((weak)) void	debug_execution_pos(t_shell *shell)
+{
+	(void)shell;
 }
 #endif

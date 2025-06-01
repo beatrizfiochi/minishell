@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 19:55:45 by djunho            #+#    #+#             */
-/*   Updated: 2025/05/29 20:13:56 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/06/01 14:40:04 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 #include "execution.h"
 
 static int	btree_operator_before_callback(t_btnode *node,
-				int ret, void *_shell)
+				int ret, bool *should_continue, void *_shell)
 {
 	t_content_node	*content;
 	t_content_node	*parent_content;
@@ -31,6 +31,7 @@ static int	btree_operator_before_callback(t_btnode *node,
 	(void)_shell;
 	content = (t_content_node *)node->content;
 	ignore_signals();
+	*should_continue = true;
 	if (content->op != OP_PIPE)
 		return (0);
 	if ((node->left == NULL) || (node->left->content == NULL))
@@ -51,23 +52,24 @@ static int	btree_operator_before_callback(t_btnode *node,
 }
 
 static int	btree_operator_between_callback(t_btnode *node,
-				int ret, void *_shell)
+				int ret, bool *should_continue, void *_shell)
 {
 	t_shell			*shell;
 
 	shell = _shell;
 	if (ret != 0)
 		return (0);
+	*should_continue = true;
 	if (node->content != NULL)
 	{
 		ignore_signals();
 		if (((t_content_node *)node->content)->op == OP_AND)
 		{
-			return (process_and(shell));
+			return (process_and(shell, should_continue));
 		}
 		else if (((t_content_node *)node->content)->op == OP_OR)
 		{
-			return (process_or(shell));
+			return (process_or(shell, should_continue));
 		}
 		else if (((t_content_node *)node->content)->op == OP_PIPE)
 		{
@@ -113,6 +115,7 @@ int	process(t_shell *shell)
 {
 	int								tmp;
 	int								i;
+	int								ret;
 	const t_btree_foreach_dfs_cb	cfg = {
 		.cb_node_before = btree_operator_before_callback,
 		.cb_node_between = btree_operator_between_callback,
@@ -121,13 +124,16 @@ int	process(t_shell *shell)
 	};
 
 	i = -1;
-	btree_foreach_before_and_between_dfs(shell->cmds, &cfg);
+	shell->last_exit_status = EXIT_SUCCESS;
+	ret = btree_foreach_before_and_between_dfs(shell->cmds, &cfg);
+	if (ret != 0)
+		return (ret);
 	tmp = waitpid(shell->last_pid, &i, 0);
-	while ((tmp > 0))
+	if (tmp > 0)
 	{
-		tmp = wait(NULL);
+		while ((tmp > 0))
+			tmp = wait(NULL);
+		return (get_fork_return(i));
 	}
-	if (WIFEXITED(i))
-		return (WEXITSTATUS(i));
-	return (0);
+	return (ret);
 }

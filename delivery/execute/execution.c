@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/05 13:53:41 by djunho            #+#    #+#             */
-/*   Updated: 2025/05/29 20:35:49 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/05/30 19:12:59 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,25 @@
 // 	}
 // 	return (true);
 // }
+
+int	get_fork_return(int wstatus)
+{
+	if (WIFEXITED(wstatus))
+		return (WEXITSTATUS(wstatus));
+	else if (WIFSIGNALED(wstatus))
+	{
+		return (WTERMSIG(wstatus) + 128);
+	}
+	else if (WIFSTOPPED(wstatus))
+	{
+		return (WSTOPSIG(wstatus) + 128);
+	}
+	else
+	{
+		printf("Error unknown in child process\n");
+		return (1);
+	}
+}
 
 int	execute(t_shell *shell, char *envp[])
 {
