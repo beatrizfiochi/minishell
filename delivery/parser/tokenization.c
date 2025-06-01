@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 15:26:54 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/05/14 10:25:48 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/06/01 19:29:24 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,31 +26,39 @@ t_list	*create_token(const char *line, int len)
 	return (ft_lstnew(content));
 }
 
-static int	is_op(char *line)
+static void	search_token_utils(char *l, char *c, int init, int *len)
 {
-	if (*line == '\0')
-		return (0);
-	if (*line == '&' && *(line + 1) == '&')
-		return (2);
-	if (*line == '|' && *(line + 1) == '|')
-		return (2);
-	if (*line == '|')
-		return (1);
-	if (*line == '=')
-		return (1);
-	if (*line == '<' && *(line + 1) == '<')
-		return (2);
-	if (*line == '<')
-		return (1);
-	if (*line == '>' && *(line + 1) == '>')
-		return (2);
-	if (*line == '>')
-		return (1);
-	return (0);
+	bool	valid_op;
+
+	valid_op = false;
+	while (valid_op != true)
+	{
+		valid_op = true;
+		while (l[*len] != '\0' && l[*len] != ' ' && is_op(&l[*len]) == 0)
+		{
+			if ((l[*len] == '\'' || l[*len] == '"') && l[*len] != '\0')
+			{
+				*c = l[*len];
+				*len = go_next_char(&l[*len + 1], *c) - l;
+				if (l[*len] == *c)
+					(*len)++;
+			}
+			else
+				(*len)++;
+		}
+		if ((is_op(&l[*len]) == 1) && (l[*len] == '=')
+			&& (is_valid_name(&l[init], *len - init) == -1))
+		{
+			valid_op = false;
+			(*len)++;
+		}
+	}
 }
 
 static void	search_token(char *line, char *c, int *len)
 {
+	int		init;
+
 	if (line == NULL)
 		return ;
 	if (is_op(&line[*len]) > 0)
@@ -60,19 +68,8 @@ static void	search_token(char *line, char *c, int *len)
 	}
 	if (line[*len] == ' ' && *len == 0)
 		(*len)++;
-	while (line[*len] != '\0' && line[*len] != ' ' && is_op(&line[*len]) == 0)
-	{
-		if ((line[*len] == '\'' || line[*len] == '"') && line[*len] != '\0')
-		{
-			*c = line[*len];
-			(*len)++;
-			*len = go_next_char(&line[*len], *c) - line;
-			if (line[*len] == *c)
-				(*len)++;
-		}
-		else
-			(*len)++;
-	}
+	init = *len;
+	search_token_utils(line, c, init, len);
 }
 
 t_list	*tokenization(char *line)

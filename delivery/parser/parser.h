@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 14:14:02 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/05/25 20:19:31 by djunho           ###   ########.fr       */
+/*   Updated: 2025/06/01 18:50:12 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,5 +32,8 @@ void		search_and_expand(t_list *token_list, t_list *var_list);
 void		clean_token_quotes(t_list *token_list);
 
 char		*go_next_char(char *line, char c);
+
+int			is_op(char *line);
+int			is_valid_name(char *name, int len);
 
 #endif

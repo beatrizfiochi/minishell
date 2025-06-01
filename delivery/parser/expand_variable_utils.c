@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 14:25:49 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/05/15 14:50:00 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/06/01 18:46:51 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,9 +94,7 @@ void	search_and_expand_content(char **content, t_list *var_list)
 		{
 			var = cnt;
 			cnt++;
-			while (*cnt != '\0' && ((*cnt >= 'a' && *cnt <= 'z')
-					|| (*cnt >= 'A' && *cnt <= 'Z')
-					|| (*cnt >= '0' && *cnt <= '9')))
+			while (*cnt != '\0')
 				cnt++;
 			var_len = ((int)(cnt - var)) - 1;
 			var_value = search_var((const char *)(var + 1), var_list, var_len);

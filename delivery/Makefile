@@ -6,7 +6,7 @@
 #    By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/27 13:09:33 by djunho            #+#    #+#              #
-#    Updated: 2025/05/30 14:50:53 by bfiochi-         ###   ########.fr        #
+#    Updated: 2025/06/01 18:52:57 by bfiochi-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,7 @@ SRCS = main.c read_command.c utils.c debug.c \
 	btree/btree.c btree/btree_count.c btree/debug.c \
 	btree/btree_foreach.c \
 	parser/expand_variable.c parser/clean_token_quotes.c \
-	parser/expand_variable_utils.c \
+	parser/expand_variable_utils.c parser/tokenization_utils.c\
 	execute/execution.c execute/process.c execute/utils.c execute/debug.c \
 	execute/execution_operations.c \
 	signals/handle_signals.c \
