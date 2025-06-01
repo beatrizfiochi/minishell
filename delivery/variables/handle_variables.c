@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 21:17:55 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/05/30 17:43:55 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/06/01 17:22:56 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,27 @@ t_list	*create_var_node(char *name, char *value)
 	return (ft_lstnew(content));
 }
 
+static int	check_and_replace_var(t_list *current, t_content_var *existing,
+	t_content_node *name, t_content_node *value)
+{
+	while (current != NULL)
+	{
+		if (ft_strncmp(existing->var_name,
+				(char *)(name->cmd.tokens->content),
+			ft_strlen((const char *)(name->cmd.tokens->content))) == 0)
+		{
+			free(existing->var_value);
+			existing->var_value
+				= ft_strdup((char *)(value->cmd.tokens->content));
+			if (existing->var_value == NULL)
+				return (1);
+			return (0);
+		}
+		current = current->next;
+	}
+	return (0);
+}
+
 int	process_var_assign(t_btnode *node, t_shell *shell)
 {
 	t_content_node	*name_node;
@@ -57,21 +78,10 @@ int	process_var_assign(t_btnode *node, t_shell *shell)
 	if ((name_node == NULL) || (value_node == NULL))
 		return (1);
 	current = shell->variable_list;
-	while (current != NULL)
+	if (current != NULL)
 	{
 		existing = (t_content_var *)current->content;
-		if (ft_strncmp(existing->var_name,
-				(char *)(name_node->cmd.tokens->content),
-			ft_strlen((const char *)(name_node->cmd.tokens->content))) == 0)
-		{
-			free(existing->var_value);
-			existing->var_value
-				= ft_strdup((char *)(value_node->cmd.tokens->content));
-			if (existing->var_value == NULL)
-				return (1);
-			return (0);
-		}
-		current = current->next;
+		check_and_replace_var(current, existing, name_node, value_node);
 	}
 	new_node = create_var_node((char *)(name_node->cmd.tokens->content),
 			(char *)(value_node->cmd.tokens->content));
