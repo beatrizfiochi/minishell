@@ -6,11 +6,12 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 11:59:00 by djunho            #+#    #+#             */
-/*   Updated: 2025/05/29 19:23:29 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/06/01 14:39:21 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>			// perror, printf
+#include <stdbool.h>		// bool
 #include <sys/types.h>		// pid_t
 #include <unistd.h>			// execve, fork, pipe, dup2, close
 #include <sys/wait.h>		// wait
@@ -45,38 +46,33 @@ int	run_child(t_cmd *cmd, t_shell *shell)
 	return (127);
 }
 
-int	process_and(t_shell *shell)
+int	process_and(t_shell *shell, bool *should_continue)
 {
-	int		wstatus;
+	int	wstatus;
+	int	ret;
 
+	*should_continue = true;
 	if (shell->last_pid == 0)
 		return (0);
 	waitpid(shell->last_pid, &wstatus, 0);
-	if (WIFEXITED(wstatus))
-		return (WEXITSTATUS(wstatus));
-	else
-	{
-		printf("Error in child process\n");
-		return (1);
-	}
+	ret = get_fork_return(wstatus);
+	if (ret != EXIT_SUCCESS)
+		*should_continue = false;
+	return (ret);
 }
 
-int	process_or(t_shell *shell)
+int	process_or(t_shell *shell, bool *should_continue)
 {
-	int		wstatus;
+	int	wstatus;
+	int	ret;
 
 	if (shell->last_pid == 0)
 		return (0);
 	waitpid(shell->last_pid, &wstatus, 0);
-	if (WIFEXITED(wstatus))
-	{
-		return (WEXITSTATUS(wstatus) == 0);
-	}
-	else
-	{
-		printf("Error in child process\n");
-		return (1);
-	}
+	ret = get_fork_return(wstatus);
+	if (ret == EXIT_SUCCESS)
+		*should_continue = false;
+	return (ret);
 }
 
 int	process_pipe(t_btnode *node)

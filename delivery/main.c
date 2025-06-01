@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 18:59:31 by djunho            #+#    #+#             */
-/*   Updated: 2025/05/29 20:36:24 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/06/01 15:43:49 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #include "minishell.h"
 #include "parser/parser.h"
 #include "signals/signals.h"
+#include "execute/debug.h"		// debug_execution_pos();
 
 void	clear_minishell(t_shell *shell)
 {
@@ -41,6 +42,7 @@ static int	run_minishell(char *envp[])
 	#endif // TEST
 
 	shell.variable_list = NULL;
+	shell.last_exit_status = EXIT_SUCCESS;
 	shell.cmds = NULL;
 	#ifdef TEST
 	shell.variable_list = create_var_node(name_1, value_1);
@@ -50,8 +52,9 @@ static int	run_minishell(char *envp[])
 	shell.variable_list->next->next->next->next = NULL;
 	#endif // TEST
 	ret = read_command(&shell, envp);
-	while (ret == 0)
+	while (ret >= 0)
 	{
+		debug_execution_pos(&shell);
 		#ifdef TEST
 		variable_iter = shell.variable_list;
 		while (variable_iter != NULL)
@@ -67,7 +70,7 @@ static int	run_minishell(char *envp[])
 	clear_minishell(&shell);
 	if (isatty(STDIN_FILENO))
 		write(STDOUT_FILENO, "exit\n", 5);
-	return (ret);
+	return (shell.last_exit_status);
 }
 
 int	main(int argc, char *argv[], char *envp[])
@@ -79,6 +82,5 @@ int	main(int argc, char *argv[], char *envp[])
 	{
 		ft_printf("Hello, World of minishell!\n");
 	}
-	run_minishell(envp);
-	return (0);
+	return (run_minishell(envp));
 }

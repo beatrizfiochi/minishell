@@ -6,7 +6,7 @@
 /*   By: djunho <djunho@student.42porto.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/18 21:23:49 by djunho            #+#    #+#             */
-/*   Updated: 2025/05/18 21:26:49 by djunho           ###   ########.fr       */
+/*   Updated: 2025/06/01 11:41:26 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,12 @@ static void	each_list_node(void *content)
 	printf("%s ", (char *)content);
 }
 
-static int	printf_string_node(t_btnode *node, int ret, void *ctx)
+static int	printf_string_node(t_btnode *node, int ret,
+							bool *should_continue, void *ctx)
 {
 	(void)ret;
 	(void)ctx;
+	(void)should_continue;
 	printf("Btree: Operator node> %s\n",
 		op_str(((t_content_node *)node->content)->op));
 	return (0);

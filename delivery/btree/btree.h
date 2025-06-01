@@ -6,7 +6,7 @@
 /*   By: djunho <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 11:40:35 by djunho            #+#    #+#             */
-/*   Updated: 2025/05/26 10:35:33 by djunho           ###   ########.fr       */
+/*   Updated: 2025/06/01 14:38:40 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef BTREE_H
@@ -28,7 +28,8 @@ bool		btree_is_leaf(t_btnode *node);
 void		btree_delete(t_btnode **node, void (*content_free)(void *));
 void		btree_clear(t_btnode **node, void (*content_free)(void *));
 
-typedef int	(*t_foreach_node_cb)(t_btnode *node, int ret_left, void *ctx);
+typedef int	(*t_foreach_node_cb)(t_btnode *node, int ret_left,
+								bool *should_continue, void *ctx);
 typedef int	(*t_foreach_leaf_cb)(t_btnode *node, void *ctx);
 
 // Runs a DFS approach

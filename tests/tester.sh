@@ -26,8 +26,9 @@ function tester() {
 	fi
 
 	echo -e "${GREEN}Running ./minishell $cmd${RESET}"
+	rm "$OUT_FILE" || echo -n ""
 	echo "$cmd" | valgrind --trace-children=yes --child-silent-after-fork=no --leak-check=full --show-leak-kinds=all --suppressions=../delivery/valgrind-supression --log-file="$OUT_FILE_VALGRIND" ../delivery/minishell &> $OUT_FILE
-	if [[ $? -ne 0 ]]; then
+	if [ ! -f "$OUT_FILE" ]; then
 		echo -e "${RED}Test failed: $cmd${RESET}"
 		exit 1
 	fi
@@ -146,15 +147,18 @@ function tester_with_real() {
 	# ls: cannot access 'aaa': No such file or directory
 	# Which was causing issues to compare with real bash
 	echo "$cmd" | valgrind --child-silent-after-fork=yes --leak-check=full --log-file="$OUT_FILE_VALGRIND" ../delivery/minishell &> $OUT_FILE
-	if [[ $? -ne 0 ]]; then
+	EXIT_STATUS=$?
+	if [ ! -f "$OUT_FILE" ]; then
 		echo -e "${RED}Test failed: $cmd${RESET}"
 		exit 1
 	fi
 
 	#TODO: Since we are using readline on non-interactive mode, we need to remove the first line of the output. readline is always printing the received command.
-	tail -n +2 $OUT_FILE > ${OUT_FILE}_2
+	tail -n +2 ${OUT_FILE} > ${OUT_FILE}_2
 
 	echo "$cmd" | bash &> $OUT_REAL_FILE
+	REAL_EXIT_STATUS=$?
+
 	diff "${OUT_FILE}_2" "$OUT_REAL_FILE"
 	if [ $? -ne 0 ]; then
 		echo -e "${RED}Error: $cmd${RESET}"
@@ -164,9 +168,17 @@ function tester_with_real() {
 		echo -e "${BLUE}Output from bash is:${RESET}"
 		cat $OUT_REAL_FILE
 		exit 1
-	else
-		echo -e "${GREEN}Test comparing with real bash passed: $cmd${RESET}"
 	fi
+
+
+	if [[ "$EXIT_STATUS" != "$REAL_EXIT_STATUS" ]]; then
+		echo -e "${RED}Error different error status presented: $cmd${RESET}"
+		echo "minishell exit status $EXIT_STATUS"
+		echo "bash      exit status $REAL_EXIT_STATUS"
+		exit 1
+	fi
+
+	echo -e "${GREEN}Test comparing with real bash passed: $cmd${RESET}"
 
 	rm $OUT_FILE
 	rm ${OUT_FILE}_2
@@ -284,8 +296,6 @@ tester_with_real "ls ../delivery | cat -e"
 tester_with_real "ls ../delivery | grep mini | cat -e"
 tester_with_real "ls ../delivery | grep mini | cat -e | grep '\.h'"
 tester_with_real "ls ../delivery | grep mini | cat -e | grep '\.h' | cat -e"
-
-
-
+tester_with_real "echo oi && ls ../delivery | grep mini | cat -e"
 
 make -C ../delivery/ clean > /dev/null

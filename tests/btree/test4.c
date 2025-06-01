@@ -6,7 +6,7 @@
 /*   By: djunho <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 12:00:26 by djunho            #+#    #+#             */
-/*   Updated: 2025/05/13 21:49:25 by djunho           ###   ########.fr       */
+/*   Updated: 2025/06/01 14:47:52 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "btree.h"
@@ -22,10 +22,15 @@ typedef struct s_content
 	int		ret;
 }	t_content;
 
-static int	printf_string_node(t_btnode *node, int ret, void *ctx)
+static int	printf_string_node(t_btnode *node, int ret,
+							bool *should_continue, void *ctx)
 {
 	(void)node;
 	(void)ctx;
+	if (ret != 0)
+		*should_continue = false;
+	else
+		*should_continue = true;
 	return (ret);
 }
 

@@ -25,6 +25,7 @@ typedef struct s_shell
 	t_btnode	*cmds;
 	int			ncmds;
 	pid_t		last_pid;
+	int			last_exit_status;
 	t_list		*variable_list;
 }	t_shell;
 

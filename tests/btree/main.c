@@ -6,7 +6,7 @@
 /*   By: djunho <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 12:00:26 by djunho            #+#    #+#             */
-/*   Updated: 2025/04/21 19:28:07 by djunho           ###   ########.fr       */
+/*   Updated: 2025/06/01 14:52:34 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include <stdio.h>
@@ -30,6 +30,8 @@
 
 int	main(int argc, char* argv[])
 {
+	bool ret = true;
+	size_t i = 0;
 	DECL_TEST(0);
 	DECL_TEST(1);
 	DECL_TEST(2);
@@ -49,10 +51,15 @@ int	main(int argc, char* argv[])
 		int x = atoi(argv[1]);
 		func[x]();
 	} else {
-		for (size_t i = 0; i < sizeof(func)/sizeof(func[0]); i++)
-			func[i]();
+		for (i = 0;
+			(ret == true) && (i < sizeof(func)/sizeof(func[0]));
+			i++)
+			ret = func[i]();
 	}
 
-	printf(GREEN"All tests run successfully ✅\n"RESET);
+	if (ret)
+		printf(GREEN"All tests run successfully ✅\n"RESET);
+	else
+		printf(RED"Test %zu failed 🚫\n"RESET, i - 1);
 	return (0);
 }
