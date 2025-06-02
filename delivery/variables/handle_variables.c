@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 21:17:55 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/06/01 18:31:59 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/06/02 11:01:02 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,31 +62,31 @@ static int	check_and_replace_var(t_list *current, t_content_var *existing,
 	return (0);
 }
 
-int	process_var_assign(t_btnode *node, t_shell *shell)
+int	process_var_assign(t_btnode *nd, t_shell *sh)
 {
-	t_content_node	*name_node;
-	t_content_node	*value_node;
+	t_content_node	*name;
+	t_content_node	*value;
 	t_list			*current;
 	t_content_var	*existing;
 	t_list			*new_node;
 
-	if ((node == NULL) || (shell == NULL)
-		|| (node->left == NULL) || (node->right == NULL))
+	if ((nd->left == NULL) || (nd->right == NULL))
 		return (1);
-	name_node = (t_content_node *)node->left->content;
-	value_node = (t_content_node *)node->right->content;
-	if ((name_node == NULL) || (value_node == NULL))
+	name = (t_content_node *)nd->left->content;
+	value = (t_content_node *)nd->right->content;
+	if ((name == NULL) || (value == NULL))
 		return (1);
-	current = shell->variable_list;
+	current = sh->variable_list;
 	if (current != NULL)
 	{
 		existing = (t_content_var *)current->content;
-		check_and_replace_var(current, existing, name_node, value_node);
+		if (check_and_replace_var(current, existing, name, value) != 0)
+			return (1);
 	}
-	new_node = create_var_node((char *)(name_node->cmd.tokens->content),
-			(char *)(value_node->cmd.tokens->content));
+	new_node = create_var_node((char *)(name->cmd.tokens->content),
+		(char *)(value->cmd.tokens->content));
 	if (new_node == NULL)
 		return (1);
-	ft_lstadd_back(&shell->variable_list, new_node);
+	ft_lstadd_back(&sh->variable_list, new_node);
 	return (0);
 }
