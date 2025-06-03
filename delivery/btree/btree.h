@@ -6,7 +6,7 @@
 /*   By: djunho <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 11:40:35 by djunho            #+#    #+#             */
-/*   Updated: 2025/06/01 14:38:40 by djunho           ###   ########.fr       */
+/*   Updated: 2025/06/03 10:23:13 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef BTREE_H
@@ -60,5 +60,6 @@ int			btree_foreach_before_and_between_dfs(t_btnode *node,
 				const t_btree_foreach_dfs_cb *const cb_funcs);
 
 int			btree_count_leaves(t_btnode *node);
+int			btree_count_nodes(t_btnode *node);
 
 #endif // BTREE_H
