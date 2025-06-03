@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 14:14:02 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/06/01 18:50:12 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/06/03 10:40:55 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,5 +35,6 @@ char		*go_next_char(char *line, char c);
 
 int			is_op(char *line);
 int			is_valid_name(char *name, int len);
+int			is_token_operator(char *token);
 
 #endif

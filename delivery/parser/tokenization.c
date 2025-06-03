@@ -6,14 +6,15 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 15:26:54 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/06/01 19:29:24 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/06/03 11:11:55 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
 #include <stdio.h>       //printf
+#include <unistd.h>      //write
 #include <stdlib.h>
 #include "../libft/libft.h"
+#include "../minishell.h"
 #include "parser.h"
 
 t_list	*create_token(const char *line, int len)
@@ -26,6 +27,27 @@ t_list	*create_token(const char *line, int len)
 	return (ft_lstnew(content));
 }
 
+static int	scan_until_op_or_error(char *l, char *c, int *len)
+{
+	while (l[*len] != '\0' && l[*len] != ' ')
+	{
+		if (is_op(&l[*len]) > 0)
+			break;
+		if (is_op(&l[*len]) == 0 && (l[*len] == '|' || l[*len] == '&'))
+			return (-1);
+		if ((l[*len] == '\'' || l[*len] == '"') && l[*len] != '\0')
+		{
+			*c = l[*len];
+			*len = go_next_char(&l[*len + 1], *c) - l;
+			if (l[*len] == *c)
+				(*len)++;
+		}
+		else
+			(*len)++;
+	}
+	return (0);
+}
+
 static void	search_token_utils(char *l, char *c, int init, int *len)
 {
 	bool	valid_op;
@@ -34,17 +56,10 @@ static void	search_token_utils(char *l, char *c, int init, int *len)
 	while (valid_op != true)
 	{
 		valid_op = true;
-		while (l[*len] != '\0' && l[*len] != ' ' && is_op(&l[*len]) == 0)
+		if (scan_until_op_or_error(l, c, len) == -1)
 		{
-			if ((l[*len] == '\'' || l[*len] == '"') && l[*len] != '\0')
-			{
-				*c = l[*len];
-				*len = go_next_char(&l[*len + 1], *c) - l;
-				if (l[*len] == *c)
-					(*len)++;
-			}
-			else
-				(*len)++;
+			*len = -1;
+			return ;
 		}
 		if ((is_op(&l[*len]) == 1) && (l[*len] == '=')
 			&& (is_valid_name(&l[init], *len - init) == -1))
@@ -58,13 +73,21 @@ static void	search_token_utils(char *l, char *c, int init, int *len)
 static void	search_token(char *line, char *c, int *len)
 {
 	int		init;
+	int		op_len;
 
 	if (line == NULL)
 		return ;
-	if (is_op(&line[*len]) > 0)
+	op_len = is_op(&line[*len]);
+	if (op_len == 0 && ((line[*len] == '&') || (line[*len] == '|')
+		|| (line[*len] == '=') || (line[*len] == '<') || (line[*len] == '>')))
 	{
-		*len += is_op(&line[*len]);
-		return ;
+		*len = -1;
+		return;
+	}
+	if (op_len > 0)
+	{
+		*len += op_len;
+		return;
 	}
 	if (line[*len] == ' ' && *len == 0)
 		(*len)++;
@@ -76,10 +99,12 @@ t_list	*tokenization(char *line)
 {
 	t_list	*head_token;
 	t_list	*new_token;
+	t_list	*prev_token;
 	char	quote;
 	int		len;
 
 	head_token = NULL;
+	prev_token = NULL;
 	quote = 0;
 	if (line == NULL)
 		return (NULL);
@@ -91,8 +116,23 @@ t_list	*tokenization(char *line)
 			break ;
 		len = 0;
 		search_token(line, &quote, &len);
+		if (len == -1)
+		{
+			printf_error("syntax error near unexpected token\n");
+			return (NULL);
+		}
 		new_token = create_token(line, len);
+		if ((prev_token != NULL)
+			&& (is_token_operator(prev_token->content) == 1)
+			&& (is_token_operator(new_token->content) == 1))
+		{
+			printf_error("syntax error near unexpected token\n");
+			ft_lstdelone(new_token, free);
+			ft_lstclear(&head_token, free);
+			return (NULL);
+		}
 		ft_lstadd_back(&head_token, new_token);
+		prev_token = new_token;
 		line += len;
 	}
 	return (head_token);
