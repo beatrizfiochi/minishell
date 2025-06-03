@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 19:55:45 by djunho            #+#    #+#             */
-/*   Updated: 2025/06/01 20:35:10 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/06/13 16:29:14 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,27 +26,32 @@ static int	btree_operator_before_callback(t_btnode *node,
 				int ret, bool *should_continue, void *_shell)
 {
 	t_content_node	*content;
-	t_content_node	*parent_content;
 
+	content = (t_content_node *)node->content;
 	(void)ret;
 	(void)_shell;
-	content = (t_content_node *)node->content;
 	ignore_signals();
 	*should_continue = true;
+	if (content->op == OP_PIPE)
+	{
+		//TODO: Initialize each node when creating the tree
+		content->pipe.is_last_pipe = false;
+		content->pipe.pipe[0] = -1;
+		content->pipe.pipe[1] = -1;
+		content->pipe.carry_over_fd = -1;
+	}
 	if (content->op != OP_PIPE)
 		return (0);
+	if ((node->right == NULL) || (node->right->content == NULL))
+		return (1);
 	if ((node->left == NULL) || (node->left->content == NULL))
 		return (1);
+	if (((t_content_node *)node->right->content)->op != OP_CMD)
+		return (0);
 	if (((t_content_node *)node->left->content)->op != OP_CMD)
 		return (0);
 	content->pipe.is_last_pipe = false;
 	content->pipe.carry_over_fd = -1;
-	if (node->parent != NULL)
-	{
-		parent_content = (t_content_node *)node->parent->content;
-		if ((parent_content != NULL) && (parent_content->op == OP_PIPE))
-			content->pipe.carry_over_fd = parent_content->pipe.carry_over_fd;
-	}
 	if (pipe(content->pipe.pipe) < 0)
 		return (1);
 	return (0);
@@ -55,7 +60,7 @@ static int	btree_operator_before_callback(t_btnode *node,
 static int	btree_operator_between_callback(t_btnode *node,
 				int ret, bool *should_continue, void *_shell)
 {
-	t_shell			*shell;
+	t_shell	*shell;
 
 	shell = _shell;
 	if (ret != 0)

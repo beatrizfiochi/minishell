@@ -6,10 +6,11 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 18:34:50 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/05/25 22:58:12 by djunho           ###   ########.fr       */
+/*   Updated: 2025/06/03 23:00:19 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stdio.h>				// printf
 #include "../btree/btree.h"
 #include "../minishell.h"
 #include "../cmd.h"
@@ -77,20 +78,20 @@ static t_btnode	*create_node(t_list *token_list, t_btnode *parent)
 	return (tree_node);
 }
 
-static void	delete_btree_node(t_btnode **node, t_list *left,
-								t_list *cur, t_list *right)
+static void free_btree_content(void *_content)
 {
-	ft_lstclear(&left, free);
-	ft_lstclear(&cur, free);
-	ft_lstclear(&right, free);
-	btree_delete(&(*node)->left, free);
-	btree_delete(&(*node)->right, free);
-	btree_delete(node, free);
+	t_content_node *content;
+
+	content = (t_content_node *)_content;
+	if (content->op == OP_CMD)
+	{
+		if (content->cmd.tokens != NULL)
+			ft_lstclear(&content->cmd.tokens, free);
+	}
+	free(content);
 }
 
-// Search for and operator
-// Every operator must be placed between 2 commands
-t_btnode	*create_tree(t_list **token_list, t_btnode *parent)
+t_btnode	*create_first(t_list **token_list, t_btnode *parent)
 {
 	t_list		*op_node;
 	t_list		*aux;
@@ -98,7 +99,11 @@ t_btnode	*create_tree(t_list **token_list, t_btnode *parent)
 
 	op_node = search_op(*token_list);
 	if (op_node == NULL)
-		return (create_node(*token_list, parent));
+	{
+		tree = create_node(*token_list, parent);
+		*token_list = op_node;
+		return (tree);
+	}
 	aux = prev_list_item(*token_list, op_node);
 	if ((op_node->next == NULL) || (aux == NULL))
 	{
@@ -109,9 +114,69 @@ t_btnode	*create_tree(t_list **token_list, t_btnode *parent)
 	aux = op_node->next;
 	op_node->next = NULL;
 	tree = create_node(op_node, parent);
-	tree->left = create_tree(token_list, tree);
-	tree->right = create_tree(&aux, tree);
-	if ((tree->left == NULL) || (tree->right == NULL))
-		delete_btree_node(&tree, *token_list, op_node, aux);
+	tree->left = create_node(*token_list, tree);
+	tree->right = create_node(aux, tree);
+	op_node = search_op(aux);
+	if (op_node != NULL)
+	{
+		aux = prev_list_item(aux, op_node);
+		if (aux == NULL)
+		{
+			printf("Error: Two operators in sequence\n");
+			btree_clear(&tree, free_btree_content);
+			ft_lstclear(&op_node, free);
+			return (NULL);
+		}
+		aux->next = NULL;
+	}
+	*token_list = op_node;
+	return (tree);
+}
+
+// Search for and operator
+// Every operator must be placed between 2 commands
+t_btnode	*create_tree(t_list **token_list, t_btnode *parent)
+{
+	t_list		*op_node;
+	t_list		*right;
+	t_list		*aux;
+	t_btnode	*tree;
+	t_btnode	*old_tree;
+
+	old_tree = create_first(token_list, parent);
+	if (old_tree == NULL)
+		return (NULL);
+	tree = old_tree;
+	while (*token_list != NULL)
+	{
+		op_node = search_op(*token_list);
+		if ((op_node == NULL) || (op_node != *token_list))
+		{
+			printf("Should find an operator\n");
+			ft_lstclear(token_list, free);
+			return (NULL);
+		}
+		right = op_node->next;
+		op_node->next = NULL;
+		tree = create_node(op_node, parent);
+		tree->left = old_tree;
+		tree->left->parent = tree;
+		tree->right = create_node(right, tree);
+		op_node = search_op(right);
+		if (op_node != NULL)
+		{
+			aux = prev_list_item(right, op_node);
+			if (aux == NULL)
+			{
+				printf("Error: Two operators in sequence\n");
+				btree_clear(&tree, free_btree_content);
+				ft_lstclear(&op_node, free);
+				return (NULL);
+			}
+			aux->next = NULL;
+		}
+		*token_list = op_node;
+		old_tree = tree;
+	}
 	return (tree);
 }

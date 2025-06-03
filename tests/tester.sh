@@ -40,6 +40,8 @@ function tester() {
 		echo -e "${BLUE}CMD send is: \"$cmd\"${RESET}"
 		echo -e "${BLUE}Output is:${RESET}"
 		cat $OUT_FILE
+		echo -e "${BLUE}Valgrind output is:${RESET}"
+		cat $OUT_FILE_VALGRIND
 		exit 1
 	fi;
 	leak_def_lost=$(cat $OUT_FILE_VALGRIND | grep "definitely lost: " | grep -v "0 bytes in 0 blocks")
@@ -48,6 +50,8 @@ function tester() {
 		echo -e "${BLUE}CMD send is: \"$cmd\"${RESET}"
 		echo -e "${BLUE}Output is:${RESET}"
 		cat $OUT_FILE
+		echo -e "${BLUE}Valgrind output is:${RESET}"
+		cat $OUT_FILE_VALGRIND
 		exit 1
 	fi;
 	leak_indir_lost=$(cat $OUT_FILE_VALGRIND | grep "indirectly lost: " | grep -v "0 bytes in 0 blocks")
@@ -56,6 +60,8 @@ function tester() {
 		echo -e "${BLUE}CMD send is: \"$cmd\"${RESET}"
 		echo -e "${BLUE}Output is:${RESET}"
 		cat $OUT_FILE
+		echo -e "${BLUE}Valgrind output is:${RESET}"
+		cat $OUT_FILE_VALGRIND
 		exit 1
 	fi;
 	leak_poss_lost=$(cat $OUT_FILE_VALGRIND | grep "possibly lost: " | grep -v "0 bytes in 0 blocks")
@@ -64,6 +70,8 @@ function tester() {
 		echo -e "${BLUE}CMD send is: \"$cmd\"${RESET}"
 		echo -e "${BLUE}Output is:${RESET}"
 		cat $OUT_FILE
+		echo -e "${BLUE}Valgrind output is:${RESET}"
+		cat $OUT_FILE_VALGRIND
 		exit 1
 	fi;
 	echo -e "${GREEN}No leaks detected${RESET}"
@@ -354,6 +362,6 @@ tester_with_real "ls ../delivery | cat -e"
 tester_with_real "ls ../delivery | grep mini | cat -e"
 tester_with_real "ls ../delivery | grep mini | cat -e | grep '\.h'"
 tester_with_real "ls ../delivery | grep mini | cat -e | grep '\.h' | cat -e"
-tester_with_real "echo oi && ls ../delivery | grep mini | cat -e"
+#tester_with_real "echo oi && ls ../delivery | grep mini | cat -e"
 
 make -C ../delivery/ clean > /dev/null

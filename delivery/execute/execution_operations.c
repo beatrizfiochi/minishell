@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 11:59:00 by djunho            #+#    #+#             */
-/*   Updated: 2025/06/01 14:39:21 by djunho           ###   ########.fr       */
+/*   Updated: 2025/06/03 22:55:57 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 #include "../cmd.h"
 #include "execution.h"
 #include "../signals/signals.h"
+#include "../parser/parser.h"
 
 int	run_child(t_cmd *cmd, t_shell *shell)
 {
@@ -27,6 +28,7 @@ int	run_child(t_cmd *cmd, t_shell *shell)
 	char	**args;
 
 	envp = shell->envp;
+	clean_token_quotes(cmd->tokens);
 	args = convert_list_to_vector(cmd->tokens);
 	if (args == NULL)
 		return (0);
@@ -77,27 +79,37 @@ int	process_or(t_shell *shell, bool *should_continue)
 
 int	process_pipe(t_btnode *node)
 {
-	t_node_op		right_operation;
+	t_node_op		parent_operation;
 	t_content_node	*content;
-	t_content_node	*right_content;
+	t_content_node	*parent_content;
 
 	content = (t_content_node *)node->content;
-	right_operation = OP_INVALID;
-	if (node->right != NULL)
+	parent_operation = OP_INVALID;
+	if (node->parent != NULL)
 	{
-		right_content = (t_content_node *)node->right->content;
-		if (right_content != NULL)
-			right_operation = right_content->op;
+		parent_content = (t_content_node *)node->parent->content;
+		if (parent_content != NULL)
+			parent_operation = parent_content->op;
 	}
-	close(content->pipe.carry_over_fd);
-	content->pipe.carry_over_fd = dup(content->pipe.pipe[0]);
+	t_content_node	*left_content;
+	if (node->left != NULL)
+	{
+		left_content = (t_content_node *)node->left->content;
+		if ((left_content != NULL) && (left_content->op == OP_PIPE))
+		{
+			content->pipe.carry_over_fd = dup(left_content->pipe.pipe[0]);
+			close(left_content->pipe.pipe[0]);
+			close(left_content->pipe.pipe[1]);
+			close(left_content->pipe.carry_over_fd);
+		}
+		else
+			content->pipe.carry_over_fd = dup(content->pipe.pipe[0]);
+	} 
 	close(content->pipe.pipe[0]);
 	close(content->pipe.pipe[1]);
 	if (pipe(content->pipe.pipe) < 0)
 		return (1);
-	close(content->pipe.pipe[0]);
-	content->pipe.pipe[0] = content->pipe.carry_over_fd;
-	if (right_operation != OP_PIPE)
+	if (parent_operation != OP_PIPE)
 		content->pipe.is_last_pipe = true;
 	return (0);
 }
@@ -109,13 +121,8 @@ void	configure_pipe(int pipe[2], int carry_over_fd, bool is_last_pipe)
 		dup2(carry_over_fd, STDIN_FILENO);
 		close(carry_over_fd);
 	}
-	else
-	{
-		close(pipe[0]);
-	}
+	close(pipe[0]);
 	if (!is_last_pipe)
-	{
 		dup2(pipe[1], STDOUT_FILENO);
-	}
 	close(pipe[1]);
 }
