@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 18:34:50 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/06/03 23:00:19 by djunho           ###   ########.fr       */
+/*   Updated: 2025/06/13 16:31:58 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ static t_node_op	op(char *token_str)
 	return (OP_CMD);
 }
 
-static t_list	*search_op(t_list *tokens)
+static t_list	*search_op(t_list *tokens, bool full_expand)
 {
 	char		*content_token;
 	t_node_op	operator;
@@ -50,10 +50,12 @@ static t_list	*search_op(t_list *tokens)
 	{
 		content_token = tokens->content;
 		operator = op(content_token);
-		if (operator == OP_AND || operator == OP_OR || operator == OP_PIPE
+		if (operator == OP_AND || operator == OP_OR
 			|| operator == OP_VAR_ASSIGN || operator == OP_HEREDOC
 			|| operator == OP_RD_INPUT || operator == OP_APPEND_RD_OUTPUT
 			|| operator == OP_RD_OUTPUT)
+			return (tokens);
+		if (full_expand && (operator == OP_PIPE))
 			return (tokens);
 		tokens = tokens->next;
 	}
@@ -91,13 +93,13 @@ static void free_btree_content(void *_content)
 	free(content);
 }
 
-t_btnode	*create_first(t_list **token_list, t_btnode *parent)
+static t_btnode	*create_first(t_list **token_list, t_btnode *parent, bool full_expand)
 {
 	t_list		*op_node;
 	t_list		*aux;
 	t_btnode	*tree;
 
-	op_node = search_op(*token_list);
+	op_node = search_op(*token_list, full_expand);
 	if (op_node == NULL)
 	{
 		tree = create_node(*token_list, parent);
@@ -116,7 +118,7 @@ t_btnode	*create_first(t_list **token_list, t_btnode *parent)
 	tree = create_node(op_node, parent);
 	tree->left = create_node(*token_list, tree);
 	tree->right = create_node(aux, tree);
-	op_node = search_op(aux);
+	op_node = search_op(aux, full_expand);
 	if (op_node != NULL)
 	{
 		aux = prev_list_item(aux, op_node);
@@ -135,7 +137,8 @@ t_btnode	*create_first(t_list **token_list, t_btnode *parent)
 
 // Search for and operator
 // Every operator must be placed between 2 commands
-t_btnode	*create_tree(t_list **token_list, t_btnode *parent)
+//
+static t_btnode	*create_basic_tree(t_list **token_list, t_btnode *parent, bool full_expand)
 {
 	t_list		*op_node;
 	t_list		*right;
@@ -143,13 +146,13 @@ t_btnode	*create_tree(t_list **token_list, t_btnode *parent)
 	t_btnode	*tree;
 	t_btnode	*old_tree;
 
-	old_tree = create_first(token_list, parent);
+	old_tree = create_first(token_list, parent, full_expand);
 	if (old_tree == NULL)
 		return (NULL);
 	tree = old_tree;
 	while (*token_list != NULL)
 	{
-		op_node = search_op(*token_list);
+		op_node = search_op(*token_list, full_expand);
 		if ((op_node == NULL) || (op_node != *token_list))
 		{
 			printf("Should find an operator\n");
@@ -162,7 +165,7 @@ t_btnode	*create_tree(t_list **token_list, t_btnode *parent)
 		tree->left = old_tree;
 		tree->left->parent = tree;
 		tree->right = create_node(right, tree);
-		op_node = search_op(right);
+		op_node = search_op(right, full_expand);
 		if (op_node != NULL)
 		{
 			aux = prev_list_item(right, op_node);
@@ -177,6 +180,53 @@ t_btnode	*create_tree(t_list **token_list, t_btnode *parent)
 		}
 		*token_list = op_node;
 		old_tree = tree;
+	}
+	return (tree);
+}
+
+static t_btnode	*expand_pipe_btree_node(t_btnode *node)
+{
+	t_content_node	*content;
+	t_btnode		*new_tree;
+
+	if (node == NULL)
+		return (node);
+	if (btree_is_leaf(node))
+	{
+		content = (t_content_node *)node->content;
+		if (content->op == OP_CMD)
+		{
+			new_tree = create_basic_tree(&content->cmd.tokens, node->parent, true);
+			// Do the expansion
+			btree_delete(&node, free_btree_node);
+			return (new_tree);
+		}
+		else
+		{
+			printf("Error: Operator without command\n");
+			return (node);
+		}
+	}
+	if (node->left != NULL)
+		node->left = expand_pipe_btree_node(node->left);
+	if (node->right != NULL)
+		node->right = expand_pipe_btree_node(node->right);
+	return (node);
+}
+
+t_btnode	*create_tree(t_list **token_list, t_btnode *parent)
+{
+	t_btnode	*tree;
+	if (token_list == NULL || *token_list == NULL)
+		return (NULL);
+	tree = create_basic_tree(token_list, parent, false);
+	if (tree == NULL)
+		return (NULL);
+	tree = expand_pipe_btree_node(tree);
+	if (tree == NULL)
+	{
+		printf("Error: Failed to expand pipe btree node\n");
+		return (NULL);
 	}
 	return (tree);
 }
