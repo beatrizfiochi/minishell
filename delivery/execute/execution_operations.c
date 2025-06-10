@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 11:59:00 by djunho            #+#    #+#             */
-/*   Updated: 2025/06/03 22:55:57 by djunho           ###   ########.fr       */
+/*   Updated: 2025/06/04 19:23:16 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,32 +48,46 @@ int	run_child(t_cmd *cmd, t_shell *shell)
 	return (127);
 }
 
-int	process_and(t_shell *shell, bool *should_continue)
+int	process_and(t_shell *shell, t_content_node *left_content, int ret, bool *should_continue)
 {
 	int	wstatus;
-	int	ret;
 
 	*should_continue = true;
 	if (shell->last_pid == 0)
 		return (0);
-	waitpid(shell->last_pid, &wstatus, 0);
-	ret = get_fork_return(wstatus);
-	if (ret != EXIT_SUCCESS)
-		*should_continue = false;
+	// printf("Process AND: left op = %d, ret = %d\n", left_content->op, ret);
+	if ((left_content->op == OP_CMD) && (ret == EXIT_SUCCESS))
+	{
+		waitpid(shell->last_pid, &wstatus, 0);
+		ret = get_fork_return(wstatus);
+		if (ret != EXIT_SUCCESS)
+			*should_continue = false;
+	}
+	else
+	{
+		*should_continue = (ret == EXIT_SUCCESS);
+	}
 	return (ret);
 }
 
-int	process_or(t_shell *shell, bool *should_continue)
+int	process_or(t_shell *shell, t_content_node *left_content, int ret, bool *should_continue)
 {
 	int	wstatus;
-	int	ret;
 
 	if (shell->last_pid == 0)
 		return (0);
-	waitpid(shell->last_pid, &wstatus, 0);
-	ret = get_fork_return(wstatus);
-	if (ret == EXIT_SUCCESS)
-		*should_continue = false;
+	// printf("Process OR: left op = %d, ret = %d\n", left_content->op, ret);
+	if ((left_content->op == OP_CMD) && (ret == EXIT_SUCCESS))
+	{
+		waitpid(shell->last_pid, &wstatus, 0);
+		ret = get_fork_return(wstatus);
+		if (ret == EXIT_SUCCESS)
+			*should_continue = false;
+	}
+	else
+	{
+		*should_continue = (ret != EXIT_SUCCESS);
+	}
 	return (ret);
 }
 

@@ -362,6 +362,22 @@ tester_with_real "ls ../delivery | cat -e"
 tester_with_real "ls ../delivery | grep mini | cat -e"
 tester_with_real "ls ../delivery | grep mini | cat -e | grep '\.h'"
 tester_with_real "ls ../delivery | grep mini | cat -e | grep '\.h' | cat -e"
+
+# Mixed AND and OR
+tester_with_real "ls || echo oi || ls ../delivery"
+tester_with_real "ls || echo oi && ls ../delivery"
+tester_with_real "ls && echo oi && ls ../delivery"
+tester_with_real "ls || echo oi || ls ../delivery || grep mini"
+tester_with_real "ls || echo oi || ls ../delivery && grep mini"
+tester_with_real "ls || echo oi && ls ../delivery && grep mini"
+tester_with_real "ls && echo oi && ls ../delivery && grep mini"
+tester_with_real "ls && echo oi && ls ../delivery || grep mini"
+tester_with_real "ls && echo oi || ls ../delivery || grep mini"
+tester_with_real "ls && echo oi || ls ../delivery && grep mini"
+tester_with_real "ls || echo oi && ls ../delivery || grep mini"
+
+# Mixed AND, OR and PIPE
 #tester_with_real "echo oi && ls ../delivery | grep mini | cat -e"
+#tester_with_real "ls || echo oi && ls ../delivery | grep mini | cat -e"
 
 make -C ../delivery/ clean > /dev/null
