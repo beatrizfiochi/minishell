@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include <stdlib.h>
+#include <stdio.h>			// printf
 #include <stdbool.h>
 #include <unistd.h>			// pipe
 #include <sys/wait.h>		// wait
@@ -102,6 +103,11 @@ static int	btree_cmd_callback(t_btnode *node, void *_shell)
 	}
 	if (node->content == NULL)
 		return (0);
+	if (((t_content_node *)node->content)->op != OP_CMD)
+	{
+		printf("Error: Node is not a command\n");
+		return (EXIT_FAILURE);
+	}
 	debug_btree_print(node);
 	if (operator == OP_VAR_ASSIGN)
 		return (0);

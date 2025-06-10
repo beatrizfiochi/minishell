@@ -75,6 +75,12 @@ static t_btnode	*create_node(t_list *token_list, t_btnode *parent)
 		content->cmd.tokens = token_list;
 	else
 		ft_lstclear(&token_list, free);
+	if (content->op == OP_PIPE)
+	{
+		content->pipe.pipe[0] = -1;
+		content->pipe.pipe[1] = -1;
+		content->pipe.carry_over_fd = -1;
+	}
 	tree_node = btree_new(content);
 	tree_node->parent = parent;
 	return (tree_node);
@@ -117,8 +123,15 @@ static t_btnode	*create_first(t_list **token_list, t_btnode *parent, bool full_e
 	op_node->next = NULL;
 	tree = create_node(op_node, parent);
 	tree->left = create_node(*token_list, tree);
-	tree->right = create_node(aux, tree);
 	op_node = search_op(aux, full_expand);
+	if (op_node == aux)
+	{
+		printf("Error: Two operator in a row\n");
+		ft_lstclear(&aux, free);
+		btree_clear(&tree, free_btree_content);
+		return (NULL);
+	}
+	tree->right = create_node(aux, tree);
 	if (op_node != NULL)
 	{
 		aux = prev_list_item(aux, op_node);
@@ -164,8 +177,15 @@ static t_btnode	*create_basic_tree(t_list **token_list, t_btnode *parent, bool f
 		tree = create_node(op_node, parent);
 		tree->left = old_tree;
 		tree->left->parent = tree;
-		tree->right = create_node(right, tree);
 		op_node = search_op(right, full_expand);
+		if (op_node == right)
+		{
+			printf("Error: Two operator in a row\n");
+			ft_lstclear(&right, free);
+			btree_clear(&tree, free_btree_content);
+			return (NULL);
+		}
+		tree->right = create_node(right, tree);
 		if (op_node != NULL)
 		{
 			aux = prev_list_item(right, op_node);

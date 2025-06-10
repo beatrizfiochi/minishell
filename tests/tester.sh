@@ -117,7 +117,7 @@ function tester() {
 			# expected print
 			# Btree: Leaf content: oi
 			# Btree: Operator leaf> OP_CMD
-			found=$(cat $OUT_FILE | grep -A 1 "Btree: Leaf content: $item")
+			found=$(cat $OUT_FILE | grep -B 1 "Btree: Leaf content: $item")
 			echo "$found" | grep "OP_CMD" > /dev/null
 			if [[ $? -ne 0 ]]; then
 				echo -e "${RED}Error to find the command $item in the output${RESET}"

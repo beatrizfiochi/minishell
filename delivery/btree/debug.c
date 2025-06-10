@@ -36,12 +36,20 @@ static int	printf_string_node(t_btnode *node, int ret,
 
 static int	printf_string_leaf(t_btnode *node, void *ctx)
 {
+	t_content_node *content;
 	(void)ctx;
-	printf("Btree: Leaf content: ");
-	ft_lstiter(((t_content_node *)node->content)->cmd.tokens, each_list_node);
-	printf("\n");
+
+	content = (t_content_node *)node->content;
 	printf("Btree: Operator leaf> %s\n",
-		op_str(((t_content_node *)node->content)->op));
+		op_str(content->op));
+	if (content->op != OP_CMD)
+	{
+		printf("Btree: Leaf is not a command (Error)!\n");
+		return (0);
+	}
+	printf("Btree: Leaf content: ");
+	ft_lstiter(content->cmd.tokens, each_list_node);
+	printf("\n");
 	return (0);
 }
 
