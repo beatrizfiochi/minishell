@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 21:17:55 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/06/02 11:29:13 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/06/13 12:50:30 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ int	process_var_assign(t_btnode *nd, t_shell *sh)
 		check_and_replace_var(current, existing, name, value);
 	}
 	new_node = create_var_node((char *)(name->cmd.tokens->content),
-		(char *)(value->cmd.tokens->content));
+			(char *)(value->cmd.tokens->content));
 	if (new_node == NULL)
 		return (1);
 	ft_lstadd_back(&sh->variable_list, new_node);

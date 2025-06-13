@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 15:26:54 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/06/13 11:53:01 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/06/13 12:53:54 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ static int	scan_until_op_or_error(char *l, char *c, int *len)
 	while (l[*len] != '\0' && l[*len] != ' ')
 	{
 		if (is_op(&l[*len]) > 0)
-			break;
+			break ;
 		if (is_op(&l[*len]) == 0 && (l[*len] == '|' || l[*len] == '&'))
 			return (-1);
 		if ((l[*len] == '\'' || l[*len] == '"') && l[*len] != '\0')
@@ -79,15 +79,16 @@ static void	search_token(char *line, char *c, int *len)
 		return ;
 	op_len = is_op(&line[*len]);
 	if (op_len == 0 && ((line[*len] == '&') || (line[*len] == '|')
-		|| (line[*len] == '=') || (line[*len] == '<') || (line[*len] == '>')))
+			|| (line[*len] == '=') || (line[*len] == '<')
+			|| (line[*len] == '>')))
 	{
 		*len = -1;
-		return;
+		return ;
 	}
 	if (op_len > 0)
 	{
 		*len += op_len;
-		return;
+		return ;
 	}
 	if (line[*len] == ' ' && *len == 0)
 		(*len)++;

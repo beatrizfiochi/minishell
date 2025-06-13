@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 18:48:52 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/06/03 10:40:31 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/06/13 12:54:27 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ static int	check_sequence(char *line, char c)
 // 0 -> invalid, 1 ou 2 -> size of valid op
 int	is_op(char *line)
 {
-	int len;
+	int	len;
 
 	if (*line == '\0')
 		return (0);
