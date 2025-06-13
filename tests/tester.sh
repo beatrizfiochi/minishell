@@ -40,6 +40,8 @@ function tester() {
 		echo -e "${BLUE}CMD send is: \"$cmd\"${RESET}"
 		echo -e "${BLUE}Output is:${RESET}"
 		cat $OUT_FILE
+		echo -e "${BLUE}Valgrind output is:${RESET}"
+		cat $OUT_FILE_VALGRIND
 		exit 1
 	fi;
 	leak_def_lost=$(cat $OUT_FILE_VALGRIND | grep "definitely lost: " | grep -v "0 bytes in 0 blocks")
@@ -48,6 +50,8 @@ function tester() {
 		echo -e "${BLUE}CMD send is: \"$cmd\"${RESET}"
 		echo -e "${BLUE}Output is:${RESET}"
 		cat $OUT_FILE
+		echo -e "${BLUE}Valgrind output is:${RESET}"
+		cat $OUT_FILE_VALGRIND
 		exit 1
 	fi;
 	leak_indir_lost=$(cat $OUT_FILE_VALGRIND | grep "indirectly lost: " | grep -v "0 bytes in 0 blocks")
@@ -56,6 +60,8 @@ function tester() {
 		echo -e "${BLUE}CMD send is: \"$cmd\"${RESET}"
 		echo -e "${BLUE}Output is:${RESET}"
 		cat $OUT_FILE
+		echo -e "${BLUE}Valgrind output is:${RESET}"
+		cat $OUT_FILE_VALGRIND
 		exit 1
 	fi;
 	leak_poss_lost=$(cat $OUT_FILE_VALGRIND | grep "possibly lost: " | grep -v "0 bytes in 0 blocks")
@@ -64,6 +70,8 @@ function tester() {
 		echo -e "${BLUE}CMD send is: \"$cmd\"${RESET}"
 		echo -e "${BLUE}Output is:${RESET}"
 		cat $OUT_FILE
+		echo -e "${BLUE}Valgrind output is:${RESET}"
+		cat $OUT_FILE_VALGRIND
 		exit 1
 	fi;
 	echo -e "${GREEN}No leaks detected${RESET}"
@@ -109,7 +117,7 @@ function tester() {
 			# expected print
 			# Btree: Leaf content: oi
 			# Btree: Operator leaf> OP_CMD
-			found=$(cat $OUT_FILE | grep -A 1 "Btree: Leaf content: $item")
+			found=$(cat $OUT_FILE | grep -B 1 "Btree: Leaf content: $item")
 			echo "$found" | grep "OP_CMD" > /dev/null
 			if [[ $? -ne 0 ]]; then
 				echo -e "${RED}Error to find the command $item in the output${RESET}"
@@ -206,8 +214,6 @@ function tester_with_real() {
 	rm $OUT_FILE
 	rm ${OUT_FILE}_2
 	rm $OUT_REAL_FILE
-
-	echo ""
 }
 
 OUT_FILE="/tmp/my_minishell"
@@ -336,24 +342,53 @@ if [[ $? -ne 0 ]]; then
 fi
 
 # Test a normal command
+echo -e "${MAGENTA}Testing a normal command${RESET}"
 tester_with_real "ls"
 tester_with_real "echo opa"
+echo ""
 
 # test AND
+echo -e "${MAGENTA}Testing AND operator${RESET}"
 tester_with_real "ls && pwd"
 tester_with_real "ls aaa && pwd"
+echo ""
 
 # test OR
+echo -e "${MAGENTA}Testing OR operator${RESET}"
 tester_with_real "ls || pwd"
 tester_with_real "ls aaa || pwd"
+echo ""
 
 # Test PIPE
+echo -e "${MAGENTA}Testing PIPE operator${RESET}"
 tester_with_real "ls | cat -e"
 tester_with_real "ls aaa | cat -e"
 tester_with_real "ls ../delivery | cat -e"
 tester_with_real "ls ../delivery | grep mini | cat -e"
 tester_with_real "ls ../delivery | grep mini | cat -e | grep '\.h'"
 tester_with_real "ls ../delivery | grep mini | cat -e | grep '\.h' | cat -e"
+echo ""
+
+# Mixed AND and OR
+echo -e "${MAGENTA}Testing AND and OR operators mixed${RESET}"
+tester_with_real "ls || echo oi || ls ../delivery"
+tester_with_real "ls || echo oi && ls ../delivery"
+tester_with_real "ls && echo oi && ls ../delivery"
+tester_with_real "ls || echo oi || ls ../delivery || grep mini"
+tester_with_real "ls || echo oi || ls ../delivery && grep mini"
+tester_with_real "ls || echo oi && ls ../delivery && grep mini"
+tester_with_real "ls && echo oi && ls ../delivery && grep mini"
+tester_with_real "ls && echo oi && ls ../delivery || grep mini"
+tester_with_real "ls && echo oi || ls ../delivery || grep mini"
+tester_with_real "ls && echo oi || ls ../delivery && grep mini"
+tester_with_real "ls || echo oi && ls ../delivery || grep mini"
+echo ""
+
+# Mixed AND, OR and PIPE
+echo -e "${MAGENTA}Testing AND, OR and PIPE operators mixed${RESET}"
 tester_with_real "echo oi && ls ../delivery | grep mini | cat -e"
+tester_with_real "ls || echo oi && ls ../delivery | grep mini | cat -e"
+tester_with_real "echo 'Hello World' && ls -l | grep 'o'"
+echo ""
 
 make -C ../delivery/ clean > /dev/null

@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 11:59:00 by djunho            #+#    #+#             */
-/*   Updated: 2025/06/01 14:39:21 by djunho           ###   ########.fr       */
+/*   Updated: 2025/06/13 17:13:34 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 #include "../cmd.h"
 #include "execution.h"
 #include "../signals/signals.h"
+#include "../parser/parser.h"
 
 int	run_child(t_cmd *cmd, t_shell *shell)
 {
@@ -27,6 +28,7 @@ int	run_child(t_cmd *cmd, t_shell *shell)
 	char	**args;
 
 	envp = shell->envp;
+	clean_token_quotes(cmd->tokens);
 	args = convert_list_to_vector(cmd->tokens);
 	if (args == NULL)
 		return (0);
@@ -46,58 +48,74 @@ int	run_child(t_cmd *cmd, t_shell *shell)
 	return (127);
 }
 
-int	process_and(t_shell *shell, bool *should_continue)
+int	process_and(t_shell *shell, t_content_node *left_content, int ret,
+			bool *should_continue)
 {
 	int	wstatus;
-	int	ret;
 
 	*should_continue = true;
 	if (shell->last_pid == 0)
 		return (0);
-	waitpid(shell->last_pid, &wstatus, 0);
-	ret = get_fork_return(wstatus);
-	if (ret != EXIT_SUCCESS)
-		*should_continue = false;
+	if ((left_content->op == OP_CMD) && (ret == EXIT_SUCCESS))
+	{
+		waitpid(shell->last_pid, &wstatus, 0);
+		ret = get_fork_return(wstatus);
+		if (ret != EXIT_SUCCESS)
+			*should_continue = false;
+	}
+	else
+	{
+		*should_continue = (ret == EXIT_SUCCESS);
+	}
 	return (ret);
 }
 
-int	process_or(t_shell *shell, bool *should_continue)
+int	process_or(t_shell *shell, t_content_node *left_content, int ret,
+			bool *should_continue)
 {
 	int	wstatus;
-	int	ret;
 
 	if (shell->last_pid == 0)
 		return (0);
-	waitpid(shell->last_pid, &wstatus, 0);
-	ret = get_fork_return(wstatus);
-	if (ret == EXIT_SUCCESS)
-		*should_continue = false;
+	if ((left_content->op == OP_CMD) && (ret == EXIT_SUCCESS))
+	{
+		waitpid(shell->last_pid, &wstatus, 0);
+		ret = get_fork_return(wstatus);
+		if (ret == EXIT_SUCCESS)
+			*should_continue = false;
+	}
+	else
+	{
+		*should_continue = (ret != EXIT_SUCCESS);
+	}
 	return (ret);
 }
 
 int	process_pipe(t_btnode *node)
 {
-	t_node_op		right_operation;
 	t_content_node	*content;
-	t_content_node	*right_content;
+	t_content_node	*left_content;
 
 	content = (t_content_node *)node->content;
-	right_operation = OP_INVALID;
-	if (node->right != NULL)
+	if (node->left != NULL)
 	{
-		right_content = (t_content_node *)node->right->content;
-		if (right_content != NULL)
-			right_operation = right_content->op;
+		left_content = (t_content_node *)node->left->content;
+		if ((left_content != NULL) && (left_content->op == OP_PIPE))
+		{
+			content->pipe.carry_over_fd = dup(left_content->pipe.pipe[0]);
+			close(left_content->pipe.pipe[0]);
+			close(left_content->pipe.pipe[1]);
+			close(left_content->pipe.carry_over_fd);
+		}
+		else
+			content->pipe.carry_over_fd = dup(content->pipe.pipe[0]);
 	}
-	close(content->pipe.carry_over_fd);
-	content->pipe.carry_over_fd = dup(content->pipe.pipe[0]);
 	close(content->pipe.pipe[0]);
 	close(content->pipe.pipe[1]);
 	if (pipe(content->pipe.pipe) < 0)
 		return (1);
-	close(content->pipe.pipe[0]);
-	content->pipe.pipe[0] = content->pipe.carry_over_fd;
-	if (right_operation != OP_PIPE)
+	if ((node->parent == NULL)
+		|| (((t_content_node *)node->parent->content)->op != OP_PIPE))
 		content->pipe.is_last_pipe = true;
 	return (0);
 }
@@ -109,13 +127,8 @@ void	configure_pipe(int pipe[2], int carry_over_fd, bool is_last_pipe)
 		dup2(carry_over_fd, STDIN_FILENO);
 		close(carry_over_fd);
 	}
-	else
-	{
-		close(pipe[0]);
-	}
+	close(pipe[0]);
 	if (!is_last_pipe)
-	{
 		dup2(pipe[1], STDOUT_FILENO);
-	}
 	close(pipe[1]);
 }

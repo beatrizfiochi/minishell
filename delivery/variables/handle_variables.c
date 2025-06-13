@@ -6,14 +6,14 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 21:17:55 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/06/13 15:22:05 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/06/13 16:40:19 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../libft/libft.h"
 #include "../cmd.h"
 #include "../minishell.h"
-# include "../parser/parser.h"
+#include "../parser/parser.h"
 
 t_list	*create_var_node(char *name, char *value)
 {

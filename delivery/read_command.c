@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 17:00:20 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/06/01 14:38:15 by djunho           ###   ########.fr       */
+/*   Updated: 2025/06/03 23:02:00 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,6 @@ int	read_command(t_shell *shell, char *envp[])
 	token_list = tokenization(line);
 	debug_print_read_command(token_list, line);
 	search_and_expand(token_list, shell->variable_list);
-	clean_token_quotes(token_list);
 	if (token_list != NULL)
 	{
 		shell->cmds = create_tree(&token_list, NULL);
