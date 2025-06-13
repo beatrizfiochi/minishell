@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 19:55:45 by djunho            #+#    #+#             */
-/*   Updated: 2025/06/01 14:40:04 by djunho           ###   ########.fr       */
+/*   Updated: 2025/06/01 20:35:10 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 #include "../minishell.h"
 #include "../signals/signals.h"
 #include "execution.h"
+#include "../variables/variables.h"
 
 static int	btree_operator_before_callback(t_btnode *node,
 				int ret, bool *should_continue, void *_shell)
@@ -64,17 +65,13 @@ static int	btree_operator_between_callback(t_btnode *node,
 	{
 		ignore_signals();
 		if (((t_content_node *)node->content)->op == OP_AND)
-		{
 			return (process_and(shell, should_continue));
-		}
 		else if (((t_content_node *)node->content)->op == OP_OR)
-		{
 			return (process_or(shell, should_continue));
-		}
 		else if (((t_content_node *)node->content)->op == OP_PIPE)
-		{
 			return (process_pipe(node));
-		}
+		else if (((t_content_node *)node->content)->op == OP_VAR_ASSIGN)
+			return (process_var_assign(node, shell));
 	}
 	return (-1);
 }
@@ -88,24 +85,30 @@ static int	btree_cmd_callback(t_btnode *node, void *_shell)
 {
 	t_shell			*shell;
 	t_content_node	*parent_content;
+	t_node_op		operator;
 
 	shell = (t_shell *)_shell;
+	parent_content = NULL;
+	operator = OP_INVALID;
+	if (node->parent != NULL)
+	{
+		parent_content = (t_content_node *)node->parent->content;
+		operator = parent_content->op;
+	}
 	if (node->content == NULL)
 		return (0);
 	debug_btree_print(node);
+	if (operator == OP_VAR_ASSIGN)
+		return (0);
 	shell->last_pid = fork();
 	if (shell->last_pid < 0)
 		return (1);
 	if (shell->last_pid == 0)
 	{
-		if ((node->parent != NULL) && (node->parent->content != NULL)
-			&& (((t_content_node *)node->parent->content)->op == OP_PIPE))
-		{
-			parent_content = (t_content_node *)node->parent->content;
+		if (operator == OP_PIPE)
 			configure_pipe(parent_content->pipe.pipe,
 				parent_content->pipe.carry_over_fd,
 				parent_content->pipe.is_last_pipe);
-		}
 		exit(run_child(&((t_content_node *)node->content)->cmd, shell));
 	}
 	return (0);

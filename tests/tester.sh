@@ -137,11 +137,34 @@ function tester() {
 	echo ""
 }
 
+function tester_grep() {
+	cmd=$1
+	text=$2
+
+	echo -e "${GREEN}Running ./minishell $cmd${RESET}"
+	rm "$OUT_FILE" || echo -n ""
+	echo "$cmd" | valgrind --trace-children=yes --child-silent-after-fork=no --leak-check=full --show-leak-kinds=all --suppressions=../delivery/valgrind-supression --log-file="$OUT_FILE_VALGRIND" ../delivery/minishell &> $OUT_FILE
+	if [ ! -f "$OUT_FILE" ]; then
+		echo -e "${RED}Test failed: $cmd${RESET}"
+		exit 1
+	fi
+
+	text_found=$(cat $OUT_FILE | grep "$text")
+	if [[ $text_found == "$text" ]]; then
+		echo -e "${GREEN}Success${RESET}"
+	else
+		echo -e "${RED}CMD send is: \"$cmd\"${RESET}"
+		echo -e "${BLUE}Output is:${RESET}"
+		cat $OUT_FILE
+		exit 1
+	fi
+}
+
 function tester_with_real() {
 	cmd=$1
 
 	# Compared with the other tester function this one removed the "--trace-children=yes" argument of the valgrind command.
-	# It was somehow changing the path of teh command causing some prints like 
+	# It was somehow changing the path of teh command causing some prints like
 	# /usr/bin/ls: cannot access 'aaa': No such file or directory
 	# Instead of
 	# ls: cannot access 'aaa': No such file or directory
@@ -233,10 +256,10 @@ tester "oi '&&' oi"         0       3
 cmds=("oi" "oi")
 ops=("OP_AND")
 tester "oi && oi"           "&&"    3      "cmds"     "ops"
-tester "oi & oi"            0       3
-tester "oi &&& oi"          0       4
-tester "oi &&&& oi"         0       4
-tester "oi &&&&& oi"        0       5
+tester "oi & oi"            0       0
+tester "oi &&& oi"          0       0
+tester "oi &&&& oi"         0       0
+tester "oi &&&&& oi"        0       0
 cmds=("oi" "oi")
 ops=("OP_AND")
 tester "oi&&oi"             "&&"    3      "cmds"     "ops"
@@ -249,9 +272,9 @@ tester "oi '||' oi"         0       3
 cmds=("oi" "oi")
 ops=("OP_OR")
 tester "oi || oi"           "||"    3      "cmds"     "ops"
-tester "oi ||| oi"          0       4
-tester "oi |||| oi"         0       4
-tester "oi ||||| oi"        0       5
+tester "oi ||| oi"          0       0
+tester "oi |||| oi"         0       0
+tester "oi ||||| oi"        0       0
 cmds=("oi" "oi")
 ops=("OP_OR")
 tester "oi||oi"             "||"    3      "cmds"     "ops"
@@ -268,6 +291,41 @@ cmds=("oi" "oi")
 ops=("OP_PIPE")
 tester "oi|oi"             "|"     3      "cmds"     "ops"
 tester "oioi|"             0       2
+
+# Testing syntax error         cmd              text
+echo "################ Testing syntax error ################"
+tester_grep             'ls && || pwd'       "syntax error near unexpected token"
+tester_grep             'ls && ||pwd'       "syntax error near unexpected token"
+tester_grep             'ls&& || pwd'       "syntax error near unexpected token"
+tester_grep             'ls&&|| pwd'       "syntax error near unexpected token"
+tester_grep             'ls &&||pwd'       "syntax error near unexpected token"
+tester_grep             'ls&& ||pwd'       "syntax error near unexpected token"
+tester_grep             'ls &&|| pwd'       "syntax error near unexpected token"
+tester_grep             'ls &&||& pwd'       "syntax error near unexpected token"
+tester_grep             'ls & pwd'       "syntax error near unexpected token"
+tester_grep             'ls&pwd'       "syntax error near unexpected token"
+tester_grep             'ls &&& pwd'       "syntax error near unexpected token"
+tester_grep             'ls&&&pwd'       "syntax error near unexpected token"
+tester_grep             'ls&&&&pwd'       "syntax error near unexpected token"
+tester_grep             'ls &&&& pwd'       "syntax error near unexpected token"
+tester_grep             'ls &&&&& pwd'       "syntax error near unexpected token"
+tester_grep             'ls ||| pwd'       "syntax error near unexpected token"
+tester_grep             'ls |||| pwd'       "syntax error near unexpected token"
+tester_grep             'ls ||||| pwd'       "syntax error near unexpected token"
+tester_grep             'ls <<< pwd'       "syntax error near unexpected token"
+tester_grep             'ls <<<< pwd'       "syntax error near unexpected token"
+tester_grep             'ls <<<<< pwd'       "syntax error near unexpected token"
+tester_grep             'ls >>> pwd'       "syntax error near unexpected token"
+tester_grep             'ls >>>> pwd'       "syntax error near unexpected token"
+tester_grep             'ls >>>>> pwd'       "syntax error near unexpected token"
+echo ""
+
+tester_grep             '1=10'       "1=10: No such file or directory"
+echo ""
+
+tester_grep             'x=10'       "var_name = x, var_value = 10"
+tester_grep             'y=20'       "var_name = y, var_value = 20"
+echo ""
 
 echo "################ Comparing with real bash ################"
 make -C ../delivery/ clean &> /dev/null

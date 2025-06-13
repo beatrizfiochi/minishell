@@ -27,7 +27,7 @@ static t_node_op	op(char *token_str)
 	if (*token_str == '|')
 		return (OP_PIPE);
 	if (*token_str == '=')
-		return (OP_EQUAL);
+		return (OP_VAR_ASSIGN);
 	if (*token_str == '<' && *(token_str + 1) == '<')
 		return (OP_HEREDOC);
 	if (*token_str == '<')
@@ -50,7 +50,7 @@ static t_list	*search_op(t_list *tokens)
 		content_token = tokens->content;
 		operator = op(content_token);
 		if (operator == OP_AND || operator == OP_OR || operator == OP_PIPE
-			|| operator == OP_EQUAL || operator == OP_HEREDOC
+			|| operator == OP_VAR_ASSIGN || operator == OP_HEREDOC
 			|| operator == OP_RD_INPUT || operator == OP_APPEND_RD_OUTPUT
 			|| operator == OP_RD_OUTPUT)
 			return (tokens);

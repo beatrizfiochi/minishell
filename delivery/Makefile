@@ -6,7 +6,7 @@
 #    By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/27 13:09:33 by djunho            #+#    #+#              #
-#    Updated: 2025/05/21 21:24:29 by bfiochi-         ###   ########.fr        #
+#    Updated: 2025/06/01 18:52:57 by bfiochi-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,10 +16,11 @@ SRCS = main.c read_command.c utils.c debug.c \
 	btree/btree.c btree/btree_count.c btree/debug.c \
 	btree/btree_foreach.c \
 	parser/expand_variable.c parser/clean_token_quotes.c \
-	parser/expand_variable_utils.c \
+	parser/expand_variable_utils.c parser/tokenization_utils.c\
 	execute/execution.c execute/process.c execute/utils.c execute/debug.c \
 	execute/execution_operations.c \
-	signals/handle_signals.c
+	signals/handle_signals.c \
+	variables/handle_variables.c
 OBJS_DIR = objs
 OBJS = $(patsubst %.c,$(OBJS_DIR)/%.o,$(SRCS))
 DEPENDS = $(patsubst %.c,$(OBJS_DIR)/%.d,$(SRCS))
