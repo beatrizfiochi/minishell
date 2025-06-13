@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 21:17:55 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/06/13 12:50:30 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/06/13 15:15:14 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,25 +41,28 @@ t_list	*create_var_node(char *name, char *value)
 	return (ft_lstnew(content));
 }
 
-static int	check_and_replace_var(t_list *current, t_content_var *existing,
+static bool	check_and_replace_var(t_list *current,
 	t_content_node *name, t_content_node *value)
 {
+	t_content_var	*current_content;
+
 	while (current != NULL)
 	{
-		if (ft_strncmp(existing->var_name,
+		current_content = (t_content_var *)current->content;
+		if (ft_strncmp(current_content->var_name,
 				(char *)(name->cmd.tokens->content),
 			ft_strlen((const char *)(name->cmd.tokens->content))) == 0)
 		{
-			free(existing->var_value);
-			existing->var_value
+			free(current_content->var_value);
+			current_content->var_value
 				= ft_strdup((char *)(value->cmd.tokens->content));
-			if (existing->var_value == NULL)
-				return (1);
-			return (0);
+			if (current_content->var_value == NULL)
+				return (false);
+			return (true);
 		}
 		current = current->next;
 	}
-	return (0);
+	return (false);
 }
 
 int	process_var_assign(t_btnode *nd, t_shell *sh)
@@ -67,7 +70,6 @@ int	process_var_assign(t_btnode *nd, t_shell *sh)
 	t_content_node	*name;
 	t_content_node	*value;
 	t_list			*current;
-	t_content_var	*existing;
 	t_list			*new_node;
 
 	if ((nd->left == NULL) || (nd->right == NULL))
@@ -77,11 +79,8 @@ int	process_var_assign(t_btnode *nd, t_shell *sh)
 	if ((name == NULL) || (value == NULL))
 		return (1);
 	current = sh->variable_list;
-	if (current != NULL)
-	{
-		existing = (t_content_var *)current->content;
-		check_and_replace_var(current, existing, name, value);
-	}
+	if (check_and_replace_var(current, name, value) == true)
+		return (0);
 	new_node = create_var_node((char *)(name->cmd.tokens->content),
 			(char *)(value->cmd.tokens->content));
 	if (new_node == NULL)
