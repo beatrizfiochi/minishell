@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 18:48:52 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/06/13 12:54:27 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/06/13 15:35:36 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ static int	is_a_possible_op(char c)
 // 0 -> invalid, 1 ou 2 -> size of valid op
 // '&' valid as '&&'
 // '|' valid as '|' or '||'
-// '<' and '>' valid as single or duble
+// '<' and '>' valid as single or double
 // '=' valid as single
 static int	check_sequence(char *line, char c)
 {
@@ -77,8 +77,6 @@ int	is_op(char *line)
 	if (is_a_possible_op(*line) == 1)
 	{
 		len = check_sequence(line, *line);
-		if (len == 0)
-			return (0);
 		return (len);
 	}
 	return (0);
