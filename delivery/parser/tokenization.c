@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 15:26:54 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/06/03 11:11:55 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/06/13 11:53:01 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,6 +119,7 @@ t_list	*tokenization(char *line)
 		if (len == -1)
 		{
 			printf_error("syntax error near unexpected token\n");
+			ft_lstclear(&head_token, free);
 			return (NULL);
 		}
 		new_token = create_token(line, len);
