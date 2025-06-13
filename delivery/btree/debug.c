@@ -6,7 +6,7 @@
 /*   By: djunho <djunho@student.42porto.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/18 21:23:49 by djunho            #+#    #+#             */
-/*   Updated: 2025/06/01 11:41:26 by djunho           ###   ########.fr       */
+/*   Updated: 2025/06/13 16:43:23 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,9 +36,9 @@ static int	printf_string_node(t_btnode *node, int ret,
 
 static int	printf_string_leaf(t_btnode *node, void *ctx)
 {
-	t_content_node *content;
-	(void)ctx;
+	t_content_node	*content;
 
+	(void)ctx;
 	content = (t_content_node *)node->content;
 	printf("Btree: Operator leaf> %s\n",
 		op_str(content->op));

@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 11:59:00 by djunho            #+#    #+#             */
-/*   Updated: 2025/06/04 19:23:16 by djunho           ###   ########.fr       */
+/*   Updated: 2025/06/13 17:13:34 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,14 +48,14 @@ int	run_child(t_cmd *cmd, t_shell *shell)
 	return (127);
 }
 
-int	process_and(t_shell *shell, t_content_node *left_content, int ret, bool *should_continue)
+int	process_and(t_shell *shell, t_content_node *left_content, int ret,
+			bool *should_continue)
 {
 	int	wstatus;
 
 	*should_continue = true;
 	if (shell->last_pid == 0)
 		return (0);
-	// printf("Process AND: left op = %d, ret = %d\n", left_content->op, ret);
 	if ((left_content->op == OP_CMD) && (ret == EXIT_SUCCESS))
 	{
 		waitpid(shell->last_pid, &wstatus, 0);
@@ -70,13 +70,13 @@ int	process_and(t_shell *shell, t_content_node *left_content, int ret, bool *sho
 	return (ret);
 }
 
-int	process_or(t_shell *shell, t_content_node *left_content, int ret, bool *should_continue)
+int	process_or(t_shell *shell, t_content_node *left_content, int ret,
+			bool *should_continue)
 {
 	int	wstatus;
 
 	if (shell->last_pid == 0)
 		return (0);
-	// printf("Process OR: left op = %d, ret = %d\n", left_content->op, ret);
 	if ((left_content->op == OP_CMD) && (ret == EXIT_SUCCESS))
 	{
 		waitpid(shell->last_pid, &wstatus, 0);
@@ -93,19 +93,10 @@ int	process_or(t_shell *shell, t_content_node *left_content, int ret, bool *shou
 
 int	process_pipe(t_btnode *node)
 {
-	t_node_op		parent_operation;
 	t_content_node	*content;
-	t_content_node	*parent_content;
+	t_content_node	*left_content;
 
 	content = (t_content_node *)node->content;
-	parent_operation = OP_INVALID;
-	if (node->parent != NULL)
-	{
-		parent_content = (t_content_node *)node->parent->content;
-		if (parent_content != NULL)
-			parent_operation = parent_content->op;
-	}
-	t_content_node	*left_content;
 	if (node->left != NULL)
 	{
 		left_content = (t_content_node *)node->left->content;
@@ -118,12 +109,13 @@ int	process_pipe(t_btnode *node)
 		}
 		else
 			content->pipe.carry_over_fd = dup(content->pipe.pipe[0]);
-	} 
+	}
 	close(content->pipe.pipe[0]);
 	close(content->pipe.pipe[1]);
 	if (pipe(content->pipe.pipe) < 0)
 		return (1);
-	if (parent_operation != OP_PIPE)
+	if ((node->parent == NULL)
+		|| (((t_content_node *)node->parent->content)->op != OP_PIPE))
 		content->pipe.is_last_pipe = true;
 	return (0);
 }

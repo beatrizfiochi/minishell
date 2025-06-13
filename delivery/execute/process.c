@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 19:55:45 by djunho            #+#    #+#             */
-/*   Updated: 2025/06/13 16:30:59 by djunho           ###   ########.fr       */
+/*   Updated: 2025/06/13 16:55:06 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,14 +33,6 @@ static int	btree_operator_before_callback(t_btnode *node,
 	(void)_shell;
 	ignore_signals();
 	*should_continue = true;
-	if (content->op == OP_PIPE)
-	{
-		//TODO: Initialize each node when creating the tree
-		content->pipe.is_last_pipe = false;
-		content->pipe.pipe[0] = -1;
-		content->pipe.pipe[1] = -1;
-		content->pipe.carry_over_fd = -1;
-	}
 	if (content->op != OP_PIPE)
 		return (0);
 	if ((node->right == NULL) || (node->right->content == NULL))
@@ -61,7 +53,8 @@ static int	btree_operator_before_callback(t_btnode *node,
 static int	btree_operator_between_callback(t_btnode *node,
 				int ret, bool *should_continue, void *_shell)
 {
-	t_shell	*shell;
+	t_shell			*shell;
+	t_content_node	*left_content;
 
 	shell = _shell;
 	if (ret != 0)
@@ -70,10 +63,11 @@ static int	btree_operator_between_callback(t_btnode *node,
 	if (node->content != NULL)
 	{
 		ignore_signals();
+		left_content = (t_content_node *)node->left->content;
 		if (((t_content_node *)node->content)->op == OP_AND)
-			return (process_and(shell, (t_content_node *)node->left->content, ret, should_continue));
+			return (process_and(shell, left_content, ret, should_continue));
 		else if (((t_content_node *)node->content)->op == OP_OR)
-			return (process_or(shell, (t_content_node *)node->left->content, ret, should_continue));
+			return (process_or(shell, left_content, ret, should_continue));
 		else if (((t_content_node *)node->content)->op == OP_PIPE)
 			return (process_pipe(node));
 		else if (((t_content_node *)node->content)->op == OP_VAR_ASSIGN)
@@ -91,32 +85,31 @@ static int	btree_cmd_callback(t_btnode *node, void *_shell)
 {
 	t_shell			*shell;
 	t_content_node	*parent_content;
-	t_node_op		operator;
+	t_node_op		parent_operator;
 
 	shell = (t_shell *)_shell;
 	parent_content = NULL;
-	operator = OP_INVALID;
+	parent_operator = OP_INVALID;
 	if (node->parent != NULL)
 	{
 		parent_content = (t_content_node *)node->parent->content;
-		operator = parent_content->op;
+		parent_operator = parent_content->op;
 	}
-	if (node->content == NULL)
-		return (0);
-	if (((t_content_node *)node->content)->op != OP_CMD)
+	if ((node->content == NULL)
+		|| (((t_content_node *)node->content)->op != OP_CMD))
 	{
 		printf("Error: Node is not a command\n");
 		return (EXIT_FAILURE);
 	}
 	debug_btree_print(node);
-	if (operator == OP_VAR_ASSIGN)
+	if (parent_operator == OP_VAR_ASSIGN)
 		return (0);
 	shell->last_pid = fork();
 	if (shell->last_pid < 0)
 		return (1);
 	if (shell->last_pid == 0)
 	{
-		if (operator == OP_PIPE)
+		if (parent_operator == OP_PIPE)
 			configure_pipe(parent_content->pipe.pipe,
 				parent_content->pipe.carry_over_fd,
 				parent_content->pipe.is_last_pipe);

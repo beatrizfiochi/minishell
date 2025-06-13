@@ -6,61 +6,17 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 18:34:50 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/06/13 16:31:58 by djunho           ###   ########.fr       */
+/*   Updated: 2025/06/13 16:37:07 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>				// printf
+#include <stdlib.h>
 #include "../btree/btree.h"
 #include "../minishell.h"
 #include "../cmd.h"
 #include "aux.h"
 #include "parser.h"
-
-static t_node_op	op(char *token_str)
-{
-	if (*token_str == '\0')
-		return (OP_INVALID);
-	if (*token_str == '&' && *(token_str + 1) == '&')
-		return (OP_AND);
-	if (*token_str == '|' && *(token_str + 1) == '|')
-		return (OP_OR);
-	if (*token_str == '|')
-		return (OP_PIPE);
-	if (*token_str == '=')
-		return (OP_VAR_ASSIGN);
-	if (*token_str == '<' && *(token_str + 1) == '<')
-		return (OP_HEREDOC);
-	if (*token_str == '<')
-		return (OP_RD_INPUT);
-	if (*token_str == '>' && *(token_str + 1) == '>')
-		return (OP_APPEND_RD_OUTPUT);
-	if (*token_str == '>')
-		return (OP_RD_OUTPUT);
-	return (OP_CMD);
-}
-
-static t_list	*search_op(t_list *tokens, bool full_expand)
-{
-	char		*content_token;
-	t_node_op	operator;
-
-	content_token = NULL;
-	while (tokens != NULL)
-	{
-		content_token = tokens->content;
-		operator = op(content_token);
-		if (operator == OP_AND || operator == OP_OR
-			|| operator == OP_VAR_ASSIGN || operator == OP_HEREDOC
-			|| operator == OP_RD_INPUT || operator == OP_APPEND_RD_OUTPUT
-			|| operator == OP_RD_OUTPUT)
-			return (tokens);
-		if (full_expand && (operator == OP_PIPE))
-			return (tokens);
-		tokens = tokens->next;
-	}
-	return (NULL);
-}
 
 static t_btnode	*create_node(t_list *token_list, t_btnode *parent)
 {
@@ -86,24 +42,12 @@ static t_btnode	*create_node(t_list *token_list, t_btnode *parent)
 	return (tree_node);
 }
 
-static void free_btree_content(void *_content)
+static t_btnode	*create_first(t_list **token_list, t_btnode *parent,
+								bool full_expand)
 {
-	t_content_node *content;
-
-	content = (t_content_node *)_content;
-	if (content->op == OP_CMD)
-	{
-		if (content->cmd.tokens != NULL)
-			ft_lstclear(&content->cmd.tokens, free);
-	}
-	free(content);
-}
-
-static t_btnode	*create_first(t_list **token_list, t_btnode *parent, bool full_expand)
-{
-	t_list		*op_node;
-	t_list		*aux;
-	t_btnode	*tree;
+	t_list						*op_node;
+	t_btnode					*tree;
+	struct s_split_token_list	split;
 
 	op_node = search_op(*token_list, full_expand);
 	if (op_node == NULL)
@@ -112,94 +56,48 @@ static t_btnode	*create_first(t_list **token_list, t_btnode *parent, bool full_e
 		*token_list = op_node;
 		return (tree);
 	}
-	aux = prev_list_item(*token_list, op_node);
-	if ((op_node->next == NULL) || (aux == NULL))
-	{
-		ft_lstclear(token_list, free);
+	split = (struct s_split_token_list){
+		.left = *token_list, .op = NULL,
+		.right = NULL, .remain = NULL
+	};
+	if (split_token_list(&split, true, full_expand) == false)
 		return (NULL);
-	}
-	aux->next = NULL;
-	aux = op_node->next;
-	op_node->next = NULL;
-	tree = create_node(op_node, parent);
-	tree->left = create_node(*token_list, tree);
-	op_node = search_op(aux, full_expand);
-	if (op_node == aux)
-	{
-		printf("Error: Two operator in a row\n");
-		ft_lstclear(&aux, free);
-		btree_clear(&tree, free_btree_content);
-		return (NULL);
-	}
-	tree->right = create_node(aux, tree);
-	if (op_node != NULL)
-	{
-		aux = prev_list_item(aux, op_node);
-		if (aux == NULL)
-		{
-			printf("Error: Two operators in sequence\n");
-			btree_clear(&tree, free_btree_content);
-			ft_lstclear(&op_node, free);
-			return (NULL);
-		}
-		aux->next = NULL;
-	}
-	*token_list = op_node;
+	tree = create_node(split.op, parent);
+	tree->left = create_node(split.left, tree);
+	tree->right = create_node(split.right, tree);
+	*token_list = split.remain;
 	return (tree);
 }
 
 // Search for and operator
 // Every operator must be placed between 2 commands
 //
-static t_btnode	*create_basic_tree(t_list **token_list, t_btnode *parent, bool full_expand)
+static t_btnode	*create_basic_tree(t_list **token_list, t_btnode *parent,
+								bool full_expand)
 {
-	t_list		*op_node;
-	t_list		*right;
-	t_list		*aux;
-	t_btnode	*tree;
-	t_btnode	*old_tree;
+	t_btnode					*tree;
+	t_btnode					*old_tree;
+	struct s_split_token_list	split;
 
-	old_tree = create_first(token_list, parent, full_expand);
-	if (old_tree == NULL)
+	tree = create_first(token_list, parent, full_expand);
+	if (tree == NULL)
 		return (NULL);
-	tree = old_tree;
-	while (*token_list != NULL)
+	split = (struct s_split_token_list){
+		.left = NULL, .op = NULL,
+		.right = NULL, .remain = *token_list
+	};
+	while (split.remain != NULL)
 	{
-		op_node = search_op(*token_list, full_expand);
-		if ((op_node == NULL) || (op_node != *token_list))
-		{
-			printf("Should find an operator\n");
-			ft_lstclear(token_list, free);
-			return (NULL);
-		}
-		right = op_node->next;
-		op_node->next = NULL;
-		tree = create_node(op_node, parent);
+		old_tree = tree;
+		split = (struct s_split_token_list){
+			.left = split.remain, .op = NULL, .right = NULL, .remain = NULL
+		};
+		if (split_token_list(&split, false, full_expand) == false)
+			return (abort_tree_lst(tree, &split.left, NULL));
+		tree = create_node(split.op, parent);
 		tree->left = old_tree;
 		tree->left->parent = tree;
-		op_node = search_op(right, full_expand);
-		if (op_node == right)
-		{
-			printf("Error: Two operator in a row\n");
-			ft_lstclear(&right, free);
-			btree_clear(&tree, free_btree_content);
-			return (NULL);
-		}
-		tree->right = create_node(right, tree);
-		if (op_node != NULL)
-		{
-			aux = prev_list_item(right, op_node);
-			if (aux == NULL)
-			{
-				printf("Error: Two operators in sequence\n");
-				btree_clear(&tree, free_btree_content);
-				ft_lstclear(&op_node, free);
-				return (NULL);
-			}
-			aux->next = NULL;
-		}
-		*token_list = op_node;
-		old_tree = tree;
+		tree->right = create_node(split.right, tree);
 	}
 	return (tree);
 }
@@ -209,15 +107,13 @@ static t_btnode	*expand_pipe_btree_node(t_btnode *node)
 	t_content_node	*content;
 	t_btnode		*new_tree;
 
-	if (node == NULL)
-		return (node);
 	if (btree_is_leaf(node))
 	{
 		content = (t_content_node *)node->content;
 		if (content->op == OP_CMD)
 		{
-			new_tree = create_basic_tree(&content->cmd.tokens, node->parent, true);
-			// Do the expansion
+			new_tree = create_basic_tree(&content->cmd.tokens,
+					node->parent, true);
 			btree_delete(&node, free_btree_node);
 			return (new_tree);
 		}
@@ -237,6 +133,7 @@ static t_btnode	*expand_pipe_btree_node(t_btnode *node)
 t_btnode	*create_tree(t_list **token_list, t_btnode *parent)
 {
 	t_btnode	*tree;
+
 	if (token_list == NULL || *token_list == NULL)
 		return (NULL);
 	tree = create_basic_tree(token_list, parent, false);
