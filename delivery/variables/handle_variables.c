@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 21:17:55 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/06/13 16:40:19 by djunho           ###   ########.fr       */
+/*   Updated: 2025/06/13 17:42:43 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,18 @@ t_list	*create_var_node(char *name, char *value)
 	return (ft_lstnew(content));
 }
 
+static bool	is_strlen_equals(char *text_1, char *text_2)
+{
+	int	len_1;
+	int	len_2;
+
+	len_1 = ft_strlen(text_1);
+	len_2 = ft_strlen(text_2);
+	if (len_1 == len_2)
+		return (true);
+	return (false);
+}
+
 static bool	check_and_replace_var(t_list *current,
 	t_content_node *name, t_content_node *value)
 {
@@ -50,16 +62,19 @@ static bool	check_and_replace_var(t_list *current,
 	while (current != NULL)
 	{
 		current_content = (t_content_var *)current->content;
-		if (ft_strncmp(current_content->var_name,
-				(char *)(name->cmd.tokens->content),
-			ft_strlen((const char *)(name->cmd.tokens->content))) == 0)
+		if (is_strlen_equals(current_content->var_name, (char *)(name->cmd.tokens->content)))
 		{
-			free(current_content->var_value);
-			current_content->var_value
-				= ft_strdup((char *)(value->cmd.tokens->content));
-			if (current_content->var_value == NULL)
-				return (false);
-			return (true);
+			if (ft_strncmp(current_content->var_name,
+					(char *)(name->cmd.tokens->content),
+				ft_strlen((const char *)(name->cmd.tokens->content))) == 0)
+			{
+				free(current_content->var_value);
+				current_content->var_value
+					= ft_strdup((char *)(value->cmd.tokens->content));
+				if (current_content->var_value == NULL)
+					return (false);
+				return (true);
+			}
 		}
 		current = current->next;
 	}
