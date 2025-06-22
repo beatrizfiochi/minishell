@@ -9,6 +9,54 @@ BLUE='\033[0;34m'
 MAGENTA='\033[0;35m'
 RESET='\033[0m'
 
+function check_valgrind_logs() {
+	# Check leaks
+	# echo ---------------------------
+	# cat $OUT_FILE_VALGRIND
+	# echo ---------------------------
+	leak_still_reachable=$(cat $OUT_FILE_VALGRIND | grep -a "still reachable: " | grep -a -v "0 bytes in 0 blocks")
+	if [[ ! -z "$leak_still_reachable" ]]; then
+		echo -e "${RED}LEAK detected!!! (still reachable)${RESET}"
+		echo -e "${BLUE}CMD send is: \"$cmd\"${RESET}"
+		echo -e "${BLUE}Output is:${RESET}"
+		cat $OUT_FILE
+		echo -e "${BLUE}Valgrind output is:${RESET}"
+		cat $OUT_FILE_VALGRIND
+		exit 1
+	fi;
+	leak_def_lost=$(cat $OUT_FILE_VALGRIND | grep -a "definitely lost: " | grep -a -v "0 bytes in 0 blocks")
+	if [[ ! -z "$leak_def_lost" ]]; then
+		echo -e "${RED}LEAK detected!!! (definitely lost)${RESET}"
+		echo -e "${BLUE}CMD send is: \"$cmd\"${RESET}"
+		echo -e "${BLUE}Output is:${RESET}"
+		cat $OUT_FILE
+		echo -e "${BLUE}Valgrind output is:${RESET}"
+		cat $OUT_FILE_VALGRIND
+		exit 1
+	fi;
+	leak_indir_lost=$(cat $OUT_FILE_VALGRIND | grep -a "indirectly lost: " | grep -a -v "0 bytes in 0 blocks")
+	if [[ ! -z "$leak_indir_lost" ]]; then
+		echo -e "${RED}LEAK detected!!! (indirectly lost)${RESET}"
+		echo -e "${BLUE}CMD send is: \"$cmd\"${RESET}"
+		echo -e "${BLUE}Output is:${RESET}"
+		cat $OUT_FILE
+		echo -e "${BLUE}Valgrind output is:${RESET}"
+		cat $OUT_FILE_VALGRIND
+		exit 1
+	fi;
+	leak_poss_lost=$(cat $OUT_FILE_VALGRIND | grep -a "possibly lost: " | grep -a -v "0 bytes in 0 blocks")
+	if [[ ! -z "$leak_poss_lost" ]]; then
+		echo -e "${RED}LEAK detected!!! (possibly lost)${RESET}"
+		echo -e "${BLUE}CMD send is: \"$cmd\"${RESET}"
+		echo -e "${BLUE}Output is:${RESET}"
+		cat $OUT_FILE
+		echo -e "${BLUE}Valgrind output is:${RESET}"
+		cat $OUT_FILE_VALGRIND
+		exit 1
+	fi;
+	# echo -e "${GREEN}No leaks detected${RESET}"
+}
+
 function tester() {
 	cmd=$1
 	cmd_expected=$1
@@ -34,47 +82,7 @@ function tester() {
 	fi
 
 	# Check leaks
-	leak_still_reachable=$(cat $OUT_FILE_VALGRIND | grep "still reachable: " | grep -v "0 bytes in 0 blocks")
-	if [[ ! -z "$leak_still_reachable" ]]; then
-		echo -e "${RED}LEAK detected!!! (still reachable)${RESET}"
-		echo -e "${BLUE}CMD send is: \"$cmd\"${RESET}"
-		echo -e "${BLUE}Output is:${RESET}"
-		cat $OUT_FILE
-		echo -e "${BLUE}Valgrind output is:${RESET}"
-		cat $OUT_FILE_VALGRIND
-		exit 1
-	fi;
-	leak_def_lost=$(cat $OUT_FILE_VALGRIND | grep "definitely lost: " | grep -v "0 bytes in 0 blocks")
-	if [[ ! -z "$leak_def_lost" ]]; then
-		echo -e "${RED}LEAK detected!!! (definitely lost)${RESET}"
-		echo -e "${BLUE}CMD send is: \"$cmd\"${RESET}"
-		echo -e "${BLUE}Output is:${RESET}"
-		cat $OUT_FILE
-		echo -e "${BLUE}Valgrind output is:${RESET}"
-		cat $OUT_FILE_VALGRIND
-		exit 1
-	fi;
-	leak_indir_lost=$(cat $OUT_FILE_VALGRIND | grep "indirectly lost: " | grep -v "0 bytes in 0 blocks")
-	if [[ ! -z "$leak_indir_lost" ]]; then
-		echo -e "${RED}LEAK detected!!! (indirectly lost)${RESET}"
-		echo -e "${BLUE}CMD send is: \"$cmd\"${RESET}"
-		echo -e "${BLUE}Output is:${RESET}"
-		cat $OUT_FILE
-		echo -e "${BLUE}Valgrind output is:${RESET}"
-		cat $OUT_FILE_VALGRIND
-		exit 1
-	fi;
-	leak_poss_lost=$(cat $OUT_FILE_VALGRIND | grep "possibly lost: " | grep -v "0 bytes in 0 blocks")
-	if [[ ! -z "$leak_poss_lost" ]]; then
-		echo -e "${RED}LEAK detected!!! (possibly lost)${RESET}"
-		echo -e "${BLUE}CMD send is: \"$cmd\"${RESET}"
-		echo -e "${BLUE}Output is:${RESET}"
-		cat $OUT_FILE
-		echo -e "${BLUE}Valgrind output is:${RESET}"
-		cat $OUT_FILE_VALGRIND
-		exit 1
-	fi;
-	echo -e "${GREEN}No leaks detected${RESET}"
+	check_valgrind_logs
 
 	cmd_received=$(cat $OUT_FILE | grep "Command received: " | sed 's/Command received: //')
 	if [[ $cmd_received == "$cmd" ]]; then
@@ -162,6 +170,7 @@ function tester_grep() {
 		echo -e "${RED}Test failed: $cmd${RESET}"
 		exit 1
 	fi
+	check_valgrind_logs
 
 	text_found=$(cat $OUT_FILE | grep "^$text\$")
 	if [[ $text_found == "$text" ]]; then
@@ -177,35 +186,25 @@ function tester_grep() {
 function tester_with_real() {
 	cmd=$1
 
-	# Compared with the other tester function this one removed the "--trace-children=yes" argument of the valgrind command.
-	# It was somehow changing the path of teh command causing some prints like
-	# /usr/bin/ls: cannot access 'aaa': No such file or directory
-	# Instead of
-	# ls: cannot access 'aaa': No such file or directory
-	# Which was causing issues to compare with real bash
-	echo "$cmd" | valgrind --child-silent-after-fork=yes --leak-check=full --log-file="$OUT_FILE_VALGRIND" ../delivery/minishell &> $OUT_FILE
+	# Run minishell
+	echo "$cmd" | valgrind --trace-children=yes --child-silent-after-fork=no --leak-check=full --show-leak-kinds=all --suppressions=../delivery/valgrind-supression --log-file="$OUT_FILE_VALGRIND" ../delivery/minishell &> $OUT_FILE
 	EXIT_STATUS=$?
 	if [ ! -f "$OUT_FILE" ]; then
 		echo -e "${RED}Test failed: $cmd${RESET}"
 		exit 1
 	fi
+	check_valgrind_logs
 
 	#TODO: Since we are using readline on non-interactive mode, we need to remove the first line of the output. readline is always printing the received command.
 	tail -n +2 ${OUT_FILE} > ${OUT_FILE}_2
 
-	echo "$cmd" | bash &> $OUT_REAL_FILE
+	# Run bash
+	# TODO: Using valgrind on bash just to avoid issues when coparing the output of the applications
+	# Valgring --trace-children option changes the path of the executables, like ls to /bin/ls. So a msg like
+	# `ls: cannot access 'aaa': No such file or directory` will become `/usr/bin/ls: cannot access 'aaa': No such file or directory`
+	# which will cause issues with diff application. To simplify, we apply valgring on bash too
+	echo "$cmd" | valgrind --trace-children=yes -q --log-file=/dev/null bash &> $OUT_REAL_FILE
 	REAL_EXIT_STATUS=$?
-
-	diff "${OUT_FILE}_2" "$OUT_REAL_FILE"
-	if [ $? -ne 0 ]; then
-		echo -e "${RED}Error: $cmd${RESET}"
-		echo -e "${BLUE}CMD send is: \"$cmd\"${RESET}"
-		echo -e "${BLUE}Output of minishell is:${RESET}"
-		cat ${OUT_FILE}_2
-		echo -e "${BLUE}Output from bash is:${RESET}"
-		cat $OUT_REAL_FILE
-		exit 1
-	fi
 
 	if [[ "$EXIT_STATUS" != "$REAL_EXIT_STATUS" ]]; then
 		echo -e "${RED}Error different error status presented: $cmd${RESET}"
@@ -214,11 +213,35 @@ function tester_with_real() {
 		exit 1
 	fi
 
+	diff "${OUT_FILE}_2" "$OUT_REAL_FILE"
+	if [ $? -ne 0 ]; then
+		echo -e "${RED}Error on comparing the output: $cmd${RESET}"
+		echo -e "${BLUE}CMD send is: \"$cmd\"${RESET}"
+		echo -e "${BLUE}Output of minishell is:${RESET}"
+		cat ${OUT_FILE}_2
+		echo -e "${BLUE}Output from bash is:${RESET}"
+		cat $OUT_REAL_FILE
+		exit 1
+	fi
+
 	echo -e "${GREEN}Test comparing with real bash passed: $cmd${RESET}"
 
 	rm $OUT_FILE
 	rm ${OUT_FILE}_2
 	rm $OUT_REAL_FILE
+}
+
+function tester_with_real_should_be_different() {
+	cmd="$1"
+	output=$(tester_with_real "$cmd")
+	echo "$output" | grep "Error on comparing the output:" > /dev/null
+	if [ $? -ne 0 ]; then
+		echo -e "${RED}Error: The output is equal!!!!!!${RESET}"
+		exit 1
+	fi
+	echo -ne "${GREEN}Test comparing with builtin limitation with real bash passed: "
+	echo -nE "$cmd"
+	echo -e "${RESET}"
 }
 
 OUT_FILE="/tmp/my_minishell"
@@ -358,6 +381,14 @@ if [[ $? -ne 0 ]]; then
 	echo -e "${RED}Error to compile the project${RESET}"
 	exit 1
 fi
+
+echo -e "${MAGENTA}Testing builtin commands${RESET}"
+echo -e "${MAGENTA}Testing echo${RESET}"
+tester_with_real "echo opa"
+tester_with_real "echo -n look"
+tester_with_real "echo look -n"
+tester_with_real_should_be_different "echo -e \"\nlook -n\""
+echo ""
 
 # Test a normal command
 echo -e "${MAGENTA}Testing a normal command${RESET}"
