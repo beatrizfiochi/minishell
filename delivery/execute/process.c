@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 19:55:45 by djunho            #+#    #+#             */
-/*   Updated: 2025/06/22 20:13:53 by djunho           ###   ########.fr       */
+/*   Updated: 2025/06/23 14:17:42 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,16 +97,16 @@ static int	execute_execve(t_btnode *node, t_shell *shell,
 
 static int	btree_cmd_callback(t_btnode *node, void *_shell)
 {
-	t_content_node	*parent_content;
-	t_node_op		parent_operator;
+	t_content_node	*parent_cnt;
+	t_node_op		parent_op;
 	int				ret;
 
-	parent_content = NULL;
-	parent_operator = OP_INVALID;
+	parent_cnt = NULL;
+	parent_op = OP_INVALID;
 	if (node->parent != NULL)
 	{
-		parent_content = (t_content_node *)node->parent->content;
-		parent_operator = parent_content->op;
+		parent_cnt = (t_content_node *)node->parent->content;
+		parent_op = parent_cnt->op;
 	}
 	if ((node->content == NULL)
 		|| (((t_content_node *)node->content)->op != OP_CMD))
@@ -115,13 +115,13 @@ static int	btree_cmd_callback(t_btnode *node, void *_shell)
 		return (EXIT_FAILURE);
 	}
 	debug_btree_print(node);
-	if (parent_operator == OP_VAR_ASSIGN)
+	if (parent_op == OP_VAR_ASSIGN)
 		return (0);
-	ret = execute_builtin(&((t_content_node *)node->content)->cmd);
+	ret = execute_builtin(&((t_content_node *)node->content)->cmd,
+			((t_shell *)_shell)->envp);
 	if (ret != 127)
 		return (ret);
-	return (execute_execve(node, (t_shell *)_shell,
-			parent_operator, parent_content));
+	return (execute_execve(node, (t_shell *)_shell, parent_op, parent_cnt));
 }
 
 int	process(t_shell *shell)

@@ -1,38 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   echo.c                                             :+:      :+:    :+:   */
+/*   env_utils.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: djunho <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/22 11:48:18 by djunho            #+#    #+#             */
-/*   Updated: 2025/06/23 14:14:07 by djunho           ###   ########.fr       */
+/*   Created: 2025/06/23 13:56:51 by djunho            #+#    #+#             */
+/*   Updated: 2025/06/23 13:59:43 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdbool.h>
-#include "../../libft/libft.h"
+#ifndef ENV_UTILS_H
+# define ENV_UTILS_H
 
-int	echo(int argc, char *argv[], char *envp[])
-{
-	int		i;
-	bool	no_nl;
+const char	*get_env(char *env, char **envp);
 
-	(void)envp;
-	i = 1;
-	no_nl = false;
-	if ((i < argc) && (ft_strncmp(argv[i], "-n", 2) == 0))
-	{
-		no_nl = true;
-		i++;
-	}
-	if (i < argc)
-		ft_printf("%s", argv[i++]);
-	while (i < argc)
-	{
-		ft_printf(" %s", argv[i++]);
-	}
-	if (!no_nl)
-		ft_printf("\n");
-	return (0);
-}
+#endif // ENV_UTILS_H
+
+
