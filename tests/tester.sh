@@ -335,9 +335,11 @@ echo ""
 tester_grep             '1=10'       "1=10: No such file or directory"
 echo ""
 
-tester_grep             'x=10'       "var_name = x, var_value = 10"
-tester_grep             'y=20'       "var_name = y, var_value = 20"
-tester_grep             'w==20'      "var_name = w, var_value = =20"
+tester_grep             'x=10'                "var_name = x, var_value = 10"
+tester_grep             'y=20'                "var_name = y, var_value = 20"
+tester_grep             'w==20'               "var_name = w, var_value = =20"
+tester_grep             "a=\"123\"456'789'\"\". && echo \$a"             "var_name = a, var_value = \"123\"456'789'\"\"."
+# tester_grep             "a=\"123\"456'789'\"\". && echo \$a"             "123456789." por enquanto da erro
 echo ""
 
 echo "################ Comparing with real bash ################"
