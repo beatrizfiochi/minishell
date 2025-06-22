@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 19:55:45 by djunho            #+#    #+#             */
-/*   Updated: 2025/06/13 16:55:06 by djunho           ###   ########.fr       */
+/*   Updated: 2025/06/22 20:13:53 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,10 @@
 #include <sys/wait.h>		// wait
 #include "../libft/libft.h"
 #include "../cmd.h"
+#include "../builtins/builtins.h"
 #include "../debug.h"
 #include "../minishell.h"
+#include "../execute/execute_debug.h"
 #include "../signals/signals.h"
 #include "execution.h"
 #include "../variables/variables.h"
@@ -76,18 +78,29 @@ static int	btree_operator_between_callback(t_btnode *node,
 	return (-1);
 }
 
-__attribute__((weak)) void	debug_btree_print(t_btnode *node)
+static int	execute_execve(t_btnode *node, t_shell *shell,
+	t_node_op parent_operator, t_content_node *parent_content)
 {
-	(void)node;
+	shell->last_pid = fork();
+	if (shell->last_pid < 0)
+		return (1);
+	if (shell->last_pid == 0)
+	{
+		if (parent_operator == OP_PIPE)
+			configure_pipe(parent_content->pipe.pipe,
+				parent_content->pipe.carry_over_fd,
+				parent_content->pipe.is_last_pipe);
+		exit(run_child(&((t_content_node *)node->content)->cmd, shell));
+	}
+	return (0);
 }
 
 static int	btree_cmd_callback(t_btnode *node, void *_shell)
 {
-	t_shell			*shell;
 	t_content_node	*parent_content;
 	t_node_op		parent_operator;
+	int				ret;
 
-	shell = (t_shell *)_shell;
 	parent_content = NULL;
 	parent_operator = OP_INVALID;
 	if (node->parent != NULL)
@@ -104,18 +117,11 @@ static int	btree_cmd_callback(t_btnode *node, void *_shell)
 	debug_btree_print(node);
 	if (parent_operator == OP_VAR_ASSIGN)
 		return (0);
-	shell->last_pid = fork();
-	if (shell->last_pid < 0)
-		return (1);
-	if (shell->last_pid == 0)
-	{
-		if (parent_operator == OP_PIPE)
-			configure_pipe(parent_content->pipe.pipe,
-				parent_content->pipe.carry_over_fd,
-				parent_content->pipe.is_last_pipe);
-		exit(run_child(&((t_content_node *)node->content)->cmd, shell));
-	}
-	return (0);
+	ret = execute_builtin(&((t_content_node *)node->content)->cmd);
+	if (ret != 127)
+		return (ret);
+	return (execute_execve(node, (t_shell *)_shell,
+			parent_operator, parent_content));
 }
 
 int	process(t_shell *shell)

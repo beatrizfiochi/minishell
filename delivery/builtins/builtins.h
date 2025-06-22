@@ -6,12 +6,14 @@
 /*   By: djunho <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 12:13:21 by djunho            #+#    #+#             */
-/*   Updated: 2025/06/22 18:32:23 by djunho           ###   ########.fr       */
+/*   Updated: 2025/06/22 19:52:44 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef BUILTINS_H
 # define BUILTINS_H
+
+# include "../cmd.h"
 
 struct	s_builtins
 {
@@ -19,7 +21,7 @@ struct	s_builtins
 	int			(*func)(int argc, char *argv[]);
 };
 
-int	run_builtin(int argc, char *argv[], int *ret);
+int	execute_builtin(t_cmd *cmd);
 
 int	echo(int argc, char *argv[]);
 

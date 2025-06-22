@@ -6,14 +6,17 @@
 /*   By: djunho <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 13:30:38 by djunho            #+#    #+#             */
-/*   Updated: 2025/06/22 15:28:38 by djunho           ###   ########.fr       */
+/*   Updated: 2025/06/22 19:56:12 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "../cmd.h"
+#include "../execute/execution.h"
+#include "../parser/parser.h"
 #include "../libft/libft.h"
 #include "builtins.h"
 
-int	run_builtin(int argc, char *argv[], int *ret)
+static int	run_builtin(int argc, char *argv[], int *ret)
 {
 	size_t					i;
 	const struct s_builtins	cmds[] = {
@@ -29,4 +32,17 @@ int	run_builtin(int argc, char *argv[], int *ret)
 	if (i < (sizeof(cmds) / sizeof(cmds[0])))
 		*ret = (cmds[i].func(argc, argv));
 	return (*ret);
+}
+
+int	execute_builtin(t_cmd *cmd)
+{
+	char	**args;
+	int		argc;
+	int		ret;
+
+	clean_token_quotes(cmd->tokens);
+	args = convert_list_to_vector(cmd->tokens, &argc);
+	ret = run_builtin(argc, args, &ret);
+	free(args);
+	return (ret);
 }
