@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 11:59:00 by djunho            #+#    #+#             */
-/*   Updated: 2025/06/22 14:21:07 by djunho           ###   ########.fr       */
+/*   Updated: 2025/06/22 15:30:20 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,35 +24,30 @@
 
 int	run_child(t_cmd *cmd, t_shell *shell)
 {
-	char	**envp;
 	char	*path;
 	char	**args;
 	int		ret;
 	int		argc;
 
-	envp = shell->envp;
 	clean_token_quotes(cmd->tokens);
 	args = convert_list_to_vector(cmd->tokens, &argc);
-	if (args == NULL)
-		return (0);
-	if (args[0] == NULL)
+	ret = 0;
+	while (1)
 	{
-		clear_minishell(shell);
-		free(args);
-		return (0);
-	}
-	reset_signals();
-	ret = run_builtin(argc, args);
-	if (ret == -1)
-	{
-		execve(args[0], args, envp);
-		if (create_cmd_path(args[0], envp, &path))
-			execve(path, args, envp);
+		if ((args == NULL) || (args[0] == NULL))
+			break ;
+		reset_signals();
+		if (run_builtin(argc, args, &ret) != 127)
+			break ;
+		execve(args[0], args, shell->envp);
+		if (create_cmd_path(args[0], shell->envp, &path))
+			execve(path, args, shell->envp);
 		perror(args[0]);
-		ret = 127;
+		break ;
 	}
 	clear_minishell(shell);
-	free(args);
+	if (args != NULL)
+		free(args);
 	return (ret);
 }
 
