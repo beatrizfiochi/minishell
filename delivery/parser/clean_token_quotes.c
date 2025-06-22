@@ -6,34 +6,71 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 11:33:43 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/05/14 12:09:03 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/06/22 19:30:31 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 #include "../libft/libft.h"
+#include <stdbool.h>
 
-void	clean_token_quotes(t_list *token_list)
+bool	is_quote(char c)
 {
-	char	*content;
-	char	*new_content;
-	int		len;
+	return (c == '\'' || c == '"');
+}
 
+bool	clean_single_token_quotes(char **content_ptr)
+{
+	const char	*src;
+	char		*new_str;
+	int			len;
+	int			i;
+	int			j;
+	char		quote;
+	bool		in_quote;
+
+	src = *content_ptr;
+	len = ft_strlen(src);
+	i = 0;
+	j = 0;
+	in_quote = false;
+	new_str = malloc(len + 1);
+	if (new_str == NULL)
+		return (false);
+	while (src[i] != '\0')
+	{
+		if ((in_quote == false) && (is_quote(src[i]) == true))
+		{
+			quote = src[i++];
+			in_quote = true;
+		}
+		else if ((in_quote == true) && (src[i] == quote))
+		{
+			i++;
+			in_quote = false;
+		}
+		else
+			new_str[j++] = src[i++];
+	}
+	if (in_quote == true)
+	{
+		free(new_str);
+		return (false);
+	}
+	new_str[j] = '\0';
+	free(*content_ptr);
+	*content_ptr = new_str;
+	return (true);
+}
+
+bool	clean_token_quotes(t_list *token_list)
+{
 	while (token_list != NULL)
 	{
-		content = (char *)(token_list->content);
-		len = ft_strlen(content);
-		if (len >= 2 && ((content[0] == '\'' && content[len - 1] == '\'')
-				|| (content[0] == '"' && content[len - 1] == '"')))
-		{
-			new_content = malloc(len - 1);
-			if (new_content == NULL)
-				return ;
-			ft_strlcpy(new_content, content + 1, len - 1);
-			new_content[len - 2] = '\0';
-			free(token_list->content);
-			token_list->content = new_content;
-		}
+		if (clean_single_token_quotes((char **)&token_list->content) == false)
+			return (false);
 		token_list = token_list->next;
 	}
+	return (true);
 }
+
