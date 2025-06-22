@@ -89,7 +89,7 @@ function tester() {
 
 	valid_operators=('&&' '||' '|' '<' '>' '<<' '>>')
 	if [[ "${valid_operators[@]}" =~ $op_expected ]]; then
-		found_op=$(cat $OUT_FILE | grep "Nodes: $op_expected")
+		found_op=$(cat $OUT_FILE | grep -E "Nodes: $op_expected\$")
 		if [[ ! -z $found_op ]]; then
 			echo -e "${GREEN}Operators detected correctly${RESET}"
 		else
@@ -117,7 +117,7 @@ function tester() {
 			# expected print
 			# Btree: Leaf content: oi
 			# Btree: Operator leaf> OP_CMD
-			found=$(cat $OUT_FILE | grep -B 1 "Btree: Leaf content: $item")
+			found=$(cat $OUT_FILE | grep -E -B 1 "Btree: Leaf content: $item \$")
 			echo "$found" | grep "OP_CMD" > /dev/null
 			if [[ $? -ne 0 ]]; then
 				echo -e "${RED}Error to find the command $item in the output${RESET}"
@@ -132,7 +132,7 @@ function tester() {
 			# expected print
 			# Btree: Node content: ||
 			# Btree: Operator node> OP_OR
-			found=$(cat $OUT_FILE | grep -A 1 "Btree: Operator node> $item")
+			found=$(cat $OUT_FILE | grep -E -A 1 "Btree: Operator node> $item\$")
 			echo "$found" | grep -E "OP_OR|OP_AND|OP_PIPE" > /dev/null
 			if [[ $? -ne 0 ]]; then
 				echo -e "${RED}Error to find the operator $item in the output${RESET}"
@@ -140,6 +140,12 @@ function tester() {
 				exit 1
 			fi
 		done
+	else
+		found=$(cat $OUT_FILE | grep "Btree: Operator node> ")
+		if [ ! -z "$found" ]; then
+			echo -e "${RED}Found an opereator when not expecting one${RESET}"
+			exit 1
+		fi
 	fi
 
 	echo ""
@@ -229,7 +235,7 @@ if [[ $? -ne 0 ]]; then
 fi
 
 # tester  cmd              found_op num_of_nodes   list_of_cmds   list_of_ops
-cmds=("oi" "oi hi")
+cmds=("oi hi")
 tester   "oi hi"                  0      2           "cmd"
 tester   "oi oi oi"               0      3
 tester   "1 2 3 4 5 6 7 8 9 10"   0      10
