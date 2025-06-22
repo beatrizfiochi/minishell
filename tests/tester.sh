@@ -207,7 +207,6 @@ function tester_with_real() {
 		exit 1
 	fi
 
-
 	if [[ "$EXIT_STATUS" != "$REAL_EXIT_STATUS" ]]; then
 		echo -e "${RED}Error different error status presented: $cmd${RESET}"
 		echo "minishell exit status $EXIT_STATUS"

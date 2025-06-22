@@ -6,7 +6,7 @@
 #    By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/27 13:09:33 by djunho            #+#    #+#              #
-#    Updated: 2025/06/13 16:34:05 by djunho           ###   ########.fr        #
+#    Updated: 2025/06/22 14:44:54 by djunho           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,6 +19,7 @@ SRCS = main.c read_command.c utils.c debug.c \
 	parser/expand_variable_utils.c parser/tokenization_utils.c\
 	execute/execution.c execute/process.c execute/utils.c execute/debug.c \
 	execute/execution_operations.c \
+	builtins/builtins.c builtins/echo/echo.c \
 	signals/handle_signals.c \
 	variables/handle_variables.c
 OBJS_DIR = objs

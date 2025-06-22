@@ -6,7 +6,7 @@
 /*   By: djunho <djunho@student.42porto.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/01 12:16:24 by djunho            #+#    #+#             */
-/*   Updated: 2025/05/18 20:51:27 by djunho           ###   ########.fr       */
+/*   Updated: 2025/06/22 14:17:12 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ bool	create_cmd_path(char *cmd, char **envp, char **path)
 	return (!free_join(tmp));
 }
 
-char	**convert_list_to_vector(t_list *list)
+char	**convert_list_to_vector(t_list *list, int *size)
 {
 	int		i;
 	char	**vector;
@@ -99,5 +99,7 @@ char	**convert_list_to_vector(t_list *list)
 		tmp = tmp->next;
 	}
 	vector[i] = NULL;
+	if (size != NULL)
+		*size = i;
 	return (vector);
 }
