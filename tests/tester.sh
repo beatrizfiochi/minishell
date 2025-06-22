@@ -337,6 +337,7 @@ echo ""
 
 tester_grep             'x=10'       "var_name = x, var_value = 10"
 tester_grep             'y=20'       "var_name = y, var_value = 20"
+tester_grep             'w==20'      "var_name = w, var_value = =20"
 echo ""
 
 echo "################ Comparing with real bash ################"

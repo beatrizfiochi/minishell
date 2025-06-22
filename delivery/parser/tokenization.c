@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 15:26:54 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/06/13 12:53:54 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/06/22 17:09:47 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@
 #include "../libft/libft.h"
 #include "../minishell.h"
 #include "parser.h"
+#include "../cmd.h"
+#include "aux.h"
 
 t_list	*create_token(const char *line, int len)
 {
@@ -70,7 +72,7 @@ static void	search_token_utils(char *l, char *c, int init, int *len)
 	}
 }
 
-static void	search_token(char *line, char *c, int *len)
+static void	search_token(char *line, char *c, int *len, bool *op_var_assign)
 {
 	int		init;
 	int		op_len;
@@ -85,7 +87,7 @@ static void	search_token(char *line, char *c, int *len)
 		*len = -1;
 		return ;
 	}
-	if (op_len > 0)
+	if (op_len > 0 && (*op_var_assign == false))
 	{
 		*len += op_len;
 		return ;
@@ -103,10 +105,12 @@ t_list	*tokenization(char *line)
 	t_list	*prev_token;
 	char	quote;
 	int		len;
+	bool	ignore_op_var_assign;
 
 	head_token = NULL;
 	prev_token = NULL;
 	quote = 0;
+	ignore_op_var_assign = false;
 	if (line == NULL)
 		return (NULL);
 	while (*line != '\0')
@@ -116,7 +120,7 @@ t_list	*tokenization(char *line)
 		if (*line == '\0')
 			break ;
 		len = 0;
-		search_token(line, &quote, &len);
+		search_token(line, &quote, &len, &ignore_op_var_assign);
 		if (len == -1)
 		{
 			printf_error("syntax error near unexpected token\n");
@@ -124,6 +128,10 @@ t_list	*tokenization(char *line)
 			return (NULL);
 		}
 		new_token = create_token(line, len);
+		if (op(new_token->content) == OP_VAR_ASSIGN)
+			ignore_op_var_assign = true;
+		else
+			ignore_op_var_assign = false;
 		if ((prev_token != NULL)
 			&& (is_token_operator(prev_token->content) == 1)
 			&& (is_token_operator(new_token->content) == 1))

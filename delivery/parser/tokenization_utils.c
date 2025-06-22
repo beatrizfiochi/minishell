@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 18:48:52 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/06/13 15:35:36 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/06/22 17:10:41 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,8 +62,8 @@ static int	check_sequence(char *line, char c)
 		return (0);
 	if ((c == '<' || c == '>') && (i != 1 && i != 2))
 		return (0);
-	if (c == '=' && i != 1)
-		return (0);
+	if (c == '=')
+		return (1);
 	return (i);
 }
 
