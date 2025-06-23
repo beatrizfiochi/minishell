@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 14:25:49 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/06/22 11:58:14 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/06/23 13:11:10 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,26 +80,29 @@ char	*expand_variable(char *content, int var_pos,
 	return (new_content);
 }
 
-void	search_and_expand_content(char **content, t_list *var_list)
+void	search_and_expand_content(char **cont, t_list *var_list)
 {
 	char	*var;
-	char	*var_value;
+	char	*v_value;
 	int		var_len;
 	char	*cnt;
 
-	cnt = *content;
+	cnt = *cont;
 	while (*cnt != '\0' && (cnt[0] != '\'' && cnt[(int)ft_strlen(cnt)] != '\''))
 	{
 		if (*cnt == '$')
 		{
+			if (*(cnt + 1) == '\0')
+				return ;
 			var = cnt;
 			cnt++;
+			if ((*cnt != '_') && !ft_isalpha(*cnt))
+				continue ;
 			while ((*cnt != '\0') && ((*cnt == '_') || ft_isalnum(*cnt)))
 				cnt++;
-			var_len = ((int)(cnt - var)) - 1;
-			var_value = search_var((const char *)(var + 1), var_list, var_len);
-			*content = expand_variable(*content, (var - *content), &cnt,
-					var_value);
+			var_len = ((int)(cnt - var) - 1);
+			v_value = search_var((const char *)(var + 1), var_list, var_len);
+			*cont = expand_variable(*cont, (var - *cont), &cnt, v_value);
 		}
 		else
 			cnt++;
