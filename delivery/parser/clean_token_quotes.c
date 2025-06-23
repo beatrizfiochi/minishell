@@ -6,58 +6,75 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 11:33:43 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/06/22 19:30:31 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/06/23 18:30:58 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 #include "../libft/libft.h"
 #include <stdbool.h>
+#include "aux.h"
 
-bool	is_quote(char c)
+static int	copy_inside_quotes(const char *src, char *new_str, int i, int *j)
 {
-	return (c == '\'' || c == '"');
+	int		k;
+	char	quote;
+
+	quote = src[i];
+	k = i + 1;
+	while ((src[k] != '\0') && (src[k] != quote))
+		k++;
+	if (src[k] == quote)
+	{
+		i++;
+		while (i < k)
+			new_str[(*j)++] = src[i++];
+		return (k + 1);
+	}
+	else
+	{
+		new_str[(*j)++] = src[i++];
+		return (i);
+	}
 }
 
-bool	clean_single_token_quotes(char **content_ptr)
+static void	copy_without_matched_quotes(const char *src, char *new_str)
 {
-	const char	*src;
-	char		*new_str;
-	int			len;
-	int			i;
-	int			j;
-	char		quote;
-	bool		in_quote;
+	int		i;
+	int		j;
 
-	src = *content_ptr;
-	len = ft_strlen(src);
 	i = 0;
 	j = 0;
-	in_quote = false;
-	new_str = malloc(len + 1);
-	if (new_str == NULL)
-		return (false);
 	while (src[i] != '\0')
 	{
-		if ((in_quote == false) && (is_quote(src[i]) == true))
-		{
-			quote = src[i++];
-			in_quote = true;
-		}
-		else if ((in_quote == true) && (src[i] == quote))
-		{
-			i++;
-			in_quote = false;
-		}
+		if (is_quote(src[i]) == true)
+			i = copy_inside_quotes(src, new_str, i, &j);
 		else
 			new_str[j++] = src[i++];
 	}
-	if (in_quote == true)
-	{
-		free(new_str);
-		return (false);
-	}
 	new_str[j] = '\0';
+}
+
+static char	*remove_quotes(const char *src)
+{
+	char	*new_str;
+	int		len;
+
+	len = ft_strlen(src);
+	new_str = malloc(len + 1);
+	if (new_str == NULL)
+		return (NULL);
+	copy_without_matched_quotes(src, new_str);
+	return (new_str);
+}
+
+static bool	clean_single_token_quotes(char **content_ptr)
+{
+	char	*new_str;
+
+	new_str = remove_quotes((const char *)*content_ptr);
+	if (new_str == NULL)
+		return (false);
 	free(*content_ptr);
 	*content_ptr = new_str;
 	return (true);
@@ -73,4 +90,3 @@ bool	clean_token_quotes(t_list *token_list)
 	}
 	return (true);
 }
-

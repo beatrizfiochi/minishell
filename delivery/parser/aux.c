@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   aux.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: djunho <djunho@student.42porto.com>        +#+  +:+       +#+        */
+/*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 18:09:35 by djunho            #+#    #+#             */
-/*   Updated: 2025/05/05 18:13:30 by djunho           ###   ########.fr       */
+/*   Updated: 2025/06/23 18:18:53 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,4 +77,9 @@ bool	split_token_list(struct s_split_token_list *split, bool need_left,
 	}
 	abort_tree_lst(NULL, &(split->left), "Error: spliting tokens from list\n");
 	return (false);
+}
+
+bool	is_quote(char c)
+{
+	return (c == '\'' || c == '"');
 }

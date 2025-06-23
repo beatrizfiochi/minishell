@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/13 16:12:37 by djunho            #+#    #+#             */
-/*   Updated: 2025/06/22 16:09:38 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/06/23 14:55:09 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ t_node_op	op(char *token)
 		return (OP_AND);
 	if ((*token == '|') && (*(token + 1) == '|') && (*(token + 2) == '\0'))
 		return (OP_OR);
-	if ((*token == '|')  && (*(token + 1) == '\0'))
+	if ((*token == '|') && (*(token + 1) == '\0'))
 		return (OP_PIPE);
 	if ((*token == '=') && (*(token + 1) == '\0'))
 		return (OP_VAR_ASSIGN);

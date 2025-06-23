@@ -3,12 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   aux.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: djunho <djunho@student.42porto.com>        +#+  +:+       +#+        */
+/*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 18:10:01 by djunho            #+#    #+#             */
-/*   Updated: 2025/06/13 16:41:38 by djunho           ###   ########.fr       */
+/*   Updated: 2025/06/23 18:33:18 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 #ifndef AUX_H
 # define AUX_H
 
@@ -29,6 +30,7 @@ struct s_split_token_list
 
 bool		split_token_list(struct s_split_token_list *split, bool need_left,
 				bool full_expand);
+bool		is_quote(char c);
 
 t_list		*search_op(t_list *tokens, bool full_expand);
 

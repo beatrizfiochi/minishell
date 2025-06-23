@@ -343,6 +343,13 @@ tester_grep             "a=\"123\"456'789'\"\". && echo \$a"             "var_na
 tester_grep             'echo $'              '$'
 tester_grep             'echo $$'             '$$'
 tester_grep             'echo $$oi'           '$hi'
+tester_grep               "echo '123"           "'123"
+tester_grep               "echo '123'"           "123"
+tester_grep               "echo '123\""           "'123\""
+tester_grep               "echo '123\"'"           "123\""
+tester_grep               "echo '123\"'456"           "123\"456"
+tester_grep               "echo '123\"''456'"           "123\"456"
+tester_grep               "echo '123\"'\"456\""           "123\"456"
 echo ""
 
 echo "################ Comparing with real bash ################"
