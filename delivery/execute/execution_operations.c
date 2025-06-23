@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 11:59:00 by djunho            #+#    #+#             */
-/*   Updated: 2025/06/22 19:49:39 by djunho           ###   ########.fr       */
+/*   Updated: 2025/06/23 16:35:35 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,11 +31,12 @@ int	run_child(t_cmd *cmd, t_shell *shell)
 
 	clean_token_quotes(cmd->tokens);
 	args = convert_list_to_vector(cmd->tokens, &argc);
-	ret = 0;
+	ret = 1;
 	while (1)
 	{
 		if ((args == NULL) || (args[0] == NULL))
 			break ;
+		ret = 127;
 		reset_signals();
 		execve(args[0], args, shell->envp);
 		if (create_cmd_path(args[0], shell->envp, &path))
