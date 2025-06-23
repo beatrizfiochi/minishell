@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 14:26:44 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/05/15 14:32:40 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/06/23 13:11:24 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,6 @@ char	*replace_var_name_by_value(char *content, int var_pos,
 char	*expand_variable(char *content, int var_pos,
 			char **cnt, char *var_value);
 
-void	search_and_expand_content(char **content, t_list *var_list);
+void	search_and_expand_content(char **cont, t_list *var_list);
 
 #endif

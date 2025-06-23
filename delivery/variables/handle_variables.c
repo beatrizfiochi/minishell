@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 21:17:55 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/06/13 17:42:43 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/06/23 14:56:20 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,8 @@ static bool	check_and_replace_var(t_list *current,
 	while (current != NULL)
 	{
 		current_content = (t_content_var *)current->content;
-		if (is_strlen_equals(current_content->var_name, (char *)(name->cmd.tokens->content)))
+		if (is_strlen_equals(current_content->var_name,
+				(char *)(name->cmd.tokens->content)))
 		{
 			if (ft_strncmp(current_content->var_name,
 					(char *)(name->cmd.tokens->content),

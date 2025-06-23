@@ -3,35 +3,35 @@
 /*                                                        :::      ::::::::   */
 /*   aux2.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: djunho <djunho@student.42porto.com>        +#+  +:+       +#+        */
+/*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/13 16:12:37 by djunho            #+#    #+#             */
-/*   Updated: 2025/06/13 16:33:23 by djunho           ###   ########.fr       */
+/*   Updated: 2025/06/23 14:55:09 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../libft/libft.h"
 #include "../cmd.h"
 
-t_node_op	op(char *token_str)
+t_node_op	op(char *token)
 {
-	if (*token_str == '\0')
+	if (*token == '\0')
 		return (OP_INVALID);
-	if (*token_str == '&' && *(token_str + 1) == '&')
+	if ((*token == '&') && (*(token + 1) == '&') && (*(token + 2) == '\0'))
 		return (OP_AND);
-	if (*token_str == '|' && *(token_str + 1) == '|')
+	if ((*token == '|') && (*(token + 1) == '|') && (*(token + 2) == '\0'))
 		return (OP_OR);
-	if (*token_str == '|')
+	if ((*token == '|') && (*(token + 1) == '\0'))
 		return (OP_PIPE);
-	if (*token_str == '=')
+	if ((*token == '=') && (*(token + 1) == '\0'))
 		return (OP_VAR_ASSIGN);
-	if (*token_str == '<' && *(token_str + 1) == '<')
+	if ((*token == '<') && (*(token + 1) == '<') && (*(token + 2) == '\0'))
 		return (OP_HEREDOC);
-	if (*token_str == '<')
+	if ((*token == '<') && (*(token + 1) == '\0'))
 		return (OP_RD_INPUT);
-	if (*token_str == '>' && *(token_str + 1) == '>')
+	if ((*token == '>') && (*(token + 1) == '>') && (*(token + 2) == '\0'))
 		return (OP_APPEND_RD_OUTPUT);
-	if (*token_str == '>')
+	if ((*token == '>') && (*(token + 1) == '\0'))
 		return (OP_RD_OUTPUT);
 	return (OP_CMD);
 }

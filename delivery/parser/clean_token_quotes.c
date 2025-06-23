@@ -6,34 +6,87 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 11:33:43 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/05/14 12:09:03 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/06/23 18:30:58 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 #include "../libft/libft.h"
+#include <stdbool.h>
+#include "aux.h"
 
-void	clean_token_quotes(t_list *token_list)
+static int	copy_inside_quotes(const char *src, char *new_str, int i, int *j)
 {
-	char	*content;
-	char	*new_content;
+	int		k;
+	char	quote;
+
+	quote = src[i];
+	k = i + 1;
+	while ((src[k] != '\0') && (src[k] != quote))
+		k++;
+	if (src[k] == quote)
+	{
+		i++;
+		while (i < k)
+			new_str[(*j)++] = src[i++];
+		return (k + 1);
+	}
+	else
+	{
+		new_str[(*j)++] = src[i++];
+		return (i);
+	}
+}
+
+static void	copy_without_matched_quotes(const char *src, char *new_str)
+{
+	int		i;
+	int		j;
+
+	i = 0;
+	j = 0;
+	while (src[i] != '\0')
+	{
+		if (is_quote(src[i]) == true)
+			i = copy_inside_quotes(src, new_str, i, &j);
+		else
+			new_str[j++] = src[i++];
+	}
+	new_str[j] = '\0';
+}
+
+static char	*remove_quotes(const char *src)
+{
+	char	*new_str;
 	int		len;
 
+	len = ft_strlen(src);
+	new_str = malloc(len + 1);
+	if (new_str == NULL)
+		return (NULL);
+	copy_without_matched_quotes(src, new_str);
+	return (new_str);
+}
+
+static bool	clean_single_token_quotes(char **content_ptr)
+{
+	char	*new_str;
+
+	new_str = remove_quotes((const char *)*content_ptr);
+	if (new_str == NULL)
+		return (false);
+	free(*content_ptr);
+	*content_ptr = new_str;
+	return (true);
+}
+
+bool	clean_token_quotes(t_list *token_list)
+{
 	while (token_list != NULL)
 	{
-		content = (char *)(token_list->content);
-		len = ft_strlen(content);
-		if (len >= 2 && ((content[0] == '\'' && content[len - 1] == '\'')
-				|| (content[0] == '"' && content[len - 1] == '"')))
-		{
-			new_content = malloc(len - 1);
-			if (new_content == NULL)
-				return ;
-			ft_strlcpy(new_content, content + 1, len - 1);
-			new_content[len - 2] = '\0';
-			free(token_list->content);
-			token_list->content = new_content;
-		}
+		if (clean_single_token_quotes((char **)&token_list->content) == false)
+			return (false);
 		token_list = token_list->next;
 	}
+	return (true);
 }
