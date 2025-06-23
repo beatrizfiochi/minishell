@@ -163,7 +163,7 @@ function tester_grep() {
 		exit 1
 	fi
 
-	text_found=$(cat $OUT_FILE | grep "$text")
+	text_found=$(cat $OUT_FILE | grep "^$text\$")
 	if [[ $text_found == "$text" ]]; then
 		echo -e "${GREEN}Success${RESET}"
 	else
@@ -340,6 +340,9 @@ tester_grep             'y=20'                "var_name = y, var_value = 20"
 tester_grep             'w==20'               "var_name = w, var_value = =20"
 tester_grep             "a=\"123\"456'789'\"\". && echo \$a"             "var_name = a, var_value = \"123\"456'789'\"\"."
 # tester_grep             "a=\"123\"456'789'\"\". && echo \$a"             "123456789." por enquanto da erro
+tester_grep             'echo $'              '$'
+tester_grep             'echo $$'             '$$'
+tester_grep             'echo $$oi'           '$hi'
 echo ""
 
 echo "################ Comparing with real bash ################"
