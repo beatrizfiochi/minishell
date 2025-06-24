@@ -12,10 +12,11 @@
 
 #include "../libft/libft.h"		// ft_strlen()
 
-// Search for the environment variable (must contain the = at the end) in the envp
+// Search for the environment variable (must contain the = at the end) in
+//  the envp
 const char	*get_env(char *env, char **envp)
 {
-	int		i;
+	int	i;
 
 	i = -1;
 	while (envp[++i] != NULL)
@@ -25,4 +26,3 @@ const char	*get_env(char *env, char **envp)
 		return (NULL);
 	return (&envp[i][ft_strlen(env)]);
 }
-

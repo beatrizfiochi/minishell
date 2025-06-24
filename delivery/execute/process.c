@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 19:55:45 by djunho            #+#    #+#             */
-/*   Updated: 2025/06/23 14:17:42 by djunho           ###   ########.fr       */
+/*   Updated: 2025/06/23 18:05:00 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,10 @@ static int	execute_execve(t_btnode *node, t_shell *shell,
 {
 	shell->last_pid = fork();
 	if (shell->last_pid < 0)
+	{
+		perror("Error on fork");
 		return (1);
+	}
 	if (shell->last_pid == 0)
 	{
 		if (parent_operator == OP_PIPE)

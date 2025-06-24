@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 11:59:00 by djunho            #+#    #+#             */
-/*   Updated: 2025/06/23 16:35:35 by djunho           ###   ########.fr       */
+/*   Updated: 2025/06/23 17:59:47 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,12 +56,17 @@ int	process_and(t_shell *shell, t_content_node *left_content, int ret,
 	int	wstatus;
 
 	*should_continue = true;
-	if (shell->last_pid == 0)
+	//TODO: FIXME: Check left or left->right op
+	if ((left_content->op == OP_CMD) && !left_content->cmd.is_builtin && (shell->last_pid == 0))
 		return (0);
 	if ((left_content->op == OP_CMD) && (ret == EXIT_SUCCESS))
 	{
-		waitpid(shell->last_pid, &wstatus, 0);
-		ret = get_fork_return(wstatus);
+		if (!left_content->cmd.is_builtin)
+		{
+			waitpid(shell->last_pid, &wstatus, 0);
+			shell->last_pid = 0;
+			ret = get_fork_return(wstatus);
+		}
 		if (ret != EXIT_SUCCESS)
 			*should_continue = false;
 	}
@@ -77,12 +82,16 @@ int	process_or(t_shell *shell, t_content_node *left_content, int ret,
 {
 	int	wstatus;
 
-	if (shell->last_pid == 0)
+	//TODO: FIXME: Check left or left->right op
+	if ((left_content->op == OP_CMD) && !left_content->cmd.is_builtin && (shell->last_pid == 0))
 		return (0);
 	if ((left_content->op == OP_CMD) && (ret == EXIT_SUCCESS))
 	{
-		waitpid(shell->last_pid, &wstatus, 0);
-		ret = get_fork_return(wstatus);
+		if (!left_content->cmd.is_builtin)
+		{
+			waitpid(shell->last_pid, &wstatus, 0);
+			ret = get_fork_return(wstatus);
+		}
 		if (ret == EXIT_SUCCESS)
 			*should_continue = false;
 	}

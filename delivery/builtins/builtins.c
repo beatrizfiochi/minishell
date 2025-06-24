@@ -6,7 +6,7 @@
 /*   By: djunho <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 13:30:38 by djunho            #+#    #+#             */
-/*   Updated: 2025/06/23 14:18:29 by djunho           ###   ########.fr       */
+/*   Updated: 2025/06/23 17:57:45 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,5 +45,7 @@ int	execute_builtin(t_cmd *cmd, char *envp[])
 	args = convert_list_to_vector(cmd->tokens, &argc);
 	ret = run_builtin(argc, args, envp, &ret);
 	free(args);
+	if (ret != 127)
+		cmd->is_builtin = true;
 	return (ret);
 }

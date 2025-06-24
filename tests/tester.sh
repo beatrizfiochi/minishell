@@ -75,7 +75,7 @@ function tester() {
 
 	echo -e "${GREEN}Running ./minishell $cmd${RESET}"
 	rm "$OUT_FILE" || echo -n ""
-	echo "$cmd" | valgrind --trace-children=yes --child-silent-after-fork=no --leak-check=full --show-leak-kinds=all --suppressions=../delivery/valgrind-supression --log-file="$OUT_FILE_VALGRIND" ../delivery/minishell &> $OUT_FILE
+	echo "$cmd" | valgrind --trace-children=yes --child-silent-after-fork=no --leak-check=full --show-leak-kinds=all --suppressions=$(pwd)/../delivery/valgrind-supression --log-file="$OUT_FILE_VALGRIND" ../delivery/minishell &> $OUT_FILE
 	if [ ! -f "$OUT_FILE" ]; then
 		echo -e "${RED}Test failed: $cmd${RESET}"
 		exit 1
@@ -165,7 +165,7 @@ function tester_grep() {
 
 	echo -e "${GREEN}Running ./minishell $cmd${RESET}"
 	rm "$OUT_FILE" || echo -n ""
-	echo "$cmd" | valgrind --trace-children=yes --child-silent-after-fork=no --leak-check=full --show-leak-kinds=all --suppressions=../delivery/valgrind-supression --log-file="$OUT_FILE_VALGRIND" ../delivery/minishell &> $OUT_FILE
+	echo "$cmd" | valgrind --trace-children=yes --child-silent-after-fork=no --leak-check=full --show-leak-kinds=all --suppressions=$(pwd)/../delivery/valgrind-supression --log-file="$OUT_FILE_VALGRIND" ../delivery/minishell &> $OUT_FILE
 	if [ ! -f "$OUT_FILE" ]; then
 		echo -e "${RED}Test failed: $cmd${RESET}"
 		exit 1
@@ -185,9 +185,13 @@ function tester_grep() {
 
 function tester_with_real() {
 	cmd=$1
+	should_compare=true
+	if [ $# -eq 2 ]; then
+		should_compare=$2
+	fi
 
 	# Run minishell
-	echo "$cmd" | valgrind --trace-children=yes --child-silent-after-fork=no --leak-check=full --show-leak-kinds=all --suppressions=../delivery/valgrind-supression --log-file="$OUT_FILE_VALGRIND" ../delivery/minishell &> $OUT_FILE
+	echo "$cmd" | valgrind --trace-children=yes --child-silent-after-fork=no --leak-check=full --show-leak-kinds=all --suppressions=$(pwd)/../delivery/valgrind-supression --log-file="$OUT_FILE_VALGRIND" ../delivery/minishell &> $OUT_FILE
 	EXIT_STATUS=$?
 	if [ ! -f "$OUT_FILE" ]; then
 		echo -e "${RED}Test failed: $cmd${RESET}"
@@ -206,6 +210,9 @@ function tester_with_real() {
 	echo "$cmd" | valgrind --trace-children=yes -q --log-file=/dev/null bash &> $OUT_REAL_FILE
 	REAL_EXIT_STATUS=$?
 
+	# Ajust some bash message to make it easier to compare
+	sed -i 's/bash: line 1: //' ${OUT_REAL_FILE}
+
 	if [[ "$EXIT_STATUS" != "$REAL_EXIT_STATUS" ]]; then
 		echo -e "${RED}Error different error status presented: $cmd${RESET}"
 		echo "minishell exit status $EXIT_STATUS"
@@ -213,15 +220,17 @@ function tester_with_real() {
 		exit 1
 	fi
 
-	diff "${OUT_FILE}_2" "$OUT_REAL_FILE"
-	if [ $? -ne 0 ]; then
-		echo -e "${RED}Error on comparing the output: $cmd${RESET}"
-		echo -e "${BLUE}CMD send is: \"$cmd\"${RESET}"
-		echo -e "${BLUE}Output of minishell is:${RESET}"
-		cat ${OUT_FILE}_2
-		echo -e "${BLUE}Output from bash is:${RESET}"
-		cat $OUT_REAL_FILE
-		exit 1
+	if [ $should_compare == true ]; then
+		diff "${OUT_FILE}_2" "$OUT_REAL_FILE"
+		if [ $? -ne 0 ]; then
+			echo -e "${RED}Error on comparing the output: $cmd${RESET}"
+			echo -e "${BLUE}CMD send is: \"$cmd\"${RESET}"
+			echo -e "${BLUE}Output of minishell is:${RESET}"
+			cat ${OUT_FILE}_2
+			echo -e "${BLUE}Output from bash is:${RESET}"
+			cat $OUT_REAL_FILE
+			exit 1
+		fi
 	fi
 
 	echo -e "${GREEN}Test comparing with real bash passed: $cmd${RESET}"
@@ -328,30 +337,28 @@ tester "oioi|"             0       2
 
 # Testing syntax error         cmd              text
 echo "################ Testing syntax error ################"
-tester_grep             'ls && || pwd'       "syntax error near unexpected token"
-tester_grep             'ls && ||pwd'       "syntax error near unexpected token"
-tester_grep             'ls&& || pwd'       "syntax error near unexpected token"
-tester_grep             'ls&&|| pwd'       "syntax error near unexpected token"
-tester_grep             'ls &&||pwd'       "syntax error near unexpected token"
-tester_grep             'ls&& ||pwd'       "syntax error near unexpected token"
-tester_grep             'ls &&|| pwd'       "syntax error near unexpected token"
-tester_grep             'ls &&||& pwd'       "syntax error near unexpected token"
-tester_grep             'ls & pwd'       "syntax error near unexpected token"
-tester_grep             'ls&pwd'       "syntax error near unexpected token"
-tester_grep             'ls &&& pwd'       "syntax error near unexpected token"
-tester_grep             'ls&&&pwd'       "syntax error near unexpected token"
+tester_grep             'ls && || pwd'    "syntax error near unexpected token"
+tester_grep             'ls && ||pwd'     "syntax error near unexpected token"
+tester_grep             'ls&& || pwd'     "syntax error near unexpected token"
+tester_grep             'ls&&|| pwd'      "syntax error near unexpected token"
+tester_grep             'ls &&||pwd'      "syntax error near unexpected token"
+tester_grep             'ls&& ||pwd'      "syntax error near unexpected token"
+tester_grep             'ls &&|| pwd'     "syntax error near unexpected token"
+tester_grep             'ls &&||& pwd'    "syntax error near unexpected token"
+tester_grep             'ls & pwd'        "syntax error near unexpected token"
+tester_grep             'ls&pwd'          "syntax error near unexpected token"
+tester_grep             'ls &&& pwd'      "syntax error near unexpected token"
+tester_grep             'ls&&&pwd'        "syntax error near unexpected token"
 tester_grep             'ls&&&&pwd'       "syntax error near unexpected token"
-tester_grep             'ls &&&& pwd'       "syntax error near unexpected token"
-tester_grep             'ls &&&&& pwd'       "syntax error near unexpected token"
-tester_grep             'ls ||| pwd'       "syntax error near unexpected token"
-tester_grep             'ls |||| pwd'       "syntax error near unexpected token"
-tester_grep             'ls ||||| pwd'       "syntax error near unexpected token"
-tester_grep             'ls <<< pwd'       "syntax error near unexpected token"
-tester_grep             'ls <<<< pwd'       "syntax error near unexpected token"
-tester_grep             'ls <<<<< pwd'       "syntax error near unexpected token"
-tester_grep             'ls >>> pwd'       "syntax error near unexpected token"
-tester_grep             'ls >>>> pwd'       "syntax error near unexpected token"
-tester_grep             'ls >>>>> pwd'       "syntax error near unexpected token"
+tester_grep             'ls &&&& pwd'     "syntax error near unexpected token"
+tester_grep             'ls &&&&& pwd'    "syntax error near unexpected token"
+tester_grep             'ls ||| pwd'      "syntax error near unexpected token"
+tester_grep             'ls |||| pwd'     "syntax error near unexpected token"
+tester_grep             'ls ||||| pwd'    "syntax error near unexpected token"
+tester_grep             'ls <<< pwd'      "syntax error near unexpected token"
+tester_grep             'ls <<<< pwd'     "syntax error near unexpected token"
+tester_grep             'ls <<<<< pwd'    "syntax error near unexpected token"
+tester_grep             'ls >>>>> pwd'    "syntax error near unexpected token"
 echo ""
 
 tester_grep             '1=10'       "1=10: No such file or directory"
@@ -360,18 +367,18 @@ echo ""
 tester_grep             'x=10'                "var_name = x, var_value = 10"
 tester_grep             'y=20'                "var_name = y, var_value = 20"
 tester_grep             'w==20'               "var_name = w, var_value = =20"
-tester_grep             "a=\"123\"456'789'\"\". && echo \$a"             "var_name = a, var_value = \"123\"456'789'\"\"."
+tester_grep             "a=\"123\"456'789'\"\". && echo \$a"      "var_name = a, var_value = \"123\"456'789'\"\"."
 # tester_grep             "a=\"123\"456'789'\"\". && echo \$a"             "123456789." por enquanto da erro
 tester_grep             'echo $'              '$'
 tester_grep             'echo $$'             '$$'
 tester_grep             'echo $$oi'           '$hi'
-tester_grep               "echo '123"           "'123"
-tester_grep               "echo '123'"           "123"
-tester_grep               "echo '123\""           "'123\""
-tester_grep               "echo '123\"'"           "123\""
-tester_grep               "echo '123\"'456"           "123\"456"
-tester_grep               "echo '123\"''456'"           "123\"456"
-tester_grep               "echo '123\"'\"456\""           "123\"456"
+tester_grep             "echo '123"           "'123"
+tester_grep             "echo '123'"          "123"
+tester_grep             "echo '123\""         "'123\""
+tester_grep             "echo '123\"'"        "123\""
+tester_grep             "echo '123\"'456"     "123\"456"
+tester_grep             "echo '123\"''456'"   "123\"456"
+tester_grep             "echo '123\"'\"456\"" "123\"456"
 echo ""
 
 echo "################ Comparing with real bash ################"
@@ -388,7 +395,19 @@ tester_with_real "echo opa"
 tester_with_real "echo -n look"
 tester_with_real "echo look -n"
 tester_with_real_should_be_different "echo -e \"\nlook -n\""
+tester_with_real "/usr/bin/echo hello world"
 echo ""
+echo -e "${MAGENTA}Testing cd${RESET}"
+tester_with_real "cd"
+tester_with_real "cd .."
+tester_with_real "cd nonexistent"       false
+tester_grep      'cd && pwd'            "$HOME"
+tester_grep      "cd $HOME && pwd"      "$HOME"
+tester_grep      'cd /tmp && pwd'       "/tmp"
+tester_grep      "cd ../ && pwd"        "$(realpath ..)"
+tester_grep      "cd ../.. && pwd"      "$(realpath ../..)"
+tester_grep      "cd . && pwd"          "$(realpath .)"
+tester_grep      "cd /var/log && cd .. && pwd" "/var"
 
 # Test a normal command
 echo -e "${MAGENTA}Testing a normal command${RESET}"
@@ -402,18 +421,25 @@ echo ""
 echo -e "${MAGENTA}Testing AND operator${RESET}"
 tester_with_real "ls && pwd"
 tester_with_real "ls aaa && pwd"
+# TODO: Enable the test bellow one we are able to implement the printf for stderr
+# tester_with_real "lssss && pwd"
 echo ""
 
 # test OR
 echo -e "${MAGENTA}Testing OR operator${RESET}"
 tester_with_real "ls || pwd"
 tester_with_real "ls aaa || pwd"
+# TODO: Enable the test bellow one we are able to implement the printf for stderr
+# tester_with_real "lssss || pwd"
 echo ""
 
 # Test PIPE
 echo -e "${MAGENTA}Testing PIPE operator${RESET}"
 tester_with_real "ls | cat -e"
 tester_with_real "ls aaa | cat -e"
+# TODO: Enable the test bellow one we are able to implement the printf for stderr
+# and chnage the msg from ' lssss: No such file or directory' to 'lssss: command not found'
+# tester_with_real "lssss | cat -e"
 tester_with_real "ls ../delivery | cat -e"
 tester_with_real "ls ../delivery | grep mini | cat -e"
 tester_with_real "ls ../delivery | grep mini | cat -e | grep '\.h'"

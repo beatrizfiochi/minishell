@@ -16,5 +16,3 @@
 const char	*get_env(char *env, char **envp);
 
 #endif // ENV_UTILS_H
-
-
