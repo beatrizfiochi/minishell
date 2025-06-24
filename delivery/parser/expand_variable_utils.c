@@ -6,12 +6,13 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 14:25:49 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/06/23 13:11:10 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/06/24 15:39:51 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../libft/libft.h"
 #include "parser.h"
+#include "../minishell.h"
 
 char	*search_var(const char *variable, t_list *var_list, int len)
 {
@@ -80,7 +81,7 @@ char	*expand_variable(char *content, int var_pos,
 	return (new_content);
 }
 
-void	search_and_expand_content(char **cont, t_list *var_list)
+void	search_and_expand_content(char **cont, t_list *var_list, t_shell *shell)
 {
 	char	*var;
 	char	*v_value;
@@ -96,6 +97,13 @@ void	search_and_expand_content(char **cont, t_list *var_list)
 				return ;
 			var = cnt;
 			cnt++;
+			if (*cnt == '?')
+			{
+				v_value = ft_itoa(shell->last_exit_status);
+				*cont = expand_variable(*cont, ((var - *cont) - 1), &cnt, v_value);
+				free(v_value);
+				continue ;
+			}
 			if ((*cnt != '_') && !ft_isalpha(*cnt))
 				continue ;
 			while ((*cnt != '\0') && ((*cnt == '_') || ft_isalnum(*cnt)))
