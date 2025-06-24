@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 14:25:49 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/06/24 15:39:51 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/06/24 15:57:22 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,38 +81,3 @@ char	*expand_variable(char *content, int var_pos,
 	return (new_content);
 }
 
-void	search_and_expand_content(char **cont, t_list *var_list, t_shell *shell)
-{
-	char	*var;
-	char	*v_value;
-	int		var_len;
-	char	*cnt;
-
-	cnt = *cont;
-	while (*cnt != '\0' && (cnt[0] != '\'' && cnt[(int)ft_strlen(cnt)] != '\''))
-	{
-		if (*cnt == '$')
-		{
-			if (*(cnt + 1) == '\0')
-				return ;
-			var = cnt;
-			cnt++;
-			if (*cnt == '?')
-			{
-				v_value = ft_itoa(shell->last_exit_status);
-				*cont = expand_variable(*cont, ((var - *cont) - 1), &cnt, v_value);
-				free(v_value);
-				continue ;
-			}
-			if ((*cnt != '_') && !ft_isalpha(*cnt))
-				continue ;
-			while ((*cnt != '\0') && ((*cnt == '_') || ft_isalnum(*cnt)))
-				cnt++;
-			var_len = ((int)(cnt - var) - 1);
-			v_value = search_var((const char *)(var + 1), var_list, var_len);
-			*cont = expand_variable(*cont, (var - *cont), &cnt, v_value);
-		}
-		else
-			cnt++;
-	}
-}
