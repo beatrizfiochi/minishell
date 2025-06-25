@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 18:15:43 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/06/24 16:16:09 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/06/24 17:41:28 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,13 +53,29 @@ static void	handle_normal_var(char **cont,  char **cnt, char *var, t_list *var_l
 	*cont = expand_variable(*cont, var_position, cnt, v_value);
 }
 
+char	*go_to_end_quote(char *content)
+{
+	char	quote;
+	char	*initial_content;
+
+	quote = *content;
+	initial_content = content;
+	while (*content != '\0')
+	{
+		content++;
+		if (*content == quote)
+			return (content + 1);
+	}
+	return (initial_content + 1);
+}
+
 static void	search_and_expand_content(char **cont, t_list *var_list, t_shell *shell)
 {
 	char	*var;
 	char	*cnt;
 
 	cnt = *cont;
-	while (*cnt != '\0' && (cnt[0] != '\'' && cnt[(int)ft_strlen(cnt)] != '\''))
+	while (*cnt != '\0')
 	{
 		if (*cnt == '$')
 		{
@@ -77,6 +93,8 @@ static void	search_and_expand_content(char **cont, t_list *var_list, t_shell *sh
 				continue ;
 			handle_normal_var(cont, &cnt, var, var_list);
 		}
+		else if (*cnt == '\'')
+			cnt = go_to_end_quote(cnt);
 		else
 			cnt++;
 	}
