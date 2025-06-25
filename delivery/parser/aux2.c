@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/13 16:12:37 by djunho            #+#    #+#             */
-/*   Updated: 2025/06/23 14:55:09 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/06/25 16:11:53 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,4 +56,20 @@ t_list	*search_op(t_list *tokens, bool full_expand)
 		tokens = tokens->next;
 	}
 	return (NULL);
+}
+
+char	*go_to_end_quote(char *content)
+{
+	char	quote;
+	char	*initial_content;
+
+	quote = *content;
+	initial_content = content;
+	while (*content != '\0')
+	{
+		content++;
+		if (*content == quote)
+			return (content + 1);
+	}
+	return (initial_content + 1);
 }

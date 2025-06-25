@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 18:15:43 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/06/25 16:05:40 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/06/25 16:16:06 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,19 +15,8 @@
 #include "../minishell.h"
 #include "aux.h"
 
-void	free_var_content(void *var_content)
-{
-	t_content_var	*content;
-
-	if (var_content == NULL)
-		return ;
-	content = (t_content_var *)var_content;
-	free(content->var_name);
-	free(content->var_value);
-	free(content);
-}
-
-static void	handle_special_var(char **cont, char **cnt, char *var, t_shell *shell)
+static void	handle_special_var(char **cont, char **cnt,
+		char *var, t_shell *shell)
 {
 	char	*v_value;
 	int		var_position;
@@ -40,7 +29,8 @@ static void	handle_special_var(char **cont, char **cnt, char *var, t_shell *shel
 	free(v_value);
 }
 
-static void	handle_normal_var(char **cont, char **cnt, char *var, t_list *var_list)
+static void	handle_normal_var(char **cont, char **cnt,
+		char *var, t_list *var_list)
 {
 	char	*v_value;
 	int		var_len;
@@ -54,23 +44,8 @@ static void	handle_normal_var(char **cont, char **cnt, char *var, t_list *var_li
 	*cont = expand_variable(*cont, var_position, cnt, v_value);
 }
 
-char	*go_to_end_quote(char *content)
-{
-	char	quote;
-	char	*initial_content;
-
-	quote = *content;
-	initial_content = content;
-	while (*content != '\0')
-	{
-		content++;
-		if (*content == quote)
-			return (content + 1);
-	}
-	return (initial_content + 1);
-}
-
-char	*handle_possible_var(char **cont, char *cnt, t_list *var_list, t_shell *shell)
+char	*handle_possible_var(char **cont, char *cnt,
+		t_list *var_list, t_shell *shell)
 {
 	char	*var;
 
@@ -90,7 +65,8 @@ char	*handle_possible_var(char **cont, char *cnt, t_list *var_list, t_shell *she
 	return (cnt);
 }
 
-static void	search_and_expand_content(char **cont, t_list *var_list, t_shell *shell)
+static void	search_and_expand_content(char **cont, t_list *var_list,
+		t_shell *shell)
 {
 	char	*cnt;
 	bool	dquote;

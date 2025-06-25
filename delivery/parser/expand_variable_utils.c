@@ -6,13 +6,25 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 14:25:49 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/06/24 15:57:22 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/06/25 16:15:14 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../libft/libft.h"
 #include "parser.h"
 #include "../minishell.h"
+
+void	free_var_content(void *var_content)
+{
+	t_content_var	*content;
+
+	if (var_content == NULL)
+		return ;
+	content = (t_content_var *)var_content;
+	free(content->var_name);
+	free(content->var_value);
+	free(content);
+}
 
 char	*search_var(const char *variable, t_list *var_list, int len)
 {
@@ -80,4 +92,3 @@ char	*expand_variable(char *content, int var_pos,
 	free(content);
 	return (new_content);
 }
-
