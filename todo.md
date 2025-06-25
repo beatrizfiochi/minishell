@@ -17,8 +17,30 @@ If the tree is
  /   \
 ls  pwd
 
-The && on top (the sencond && to run) is checing the operator of the left (another &&) if is a command to wait for the PID
+The && on top (the second && to run) is checking the operator of the left (another &&) if is a command to wait for the PID
 I guess the best is to create a function that gets the last pid to run that will search on the left and possible on left->right
 
-# Issue on pipe with builtins
-The pipe is only configured on childrens. How to handle it? Maybe move the builtins that prints (only echo?) to run on a child
+# Update the SHLVL env var
+
+# HEREDOC
+## dont expand before checking the eof
+cat << $somecar
+needs o compare before expanding
+
+## run all the heredocs before runing the tree
+<< a && ls && << b
+needs to run all the heredocs before running the tree
+
+## Ctr-C exits all the code
+
+## Ctr-D exits only the current heredoc
+- Runs as it was found the eof
+```
+$ << a cat | cat -e
+> aaaaaaaaaaaaaaaaa
+>
+bash: warning: here-document at line 31 delimited by end-of-file (wanted `a')
+$
+aaaaaaaaaaaaaaaaa$
+```
+
