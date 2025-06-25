@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 18:15:43 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/06/25 15:38:35 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/06/25 16:05:40 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ static void	handle_special_var(char **cont, char **cnt, char *var, t_shell *shel
 	free(v_value);
 }
 
-static void	handle_normal_var(char **cont,  char **cnt, char *var, t_list *var_list)
+static void	handle_normal_var(char **cont, char **cnt, char *var, t_list *var_list)
 {
 	char	*v_value;
 	int		var_len;
