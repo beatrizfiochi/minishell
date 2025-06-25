@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 14:14:02 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/06/22 19:34:28 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/06/24 15:33:13 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # include "../btree/btree.h"
 # include "../libft/libft.h"
+# include "../minishell.h"
 
 typedef struct s_content_var
 {
@@ -25,10 +26,10 @@ typedef struct s_content_var
 t_btnode	*create_tree(t_list **token_list, t_btnode *parent);
 
 t_list		*tokenization(char *line);
-t_list		*create_var_node(char *name, char *value);
 
 void		free_var_content(void *var_content);
-void		search_and_expand(t_list *token_list, t_list *var_list);
+void		search_and_expand(t_list *token_list,
+				t_list *var_list, t_shell *shell);
 
 char		*go_next_char(char *line, char c);
 

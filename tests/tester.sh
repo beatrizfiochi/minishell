@@ -364,6 +364,8 @@ fi
 echo -e "${MAGENTA}Testing a normal command${RESET}"
 tester_with_real "ls"
 tester_with_real "echo opa"
+tester_with_real "ls && echo \$?"
+tester_with_real "ls llll && echo \$?"
 echo ""
 
 # test AND

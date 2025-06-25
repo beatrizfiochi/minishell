@@ -6,12 +6,25 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 14:25:49 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/06/23 13:11:10 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/06/25 16:15:14 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../libft/libft.h"
 #include "parser.h"
+#include "../minishell.h"
+
+void	free_var_content(void *var_content)
+{
+	t_content_var	*content;
+
+	if (var_content == NULL)
+		return ;
+	content = (t_content_var *)var_content;
+	free(content->var_name);
+	free(content->var_value);
+	free(content);
+}
 
 char	*search_var(const char *variable, t_list *var_list, int len)
 {
@@ -78,33 +91,4 @@ char	*expand_variable(char *content, int var_pos,
 		new_content = remove_var_name(content, var_pos, cnt);
 	free(content);
 	return (new_content);
-}
-
-void	search_and_expand_content(char **cont, t_list *var_list)
-{
-	char	*var;
-	char	*v_value;
-	int		var_len;
-	char	*cnt;
-
-	cnt = *cont;
-	while (*cnt != '\0' && (cnt[0] != '\'' && cnt[(int)ft_strlen(cnt)] != '\''))
-	{
-		if (*cnt == '$')
-		{
-			if (*(cnt + 1) == '\0')
-				return ;
-			var = cnt;
-			cnt++;
-			if ((*cnt != '_') && !ft_isalpha(*cnt))
-				continue ;
-			while ((*cnt != '\0') && ((*cnt == '_') || ft_isalnum(*cnt)))
-				cnt++;
-			var_len = ((int)(cnt - var) - 1);
-			v_value = search_var((const char *)(var + 1), var_list, var_len);
-			*cont = expand_variable(*cont, (var - *cont), &cnt, v_value);
-		}
-		else
-			cnt++;
-	}
 }
