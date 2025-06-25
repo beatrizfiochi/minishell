@@ -6,13 +6,14 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 18:15:43 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/06/24 17:41:28 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/06/25 15:38:35 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 #include "expand_variables.h"
 #include "../minishell.h"
+#include "aux.h"
 
 void	free_var_content(void *var_content)
 {
@@ -69,32 +70,44 @@ char	*go_to_end_quote(char *content)
 	return (initial_content + 1);
 }
 
-static void	search_and_expand_content(char **cont, t_list *var_list, t_shell *shell)
+char	*handle_possible_var(char **cont, char *cnt, t_list *var_list, t_shell *shell)
 {
 	char	*var;
+
+	if (*(cnt + 1) == '\0')
+		return (cnt + 1);
+	var = cnt;
+	cnt++;
+	if (*cnt == '?')
+	{
+		cnt++;
+		handle_special_var(cont, &cnt, var, shell);
+		return (cnt);
+	}
+	if ((*cnt != '_') && !ft_isalpha(*cnt))
+		return (cnt);
+	handle_normal_var(cont, &cnt, var, var_list);
+	return (cnt);
+}
+
+static void	search_and_expand_content(char **cont, t_list *var_list, t_shell *shell)
+{
 	char	*cnt;
+	bool	dquote;
 
 	cnt = *cont;
+	dquote = false;
 	while (*cnt != '\0')
 	{
 		if (*cnt == '$')
-		{
-			if (*(cnt + 1) == '\0')
-				return ;
-			var = cnt;
-			cnt++;
-			if (*cnt == '?')
-			{
-				cnt++;
-				handle_special_var(cont, &cnt, var, shell);
-				continue ;
-			}
-			if ((*cnt != '_') && !ft_isalpha(*cnt))
-				continue ;
-			handle_normal_var(cont, &cnt, var, var_list);
-		}
-		else if (*cnt == '\'')
+			cnt = handle_possible_var(cont, cnt, var_list, shell);
+		else if (is_quote(*cnt) && (*cnt == '\'') && (dquote == false))
 			cnt = go_to_end_quote(cnt);
+		else if (is_quote(*cnt))
+		{
+			dquote = !dquote;
+			cnt++;
+		}
 		else
 			cnt++;
 	}
