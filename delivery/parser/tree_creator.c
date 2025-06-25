@@ -31,6 +31,7 @@ static t_btnode	*create_node(t_list *token_list, t_btnode *parent)
 	{
 		content->cmd.tokens = token_list;
 		content->cmd.is_builtin = false;
+		content->cmd.finished   = false;
 	}
 	else
 		ft_lstclear(&token_list, free);

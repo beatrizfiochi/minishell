@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 11:59:00 by djunho            #+#    #+#             */
-/*   Updated: 2025/06/25 13:24:43 by djunho           ###   ########.fr       */
+/*   Updated: 2025/06/25 17:23:45 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,11 @@
 #include <sys/wait.h>		// wait
 #include "../minishell.h"
 #include "../cmd.h"
-#include "execution.h"
 #include "../signals/signals.h"
 #include "../parser/parser.h"
 #include "../builtins/builtins.h"
+#include "execution.h"
+#include "exec_utils.h"
 
 int	run_child(t_cmd *cmd, t_shell *shell)
 {
@@ -51,21 +52,17 @@ int	run_child(t_cmd *cmd, t_shell *shell)
 	return (ret);
 }
 
-int	process_and(t_shell *shell, t_content_node *left_content, int ret,
-			bool *should_continue)
+int	process_and(t_shell *shell, int ret, bool *should_continue)
 {
 	int	wstatus;
 
 	*should_continue = true;
-	//TODO: FIXME: Check left or left->right op
-	if ((left_content->op == OP_CMD) && !left_content->cmd.is_builtin && (shell->last_pid == 0))
-		return (0);
-	if ((left_content->op == OP_CMD) && (ret == EXIT_SUCCESS))
+	if ((shell->last_cmd != NULL) && (ret == EXIT_SUCCESS))
 	{
-		if (!left_content->cmd.is_builtin)
+		if (!shell->last_cmd->is_builtin && !shell->last_cmd->finished)
 		{
 			waitpid(shell->last_pid, &wstatus, 0);
-			shell->last_pid = 0;
+			shell->last_cmd->finished = true;
 			ret = get_fork_return(wstatus);
 		}
 		if (ret != EXIT_SUCCESS)
@@ -78,19 +75,17 @@ int	process_and(t_shell *shell, t_content_node *left_content, int ret,
 	return (ret);
 }
 
-int	process_or(t_shell *shell, t_content_node *left_content, int ret,
-			bool *should_continue)
+int	process_or(t_shell *shell, int ret, bool *should_continue)
 {
 	int	wstatus;
 
-	//TODO: FIXME: Check left or left->right op
-	if ((left_content->op == OP_CMD) && !left_content->cmd.is_builtin && (shell->last_pid == 0))
-		return (0);
-	if ((left_content->op == OP_CMD) && (ret == EXIT_SUCCESS))
+	*should_continue = true;
+	if ((shell->last_cmd != NULL) && (ret == EXIT_SUCCESS))
 	{
-		if (!left_content->cmd.is_builtin)
+		if (!shell->last_cmd->is_builtin && !shell->last_cmd->finished)
 		{
 			waitpid(shell->last_pid, &wstatus, 0);
+			shell->last_cmd->finished = true;
 			ret = get_fork_return(wstatus);
 		}
 		if (ret == EXIT_SUCCESS)

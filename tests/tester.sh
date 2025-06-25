@@ -74,7 +74,7 @@ function tester() {
 	fi
 
 	echo -e "${GREEN}Running ./minishell $cmd${RESET}"
-	rm "$OUT_FILE" || echo -n ""
+	rm "$OUT_FILE" &> /dev/null || echo -n ""
 	echo "$cmd" | valgrind --trace-children=yes --child-silent-after-fork=no --leak-check=full --show-leak-kinds=all --suppressions=$(pwd)/../delivery/valgrind-supression --log-file="$OUT_FILE_VALGRIND" ../delivery/minishell &> $OUT_FILE
 	if [ ! -f "$OUT_FILE" ]; then
 		echo -e "${RED}Test failed: $cmd${RESET}"
@@ -164,7 +164,7 @@ function tester_grep() {
 	text=$2
 
 	echo -e "${GREEN}Running ./minishell $cmd${RESET}"
-	rm "$OUT_FILE" || echo -n ""
+	rm "$OUT_FILE" &> /dev/null || echo -n ""
 	echo "$cmd" | valgrind --trace-children=yes --child-silent-after-fork=no --leak-check=full --show-leak-kinds=all --suppressions=$(pwd)/../delivery/valgrind-supression --log-file="$OUT_FILE_VALGRIND" ../delivery/minishell &> $OUT_FILE
 	if [ ! -f "$OUT_FILE" ]; then
 		echo -e "${RED}Test failed: $cmd${RESET}"
@@ -235,9 +235,9 @@ function tester_with_real() {
 
 	echo -e "${GREEN}Test comparing with real bash passed: $cmd${RESET}"
 
-	rm $OUT_FILE
-	rm ${OUT_FILE}_2
-	rm $OUT_REAL_FILE
+	rm $OUT_FILE       &> /dev/null
+	rm ${OUT_FILE}_2   &> /dev/null
+	rm $OUT_REAL_FILE  &> /dev/null
 }
 
 function tester_with_real_should_be_different() {
@@ -415,6 +415,8 @@ tester_with_real "ls"
 tester_with_real "echo opa"
 tester_with_real "ls && echo \$?"
 tester_with_real "ls llll && echo \$?"
+tester_with_real "ls && sleep 1 && pwd"
+tester_with_real "pwd && ls && sleep 3 && pwd && sleep 1 && ls"
 echo ""
 
 # test AND

@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 19:55:45 by djunho            #+#    #+#             */
-/*   Updated: 2025/06/25 13:23:29 by djunho           ###   ########.fr       */
+/*   Updated: 2025/06/25 17:23:23 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,13 @@
 #include "../cmd.h"
 #include "../builtins/builtins.h"
 #include "../debug.h"
+#include "../parser/parser.h"
 #include "../minishell.h"
-#include "../execute/execute_debug.h"
 #include "../signals/signals.h"
-#include "execution.h"
 #include "../variables/variables.h"
+#include "execute_debug.h"
+#include "exec_utils.h"
+#include "execution.h"
 
 static int	btree_operator_before_callback(t_btnode *node,
 				int ret, bool *should_continue, void *_shell)
@@ -56,7 +58,6 @@ static int	btree_operator_between_callback(t_btnode *node,
 				int ret, bool *should_continue, void *_shell)
 {
 	t_shell			*shell;
-	t_content_node	*left_content;
 
 	shell = _shell;
 	if (ret != 0)
@@ -65,11 +66,10 @@ static int	btree_operator_between_callback(t_btnode *node,
 	if (node->content != NULL)
 	{
 		ignore_signals();
-		left_content = (t_content_node *)node->left->content;
 		if (((t_content_node *)node->content)->op == OP_AND)
-			return (process_and(shell, left_content, ret, should_continue));
+			return (process_and(shell, ret, should_continue));
 		else if (((t_content_node *)node->content)->op == OP_OR)
-			return (process_or(shell, left_content, ret, should_continue));
+			return (process_or(shell, ret, should_continue));
 		else if (((t_content_node *)node->content)->op == OP_PIPE)
 			return (process_pipe(node));
 		else if (((t_content_node *)node->content)->op == OP_VAR_ASSIGN)
@@ -78,32 +78,29 @@ static int	btree_operator_between_callback(t_btnode *node,
 	return (-1);
 }
 
-static int	execute_execve(t_btnode *node, t_shell *shell,
-	t_node_op parent_operator, t_content_node *parent_content)
+static int	run_cmd(t_shell *shell, t_btnode *node,
+				t_node_op parent_op, t_content_node	*parent_cnt)
 {
-	shell->last_pid = fork();
-	if (shell->last_pid < 0)
+	t_content_node	*content;
+	int				ret;
+
+	content = (t_content_node *)node->content;
+	shell->last_cmd = &content->cmd;
+	clean_token_quotes(content->cmd.tokens);
+	if (parent_op != OP_PIPE)
 	{
-		perror("Error on fork");
-		return (1);
+		ret = execute_builtin(&content->cmd,
+				shell->envp);
+		if (ret != 127)
+			return (ret);
 	}
-	if (shell->last_pid == 0)
-	{
-		if (parent_operator == OP_PIPE)
-			configure_pipe(parent_content->pipe.pipe,
-				parent_content->pipe.carry_over_fd,
-				parent_content->pipe.is_last_pipe);
-		exit(run_child(&((t_content_node *)node->content)->cmd, shell));
-	}
-	return (0);
+	return (execute_execve(node, shell, parent_op, parent_cnt));
 }
 
-#include "../parser/parser.h"
 static int	btree_cmd_callback(t_btnode *node, void *_shell)
 {
 	t_content_node	*parent_cnt;
 	t_node_op		parent_op;
-	int				ret;
 
 	parent_cnt = NULL;
 	parent_op = OP_INVALID;
@@ -121,15 +118,7 @@ static int	btree_cmd_callback(t_btnode *node, void *_shell)
 	debug_btree_print(node);
 	if (parent_op == OP_VAR_ASSIGN)
 		return (0);
-	clean_token_quotes(((t_content_node *)node->content)->cmd.tokens);
-	if (parent_op != OP_PIPE)
-	{
-		ret = execute_builtin(&((t_content_node *)node->content)->cmd,
-				((t_shell *)_shell)->envp);
-		if (ret != 127)
-			return (ret);
-	}
-	return (execute_execve(node, (t_shell *)_shell, parent_op, parent_cnt));
+	return (run_cmd((t_shell *)_shell, node, parent_op, parent_cnt));
 }
 
 int	process(t_shell *shell)
@@ -146,6 +135,7 @@ int	process(t_shell *shell)
 
 	i = -1;
 	shell->last_exit_status = EXIT_SUCCESS;
+	shell->last_cmd = NULL;
 	ret = btree_foreach_before_and_between_dfs(shell->cmds, &cfg);
 	if (ret != 0)
 		return (ret);

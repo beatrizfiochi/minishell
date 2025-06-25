@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/05 13:53:41 by djunho            #+#    #+#             */
-/*   Updated: 2025/05/30 19:12:59 by djunho           ###   ########.fr       */
+/*   Updated: 2025/06/25 17:16:59 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,26 @@
 // 	}
 // 	return (true);
 // }
+
+int	execute_execve(t_btnode *node, t_shell *shell,
+	t_node_op parent_operator, t_content_node *parent_content)
+{
+	shell->last_pid = fork();
+	if (shell->last_pid < 0)
+	{
+		perror("Error on fork");
+		return (1);
+	}
+	if (shell->last_pid == 0)
+	{
+		if (parent_operator == OP_PIPE)
+			configure_pipe(parent_content->pipe.pipe,
+				parent_content->pipe.carry_over_fd,
+				parent_content->pipe.is_last_pipe);
+		exit(run_child(&((t_content_node *)node->content)->cmd, shell));
+	}
+	return (0);
+}
 
 int	get_fork_return(int wstatus)
 {
