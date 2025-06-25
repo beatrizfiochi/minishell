@@ -6,13 +6,12 @@
 /*   By: djunho <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 13:30:38 by djunho            #+#    #+#             */
-/*   Updated: 2025/06/23 17:57:45 by djunho           ###   ########.fr       */
+/*   Updated: 2025/06/25 13:21:48 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../cmd.h"
 #include "../execute/execution.h"
-#include "../parser/parser.h"
 #include "../libft/libft.h"
 #include "builtins.h"
 
@@ -41,7 +40,6 @@ int	execute_builtin(t_cmd *cmd, char *envp[])
 	int		argc;
 	int		ret;
 
-	clean_token_quotes(cmd->tokens);
 	args = convert_list_to_vector(cmd->tokens, &argc);
 	ret = run_builtin(argc, args, envp, &ret);
 	free(args);

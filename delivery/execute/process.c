@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 19:55:45 by djunho            #+#    #+#             */
-/*   Updated: 2025/06/23 18:05:00 by djunho           ###   ########.fr       */
+/*   Updated: 2025/06/25 13:23:29 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,6 +98,7 @@ static int	execute_execve(t_btnode *node, t_shell *shell,
 	return (0);
 }
 
+#include "../parser/parser.h"
 static int	btree_cmd_callback(t_btnode *node, void *_shell)
 {
 	t_content_node	*parent_cnt;
@@ -120,10 +121,14 @@ static int	btree_cmd_callback(t_btnode *node, void *_shell)
 	debug_btree_print(node);
 	if (parent_op == OP_VAR_ASSIGN)
 		return (0);
-	ret = execute_builtin(&((t_content_node *)node->content)->cmd,
-			((t_shell *)_shell)->envp);
-	if (ret != 127)
-		return (ret);
+	clean_token_quotes(((t_content_node *)node->content)->cmd.tokens);
+	if (parent_op != OP_PIPE)
+	{
+		ret = execute_builtin(&((t_content_node *)node->content)->cmd,
+				((t_shell *)_shell)->envp);
+		if (ret != 127)
+			return (ret);
+	}
 	return (execute_execve(node, (t_shell *)_shell, parent_op, parent_cnt));
 }
 
