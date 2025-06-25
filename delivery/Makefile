@@ -6,7 +6,7 @@
 #    By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/27 13:09:33 by djunho            #+#    #+#              #
-#    Updated: 2025/06/25 17:24:48 by djunho           ###   ########.fr        #
+#    Updated: 2025/06/26 12:48:16 by bfiochi-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,7 +22,7 @@ SRCS = main.c read_command.c utils.c debug.c \
 	execute/exec_utils.c \
 	builtins/builtins.c builtins/echo/echo.c builtins/cd/cd.c \
 	signals/handle_signals.c \
-	variables/handle_variables.c
+	variables/handle_variables.c variables/env_variables.c
 OBJS_DIR = objs
 OBJS = $(patsubst %.c,$(OBJS_DIR)/%.o,$(SRCS))
 DEPENDS = $(patsubst %.c,$(OBJS_DIR)/%.d,$(SRCS))
