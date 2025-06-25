@@ -6,12 +6,12 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 14:51:22 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/04/27 16:54:12 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/06/23 13:57:44 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft/libft.h"
 #include <unistd.h>           //write
+#include "libft/libft.h"
 
 void	printf_error(const char *error)
 {

@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 18:34:50 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/06/13 16:37:07 by djunho           ###   ########.fr       */
+/*   Updated: 2025/06/23 15:23:49 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,10 @@ static t_btnode	*create_node(t_list *token_list, t_btnode *parent)
 		return (NULL);
 	content->op = op((char *)(token_list->content));
 	if (content->op == OP_CMD)
+	{
 		content->cmd.tokens = token_list;
+		content->cmd.is_builtin = false;
+	}
 	else
 		ft_lstclear(&token_list, free);
 	if (content->op == OP_PIPE)

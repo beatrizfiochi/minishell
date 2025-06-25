@@ -1,22 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   debug.h                                            :+:      :+:    :+:   */
+/*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: djunho <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/01 14:18:43 by djunho            #+#    #+#             */
-/*   Updated: 2025/06/01 14:20:00 by djunho           ###   ########.fr       */
+/*   Created: 2025/06/22 11:48:18 by djunho            #+#    #+#             */
+/*   Updated: 2025/06/23 14:14:07 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef DEBUG_H
-# define DEBUG_H
+#include <stdbool.h>
+#include "../../libft/libft.h"
 
-# include "../btree/btree.h"
-# include "../minishell.h"
+int	echo(int argc, char *argv[], char *envp[])
+{
+	int		i;
+	bool	no_nl;
 
-void	debug_btree_print(t_btnode *node);
-void	debug_execution_pos(t_shell *shell);
-
-#endif // DEBUG_H
+	(void)envp;
+	i = 1;
+	no_nl = false;
+	if ((i < argc) && (ft_strncmp(argv[i], "-n", 2) == 0))
+	{
+		no_nl = true;
+		i++;
+	}
+	if (i < argc)
+		ft_printf("%s", argv[i++]);
+	while (i < argc)
+	{
+		ft_printf(" %s", argv[i++]);
+	}
+	if (!no_nl)
+		ft_printf("\n");
+	return (0);
+}

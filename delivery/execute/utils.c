@@ -6,7 +6,7 @@
 /*   By: djunho <djunho@student.42porto.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/01 12:16:24 by djunho            #+#    #+#             */
-/*   Updated: 2025/05/18 20:51:27 by djunho           ###   ########.fr       */
+/*   Updated: 2025/06/23 14:02:17 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #include <stdbool.h>		// bool
 #include <unistd.h>			// access
 #include "../libft/libft.h"	// ft_.*()
+#include "env_utils.h"		// get_env()
 
 bool	free_join(char **args)
 {
@@ -54,18 +55,16 @@ static char	*build_path(char *base, char *cmd)
 
 bool	create_cmd_path(char *cmd, char **envp, char **path)
 {
-	int		i;
-	char	**tmp;
+	int			i;
+	char		**tmp;
+	const char	*path_value;
 
 	if (check_cmd(cmd, path))
 		return (true);
-	i = -1;
-	while (envp[++i] != NULL)
-		if (ft_strncmp(envp[i], "PATH=", 5) == 0)
-			break ;
-	if (envp[i] == NULL)
+	path_value = get_env("PATH=", envp);
+	if (path_value == NULL)
 		return (false);
-	tmp = ft_split(envp[i] + 5, ':');
+	tmp = ft_split(path_value, ':');
 	i = -1;
 	while (tmp[++i] != NULL)
 	{
@@ -80,7 +79,7 @@ bool	create_cmd_path(char *cmd, char **envp, char **path)
 	return (!free_join(tmp));
 }
 
-char	**convert_list_to_vector(t_list *list)
+char	**convert_list_to_vector(t_list *list, int *size)
 {
 	int		i;
 	char	**vector;
@@ -99,5 +98,7 @@ char	**convert_list_to_vector(t_list *list)
 		tmp = tmp->next;
 	}
 	vector[i] = NULL;
+	if (size != NULL)
+		*size = i;
 	return (vector);
 }

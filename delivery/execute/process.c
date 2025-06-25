@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 19:55:45 by djunho            #+#    #+#             */
-/*   Updated: 2025/06/13 16:55:06 by djunho           ###   ########.fr       */
+/*   Updated: 2025/06/25 13:23:29 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,10 @@
 #include <sys/wait.h>		// wait
 #include "../libft/libft.h"
 #include "../cmd.h"
+#include "../builtins/builtins.h"
 #include "../debug.h"
 #include "../minishell.h"
+#include "../execute/execute_debug.h"
 #include "../signals/signals.h"
 #include "execution.h"
 #include "../variables/variables.h"
@@ -76,37 +78,15 @@ static int	btree_operator_between_callback(t_btnode *node,
 	return (-1);
 }
 
-__attribute__((weak)) void	debug_btree_print(t_btnode *node)
+static int	execute_execve(t_btnode *node, t_shell *shell,
+	t_node_op parent_operator, t_content_node *parent_content)
 {
-	(void)node;
-}
-
-static int	btree_cmd_callback(t_btnode *node, void *_shell)
-{
-	t_shell			*shell;
-	t_content_node	*parent_content;
-	t_node_op		parent_operator;
-
-	shell = (t_shell *)_shell;
-	parent_content = NULL;
-	parent_operator = OP_INVALID;
-	if (node->parent != NULL)
-	{
-		parent_content = (t_content_node *)node->parent->content;
-		parent_operator = parent_content->op;
-	}
-	if ((node->content == NULL)
-		|| (((t_content_node *)node->content)->op != OP_CMD))
-	{
-		printf("Error: Node is not a command\n");
-		return (EXIT_FAILURE);
-	}
-	debug_btree_print(node);
-	if (parent_operator == OP_VAR_ASSIGN)
-		return (0);
 	shell->last_pid = fork();
 	if (shell->last_pid < 0)
+	{
+		perror("Error on fork");
 		return (1);
+	}
 	if (shell->last_pid == 0)
 	{
 		if (parent_operator == OP_PIPE)
@@ -116,6 +96,40 @@ static int	btree_cmd_callback(t_btnode *node, void *_shell)
 		exit(run_child(&((t_content_node *)node->content)->cmd, shell));
 	}
 	return (0);
+}
+
+#include "../parser/parser.h"
+static int	btree_cmd_callback(t_btnode *node, void *_shell)
+{
+	t_content_node	*parent_cnt;
+	t_node_op		parent_op;
+	int				ret;
+
+	parent_cnt = NULL;
+	parent_op = OP_INVALID;
+	if (node->parent != NULL)
+	{
+		parent_cnt = (t_content_node *)node->parent->content;
+		parent_op = parent_cnt->op;
+	}
+	if ((node->content == NULL)
+		|| (((t_content_node *)node->content)->op != OP_CMD))
+	{
+		printf("Error: Node is not a command\n");
+		return (EXIT_FAILURE);
+	}
+	debug_btree_print(node);
+	if (parent_op == OP_VAR_ASSIGN)
+		return (0);
+	clean_token_quotes(((t_content_node *)node->content)->cmd.tokens);
+	if (parent_op != OP_PIPE)
+	{
+		ret = execute_builtin(&((t_content_node *)node->content)->cmd,
+				((t_shell *)_shell)->envp);
+		if (ret != 127)
+			return (ret);
+	}
+	return (execute_execve(node, (t_shell *)_shell, parent_op, parent_cnt));
 }
 
 int	process(t_shell *shell)

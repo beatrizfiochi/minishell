@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 11:59:00 by djunho            #+#    #+#             */
-/*   Updated: 2025/06/13 17:13:34 by djunho           ###   ########.fr       */
+/*   Updated: 2025/06/25 13:24:43 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,32 +20,35 @@
 #include "execution.h"
 #include "../signals/signals.h"
 #include "../parser/parser.h"
+#include "../builtins/builtins.h"
 
 int	run_child(t_cmd *cmd, t_shell *shell)
 {
-	char	**envp;
 	char	*path;
 	char	**args;
+	int		ret;
+	int		argc;
 
-	envp = shell->envp;
-	clean_token_quotes(cmd->tokens);
-	args = convert_list_to_vector(cmd->tokens);
-	if (args == NULL)
-		return (0);
-	if (args[0] == NULL)
+	args = convert_list_to_vector(cmd->tokens, &argc);
+	ret = 1;
+	while (1)
 	{
-		clear_minishell(shell);
-		free(args);
-		return (0);
+		if ((args == NULL) || (args[0] == NULL))
+			break ;
+		reset_signals();
+		ret = execute_builtin(cmd, shell->envp);
+		if (ret != 127)
+			break ;
+		execve(args[0], args, shell->envp);
+		if (create_cmd_path(args[0], shell->envp, &path))
+			execve(path, args, shell->envp);
+		perror(args[0]);
+		break ;
 	}
-	reset_signals();
-	execve(args[0], args, envp);
-	if (create_cmd_path(args[0], envp, &path))
-		execve(path, args, envp);
-	perror(args[0]);
 	clear_minishell(shell);
-	free(args);
-	return (127);
+	if (args != NULL)
+		free(args);
+	return (ret);
 }
 
 int	process_and(t_shell *shell, t_content_node *left_content, int ret,
@@ -54,12 +57,17 @@ int	process_and(t_shell *shell, t_content_node *left_content, int ret,
 	int	wstatus;
 
 	*should_continue = true;
-	if (shell->last_pid == 0)
+	//TODO: FIXME: Check left or left->right op
+	if ((left_content->op == OP_CMD) && !left_content->cmd.is_builtin && (shell->last_pid == 0))
 		return (0);
 	if ((left_content->op == OP_CMD) && (ret == EXIT_SUCCESS))
 	{
-		waitpid(shell->last_pid, &wstatus, 0);
-		ret = get_fork_return(wstatus);
+		if (!left_content->cmd.is_builtin)
+		{
+			waitpid(shell->last_pid, &wstatus, 0);
+			shell->last_pid = 0;
+			ret = get_fork_return(wstatus);
+		}
 		if (ret != EXIT_SUCCESS)
 			*should_continue = false;
 	}
@@ -75,12 +83,16 @@ int	process_or(t_shell *shell, t_content_node *left_content, int ret,
 {
 	int	wstatus;
 
-	if (shell->last_pid == 0)
+	//TODO: FIXME: Check left or left->right op
+	if ((left_content->op == OP_CMD) && !left_content->cmd.is_builtin && (shell->last_pid == 0))
 		return (0);
 	if ((left_content->op == OP_CMD) && (ret == EXIT_SUCCESS))
 	{
-		waitpid(shell->last_pid, &wstatus, 0);
-		ret = get_fork_return(wstatus);
+		if (!left_content->cmd.is_builtin)
+		{
+			waitpid(shell->last_pid, &wstatus, 0);
+			ret = get_fork_return(wstatus);
+		}
 		if (ret == EXIT_SUCCESS)
 			*should_continue = false;
 	}

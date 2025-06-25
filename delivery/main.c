@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 18:59:31 by djunho            #+#    #+#             */
-/*   Updated: 2025/06/24 16:11:30 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/06/25 16:28:27 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 #include "parser/parser.h"
 #include "variables/variables.h"
 #include "signals/signals.h"
-#include "execute/debug.h"		// debug_execution_pos();
+#include "execute/execute_debug.h"		// debug_execution_pos();
 
 void	clear_minishell(t_shell *shell)
 {

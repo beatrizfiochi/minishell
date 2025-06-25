@@ -6,7 +6,7 @@
 /*   By: djunho <djunho@student.42porto.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/18 14:11:46 by djunho            #+#    #+#             */
-/*   Updated: 2025/06/01 14:15:57 by djunho           ###   ########.fr       */
+/*   Updated: 2025/06/22 20:10:50 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,4 +53,10 @@ __attribute__((weak)) void	debug_execution_pos(t_shell *shell)
 {
 	(void)shell;
 }
+
+__attribute__((weak)) void	debug_btree_print(t_btnode *node)
+{
+	(void)node;
+}
+
 #endif
