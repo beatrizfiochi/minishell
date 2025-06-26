@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 13:37:40 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/06/26 15:30:03 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/06/26 16:37:12 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ typedef struct s_shell
 	t_list		*variable_list;
 }	t_shell;
 
-int		read_command(t_shell *shell, char *envp[]);
+int		read_command(t_shell *shell);
 void	free_btree_node(void *content);
 void	clear_minishell(t_shell *shell);
 void	printf_error(const char *error);

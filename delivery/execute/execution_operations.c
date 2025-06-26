@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 11:59:00 by djunho            #+#    #+#             */
-/*   Updated: 2025/06/25 17:23:45 by djunho           ###   ########.fr       */
+/*   Updated: 2025/06/26 17:14:29 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,33 +22,38 @@
 #include "../builtins/builtins.h"
 #include "execution.h"
 #include "exec_utils.h"
+#include "env_utils.h"
 
 int	run_child(t_cmd *cmd, t_shell *shell)
 {
 	char	*path;
 	char	**args;
+	char	**envp;
 	int		ret;
 	int		argc;
 
 	args = convert_list_to_vector(cmd->tokens, &argc);
+	envp = convert_list_to_envp(shell->variable_list);
 	ret = 1;
 	while (1)
 	{
 		if ((args == NULL) || (args[0] == NULL))
 			break ;
 		reset_signals();
-		ret = execute_builtin(cmd, shell->envp);
+		ret = execute_builtin(cmd, shell->variable_list);
 		if (ret != 127)
 			break ;
-		execve(args[0], args, shell->envp);
-		if (create_cmd_path(args[0], shell->envp, &path))
-			execve(path, args, shell->envp);
+		execve(args[0], args, envp);
+		if (create_cmd_path(args[0], shell->variable_list, &path))
+			execve(path, args, envp);
 		perror(args[0]);
 		break ;
 	}
 	clear_minishell(shell);
 	if (args != NULL)
 		free(args);
+	if (envp != NULL)
+		free_envp(envp);
 	return (ret);
 }
 

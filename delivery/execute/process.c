@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 19:55:45 by djunho            #+#    #+#             */
-/*   Updated: 2025/06/26 12:51:05 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/06/26 16:06:13 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ static int	run_cmd(t_shell *shell, t_btnode *node,
 	if (parent_op != OP_PIPE)
 	{
 		ret = execute_builtin(&content->cmd,
-				shell->envp);
+				shell->variable_list);
 		if (ret != 127)
 			return (ret);
 	}

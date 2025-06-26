@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: djunho <djunho@student.42porto.com>        +#+  +:+       +#+        */
+/*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 19:49:18 by djunho            #+#    #+#             */
-/*   Updated: 2025/06/25 17:29:47 by djunho           ###   ########.fr       */
+/*   Updated: 2025/06/26 16:36:10 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 # include "../cmd.h"
 
 int		process(t_shell *shell);
-int		execute(t_shell *shell, char *envp[]);
+int		execute(t_shell *shell);
 void	create_op_list(t_btnode *tree, t_list **op_list);
 int		execute_execve(t_btnode *node, t_shell *shell,
 			t_node_op parent_operator, t_content_node *parent_content);

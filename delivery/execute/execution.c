@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/05 13:53:41 by djunho            #+#    #+#             */
-/*   Updated: 2025/06/25 17:16:59 by djunho           ###   ########.fr       */
+/*   Updated: 2025/06/26 16:35:58 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,9 +109,8 @@ int	get_fork_return(int wstatus)
 	}
 }
 
-int	execute(t_shell *shell, char *envp[])
+int	execute(t_shell *shell)
 {
 	shell->ncmds = btree_count_leaves(shell->cmds);
-	shell->envp = envp;
 	return (process(shell));
 }

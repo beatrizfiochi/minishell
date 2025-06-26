@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   exec_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: djunho <djunho@student.42porto.com>        +#+  +:+       +#+        */
+/*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/01 12:16:24 by djunho            #+#    #+#             */
-/*   Updated: 2025/06/23 14:02:17 by djunho           ###   ########.fr       */
+/*   Updated: 2025/06/26 15:59:24 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ static char	*build_path(char *base, char *cmd)
 	return (path);
 }
 
-bool	create_cmd_path(char *cmd, char **envp, char **path)
+bool	create_cmd_path(char *cmd, t_list *var_list, char **path)
 {
 	int			i;
 	char		**tmp;
@@ -61,7 +61,7 @@ bool	create_cmd_path(char *cmd, char **envp, char **path)
 
 	if (check_cmd(cmd, path))
 		return (true);
-	path_value = get_env("PATH=", envp);
+	path_value = get_env("PATH=", var_list);
 	if (path_value == NULL)
 		return (false);
 	tmp = ft_split(path_value, ':');
