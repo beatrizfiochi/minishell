@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 21:17:55 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/06/23 14:56:20 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/06/26 15:27:09 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,24 +54,23 @@ static bool	is_strlen_equals(char *text_1, char *text_2)
 	return (false);
 }
 
-static bool	check_and_replace_var(t_list *current,
-	t_content_node *name, t_content_node *value)
+// Checks if a variable already exists:
+//  - If it exists: replaces its value and returns true
+//  - If it doesn't exist: returns false
+bool	check_and_replace_var(t_list *current, char *name, char *value)
 {
 	t_content_var	*current_content;
 
 	while (current != NULL)
 	{
 		current_content = (t_content_var *)current->content;
-		if (is_strlen_equals(current_content->var_name,
-				(char *)(name->cmd.tokens->content)))
+		if (is_strlen_equals(current_content->var_name, name))
 		{
-			if (ft_strncmp(current_content->var_name,
-					(char *)(name->cmd.tokens->content),
-				ft_strlen((const char *)(name->cmd.tokens->content))) == 0)
+			if (ft_strncmp(current_content->var_name, name,
+					ft_strlen(name)) == 0)
 			{
 				free(current_content->var_value);
-				current_content->var_value
-					= ft_strdup((char *)(value->cmd.tokens->content));
+				current_content->var_value = ft_strdup(value);
 				if (current_content->var_value == NULL)
 					return (false);
 				return (true);
@@ -96,7 +95,8 @@ int	process_var_assign(t_btnode *nd, t_shell *sh)
 	if ((name == NULL) || (value == NULL))
 		return (1);
 	current = sh->variable_list;
-	if (check_and_replace_var(current, name, value) == true)
+	if (check_and_replace_var(current, (char *)(name->cmd.tokens->content),
+		(char *)(value->cmd.tokens->content)) == true)
 		return (0);
 	new_node = create_var_node((char *)(name->cmd.tokens->content),
 			(char *)(value->cmd.tokens->content));
