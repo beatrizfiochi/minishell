@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 13:37:40 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/05/26 09:38:50 by djunho           ###   ########.fr       */
+/*   Updated: 2025/06/26 15:30:03 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@
 typedef struct s_shell
 {
 	char		**paths;
-	char		**envp;
 	t_btnode	*cmds;
 	t_cmd		*last_cmd;
 	int			ncmds;
