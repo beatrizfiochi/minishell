@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 19:55:45 by djunho            #+#    #+#             */
-/*   Updated: 2025/06/25 17:23:23 by djunho           ###   ########.fr       */
+/*   Updated: 2025/06/26 12:51:05 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@
 #include "execute_debug.h"
 #include "exec_utils.h"
 #include "execution.h"
+#include "../parser/parser.h"
 
 static int	btree_operator_before_callback(t_btnode *node,
 				int ret, bool *should_continue, void *_shell)

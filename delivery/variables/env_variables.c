@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 17:07:52 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/06/26 12:23:45 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/06/26 12:39:11 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ static void	free_name_value(char *name, char *value)
 	if (value != NULL)
 		free(value);
 }
+
 // Parse env in name_variable and value_variable
 //   before '=' -> name_variable
 //    after '=' --> value_variable
@@ -61,7 +62,7 @@ static bool	handle_existing_var(t_shell *shell, char *name, char *value)
 // Frees name and value if allocation fails. Returns true on success
 static bool	create_and_add_var(t_shell *shell, char *name, char *value)
 {
-	t_list *new_node;
+	t_list	*new_node;
 
 	new_node = create_var_node(name, value);
 	if (new_node == NULL)
