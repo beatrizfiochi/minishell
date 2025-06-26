@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 21:17:55 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/06/26 12:38:21 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/06/26 15:27:09 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ bool	check_and_replace_var(t_list *current, char *name, char *value)
 		if (is_strlen_equals(current_content->var_name, name))
 		{
 			if (ft_strncmp(current_content->var_name, name,
-					ft_strlen((const char *)(name))) == 0)
+					ft_strlen(name)) == 0)
 			{
 				free(current_content->var_value);
 				current_content->var_value = ft_strdup(value);
