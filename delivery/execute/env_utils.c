@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 13:57:47 by djunho            #+#    #+#             */
-/*   Updated: 2025/06/26 17:11:41 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/06/26 17:21:36 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ static char	*ft_strjoin_free(char *s1, char *s2)
 	return (joined);
 }
 
+//TODO: check if I can don't use the size
 char	**convert_list_to_envp(t_list *var_list)
 {
 	int				i;
