@@ -17,12 +17,14 @@
 # include <sys/types.h>		// pid_t
 # include "libft/libft.h"
 # include "btree/btree.h"
+# include "cmd.h"
 
 typedef struct s_shell
 {
 	char		**paths;
 	char		**envp;
 	t_btnode	*cmds;
+	t_cmd		*last_cmd;
 	int			ncmds;
 	pid_t		last_pid;
 	int			last_exit_status;

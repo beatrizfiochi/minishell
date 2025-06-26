@@ -34,6 +34,7 @@ typedef struct s_cmd
 {
 	t_list	*tokens;		// cmd followed by args
 	bool	is_builtin;		// Updated once executed. False by default
+	bool	finished;		// Indicated if the pid was already waited for. False by default
 }	t_cmd;
 
 typedef struct s_pipe
