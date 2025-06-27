@@ -30,6 +30,8 @@ const char	*op_str(t_node_op op)
 		"OP_HEREDOC",
 		"OP_APPEND_RD_OUTPUT",
 		"OP_CMD",
+		"OP_PARENTESIS_OPEN",
+		"OP_PARENTESIS_CLOSE",
 		"OP_SIZE_DO_NOT_USE",
 	};
 

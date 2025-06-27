@@ -32,6 +32,7 @@ bool		split_token_list(struct s_split_token_list *split, bool need_left,
 				bool full_expand);
 bool		is_quote(char c);
 
+t_list		*search_any_op(t_list *tokens);
 t_list		*search_op(t_list *tokens, bool full_expand);
 
 void		free_btree_content(void *_content);

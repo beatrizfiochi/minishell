@@ -38,7 +38,7 @@ int	is_valid_name(char *name, int len)
 // 0 -> error | 1 -> success
 static int	is_a_possible_op(char c)
 {
-	if (c == '|' || c == '&' || c == '=' || c == '<' || c == '>')
+	if (c == '|' || c == '&' || c == '=' || c == '<' || c == '>' || c == '(' || c == ')')
 		return (1);
 	else
 		return (0);
@@ -63,6 +63,8 @@ static int	check_sequence(char *line, char c)
 	if ((c == '<' || c == '>') && (i != 1 && i != 2))
 		return (0);
 	if (c == '=')
+		return (1);
+	if ((c == '(') || (c == ')'))
 		return (1);
 	return (i);
 }

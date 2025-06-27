@@ -44,8 +44,6 @@ static int	btree_operator_before_callback(t_btnode *node,
 		return (1);
 	if ((node->left == NULL) || (node->left->content == NULL))
 		return (1);
-	if (((t_content_node *)node->right->content)->op != OP_CMD)
-		return (0);
 	if (((t_content_node *)node->left->content)->op != OP_CMD)
 		return (0);
 	content->pipe.is_last_pipe = false;
