@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/26 17:45:35 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/06/27 20:00:05 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/06/27 20:15:36 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 
 // Search for the var_name and returns the var_value
 //  if don't find, return NULL
-static char	*find_var_value(char *var_name, t_list *var_list)
+static char	*find_var_value(const char *var_name, t_list *var_list)
 {
 	t_content_var	*var;
 
