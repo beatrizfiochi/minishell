@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 18:02:44 by djunho            #+#    #+#             */
-/*   Updated: 2025/06/26 16:08:41 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/06/27 18:32:38 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ int	cd(int argc, char *argv[], t_list *var_list)
 	arg = argv[1];
 	if (argc == 1)
 	{
-		arg = (char *)get_env("HOME=", var_list);
+		arg = (char *)get_env("HOME", var_list);
 		if (arg == NULL)
 		{
 			printf("bash: cd: HOME not set");
