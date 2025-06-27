@@ -27,8 +27,8 @@ typedef enum e_node_op
 	OP_HEREDOC,
 	OP_APPEND_RD_OUTPUT,
 	OP_CMD,
-	OP_PARENTESIS_OPEN,
-	OP_PARENTESIS_CLOSE,
+	OP_PARENTHESIS_OPEN,
+	OP_PARENTHESIS_CLOSE,
 	OP_SIZE_DO_NOT_USE,
 }	t_node_op;
 
@@ -39,20 +39,12 @@ typedef struct s_cmd
 	bool	finished;		// Indicated if the pid was already waited for. False by default
 }	t_cmd;
 
-typedef struct s_pipe
-{
-	int		pipe[2];			// pipe file descriptors
-	int		carry_over_fd;		// file descriptor to carry over the pipe
-	bool	is_last_pipe;
-}	t_pipe;
-
 typedef struct s_content_node
 {
 	t_node_op	op;
 	union
 	{
 		t_cmd		cmd;
-		t_pipe		pipe;
 	};
 }	t_content_node;
 

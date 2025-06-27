@@ -28,6 +28,13 @@ typedef struct s_shell
 	pid_t		last_pid;
 	int			last_exit_status;
 	t_list		*variable_list;
+	struct s_pipe
+	{
+		int		pipe[2];			// pipe file descriptors
+		int		carry_over_fd;		// file descriptor to carry over the pipe
+		bool	is_last_pipe;		// Flag to indicate if this is the last pipe in the chain
+		bool	will_run_a_pipe;	// Flag to indicate that the next command will run a pipe
+	} pipe;
 }	t_shell;
 
 int		read_command(t_shell *shell);

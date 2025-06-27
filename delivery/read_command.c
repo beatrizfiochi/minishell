@@ -43,16 +43,9 @@ void	free_btree_node(void *content)
 	t_content_node	*node_content;
 
 	node_content = (t_content_node *)content;
-	if (node_content->op == OP_CMD)
+	if ((node_content->op == OP_CMD) || (node_content->op == OP_PARENTHESIS_OPEN) || (node_content->op == OP_PARENTHESIS_CLOSE))
 	{
 		ft_lstclear(&(node_content->cmd.tokens), free);
-	}
-	else if (node_content->op == OP_PIPE)
-	{
-		if (node_content->pipe.pipe[0] != -1)
-			close(node_content->pipe.pipe[0]);
-		if (node_content->pipe.pipe[1] != -1)
-			close(node_content->pipe.pipe[1]);
 	}
 	free(node_content);
 }

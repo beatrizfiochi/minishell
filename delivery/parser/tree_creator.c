@@ -27,7 +27,7 @@ static t_btnode	*create_node(t_list *token_list, t_btnode *parent)
 	if (content == NULL)
 		return (NULL);
 	content->op = op((char *)(token_list->content));
-	if ((content->op == OP_CMD) || (content->op == OP_PARENTESIS_OPEN))
+	if ((content->op == OP_CMD) || (content->op == OP_PARENTHESIS_OPEN))
 	{
 		content->cmd.tokens = token_list;
 		content->cmd.is_builtin = false;
@@ -35,39 +35,36 @@ static t_btnode	*create_node(t_list *token_list, t_btnode *parent)
 	}
 	else
 		ft_lstclear(&token_list, free);
-	if (content->op == OP_PIPE)
-	{
-		content->pipe.pipe[0] = -1;
-		content->pipe.pipe[1] = -1;
-		content->pipe.carry_over_fd = -1;
-	}
 	tree_node = btree_new(content);
 	tree_node->parent = parent;
 	return (tree_node);
 }
 
 static t_btnode	*create_first(t_list **token_list, t_btnode *parent,
-								bool *full_expand)
+								enum e_expand_type *expand_type)
 {
 	t_list						*op_node;
 	t_btnode					*tree;
 	struct s_split_token_list	split;
 
-	if ((*full_expand) && (op((char *)(*token_list)->content) == OP_PARENTESIS_OPEN))
+	if ((*expand_type == EXPAND_PARENTHESIS) && (op((char *)(*token_list)->content) == OP_PARENTHESIS_OPEN))
 	{
-		t_list *first = *token_list;
-		*token_list = (*token_list)->next;
 		t_list *last = ft_lstlast(*token_list);
+		if (op((char *)last->content) != OP_PARENTHESIS_CLOSE)
+		{
+			printf("Error: Missing closing parenthesis!\n");
+			return (NULL);
+		}
+		t_list *first = *token_list;
 		t_list *prev = prev_list_item(*token_list, last);
 		prev->next = NULL;
-		if (op((char *)last->content) != OP_PARENTESIS_CLOSE)
-			printf("Error: Missing closing parenthesis!\n");
+		*token_list = (*token_list)->next;
 		ft_lstdelone(last, free);
 		ft_lstdelone(first, free);
-		*full_expand = false;
+		*expand_type = EXPAND_NORMAL;
 	}
-	op_node = search_op(*token_list, *full_expand);
-	if ((op_node == NULL) || ((op_node->next == NULL) && (op((char*)op_node->content) == OP_PARENTESIS_CLOSE)))
+	op_node = search_op(*token_list, *expand_type);
+	if ((op_node == NULL) || ((op_node->next == NULL) && (op((char*)op_node->content) == OP_PARENTHESIS_CLOSE)))
 	{
 		tree = create_node(*token_list, parent);
 		*token_list = op_node;
@@ -77,7 +74,7 @@ static t_btnode	*create_first(t_list **token_list, t_btnode *parent,
 		.left = *token_list, .op = NULL,
 		.right = NULL, .remain = NULL
 	};
-	if (split_token_list(&split, true, *full_expand) == false)
+	if (split_token_list(&split, true, *expand_type) == false)
 		return (NULL);
 	tree = create_node(split.op, parent);
 	tree->left = create_node(split.left, tree);
@@ -90,26 +87,27 @@ static t_btnode	*create_first(t_list **token_list, t_btnode *parent,
 // Every operator must be placed between 2 commands
 //
 static t_btnode	*create_basic_tree(t_list **token_list, t_btnode *parent,
-								bool full_expand)
+								enum e_expand_type expand_type)
 {
 	t_btnode					*tree;
 	t_btnode					*old_tree;
 	struct s_split_token_list	split;
 
-	tree = create_first(token_list, parent, &full_expand);
+	tree = create_first(token_list, parent, &expand_type);
 	if (tree == NULL)
 		return (NULL);
 	split = (struct s_split_token_list){
 		.left = NULL, .op = NULL,
 		.right = NULL, .remain = *token_list
 	};
-	while ((split.remain != NULL) && !((full_expand) && (split.remain->next == NULL) && (op((char *)(*token_list)->content) == OP_PARENTESIS_CLOSE)))
+	while ((split.remain != NULL) && !((expand_type == EXPAND_PARENTHESIS)
+		&& (split.remain->next == NULL) && (op((char *)(*token_list)->content) == OP_PARENTHESIS_CLOSE)))
 	{
 		old_tree = tree;
 		split = (struct s_split_token_list){
 			.left = split.remain, .op = NULL, .right = NULL, .remain = NULL
 		};
-		if (split_token_list(&split, false, full_expand) == false)
+		if (split_token_list(&split, false, expand_type) == false)
 			return (abort_tree_lst(tree, &split.left, NULL));
 		tree = create_node(split.op, parent);
 		tree->left = old_tree;
@@ -131,7 +129,7 @@ bool	is_btnode_different(t_btnode *node1, t_btnode *node2)
 	return (false);
 }
 
-static t_btnode	*expand_btree_node(t_btnode *node, bool full_expand, bool *expansion_happened)
+static t_btnode	*expand_btree_node(t_btnode *node, enum e_expand_type expand_type, bool *expansion_happened)
 {
 	t_content_node	*content;
 	t_btnode		*new_tree;
@@ -139,10 +137,10 @@ static t_btnode	*expand_btree_node(t_btnode *node, bool full_expand, bool *expan
 	if (btree_is_leaf(node))
 	{
 		content = (t_content_node *)node->content;
-		if ((content->op == OP_CMD) || (content->op == OP_PARENTESIS_OPEN))
+		if ((content->op == OP_CMD) || (content->op == OP_PARENTHESIS_OPEN))
 		{
 			new_tree = create_basic_tree(&content->cmd.tokens,
-					node->parent, full_expand);
+					node->parent, expand_type);
 			if (is_btnode_different(node, new_tree))
 				*expansion_happened = true;
 			btree_delete(&node, free_btree_node);
@@ -155,16 +153,16 @@ static t_btnode	*expand_btree_node(t_btnode *node, bool full_expand, bool *expan
 		}
 	}
 	if (node->left != NULL)
-		node->left = expand_btree_node(node->left, full_expand, expansion_happened);
+		node->left = expand_btree_node(node->left, expand_type, expansion_happened);
 	if (node->right != NULL)
-		node->right = expand_btree_node(node->right, full_expand, expansion_happened);
+		node->right = expand_btree_node(node->right, expand_type, expansion_happened);
 	return (node);
 }
 
 t_btnode	*check_tree_syntax(t_btnode *node)
 {
 	t_content_node	*content;
-	t_list			*op;
+	t_list			*operator;
 
 	if (btree_is_leaf(node))
 	{
@@ -174,10 +172,10 @@ t_btnode	*check_tree_syntax(t_btnode *node)
 			btree_delete(&node, free_btree_node);
 			return (NULL);
 		}
-		op = search_any_op(content->cmd.tokens);
-		if (op != NULL)
+		operator = search_any_op(content->cmd.tokens);
+		if (operator != NULL)
 		{
-			printf("Error: syntax error near unexpected token \"%s\"\n", (char *)op->content);
+			printf("Error: syntax error near unexpected token \"%s\"\n", (char *)operator->content);
 			btree_delete(&node, free_btree_node);
 			return (NULL);
 		}
@@ -187,9 +185,9 @@ t_btnode	*check_tree_syntax(t_btnode *node)
 		node->left = check_tree_syntax(node->left);
 	if (node->right != NULL)
 		node->right = check_tree_syntax(node->right);
-	if (node->left == NULL || node->right == NULL)
+	if ((node->left == NULL) || (node->right == NULL))
 	{
-		btree_delete(&node, free_btree_node);
+		btree_clear(&node, free_btree_node);
 		return (NULL);
 	}
 	return (node);
@@ -199,6 +197,7 @@ t_btnode	*create_tree(t_list **token_list, t_btnode *parent)
 {
 	t_btnode	*tree;
 	bool		expansion_happened;
+	bool		expansion_happened_by_type;
 
 	if (token_list == NULL || *token_list == NULL)
 		return (NULL);
@@ -209,18 +208,30 @@ t_btnode	*create_tree(t_list **token_list, t_btnode *parent)
 	while (expansion_happened == true)
 	{
 		expansion_happened = false;
-		tree = expand_btree_node(tree, true, &expansion_happened);
-		if (tree == NULL)
+		expansion_happened_by_type = true;
+		while (expansion_happened_by_type == true)
 		{
-			printf("Error: Failed to expand parentesis btree node\n");
-			return (NULL);
+			expansion_happened_by_type = false;
+			tree = expand_btree_node(tree, EXPAND_PIPE, &expansion_happened_by_type);
+			if (tree == NULL)
+			{
+				printf("Error: Failed to expand pipe btree node\n");
+				return (NULL);
+			}
+			expansion_happened = expansion_happened || expansion_happened_by_type;
 		}
-	}
-	tree = expand_btree_node(tree, true, NULL);
-	if (tree == NULL)
-	{
-		printf("Error: Failed to expand pipe btree node\n");
-		return (NULL);
+		expansion_happened_by_type = true;
+		while (expansion_happened_by_type == true)
+		{
+			expansion_happened_by_type = false;
+			tree = expand_btree_node(tree, EXPAND_PARENTHESIS, &expansion_happened_by_type);
+			if (tree == NULL)
+			{
+				printf("Error: Failed to expand parenthesis btree node\n");
+				return (NULL);
+			}
+			expansion_happened = expansion_happened || expansion_happened_by_type;
+		}
 	}
 	return (check_tree_syntax(tree));
 }

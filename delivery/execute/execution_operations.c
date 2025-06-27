@@ -103,32 +103,38 @@ int	process_or(t_shell *shell, int ret, bool *should_continue)
 	return (ret);
 }
 
-int	process_pipe(t_btnode *node)
+t_node_op	get_next_operation(t_btnode *node)
 {
-	t_content_node	*content;
-	t_content_node	*left_content;
+	t_btnode		*aux;
 
-	content = (t_content_node *)node->content;
-	if (node->left != NULL)
+	if (node == NULL || node->content == NULL)
+		return (OP_INVALID);
+	if (((t_content_node *)node->right->content)->op == OP_CMD)
 	{
-		left_content = (t_content_node *)node->left->content;
-		if ((left_content != NULL) && (left_content->op == OP_PIPE))
-		{
-			content->pipe.carry_over_fd = dup(left_content->pipe.pipe[0]);
-			close(left_content->pipe.pipe[0]);
-			close(left_content->pipe.pipe[1]);
-			close(left_content->pipe.carry_over_fd);
-		}
-		else
-			content->pipe.carry_over_fd = dup(content->pipe.pipe[0]);
+		if (node->parent == NULL)
+			return (OP_INVALID);
+		return (((t_content_node *)node->parent->content)->op);
 	}
-	close(content->pipe.pipe[0]);
-	close(content->pipe.pipe[1]);
-	if (pipe(content->pipe.pipe) < 0)
+	aux = node->right;
+	if (((t_content_node *)aux->content)->op == OP_CMD)
+		return (OP_INVALID);
+	while (aux->left != NULL)
+	{
+		aux = aux->left;
+	}
+	return (((t_content_node *)aux->parent->content)->op);
+}
+
+int	process_pipe(t_shell *shell, t_btnode *node)
+{
+	shell->pipe.will_run_a_pipe = true;
+	shell->pipe.carry_over_fd = dup(shell->pipe.pipe[0]);
+	close(shell->pipe.pipe[0]);
+	close(shell->pipe.pipe[1]);
+	if (pipe(shell->pipe.pipe) < 0)
 		return (1);
-	if ((node->parent == NULL)
-		|| (((t_content_node *)node->parent->content)->op != OP_PIPE))
-		content->pipe.is_last_pipe = true;
+	if (get_next_operation(node) != OP_PIPE)
+		shell->pipe.is_last_pipe = true;
 	return (0);
 }
 

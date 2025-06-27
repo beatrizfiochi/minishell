@@ -70,8 +70,7 @@
 // 	return (true);
 // }
 
-int	execute_execve(t_btnode *node, t_shell *shell,
-	t_node_op parent_operator, t_content_node *parent_content)
+int	execute_execve(t_btnode *node, t_shell *shell)
 {
 	shell->last_pid = fork();
 	if (shell->last_pid < 0)
@@ -81,11 +80,16 @@ int	execute_execve(t_btnode *node, t_shell *shell,
 	}
 	if (shell->last_pid == 0)
 	{
-		if (parent_operator == OP_PIPE)
-			configure_pipe(parent_content->pipe.pipe,
-				parent_content->pipe.carry_over_fd,
-				parent_content->pipe.is_last_pipe);
+		if (shell->pipe.will_run_a_pipe)
+			configure_pipe(shell->pipe.pipe,
+				shell->pipe.carry_over_fd,
+				shell->pipe.is_last_pipe);
 		exit(run_child(&((t_content_node *)node->content)->cmd, shell));
+	}
+	if (shell->pipe.is_last_pipe)
+	{
+		shell->pipe.will_run_a_pipe = false;
+		shell->pipe.is_last_pipe = false;
 	}
 	return (0);
 }

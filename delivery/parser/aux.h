@@ -28,12 +28,19 @@ struct s_split_token_list
 	t_list	*remain;
 };
 
+enum e_expand_type {
+	EXPAND_NORMAL = 0,
+	EXPAND_PIPE,
+	EXPAND_PARENTHESIS,
+	EXPAND_BOTH
+};
+
 bool		split_token_list(struct s_split_token_list *split, bool need_left,
-				bool full_expand);
+				enum e_expand_type expand_type);
 bool		is_quote(char c);
 
 t_list		*search_any_op(t_list *tokens);
-t_list		*search_op(t_list *tokens, bool full_expand);
+t_list		*search_op(t_list *tokens, enum e_expand_type expand_type);
 
 void		free_btree_content(void *_content);
 

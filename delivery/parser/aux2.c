@@ -16,8 +16,6 @@
 
 t_node_op	op(char *token)
 {
-	if (*token == '\0')
-		return (OP_INVALID);
 	if ((*token == '&') && (*(token + 1) == '&') && (*(token + 2) == '\0'))
 		return (OP_AND);
 	if ((*token == '|') && (*(token + 1) == '|') && (*(token + 2) == '\0'))
@@ -35,9 +33,9 @@ t_node_op	op(char *token)
 	if ((*token == '>') && (*(token + 1) == '\0'))
 		return (OP_RD_OUTPUT);
 	if ((*token == '(') && (*(token + 1) == '\0'))
-		return (OP_PARENTESIS_OPEN);
+		return (OP_PARENTHESIS_OPEN);
 	if ((*token == ')') && (*(token + 1) == '\0'))
-		return (OP_PARENTESIS_CLOSE);
+		return (OP_PARENTHESIS_CLOSE);
 	return (OP_CMD);
 }
 
@@ -57,29 +55,29 @@ t_list	*search_any_op(t_list *tokens)
 	return (NULL);
 }
 
-t_list	*search_op(t_list *tokens, bool full_expand)
+t_list	*search_op(t_list *tokens, enum e_expand_type expand_type)
 {
 	char		*content_token;
 	t_node_op	operator;
-	int			inside_parentesis;
+	int			inside_parenthesis;
 
-	inside_parentesis = 0;
+	inside_parenthesis = 0;
 	content_token = NULL;
 	while (tokens != NULL)
 	{
 		content_token = tokens->content;
 		operator = op(content_token);
-		if ((inside_parentesis == 0) && ((operator == OP_AND || operator == OP_OR
+		if ((inside_parenthesis == 0) && ((operator == OP_AND || operator == OP_OR
 			|| operator == OP_VAR_ASSIGN || operator == OP_HEREDOC
 			|| operator == OP_RD_INPUT || operator == OP_APPEND_RD_OUTPUT
 			|| operator == OP_RD_OUTPUT)))
 			return (tokens);
-		if ((!full_expand) && (inside_parentesis == 0) && (operator == OP_PIPE))
+		if ((expand_type == EXPAND_PIPE) && (inside_parenthesis == 0) && (operator == OP_PIPE))
 			return (tokens);
-		if (operator == OP_PARENTESIS_OPEN)
-			inside_parentesis++;
-		if (operator == OP_PARENTESIS_CLOSE)
-			inside_parentesis--;
+		if (operator == OP_PARENTHESIS_OPEN)
+			inside_parenthesis++;
+		if (operator == OP_PARENTHESIS_CLOSE)
+			inside_parenthesis--;
 		tokens = tokens->next;
 	}
 	return (NULL);
