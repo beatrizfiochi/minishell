@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: djunho <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 18:02:44 by djunho            #+#    #+#             */
-/*   Updated: 2025/06/23 16:13:13 by djunho           ###   ########.fr       */
+/*   Updated: 2025/06/27 18:32:38 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ static char	*build_path(char *path)
 	return (new_path);
 }
 
-int	cd(int argc, char *argv[], char *envp[])
+int	cd(int argc, char *argv[], t_list *var_list)
 {
 	char		*new_path;
 	const char	*arg;
@@ -52,7 +52,7 @@ int	cd(int argc, char *argv[], char *envp[])
 	arg = argv[1];
 	if (argc == 1)
 	{
-		arg = (char *)get_env("HOME=", envp);
+		arg = (char *)get_env("HOME", var_list);
 		if (arg == NULL)
 		{
 			printf("bash: cd: HOME not set");
