@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 13:57:47 by djunho            #+#    #+#             */
-/*   Updated: 2025/06/27 18:56:59 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/06/27 20:04:35 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ const char	*get_env(char *env, t_list *var_list)
 	{
 		envp_content = (t_content_var *)(var_list)->content;
 		if (ft_strncmp((char *)((envp_content)->var_name),
-				env, ft_strlen(env) + 1) == 0)
+			env, ft_strlen(env) + 1) == 0)
 			return (envp_content->var_value);
 		var_list = var_list->next;
 	}
@@ -72,7 +72,7 @@ void	free_envp(char **envp)
 	int	i;
 
 	if (!envp)
-		return;
+		return ;
 	i = 0;
 	while (envp[i])
 	{
@@ -81,4 +81,3 @@ void	free_envp(char **envp)
 	}
 	free(envp);
 }
-

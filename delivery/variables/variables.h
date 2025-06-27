@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 21:16:32 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/06/26 12:09:14 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/06/27 19:34:25 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,5 +24,7 @@ t_list	*envp_list(t_shell *shell, char *envp[]);
 int		process_var_assign(t_btnode *node, t_shell *shell);
 
 bool	check_and_replace_var(t_list *current, char *name, char *value);
+
+void	update_shell_level(t_list *var_list);
 
 #endif
