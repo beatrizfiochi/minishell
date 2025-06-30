@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 18:59:31 by djunho            #+#    #+#             */
-/*   Updated: 2025/06/26 16:37:25 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/06/27 19:46:58 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ static int	run_minishell(char *envp[])
 	shell.last_exit_status = EXIT_SUCCESS;
 	shell.cmds = NULL;
 	init_var_list(&shell, envp);
+	update_shell_level(shell.variable_list);
 	ret = read_command(&shell);
 	while (ret >= 0)
 	{

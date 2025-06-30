@@ -379,6 +379,7 @@ tester_grep             "echo '123\"'"        "123\""
 tester_grep             "echo '123\"'456"     "123\"456"
 tester_grep             "echo '123\"''456'"   "123\"456"
 tester_grep             "echo '123\"'\"456\"" "123\"456"
+tester_grep             'echo $SHLVL'         "var_name = SHLVL, var_value = 2"
 echo ""
 
 echo "################ Comparing with real bash ################"
