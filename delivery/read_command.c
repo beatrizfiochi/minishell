@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 17:00:20 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/07/03 14:36:15 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/07/02 19:22:44 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,9 @@ void	free_btree_node(void *content)
 	t_content_node	*node_content;
 
 	node_content = (t_content_node *)content;
-	if ((node_content->op == OP_CMD) || (node_content->op == OP_PARENTHESIS_OPEN) || (node_content->op == OP_PARENTHESIS_CLOSE))
+	if ((node_content->op == OP_CMD)
+		|| (node_content->op == OP_PAREN_OPEN)
+		|| (node_content->op == OP_PAREN_CLOSE))
 	{
 		ft_lstclear(&(node_content->cmd.tokens), free);
 	}

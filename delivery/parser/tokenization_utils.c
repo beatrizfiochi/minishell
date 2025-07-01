@@ -38,7 +38,8 @@ int	is_valid_name(char *name, int len)
 // 0 -> error | 1 -> success
 static int	is_a_possible_op(char c)
 {
-	if (c == '|' || c == '&' || c == '=' || c == '<' || c == '>' || c == '(' || c == ')')
+	if (c == '|' || c == '&' || c == '=' || c == '<' || c == '>' || c == '('
+		|| c == ')')
 		return (1);
 	else
 		return (0);

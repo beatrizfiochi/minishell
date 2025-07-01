@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 11:23:29 by djunho            #+#    #+#             */
-/*   Updated: 2025/06/23 15:22:39 by djunho           ###   ########.fr       */
+/*   Updated: 2025/07/02 19:22:11 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,8 @@ typedef enum e_node_op
 	OP_HEREDOC,
 	OP_APPEND_RD_OUTPUT,
 	OP_CMD,
-	OP_PARENTHESIS_OPEN,
-	OP_PARENTHESIS_CLOSE,
+	OP_PAREN_OPEN,
+	OP_PAREN_CLOSE,
 	OP_SIZE_DO_NOT_USE,
 }	t_node_op;
 
@@ -36,7 +36,8 @@ typedef struct s_cmd
 {
 	t_list	*tokens;		// cmd followed by args
 	bool	is_builtin;		// Updated once executed. False by default
-	bool	finished;		// Indicated if the pid was already waited for. False by default
+	bool	finished;		// Indicated if the pid was already waited for.
+							//	False by default
 }	t_cmd;
 
 typedef struct s_content_node

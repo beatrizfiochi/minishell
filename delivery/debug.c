@@ -6,7 +6,7 @@
 /*   By: djunho <djunho@student.42porto.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 18:22:37 by djunho            #+#    #+#             */
-/*   Updated: 2025/05/21 11:00:29 by djunho           ###   ########.fr       */
+/*   Updated: 2025/07/02 19:22:26 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,8 @@ const char	*op_str(t_node_op op)
 		"OP_HEREDOC",
 		"OP_APPEND_RD_OUTPUT",
 		"OP_CMD",
-		"OP_PARENTHESIS_OPEN",
-		"OP_PARENTHESIS_CLOSE",
+		"OP_PAREN_OPEN",
+		"OP_PAREN_CLOSE",
 		"OP_SIZE_DO_NOT_USE",
 	};
 

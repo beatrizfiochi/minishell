@@ -47,8 +47,8 @@ static int	btree_operator_before_callback(t_btnode *node,
 	if (((t_content_node *)node->left->content)->op == OP_PIPE)
 		return (0);
 	((t_shell *)_shell)->pipe.will_run_a_pipe = true;
-	((t_shell *)_shell)->pipe.is_last_pipe    = false;
-	((t_shell *)_shell)->pipe.carry_over_fd   = -1;
+	((t_shell *)_shell)->pipe.is_last_pipe = false;
+	((t_shell *)_shell)->pipe.carry_over_fd = -1;
 	if (pipe(((t_shell *)_shell)->pipe.pipe) < 0)
 		return (1);
 	return (0);

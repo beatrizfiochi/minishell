@@ -32,8 +32,10 @@ typedef struct s_shell
 	{
 		int		pipe[2];			// pipe file descriptors
 		int		carry_over_fd;		// file descriptor to carry over the pipe
-		bool	is_last_pipe;		// Flag to indicate if this is the last pipe in the chain
-		bool	will_run_a_pipe;	// Flag to indicate that the next command will run a pipe
+		bool	is_last_pipe;		// Flag to indicate if this is the last
+									//  pipe in the chain
+		bool	will_run_a_pipe;	// Flag to indicate that the next command
+									//  will run a pipe
 	} pipe;
 }	t_shell;
 

@@ -6,13 +6,15 @@
 #    By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/27 13:09:33 by djunho            #+#    #+#              #
-#    Updated: 2025/07/03 14:37:24 by bfiochi-         ###   ########.fr        #
+#    Updated: 2025/07/02 19:55:24 by djunho           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME= minishell
 SRCS = main.c read_command.c utils.c debug.c \
-	parser/tokenization.c parser/tree_creator.c parser/aux.c parser/aux2.c \
+	parser/tokenization.c parser/aux.c parser/aux2.c \
+	parser/tree_creator.c parser/tree_creator_checks.c \
+	parser/tree_creator_expand.c \
 	btree/btree.c btree/btree_count.c btree/debug.c \
 	btree/btree_foreach.c \
 	parser/expand_variable.c parser/clean_token_quotes.c \
