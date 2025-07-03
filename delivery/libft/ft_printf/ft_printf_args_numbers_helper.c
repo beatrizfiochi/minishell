@@ -31,10 +31,10 @@ int	get_width(const t_flags *const flag, int len, bool is_positive)
 	return (ret);
 }
 
-void	print_pad(bool check, char c, int i)
+void	print_pad(int fd, bool check, char c, int i)
 {
 	while ((check) && (i-- > 0))
-		write(STDOUT_FILENO, &c, sizeof(char));
+		write(fd, &c, sizeof(char));
 }
 
 void	normalize_number_flag(t_flags *flag, int len, bool is_neg)

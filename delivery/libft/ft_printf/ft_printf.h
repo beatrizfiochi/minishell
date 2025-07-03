@@ -16,5 +16,7 @@
 # include <stdarg.h>
 
 int	ft_printf(const char *format, ...);
+int	ft_fprintf(int fd, const char *format, ...);
+int	ft_vdprintf(int fd, const char *format, va_list *arg);
 
 #endif // FT_PRINTF_H

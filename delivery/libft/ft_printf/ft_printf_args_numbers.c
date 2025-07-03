@@ -15,22 +15,22 @@
 #include "../libft.h"
 #include "ft_printf_internals.h"
 
-static int	print_sign(char *s, t_flags const *flag)
+static int	print_sign(int fd, char *s, t_flags const *flag)
 {
 	int	ret;
 
 	ret = 0;
 	if (s[0] == '-')
-		write(STDOUT_FILENO, s, sizeof(char));
+		write(fd, s, sizeof(char));
 	else if (flag->force_sign)
 	{
-		write(STDOUT_FILENO, "+", sizeof(char));
+		write(fd, "+", sizeof(char));
 		ret = 1;
 	}
 	return (ret);
 }
 
-int	print_d(int i, t_flags *const flag)
+int	print_d(int fd, int i, t_flags *const flag)
 {
 	char	*s;
 	int		printed;
@@ -42,20 +42,20 @@ int	print_d(int i, t_flags *const flag)
 	normalize_number_flag(flag, printed, (i < 0));
 	printed_spec = get_width(flag, printed, (i >= 0));
 	printed_prec = ((flag->precision) * (flag->precision_width));
-	print_pad(((flag->force_sign || flag->space)), ' ', printed_spec);
-	printed_spec += print_sign(s, flag);
-	print_pad(flag->zero, '0', printed_spec);
-	print_pad(flag->precision, '0', printed_prec);
+	print_pad(fd, ((flag->force_sign || flag->space)), ' ', printed_spec);
+	printed_spec += print_sign(fd, s, flag);
+	print_pad(fd, flag->zero, '0', printed_spec);
+	print_pad(fd, flag->precision, '0', printed_prec);
 	if (s[0] == '-')
-		write(STDOUT_FILENO, &s[1], printed - 1);
+		write(fd, &s[1], printed - 1);
 	else
-		write(STDOUT_FILENO, s, printed);
-	print_pad(flag->left_aligned, ' ', printed_spec);
+		write(fd, s, printed);
+	print_pad(fd, flag->left_aligned, ' ', printed_spec);
 	free(s);
 	return (printed + printed_spec + printed_prec);
 }
 
-int	print_u(unsigned long int u, t_flags *const flag)
+int	print_u(int fd, unsigned long int u, t_flags *const flag)
 {
 	int	printed;
 	int	printed_specifier;
@@ -65,15 +65,15 @@ int	print_u(unsigned long int u, t_flags *const flag)
 	normalize_number_flag(flag, printed, false);
 	printed_specifier = get_width(flag, printed, true);
 	printed_prec = ((flag->precision) * (flag->precision_width));
-	print_pad(flag->space, ' ', printed_specifier);
-	print_pad(flag->zero, '0', printed_specifier);
-	print_pad(flag->precision, '0', printed_prec);
-	ft_putunbr_base_fd(u, "0123456789", STDOUT_FILENO);
-	print_pad(flag->left_aligned, ' ', printed_specifier);
+	print_pad(fd, flag->space, ' ', printed_specifier);
+	print_pad(fd, flag->zero, '0', printed_specifier);
+	print_pad(fd, flag->precision, '0', printed_prec);
+	ft_putunbr_base_fd(u, "0123456789", fd);
+	print_pad(fd, flag->left_aligned, ' ', printed_specifier);
 	return (printed + printed_specifier + printed_prec);
 }
 
-int	print_x(unsigned long int u, bool is_upper, t_flags *const flag)
+int	print_x(int fd, unsigned long int u, bool is_upper, t_flags *const flag)
 {
 	const char	*base;
 	int			printed;
@@ -89,15 +89,15 @@ int	print_x(unsigned long int u, bool is_upper, t_flags *const flag)
 	if (flag->prefix && u != 0)
 		printed += 2;
 	printed_specifier = get_width(flag, printed, false);
-	print_pad(flag->space, ' ', printed_specifier);
+	print_pad(fd, flag->space, ' ', printed_specifier);
 	if (flag->prefix && (u != 0) && is_upper)
-		write(STDOUT_FILENO, "0X", sizeof(char) * 2);
+		write(fd, "0X", sizeof(char) * 2);
 	if (flag->prefix && (u != 0) && !is_upper)
-		write(STDOUT_FILENO, "0x", sizeof(char) * 2);
-	print_pad(flag->zero, '0', printed_specifier);
-	print_pad(flag->precision, '0', flag->precision_width);
-	ft_putunbr_base_fd(u, base, STDOUT_FILENO);
-	print_pad(flag->left_aligned, ' ', printed_specifier);
+		write(fd, "0x", sizeof(char) * 2);
+	print_pad(fd, flag->zero, '0', printed_specifier);
+	print_pad(fd, flag->precision, '0', flag->precision_width);
+	ft_putunbr_base_fd(u, base, fd);
+	print_pad(fd, flag->left_aligned, ' ', printed_specifier);
 	return (printed + printed_specifier
 		+ (flag->precision * flag->precision_width));
 }
