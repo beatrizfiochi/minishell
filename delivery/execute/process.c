@@ -44,13 +44,12 @@ static int	btree_operator_before_callback(t_btnode *node,
 		return (1);
 	if ((node->left == NULL) || (node->left->content == NULL))
 		return (1);
-	if (((t_content_node *)node->right->content)->op != OP_CMD)
+	if (((t_content_node *)node->left->content)->op == OP_PIPE)
 		return (0);
-	if (((t_content_node *)node->left->content)->op != OP_CMD)
-		return (0);
-	content->pipe.is_last_pipe = false;
-	content->pipe.carry_over_fd = -1;
-	if (pipe(content->pipe.pipe) < 0)
+	((t_shell *)_shell)->pipe.will_run_a_pipe = true;
+	((t_shell *)_shell)->pipe.is_last_pipe = false;
+	((t_shell *)_shell)->pipe.carry_over_fd = -1;
+	if (pipe(((t_shell *)_shell)->pipe.pipe) < 0)
 		return (1);
 	return (0);
 }
@@ -72,15 +71,14 @@ static int	btree_operator_between_callback(t_btnode *node,
 		else if (((t_content_node *)node->content)->op == OP_OR)
 			return (process_or(shell, ret, should_continue));
 		else if (((t_content_node *)node->content)->op == OP_PIPE)
-			return (process_pipe(node));
+			return (process_pipe(shell, node));
 		else if (((t_content_node *)node->content)->op == OP_VAR_ASSIGN)
 			return (process_var_assign(node, shell));
 	}
 	return (-1);
 }
 
-static int	run_cmd(t_shell *shell, t_btnode *node,
-				t_node_op parent_op, t_content_node	*parent_cnt)
+static int	run_cmd(t_shell *shell, t_btnode *node, t_node_op parent_op)
 {
 	t_content_node	*content;
 	int				ret;
@@ -95,7 +93,7 @@ static int	run_cmd(t_shell *shell, t_btnode *node,
 		if (ret != 127)
 			return (ret);
 	}
-	return (execute_execve(node, shell, parent_op, parent_cnt));
+	return (execute_execve(node, shell));
 }
 
 static int	btree_cmd_callback(t_btnode *node, void *_shell)
@@ -119,7 +117,7 @@ static int	btree_cmd_callback(t_btnode *node, void *_shell)
 	debug_btree_print(node);
 	if (parent_op == OP_VAR_ASSIGN)
 		return (0);
-	return (run_cmd((t_shell *)_shell, node, parent_op, parent_cnt));
+	return (run_cmd((t_shell *)_shell, node, parent_op));
 }
 
 int	process(t_shell *shell)

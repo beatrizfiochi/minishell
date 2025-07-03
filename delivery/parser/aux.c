@@ -50,7 +50,7 @@ void	*abort_tree_lst(t_btnode *tree, t_list **token_list,
 }
 
 bool	split_token_list(struct s_split_token_list *split, bool need_left,
-			bool full_expand)
+			enum e_expand_type expand_type)
 {
 	t_list	*aux;
 
@@ -58,14 +58,14 @@ bool	split_token_list(struct s_split_token_list *split, bool need_left,
 	{
 		if (split->left == NULL)
 			break ;
-		split->op = search_op(split->left, full_expand);
+		split->op = search_op(split->left, expand_type);
 		if (split->op == NULL)
 			break ;
 		aux = prev_list_item(split->left, split->op);
 		if ((split->op->next == NULL) || (need_left && (aux == NULL)))
 			break ;
 		split->right = split->op->next;
-		split->remain = search_op(split->right, full_expand);
+		split->remain = search_op(split->right, expand_type);
 		if (split->remain == split->right)
 			break ;
 		if (aux != NULL)

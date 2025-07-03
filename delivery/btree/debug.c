@@ -44,7 +44,7 @@ static int	printf_string_leaf(t_btnode *node, void *ctx)
 		op_str(content->op));
 	if (content->op != OP_CMD)
 	{
-		printf("Btree: Leaf is not a command (Error)!\n");
+		printf("Btree: Error Leaf is not a command (%d)!\n", content->op);
 		return (0);
 	}
 	printf("Btree: Leaf content: ");
