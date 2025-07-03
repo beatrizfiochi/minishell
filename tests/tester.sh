@@ -1,5 +1,8 @@
 #! /bin/bash
 
+# echo $SHLVL
+# exit 1
+
 BASEDIR=$(dirname $(readlink -f $0))
 cd -- $BASEDIR
 
@@ -181,6 +184,21 @@ function tester_grep() {
 		cat $OUT_FILE
 		exit 1
 	fi
+}
+
+function test_signal() {
+	echo -n "Testing $2 on command: $1 ... "
+	echo "$1" | ../delivery/./minishell &
+	pid=$!
+	sleep 1
+	kill -$2 $pid
+	wait $pid 2>/dev/null
+	status=$?
+	if [ $status -eq 0 ]; then
+		echo -e "${GREEN}done${RESET}"
+	else
+		echo -e "${RED}falha (exit code $status)${RESET}"
+    fi
 }
 
 function tester_with_real() {
@@ -380,6 +398,11 @@ tester_grep             "echo '123\"'456"     "123\"456"
 tester_grep             "echo '123\"''456'"   "123\"456"
 tester_grep             "echo '123\"'\"456\"" "123\"456"
 tester_grep             'echo $SHLVL'         "var_name = SHLVL, var_value = 2"
+echo ""
+
+echo "################ Testing signals ################"
+test_signal "sleep 10"   "SIGINT" #testing Ctrl+C
+test_signal "sleep 10"   "SIGQUIT" #testing Ctrl+\
 echo ""
 
 echo "################ Comparing with real bash ################"

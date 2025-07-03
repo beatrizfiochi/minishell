@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 17:00:20 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/06/26 16:36:23 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/07/03 14:36:15 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,7 @@ int	read_command(t_shell *shell)
 			printf_error("Error to parse\n");
 		debug_print_tree(shell->cmds);
 		shell->last_exit_status = execute(shell);
+		handle_signal_output(shell);
 		btree_clear(&shell->cmds, free_btree_node);
 	}
 	free(line);

@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/21 19:54:13 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/05/30 17:18:37 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/07/03 14:38:07 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include <unistd.h>
 #include <readline/readline.h>
 #include "signals.h"
+#include "../minishell.h"
 
 void	handle_sigint(int signal)
 {
@@ -45,4 +46,12 @@ void	ignore_signals(void)
 {
 	signal(SIGINT, SIG_IGN);
 	signal(SIGQUIT, SIG_IGN);
+}
+
+void	handle_signal_output(t_shell *shell)
+{
+	if (shell->last_exit_status == (128 + SIGINT))
+		printf("\n");
+	else if (shell->last_exit_status == (128 + SIGQUIT))
+		printf("Quit (core dumped)\n");
 }
