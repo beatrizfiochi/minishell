@@ -188,17 +188,38 @@ function tester_grep() {
 
 function test_signal() {
 	echo -n "Testing $2 on command: $1 ... "
-	echo "$1" | ../delivery/./minishell &
-	pid=$!
+	echo "$1" | (../delivery/./minishell &> /dev/null) &
+	parent_pid=$!
+	# Get the child PID
+	#TODO: Using a fixed sleep can make tests brittle and slow; Another option: polling or looping on pgrep until the child PID appears.
+	#
+	# This sleep is necessary to ensure that the minishell spawn the child before we try to send a signal to it
 	sleep 1
-	kill -$2 $pid
-	wait $pid 2>/dev/null
+	child_pid=$(pgrep -n -P $parent_pid)
+	# Ensure child_pid is not empty
+	if [[ -z "$child_pid" ]]; then
+		echo -e "${RED}Error: No child process found for parent PID $parent_pid${RESET}"
+		exit 1
+	fi
+
+	# Kill and get the status code of the parent process
+	kill -"$2" $child_pid
+	if [ $? -ne 0 ]; then
+		echo -e "${RED}Error to send signal $2 to PID $child_pid${RESET}"
+		exit 1
+	fi
+	wait $parent_pid 2>/dev/null
 	status=$?
-	if [ $status -eq 0 ]; then
-		echo -e "${GREEN}done${RESET}"
+
+	# The code below get the expected status code for that signal
+	signal_number=$(kill -l $2)
+	exit_code_expected=$((128 + signal_number))
+	if [ $status -eq $exit_code_expected ]; then
+		echo -e "${GREEN}Success (status code is $status)${RESET}"
 	else
-		echo -e "${RED}falha (exit code $status)${RESET}"
-    fi
+		echo -e "${RED}Error (exit code $status)${RESET}"
+		exit 1
+	fi
 }
 
 function tester_with_real() {
@@ -401,7 +422,7 @@ tester_grep             'echo $SHLVL'         "var_name = SHLVL, var_value = 2"
 echo ""
 
 echo "################ Testing signals ################"
-test_signal "sleep 10"   "SIGINT" #testing Ctrl+C
+test_signal "sleep 10"   "SIGINT"  #testing Ctrl+C
 test_signal "sleep 10"   "SIGQUIT" #testing Ctrl+\
 echo ""
 
