@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 19:55:45 by djunho            #+#    #+#             */
-/*   Updated: 2025/06/30 20:32:04 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/07/03 14:35:51 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,7 +145,7 @@ int	process(t_shell *shell)
 	{
 		while ((tmp > 0))
 			tmp = wait(NULL);
-		return (update_exit_status_and_print(shell, i));
+		return (get_fork_return(i));
 	}
 	return (ret);
 }

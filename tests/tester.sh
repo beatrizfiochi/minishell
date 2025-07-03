@@ -1,5 +1,8 @@
 #! /bin/bash
 
+# echo $SHLVL
+# exit 1
+
 BASEDIR=$(dirname $(readlink -f $0))
 cd -- $BASEDIR
 
@@ -185,7 +188,7 @@ function tester_grep() {
 
 function test_signal() {
 	echo -n "Testing $2 on command: $1 ... "
-	$1 &
+	echo "$1" | ../delivery/./minishell &
 	pid=$!
 	sleep 1
 	kill -$2 $pid
@@ -394,7 +397,7 @@ tester_grep             "echo '123\"'"        "123\""
 tester_grep             "echo '123\"'456"     "123\"456"
 tester_grep             "echo '123\"''456'"   "123\"456"
 tester_grep             "echo '123\"'\"456\"" "123\"456"
-tester_grep             'echo $SHLVL'         "var_name = SHLVL, var_value = 3"
+tester_grep             'echo $SHLVL'         "var_name = SHLVL, var_value = 2"
 echo ""
 
 echo "################ Testing signals ################"

@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/21 19:54:13 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/06/30 20:05:16 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/07/03 14:38:07 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,8 @@ void	ignore_signals(void)
 
 void	handle_signal_output(t_shell *shell)
 {
-	if (shell->last_exit_status == SIGINT)
+	if (shell->last_exit_status == (128 + SIGINT))
 		printf("\n");
-	else if (shell->last_exit_status == SIGQUIT)
+	else if (shell->last_exit_status == (128 + SIGQUIT))
 		printf("Quit (core dumped)\n");
 }
