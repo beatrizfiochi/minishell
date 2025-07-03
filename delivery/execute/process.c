@@ -67,15 +67,16 @@ static int	btree_operator_between_callback(t_btnode *node,
 	{
 		ignore_signals();
 		if (((t_content_node *)node->content)->op == OP_AND)
-			return (process_and(shell, ret, should_continue));
+			ret = process_and(shell, ret, should_continue);
 		else if (((t_content_node *)node->content)->op == OP_OR)
-			return (process_or(shell, ret, should_continue));
+			ret = process_or(shell, ret, should_continue);
 		else if (((t_content_node *)node->content)->op == OP_PIPE)
-			return (process_pipe(shell, node));
+			ret = process_pipe(shell, node);
 		else if (((t_content_node *)node->content)->op == OP_VAR_ASSIGN)
-			return (process_var_assign(node, shell));
+			ret = process_var_assign(node, shell);
 	}
-	return (-1);
+	shell->last_exit_status = ret;
+	return (ret);
 }
 
 static int	run_cmd(t_shell *shell, t_btnode *node, t_node_op parent_op)
@@ -85,12 +86,13 @@ static int	run_cmd(t_shell *shell, t_btnode *node, t_node_op parent_op)
 
 	content = (t_content_node *)node->content;
 	shell->last_cmd = &content->cmd;
+	search_and_expand(content->cmd.tokens, shell->variable_list, shell);
 	clean_token_quotes(content->cmd.tokens);
 	if (parent_op != OP_PIPE)
 	{
 		ret = execute_builtin(&content->cmd,
 				shell->variable_list);
-		if (ret != 127)
+		if (ret != EXIT_CMD_NOT_FOUND)
 			return (ret);
 	}
 	return (execute_execve(node, shell));
@@ -133,7 +135,6 @@ int	process(t_shell *shell)
 	};
 
 	i = -1;
-	shell->last_exit_status = EXIT_SUCCESS;
 	shell->last_cmd = NULL;
 	ret = btree_foreach_before_and_between_dfs(shell->cmds, &cfg);
 	if (ret != 0)

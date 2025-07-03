@@ -23,6 +23,7 @@
 #include "execution.h"
 #include "exec_utils.h"
 #include "env_utils.h"
+#include "../minishell.h"
 
 int	run_child(t_cmd *cmd, t_shell *shell)
 {
@@ -41,7 +42,7 @@ int	run_child(t_cmd *cmd, t_shell *shell)
 			break ;
 		reset_signals();
 		ret = execute_builtin(cmd, shell->variable_list);
-		if (ret != 127)
+		if (ret != EXIT_CMD_NOT_FOUND)
 			break ;
 		execve(args[0], args, envp);
 		if (create_cmd_path(args[0], shell->variable_list, &path))

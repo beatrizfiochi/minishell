@@ -19,6 +19,11 @@
 # include "btree/btree.h"
 # include "cmd.h"
 
+# define	EXIT_INCORRECT_USAGE	2
+# define	EXIT_CMD_CANNOT_EXEC	126
+# define	EXIT_CMD_NOT_FOUND		127
+# define	EXIT_SIGNAL_BASE		128
+
 typedef struct s_shell
 {
 	char		**paths;
@@ -26,7 +31,13 @@ typedef struct s_shell
 	t_cmd		*last_cmd;
 	int			ncmds;
 	pid_t		last_pid;
-	int			last_exit_status;
+	int			last_exit_status;	// 0 - 255
+									// 0 - success	(EXIT_SUCCESS)
+									// 1 - generic error (EXIT_FAILURE)
+									// 2 - incorrect command usage
+									// 126 - command invoked cannot execute
+									// 127 - command not found
+									// 128 + n - fatal error signal "n"
 	t_list		*variable_list;
 	struct s_pipe
 	{
