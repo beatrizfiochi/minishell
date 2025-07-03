@@ -15,7 +15,7 @@
 #include "../libft.h"
 #include "ft_printf_internals.h"
 
-int	print_c(char c, t_flags *const flag)
+int	print_c(int fd, char c, t_flags *const flag)
 {
 	int	pad;
 	int	i;
@@ -29,15 +29,15 @@ int	print_c(char c, t_flags *const flag)
 		pad = flag->width - sizeof(char);
 	i = pad;
 	while ((flag->space) && (i-- > 0))
-		write(STDOUT_FILENO, " ", (sizeof(char) * 1));
-	write(STDOUT_FILENO, &c, sizeof(char));
+		write(fd, " ", (sizeof(char) * 1));
+	write(fd, &c, sizeof(char));
 	i = pad;
 	while ((flag->left_aligned) && (i-- > 0))
-		write(STDOUT_FILENO, " ", sizeof(char));
+		write(fd, " ", sizeof(char));
 	return (pad + sizeof(char));
 }
 
-int	print_s(char *ori, t_flags *const flag)
+int	print_s(int fd, char *ori, t_flags *const flag)
 {
 	int		printed;
 	int		pad;
@@ -56,20 +56,20 @@ int	print_s(char *ori, t_flags *const flag)
 		pad = flag->width - printed;
 	if ((flag != NULL) && (flag->zero) && (flag->width > 0))
 		flag->space = true;
-	print_pad((flag != NULL) && (flag->space), ' ', pad);
-	write(STDOUT_FILENO, s, (sizeof(char) * printed));
-	print_pad((flag != NULL) && (flag->left_aligned), ' ', pad);
+	print_pad(fd, (flag != NULL) && (flag->space), ' ', pad);
+	write(fd, s, (sizeof(char) * printed));
+	print_pad(fd, (flag != NULL) && (flag->left_aligned), ' ', pad);
 	return (printed + pad);
 }
 
-int	print_p(unsigned long int u, const t_flags *const flag)
+int	print_p(int fd, unsigned long int u, const t_flags *const flag)
 {
 	t_flags	new_flag;
 
 	new_flag = *flag;
 	new_flag.prefix = true;
 	if (u == 0)
-		return (print_s("(nil)", NULL));
+		return (print_s(fd, "(nil)", NULL));
 	else
-		return (print_x(u, false, &new_flag));
+		return (print_x(fd, u, false, &new_flag));
 }
