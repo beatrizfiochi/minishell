@@ -27,6 +27,7 @@
 #include "exec_utils.h"
 #include "execution.h"
 #include "../parser/parser.h"
+#include "../parser/aux.h"
 
 static int	btree_operator_before_callback(t_btnode *node,
 				int ret, bool *should_continue, void *_shell)
@@ -72,11 +73,41 @@ static int	btree_operator_between_callback(t_btnode *node,
 			ret = process_or(shell, ret, should_continue);
 		else if (((t_content_node *)node->content)->op == OP_PIPE)
 			ret = process_pipe(shell, node);
-		else if (((t_content_node *)node->content)->op == OP_VAR_ASSIGN)
-			ret = process_var_assign(node, shell);
 	}
 	shell->last_exit_status = ret;
 	return (ret);
+}
+
+// This function processes variable assignment commands into the 
+//  shell->tmp_var_list.
+// It assumes that the var name is well formed
+static int	handle_var_assign(t_shell *shell, t_btnode *node)
+{
+	t_content_node	*content;
+
+	content = (t_content_node *)node->content;
+	if (content->cmd.tokens == NULL)
+	{
+		ft_fprintf(STDERR_FILENO, "Error: Invalid variable assignment\n");
+		return EXIT_FAILURE;
+	}
+	while (content->cmd.tokens != NULL)
+	{
+		t_list *op_node = search_op(content->cmd.tokens, EXP_ASSIGN);
+		if (op_node == NULL)
+			break ;
+		t_list *name = prev_list_item(content->cmd.tokens, op_node);
+		t_list *value = op_node->next;
+		if (process_var_assign(name, op_node, value, shell) != 0)
+		{
+			ft_fprintf(STDERR_FILENO, "Error: Invalid variable assignment\n");
+			return (EXIT_FAILURE);
+		}
+		content->cmd.tokens = value->next;
+		value->next = NULL;
+		ft_lstclear(&name, free);
+	}
+	return (EXIT_SUCCESS);
 }
 
 static int	run_cmd(t_shell *shell, t_btnode *node, t_node_op parent_op)
@@ -88,6 +119,11 @@ static int	run_cmd(t_shell *shell, t_btnode *node, t_node_op parent_op)
 	shell->last_cmd = &content->cmd;
 	search_and_expand(content->cmd.tokens, shell->variable_list, shell);
 	clean_token_quotes(content->cmd.tokens);
+	ret = handle_var_assign(shell, node);
+	if (ret != EXIT_SUCCESS)
+		return (ret);
+	if (content->cmd.tokens == NULL)
+		return (EXIT_SUCCESS);
 	if (parent_op != OP_PIPE)
 	{
 		ret = execute_builtin(&content->cmd,

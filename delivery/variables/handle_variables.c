@@ -81,27 +81,21 @@ bool	check_and_replace_var(t_list *current, char *name, char *value)
 	return (false);
 }
 
-int	process_var_assign(t_btnode *nd, t_shell *sh)
+int	process_var_assign(t_list *name, t_list *op, t_list *value, t_shell *sh)
 {
-	t_content_node	*name;
-	t_content_node	*value;
 	t_list			*current;
 	t_list			*new_node;
 
-	if ((nd->left == NULL) || (nd->right == NULL))
+	if ((name == NULL) || (op == NULL) || (value == NULL))
 		return (1);
-	name = (t_content_node *)nd->left->content;
-	value = (t_content_node *)nd->right->content;
-	if ((name == NULL) || (value == NULL))
-		return (1);
-	current = sh->variable_list;
-	if (check_and_replace_var(current, (char *)(name->cmd.tokens->content),
-		(char *)(value->cmd.tokens->content)) == true)
+	current = sh->tmp_var_list;
+	if (check_and_replace_var(current, (char *)(name->content),
+		(char *)(value->content)) == true)
 		return (0);
-	new_node = create_var_node((char *)(name->cmd.tokens->content),
-			(char *)(value->cmd.tokens->content));
+	new_node = create_var_node((char *)(name->content),
+			(char *)(value->content));
 	if (new_node == NULL)
 		return (1);
-	ft_lstadd_back(&sh->variable_list, new_node);
+	ft_lstadd_back(&sh->tmp_var_list, new_node);
 	return (0);
 }

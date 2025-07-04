@@ -21,7 +21,7 @@
 t_list	*create_var_node(char *name, char *value);
 t_list	*envp_list(t_shell *shell, char *envp[]);
 
-int		process_var_assign(t_btnode *node, t_shell *shell);
+int		process_var_assign(t_list *name, t_list *op, t_list *value, t_shell *sh);
 
 bool	check_and_replace_var(t_list *current, char *name, char *value);
 

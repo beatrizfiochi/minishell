@@ -54,6 +54,7 @@ static int	run_minishell(char *envp[])
 	t_shell	shell;
 
 	shell.variable_list = NULL;
+	shell.tmp_var_list = NULL;
 	shell.last_exit_status = EXIT_SUCCESS;
 	shell.cmds = NULL;
 	init_var_list(&shell, envp);

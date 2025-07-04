@@ -47,3 +47,7 @@ $
 aaaaaaaaaaaaaaaaa$
 ```
 
+# Need to handle the followin var assign situation
+x= ls
+It unset the x and run ls
+

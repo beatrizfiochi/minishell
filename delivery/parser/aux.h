@@ -32,7 +32,8 @@ enum e_expand_type
 {
 	EXP_NORMAL = 0,
 	EXP_PIPE,
-	EXP_PAREN
+	EXP_PAREN,
+	EXP_ASSIGN
 };
 
 bool		split_token_list(struct s_split_token_list *split, bool need_left,
