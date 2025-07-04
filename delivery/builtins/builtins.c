@@ -13,6 +13,7 @@
 #include "../cmd.h"
 #include "../execute/exec_utils.h"
 #include "../libft/libft.h"
+#include "../minishell.h"
 #include "builtins.h"
 
 static int	run_builtin(int argc, char *argv[], t_list *var_list, int *ret)
@@ -23,7 +24,7 @@ static int	run_builtin(int argc, char *argv[], t_list *var_list, int *ret)
 	{"cd", cd,},
 	};
 
-	*ret = 127;
+	*ret = EXIT_CMD_NOT_FOUND;
 	i = 0;
 	while ((i < (sizeof(cmds) / sizeof(cmds[0])))
 		&& (ft_strncmp(cmds[i].cmd, (const char*)argv[0],
@@ -43,7 +44,7 @@ int	execute_builtin(t_cmd *cmd, t_list *var_list)
 	args = convert_list_to_vector(cmd->tokens, &argc);
 	ret = run_builtin(argc, args, var_list, &ret);
 	free(args);
-	if (ret != 127)
+	if (ret != EXIT_CMD_NOT_FOUND)
 		cmd->is_builtin = true;
 	return (ret);
 }

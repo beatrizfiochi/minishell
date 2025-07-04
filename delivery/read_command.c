@@ -71,20 +71,23 @@ int	read_command(t_shell *shell)
 	line = read_line();
 	if (line == NULL)
 		return (-1);
-	if (line != NULL && *line != '\0')
+	if ((line != NULL) && (*line != '\0'))
 		add_history (line);
 	token_list = tokenization(line);
 	debug_print_read_command(token_list, line);
-	search_and_expand(token_list, shell->variable_list, shell);
-	if (token_list != NULL)
+	while (token_list != NULL)
 	{
 		shell->cmds = create_tree(&token_list, NULL);
 		if (shell->cmds == NULL)
-			printf_error("Error to parse\n");
+		{
+			shell->last_exit_status = EXIT_INCORRECT_USAGE;
+			break ;
+		}
 		debug_print_tree(shell->cmds);
 		shell->last_exit_status = execute(shell);
 		handle_signal_output(shell);
 		btree_clear(&shell->cmds, free_btree_node);
+		break ;
 	}
 	free(line);
 	return (shell->last_exit_status);
