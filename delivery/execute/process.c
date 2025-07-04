@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 19:55:45 by djunho            #+#    #+#             */
-/*   Updated: 2025/07/03 14:35:51 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/07/04 21:04:10 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,6 +110,18 @@ static int	handle_var_assign(t_shell *shell, t_btnode *node)
 	return (EXIT_SUCCESS);
 }
 
+static void	join_shell_variable_lists(t_shell *shell)
+{
+	t_list *last;
+
+	last = ft_lstlast(shell->variable_list);
+	if (last == NULL)
+		shell->variable_list = shell->tmp_var_list;
+	else
+		last->next = shell->tmp_var_list;
+	shell->tmp_var_list = NULL;
+}
+
 static int	run_cmd(t_shell *shell, t_btnode *node, t_node_op parent_op)
 {
 	t_content_node	*content;
@@ -123,15 +135,18 @@ static int	run_cmd(t_shell *shell, t_btnode *node, t_node_op parent_op)
 	if (ret != EXIT_SUCCESS)
 		return (ret);
 	if (content->cmd.tokens == NULL)
-		return (EXIT_SUCCESS);
-	if (parent_op != OP_PIPE)
 	{
-		ret = execute_builtin(&content->cmd,
-				shell->variable_list);
-		if (ret != EXIT_CMD_NOT_FOUND)
-			return (ret);
+		content->cmd.is_builtin = true;
+		join_shell_variable_lists(shell);
+		return (EXIT_SUCCESS);
 	}
-	return (execute_execve(node, shell));
+	ret = EXIT_CMD_NOT_FOUND;
+	if (parent_op != OP_PIPE)
+		ret = execute_builtin(&content->cmd, shell->variable_list);
+	if (ret == EXIT_CMD_NOT_FOUND)
+		ret = execute_execve(node, shell);
+	ft_lstclear(&shell->tmp_var_list, free_var_content);
+	return (ret);
 }
 
 static int	btree_cmd_callback(t_btnode *node, void *_shell)
@@ -153,8 +168,6 @@ static int	btree_cmd_callback(t_btnode *node, void *_shell)
 		return (EXIT_FAILURE);
 	}
 	debug_btree_print(node);
-	if (parent_op == OP_VAR_ASSIGN)
-		return (0);
 	return (run_cmd((t_shell *)_shell, node, parent_op));
 }
 
