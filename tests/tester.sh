@@ -176,7 +176,7 @@ function tester_grep() {
 	check_valgrind_logs
 
 	text_found=$(cat $OUT_FILE | grep "^$text\$")
-	if [[ $text_found == "$text" ]]; then
+	if [[ ! -z $text_found ]]; then
 		echo -e "${GREEN}Success${RESET}"
 	else
 		echo -e "${RED}CMD send is: \"$cmd\"${RESET}"
@@ -376,28 +376,28 @@ tester "oioi|"             0       2
 
 # Testing syntax error         cmd              text
 echo "################ Testing syntax error ################"
-tester_grep             'ls && || pwd'    "syntax error near unexpected token"
-tester_grep             'ls && ||pwd'     "syntax error near unexpected token"
-tester_grep             'ls&& || pwd'     "syntax error near unexpected token"
-tester_grep             'ls&&|| pwd'      "syntax error near unexpected token"
-tester_grep             'ls &&||pwd'      "syntax error near unexpected token"
-tester_grep             'ls&& ||pwd'      "syntax error near unexpected token"
-tester_grep             'ls &&|| pwd'     "syntax error near unexpected token"
-tester_grep             'ls &&||& pwd'    "syntax error near unexpected token"
-tester_grep             'ls & pwd'        "syntax error near unexpected token"
-tester_grep             'ls&pwd'          "syntax error near unexpected token"
-tester_grep             'ls &&& pwd'      "syntax error near unexpected token"
-tester_grep             'ls&&&pwd'        "syntax error near unexpected token"
-tester_grep             'ls&&&&pwd'       "syntax error near unexpected token"
-tester_grep             'ls &&&& pwd'     "syntax error near unexpected token"
-tester_grep             'ls &&&&& pwd'    "syntax error near unexpected token"
-tester_grep             'ls ||| pwd'      "syntax error near unexpected token"
-tester_grep             'ls |||| pwd'     "syntax error near unexpected token"
-tester_grep             'ls ||||| pwd'    "syntax error near unexpected token"
-tester_grep             'ls <<< pwd'      "syntax error near unexpected token"
-tester_grep             'ls <<<< pwd'     "syntax error near unexpected token"
-tester_grep             'ls <<<<< pwd'    "syntax error near unexpected token"
-tester_grep             'ls >>>>> pwd'    "syntax error near unexpected token"
+tester_grep             'ls && || pwd'    'syntax error near unexpected token "||"'
+tester_grep             'ls && ||pwd'     'syntax error near unexpected token "||"'
+tester_grep             'ls&& || pwd'     'syntax error near unexpected token "||"'
+tester_grep             'ls&&|| pwd'      'syntax error near unexpected token "||"'
+tester_grep             'ls &&||pwd'      'syntax error near unexpected token "||"'
+tester_grep             'ls&& ||pwd'      'syntax error near unexpected token "||"'
+tester_grep             'ls &&|| pwd'     'syntax error near unexpected token "||"'
+tester_grep             'ls &&||& pwd'    'syntax error near unexpected token "||"'
+tester_grep             'ls & pwd'        "syntax error near unexpected token.*"
+tester_grep             'ls&pwd'          'syntax error near unexpected token.*'
+tester_grep             'ls &&& pwd'      'syntax error near unexpected token.*'
+tester_grep             'ls&&&pwd'        'syntax error near unexpected token.*'
+tester_grep             'ls&&&&pwd'       'syntax error near unexpected token.*'
+tester_grep             'ls &&&& pwd'     'syntax error near unexpected token.*'
+tester_grep             'ls &&&&& pwd'    'syntax error near unexpected token.*'
+tester_grep             'ls ||| pwd'      'syntax error near unexpected token.*'
+tester_grep             'ls |||| pwd'     'syntax error near unexpected token.*'
+tester_grep             'ls ||||| pwd'    'syntax error near unexpected token.*'
+tester_grep             'ls <<< pwd'      'syntax error near unexpected token.*'
+tester_grep             'ls <<<< pwd'     'syntax error near unexpected token.*'
+tester_grep             'ls <<<<< pwd'    'syntax error near unexpected token.*'
+tester_grep             'ls >>>>> pwd'    'syntax error near unexpected token.*'
 echo ""
 
 tester_grep             '1=10'       "1=10: No such file or directory"

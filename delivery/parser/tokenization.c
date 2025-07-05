@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 15:26:54 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/06/22 17:09:47 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/07/05 11:45:15 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,8 @@ static void	search_token_utils(char *l, char *c, int init, int *len)
 {
 	bool	valid_op;
 
+	if ((*l == ' ') && (*len == 1))
+		return ;
 	valid_op = false;
 	while (valid_op != true)
 	{
@@ -98,6 +100,9 @@ static void	search_token(char *line, char *c, int *len, bool *op_var_assign)
 	search_token_utils(line, c, init, len);
 }
 
+// Tokenize the input line into a linked list of tokens.
+// Note: This function handles spaces, quotes, and operators.
+// When finding a space after an assign operator, it creates an empty token.
 t_list	*tokenization(char *line)
 {
 	t_list	*head_token;
@@ -105,38 +110,41 @@ t_list	*tokenization(char *line)
 	t_list	*prev_token;
 	char	quote;
 	int		len;
-	bool	ignore_op_var_assign;
+	bool	last_op_was_assign;
 
 	head_token = NULL;
 	prev_token = NULL;
 	quote = 0;
-	ignore_op_var_assign = false;
+	last_op_was_assign = false;
 	if (line == NULL)
 		return (NULL);
 	while (*line != '\0')
 	{
-		while (*line == ' ' && *line != '\0')
+		while ((*line == ' ') && (last_op_was_assign == false))
 			line++;
 		if (*line == '\0')
 			break ;
 		len = 0;
-		search_token(line, &quote, &len, &ignore_op_var_assign);
+		search_token(line, &quote, &len, &last_op_was_assign);
 		if (len == -1)
 		{
 			printf_error("syntax error near unexpected token\n");
 			ft_lstclear(&head_token, free);
 			return (NULL);
 		}
-		new_token = create_token(line, len);
-		if (op(new_token->content) == OP_VAR_ASSIGN)
-			ignore_op_var_assign = true;
+		if (*line == ' ')
+			new_token = create_token("", 0);
 		else
-			ignore_op_var_assign = false;
+			new_token = create_token(line, len);
+		if (op(new_token->content) == OP_VAR_ASSIGN)
+			last_op_was_assign = true;
+		else
+			last_op_was_assign = false;
 		if ((prev_token != NULL)
 			&& (is_token_operator(prev_token->content) == 1)
 			&& (is_token_operator(new_token->content) == 1))
 		{
-			printf_error("syntax error near unexpected token\n");
+			ft_fprintf(STDERR_FILENO, "syntax error near unexpected token \"%s\"\n", (char *)(new_token->content));
 			ft_lstdelone(new_token, free);
 			ft_lstclear(&head_token, free);
 			return (NULL);
@@ -144,6 +152,11 @@ t_list	*tokenization(char *line)
 		ft_lstadd_back(&head_token, new_token);
 		prev_token = new_token;
 		line += len;
+	}
+	if (last_op_was_assign == true)
+	{
+		new_token = create_token("", 0);
+		ft_lstadd_back(&head_token, new_token);
 	}
 	return (head_token);
 }

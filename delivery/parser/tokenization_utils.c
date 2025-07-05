@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 18:48:52 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/06/22 17:10:41 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/07/05 09:55:14 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,15 +89,15 @@ int	is_token_operator(char *token)
 {
 	if (token == NULL)
 		return (0);
-	if (ft_strncmp(token, "&&", ft_strlen(token)) == 0
-		|| ft_strncmp(token, "||", ft_strlen(token)) == 0
-		|| ft_strncmp(token, "|", ft_strlen(token)) == 0
-		|| ft_strncmp(token, "&", ft_strlen(token)) == 0
-		|| ft_strncmp(token, "<", ft_strlen(token)) == 0
-		|| ft_strncmp(token, "<<", ft_strlen(token)) == 0
-		|| ft_strncmp(token, ">", ft_strlen(token)) == 0
-		|| ft_strncmp(token, ">>", ft_strlen(token)) == 0
-		|| ft_strncmp(token, "=", ft_strlen(token)) == 0)
+	if (ft_strncmp(token, "&&", 3) == 0
+		|| ft_strncmp(token, "||", 3) == 0
+		|| ft_strncmp(token, "<<", 3) == 0
+		|| ft_strncmp(token, ">>", 3) == 0
+		|| ft_strncmp(token, "|", 2) == 0
+		|| ft_strncmp(token, "&", 2) == 0
+		|| ft_strncmp(token, "<", 2) == 0
+		|| ft_strncmp(token, ">", 2) == 0
+		|| ft_strncmp(token, "=", 2) == 0)
 		return (1);
 	return (0);
 }
