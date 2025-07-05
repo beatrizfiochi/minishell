@@ -434,11 +434,13 @@ if [[ $? -ne 0 ]]; then
 	exit 1
 fi
 
-echo -e "${MAGENTA}Testing var assignements${RESET}"
-tester_with_real        'x=10 echo $x'
-tester_with_real        'x=10 && echo $x'
-tester_with_real        'x=10 y=1 w=3 echo "$x $y $w"'
-tester_with_real        'x=10 y=1 w=3 && echo "$x $y $w"'
+echo -e "${MAGENTA}Testing var assignments${RESET}"
+tester_with_real 'x=10 echo $x'
+tester_with_real 'x=10 && echo $x'
+tester_with_real 'x=10 y=1 w=3 echo "$x $y $w"'
+tester_with_real 'x=10 y=1 w=3 && echo "$x $y $w"'
+tester_with_real "x=10 y=1 w=3 bash -c 'echo \"\$x \$y \$w\"'"
+tester_with_real "x=10 y=1 w=3 && bash -c 'echo \"\$x \$y \$w\"'"
 
 echo -e "${MAGENTA}Testing parenthesis${RESET}"
 tester_with_real "ls"

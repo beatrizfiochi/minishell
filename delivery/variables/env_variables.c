@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 17:07:52 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/06/26 12:39:11 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/07/05 15:47:31 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ static bool	create_and_add_var(t_shell *shell, char *name, char *value)
 {
 	t_list	*new_node;
 
-	new_node = create_var_node(name, value);
+	new_node = create_var_node(name, value, true);
 	if (new_node == NULL)
 		return (false);
 	ft_lstadd_back(&shell->variable_list, new_node);

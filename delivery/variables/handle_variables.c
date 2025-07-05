@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 21:17:55 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/06/27 19:37:21 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/07/05 15:48:41 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include "../minishell.h"
 #include "../parser/parser.h"
 
-t_list	*create_var_node(char *name, char *value)
+t_list	*create_var_node(char *name, char *value, bool is_exported)
 {
 	char			*var_name;
 	char			*var_value;
@@ -39,6 +39,7 @@ t_list	*create_var_node(char *name, char *value)
 	}
 	content->var_name = var_name;
 	content->var_value = var_value;
+	content->is_exported = is_exported;
 	return (ft_lstnew(content));
 }
 
@@ -93,7 +94,7 @@ int	process_var_assign(t_list *name, t_list *op, t_list *value, t_shell *sh)
 		(char *)(value->content)) == true)
 		return (0);
 	new_node = create_var_node((char *)(name->content),
-			(char *)(value->content));
+			(char *)(value->content), false);
 	if (new_node == NULL)
 		return (1);
 	ft_lstadd_back(&sh->tmp_var_list, new_node);

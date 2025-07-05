@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 11:59:00 by djunho            #+#    #+#             */
-/*   Updated: 2025/06/26 17:14:29 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/07/05 15:30:41 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ int	run_child(t_cmd *cmd, t_shell *shell)
 	int		argc;
 
 	args = convert_list_to_vector(cmd->tokens, &argc);
-	envp = convert_list_to_envp(shell->variable_list);
+	envp = convert_list_to_envp(shell->variable_list, shell->tmp_var_list);
 	ret = 1;
 	while (1)
 	{

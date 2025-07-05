@@ -55,8 +55,3 @@ bash: warning: here-document at line 31 delimited by end-of-file (wanted `a')
 $
 aaaaaaaaaaaaaaaaa$
 ```
-
-# Need to handle the followin var assign situation
-x= ls
-It unset the x and run ls
-
