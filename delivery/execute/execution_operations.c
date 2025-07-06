@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 11:59:00 by djunho            #+#    #+#             */
-/*   Updated: 2025/07/05 15:30:41 by djunho           ###   ########.fr       */
+/*   Updated: 2025/07/06 11:37:12 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ int	run_child(t_cmd *cmd, t_shell *shell)
 		if ((args == NULL) || (args[0] == NULL))
 			break ;
 		reset_signals();
-		ret = execute_builtin(cmd, shell->variable_list);
+		ret = execute_builtin(cmd, shell);
 		if (ret != EXIT_CMD_NOT_FOUND)
 			break ;
 		execve(args[0], args, envp);

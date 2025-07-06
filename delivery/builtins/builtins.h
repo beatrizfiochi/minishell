@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 12:13:21 by djunho            #+#    #+#             */
-/*   Updated: 2025/06/26 16:10:06 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/07/06 11:46:14 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,16 +15,18 @@
 
 # include "../cmd.h"
 # include "../libft/libft.h"
+# include "../minishell.h"
 
 struct	s_builtins
 {
 	const char	*cmd;
-	int			(*func)(int argc, char *argv[], t_list *var_list);
+	int			(*func)(int argc, char *argv[], t_shell *shell);
 };
 
-int	execute_builtin(t_cmd *cmd, t_list *var_list);
+int		execute_builtin(t_cmd *cmd, t_shell *shell);
 
-int	echo(int argc, char *argv[], t_list *var_list);
-int	cd(int argc, char *argv[], t_list *var_list);
+int		echo(int argc, char *argv[], t_shell *shell);
+int		cd(int argc, char *argv[], t_shell *shell);
+int		env(int argc, char *argv[], t_shell *shell);
 
 #endif // BUILTINS_H
