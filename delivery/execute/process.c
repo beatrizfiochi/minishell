@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 19:55:45 by djunho            #+#    #+#             */
-/*   Updated: 2025/07/03 14:35:51 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/07/04 21:04:10 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@
 #include "exec_utils.h"
 #include "execution.h"
 #include "../parser/parser.h"
+#include "../parser/aux.h"
 
 static int	btree_operator_before_callback(t_btnode *node,
 				int ret, bool *should_continue, void *_shell)
@@ -72,11 +73,53 @@ static int	btree_operator_between_callback(t_btnode *node,
 			ret = process_or(shell, ret, should_continue);
 		else if (((t_content_node *)node->content)->op == OP_PIPE)
 			ret = process_pipe(shell, node);
-		else if (((t_content_node *)node->content)->op == OP_VAR_ASSIGN)
-			ret = process_var_assign(node, shell);
 	}
 	shell->last_exit_status = ret;
 	return (ret);
+}
+
+// This function processes variable assignment commands into the 
+//  shell->tmp_var_list.
+// It assumes that the var name is well formed
+static int	handle_var_assign(t_shell *shell, t_btnode *node)
+{
+	t_content_node	*content;
+
+	content = (t_content_node *)node->content;
+	if (content->cmd.tokens == NULL)
+	{
+		ft_fprintf(STDERR_FILENO, "Error: Invalid variable assignment\n");
+		return EXIT_FAILURE;
+	}
+	while (content->cmd.tokens != NULL)
+	{
+		t_list *op_node = search_op(content->cmd.tokens, EXP_ASSIGN);
+		if (op_node == NULL)
+			break ;
+		t_list *name = prev_list_item(content->cmd.tokens, op_node);
+		t_list *value = op_node->next;
+		if (process_var_assign(name, op_node, value, shell) != 0)
+		{
+			ft_fprintf(STDERR_FILENO, "Error: Invalid variable assignment\n");
+			return (EXIT_FAILURE);
+		}
+		content->cmd.tokens = value->next;
+		value->next = NULL;
+		ft_lstclear(&name, free);
+	}
+	return (EXIT_SUCCESS);
+}
+
+static void	join_shell_variable_lists(t_shell *shell)
+{
+	t_list *last;
+
+	last = ft_lstlast(shell->variable_list);
+	if (last == NULL)
+		shell->variable_list = shell->tmp_var_list;
+	else
+		last->next = shell->tmp_var_list;
+	shell->tmp_var_list = NULL;
 }
 
 static int	run_cmd(t_shell *shell, t_btnode *node, t_node_op parent_op)
@@ -88,14 +131,22 @@ static int	run_cmd(t_shell *shell, t_btnode *node, t_node_op parent_op)
 	shell->last_cmd = &content->cmd;
 	search_and_expand(content->cmd.tokens, shell->variable_list, shell);
 	clean_token_quotes(content->cmd.tokens);
-	if (parent_op != OP_PIPE)
+	ret = handle_var_assign(shell, node);
+	if (ret != EXIT_SUCCESS)
+		return (ret);
+	if (content->cmd.tokens == NULL)
 	{
-		ret = execute_builtin(&content->cmd,
-				shell->variable_list);
-		if (ret != EXIT_CMD_NOT_FOUND)
-			return (ret);
+		content->cmd.is_builtin = true;
+		join_shell_variable_lists(shell);
+		return (EXIT_SUCCESS);
 	}
-	return (execute_execve(node, shell));
+	ret = EXIT_CMD_NOT_FOUND;
+	if (parent_op != OP_PIPE)
+		ret = execute_builtin(&content->cmd, shell->variable_list);
+	if (ret == EXIT_CMD_NOT_FOUND)
+		ret = execute_execve(node, shell);
+	ft_lstclear(&shell->tmp_var_list, free_var_content);
+	return (ret);
 }
 
 static int	btree_cmd_callback(t_btnode *node, void *_shell)
@@ -117,8 +168,6 @@ static int	btree_cmd_callback(t_btnode *node, void *_shell)
 		return (EXIT_FAILURE);
 	}
 	debug_btree_print(node);
-	if (parent_op == OP_VAR_ASSIGN)
-		return (0);
 	return (run_cmd((t_shell *)_shell, node, parent_op));
 }
 

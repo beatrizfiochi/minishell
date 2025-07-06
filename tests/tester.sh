@@ -176,7 +176,7 @@ function tester_grep() {
 	check_valgrind_logs
 
 	text_found=$(cat $OUT_FILE | grep "^$text\$")
-	if [[ $text_found == "$text" ]]; then
+	if [[ ! -z $text_found ]]; then
 		echo -e "${GREEN}Success${RESET}"
 	else
 		echo -e "${RED}CMD send is: \"$cmd\"${RESET}"
@@ -376,28 +376,28 @@ tester "oioi|"             0       2
 
 # Testing syntax error         cmd              text
 echo "################ Testing syntax error ################"
-tester_grep             'ls && || pwd'    "syntax error near unexpected token"
-tester_grep             'ls && ||pwd'     "syntax error near unexpected token"
-tester_grep             'ls&& || pwd'     "syntax error near unexpected token"
-tester_grep             'ls&&|| pwd'      "syntax error near unexpected token"
-tester_grep             'ls &&||pwd'      "syntax error near unexpected token"
-tester_grep             'ls&& ||pwd'      "syntax error near unexpected token"
-tester_grep             'ls &&|| pwd'     "syntax error near unexpected token"
-tester_grep             'ls &&||& pwd'    "syntax error near unexpected token"
-tester_grep             'ls & pwd'        "syntax error near unexpected token"
-tester_grep             'ls&pwd'          "syntax error near unexpected token"
-tester_grep             'ls &&& pwd'      "syntax error near unexpected token"
-tester_grep             'ls&&&pwd'        "syntax error near unexpected token"
-tester_grep             'ls&&&&pwd'       "syntax error near unexpected token"
-tester_grep             'ls &&&& pwd'     "syntax error near unexpected token"
-tester_grep             'ls &&&&& pwd'    "syntax error near unexpected token"
-tester_grep             'ls ||| pwd'      "syntax error near unexpected token"
-tester_grep             'ls |||| pwd'     "syntax error near unexpected token"
-tester_grep             'ls ||||| pwd'    "syntax error near unexpected token"
-tester_grep             'ls <<< pwd'      "syntax error near unexpected token"
-tester_grep             'ls <<<< pwd'     "syntax error near unexpected token"
-tester_grep             'ls <<<<< pwd'    "syntax error near unexpected token"
-tester_grep             'ls >>>>> pwd'    "syntax error near unexpected token"
+tester_grep             'ls && || pwd'    'syntax error near unexpected token "||"'
+tester_grep             'ls && ||pwd'     'syntax error near unexpected token "||"'
+tester_grep             'ls&& || pwd'     'syntax error near unexpected token "||"'
+tester_grep             'ls&&|| pwd'      'syntax error near unexpected token "||"'
+tester_grep             'ls &&||pwd'      'syntax error near unexpected token "||"'
+tester_grep             'ls&& ||pwd'      'syntax error near unexpected token "||"'
+tester_grep             'ls &&|| pwd'     'syntax error near unexpected token "||"'
+tester_grep             'ls &&||& pwd'    'syntax error near unexpected token "||"'
+tester_grep             'ls & pwd'        "syntax error near unexpected token.*"
+tester_grep             'ls&pwd'          'syntax error near unexpected token.*'
+tester_grep             'ls &&& pwd'      'syntax error near unexpected token.*'
+tester_grep             'ls&&&pwd'        'syntax error near unexpected token.*'
+tester_grep             'ls&&&&pwd'       'syntax error near unexpected token.*'
+tester_grep             'ls &&&& pwd'     'syntax error near unexpected token.*'
+tester_grep             'ls &&&&& pwd'    'syntax error near unexpected token.*'
+tester_grep             'ls ||| pwd'      'syntax error near unexpected token.*'
+tester_grep             'ls |||| pwd'     'syntax error near unexpected token.*'
+tester_grep             'ls ||||| pwd'    'syntax error near unexpected token.*'
+tester_grep             'ls <<< pwd'      'syntax error near unexpected token.*'
+tester_grep             'ls <<<< pwd'     'syntax error near unexpected token.*'
+tester_grep             'ls <<<<< pwd'    'syntax error near unexpected token.*'
+tester_grep             'ls >>>>> pwd'    'syntax error near unexpected token.*'
 echo ""
 
 tester_grep             '1=10'       "1=10: No such file or directory"
@@ -406,7 +406,7 @@ echo ""
 tester_grep             'x=10'                "var_name = x, var_value = 10"
 tester_grep             'y=20'                "var_name = y, var_value = 20"
 tester_grep             'w==20'               "var_name = w, var_value = =20"
-tester_grep             "a=\"123\"456'789'\"\". && echo \$a"      "var_name = a, var_value = \"123\"456'789'\"\"."
+tester_grep             "a=\"123\"456'789'\"\". && echo \$a"      "var_name = a, var_value = 123456789."
 # tester_grep             "a=\"123\"456'789'\"\". && echo \$a"             "123456789." por enquanto da erro
 tester_grep             'echo $'              '$'
 tester_grep             'echo $$'             '$$'
@@ -418,7 +418,7 @@ tester_grep             "echo '123\"'"        "123\""
 tester_grep             "echo '123\"'456"     "123\"456"
 tester_grep             "echo '123\"''456'"   "123\"456"
 tester_grep             "echo '123\"'\"456\"" "123\"456"
-tester_grep             'echo $SHLVL'         "var_name = SHLVL, var_value = 2"
+tester_grep             'echo $SHLVL'         "var_name = SHLVL, var_value = 3"
 echo ""
 
 echo "################ Testing signals ################"
@@ -433,6 +433,14 @@ if [[ $? -ne 0 ]]; then
 	echo -e "${RED}Error to compile the project${RESET}"
 	exit 1
 fi
+
+echo -e "${MAGENTA}Testing var assignments${RESET}"
+tester_with_real 'x=10 echo $x'
+tester_with_real 'x=10 && echo $x'
+tester_with_real 'x=10 y=1 w=3 echo "$x $y $w"'
+tester_with_real 'x=10 y=1 w=3 && echo "$x $y $w"'
+tester_with_real "x=10 y=1 w=3 bash -c 'echo \"\$x \$y \$w\"'"
+tester_with_real "x=10 y=1 w=3 && bash -c 'echo \"\$x \$y \$w\"'"
 
 echo -e "${MAGENTA}Testing parenthesis${RESET}"
 tester_with_real "ls"

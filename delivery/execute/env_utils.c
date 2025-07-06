@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 13:57:47 by djunho            #+#    #+#             */
-/*   Updated: 2025/06/27 20:04:35 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/07/05 15:53:25 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,28 +41,47 @@ static char	*ft_strjoin_free(char *s1, char *s2)
 	return (joined);
 }
 
-char	**convert_list_to_envp(t_list *var_list)
+static void	list_to_envp(t_list *var_list, char **envp, int *i,
+						bool ignore_exported)
+{
+	t_content_var	*var;
+	char			*joined;
+
+	while (var_list != NULL)
+	{
+		var = (t_content_var *)var_list->content;
+		if (ignore_exported || var->is_exported)
+		{
+			joined = ft_strjoin(var->var_name, "=");
+			envp[*i] = ft_strjoin_free(joined, var->var_value);
+			(*i)++;
+		}
+		var_list = var_list->next;
+	}
+}
+
+char	**convert_list_to_envp(t_list *var_list, t_list *tmp_var_list)
 {
 	int				i;
 	char			**envp;
-	char			*joined;
-	t_list			*tmp;
-	t_content_var	*var;
+	t_list			*aux;
 
 	if (var_list == NULL)
 		return (NULL);
-	envp = malloc(sizeof(char *) * (ft_lstsize(var_list) + 1));
+	i = 0;
+	aux = var_list;
+	while (aux != NULL)
+	{
+		if (((t_content_var *)(aux->content))->is_exported)
+			i++;
+		aux = aux->next;
+	}
+	envp = malloc(sizeof(char *) * (i + ft_lstsize(tmp_var_list) + 1));
 	if (envp == NULL)
 		return (NULL);
 	i = 0;
-	tmp = var_list;
-	while (tmp != NULL)
-	{
-		var = (t_content_var *)tmp->content;
-		joined = ft_strjoin(var->var_name, "=");
-		envp[i++] = ft_strjoin_free(joined, var->var_value);
-		tmp = tmp->next;
-	}
+	list_to_envp(var_list, envp, &i, false);
+	list_to_envp(tmp_var_list, envp, &i, true);
 	envp[i] = NULL;
 	return (envp);
 }

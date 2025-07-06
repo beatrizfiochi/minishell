@@ -38,7 +38,8 @@ typedef struct s_shell
 									// 126 - command invoked cannot execute
 									// 127 - command not found
 									// 128 + n - fatal error signal "n"
-	t_list		*variable_list;
+	t_list		*variable_list;		// Variable list
+	t_list		*tmp_var_list;		// Temporary variable list
 	struct s_pipe
 	{
 		int		pipe[2];			// pipe file descriptors

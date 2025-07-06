@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 14:14:02 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/06/24 15:33:13 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/07/05 15:44:18 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ typedef struct s_content_var
 {
 	char		*var_name;
 	char		*var_value;
+	bool		is_exported;	// Indicates if the variable is exported
 }	t_content_var;
 
 t_btnode	*create_tree(t_list **token_list, t_btnode *parent);

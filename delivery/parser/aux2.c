@@ -53,7 +53,8 @@ t_list	*search_any_op(t_list *tokens)
 	while (tokens != NULL)
 	{
 		content_token = tokens->content;
-		if (op(content_token) != OP_CMD)
+		if ((op(content_token) != OP_CMD)
+			&& (op(content_token) != OP_VAR_ASSIGN))
 			return (tokens);
 		tokens = tokens->next;
 	}
@@ -72,14 +73,17 @@ t_list	*search_op(t_list *tokens, enum e_expand_type expand_type)
 	{
 		content_token = tokens->content;
 		oper = op(content_token);
-		if ((inside == 0) && ((oper == OP_AND) || (oper == OP_OR)
-				|| (oper == OP_VAR_ASSIGN) || (oper == OP_HEREDOC)
+		if (inside == 0)
+		{
+			if ((oper == OP_AND) || (oper == OP_OR) || (oper == OP_HEREDOC)
 				|| (oper == OP_RD_INPUT) || (oper == OP_APPEND_RD_OUTPUT)
-				|| (oper == OP_RD_OUTPUT)))
-			return (tokens);
-		if ((expand_type == EXP_PIPE) && (inside == 0)
-			&& (oper == OP_PIPE))
-			return (tokens);
+				|| (oper == OP_RD_OUTPUT))
+				return (tokens);
+			if ((expand_type == EXP_PIPE) && (oper == OP_PIPE))
+				return (tokens);
+			if ((expand_type == EXP_ASSIGN) && (oper == OP_VAR_ASSIGN))
+				return (tokens);
+		}
 		if (oper == OP_PAREN_OPEN)
 			inside++;
 		if (oper == OP_PAREN_CLOSE)

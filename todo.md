@@ -23,6 +23,15 @@ inside 2
 outside 1
 ```
 
+Outro exemplo:
+```
+$ y=1 && (x=11 && y=2 && echo "x=$x; y=$y") && echo "x=$x; y=$y"
+x=11; y=2
+x=; y=1
+```
+
+Ideia de solução. Ao entrar num parentesis, copiar a lista de váriáveis para uma outra. E usar essa outra
+
 # Update the SHLVL env var
 
 # HEREDOC
@@ -46,4 +55,3 @@ bash: warning: here-document at line 31 delimited by end-of-file (wanted `a')
 $
 aaaaaaaaaaaaaaaaa$
 ```
-
