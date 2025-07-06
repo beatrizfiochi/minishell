@@ -499,6 +499,7 @@ echo -e "${MAGENTA}Testing env${RESET}"
 tester_grep        "x=1 env"               "x=1"
 tester_grep        "x=1 y=2 env"               "x=1"
 tester_grep        "x=1 y=2 env"               "y=2"
+echo ""
 
 # Test a normal command
 echo -e "${MAGENTA}Testing a normal command${RESET}"
