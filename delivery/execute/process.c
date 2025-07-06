@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 19:55:45 by djunho            #+#    #+#             */
-/*   Updated: 2025/07/04 21:04:10 by djunho           ###   ########.fr       */
+/*   Updated: 2025/07/06 11:37:04 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ static int	btree_operator_between_callback(t_btnode *node,
 	return (ret);
 }
 
-// This function processes variable assignment commands into the 
+// This function processes variable assignment commands into the
 //  shell->tmp_var_list.
 // It assumes that the var name is well formed
 static int	handle_var_assign(t_shell *shell, t_btnode *node)
@@ -142,7 +142,7 @@ static int	run_cmd(t_shell *shell, t_btnode *node, t_node_op parent_op)
 	}
 	ret = EXIT_CMD_NOT_FOUND;
 	if (parent_op != OP_PIPE)
-		ret = execute_builtin(&content->cmd, shell->variable_list);
+		ret = execute_builtin(&content->cmd, shell);
 	if (ret == EXIT_CMD_NOT_FOUND)
 		ret = execute_execve(node, shell);
 	ft_lstclear(&shell->tmp_var_list, free_var_content);

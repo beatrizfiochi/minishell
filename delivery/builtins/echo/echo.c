@@ -6,19 +6,20 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 11:48:18 by djunho            #+#    #+#             */
-/*   Updated: 2025/06/26 16:09:53 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/07/06 11:47:38 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdbool.h>
 #include "../../libft/libft.h"
+#include "../../minishell.h"
 
-int	echo(int argc, char *argv[], t_list *var_list)
+int	echo(int argc, char *argv[], t_shell *shell)
 {
 	int		i;
 	bool	no_nl;
 
-	(void)var_list;
+	(void)shell;
 	i = 1;
 	no_nl = false;
 	if ((i < argc) && (ft_strncmp(argv[i], "-n", 2) == 0))

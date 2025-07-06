@@ -6,7 +6,7 @@
 #    By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/27 13:09:33 by djunho            #+#    #+#              #
-#    Updated: 2025/07/02 19:55:24 by djunho           ###   ########.fr        #
+#    Updated: 2025/07/06 11:00:11 by bfiochi-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,6 +23,7 @@ SRCS = main.c read_command.c utils.c debug.c \
 	execute/execution_operations.c execute/env_utils.c \
 	execute/exec_utils.c \
 	builtins/builtins.c builtins/echo/echo.c builtins/cd/cd.c \
+	builtins/env/env.c \
 	signals/handle_signals.c \
 	variables/handle_variables.c variables/env_variables.c \
 	variables/shell_level_var.c
