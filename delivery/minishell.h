@@ -50,10 +50,6 @@ typedef struct s_shell
 		int		pipe[2];			// pipe file descriptors
 		int		carry_over_fd;		// file descriptor to carry over the pipe
 	} pipe;
-	struct s_redirect
-	{
-		int	fd_out;					// File descriptor of redirect output
-	} redirect;
 }	t_shell;
 
 int		read_command(t_shell *shell);

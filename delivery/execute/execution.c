@@ -81,7 +81,7 @@ int	execute_execve(t_btnode *node, t_shell *shell)
 	if (shell->last_pid == 0)
 	{
 		if (shell->is_running_redirect)
-			configure_redirect(shell);
+			configure_redirect(shell, &(((t_content_node *)node->content)->cmd));
 		exit(run_child(&((t_content_node *)node->content)->cmd, shell));
 	}
 	if (shell->is_last_redirect)

@@ -25,11 +25,8 @@ int	wait_previous_process(t_shell *shell)
 	if (tmp > 0)
 	{
 		shell->last_cmd->finished = true;
-		if (shell->redirect.fd_out > 0)
-		{
-			close(shell->redirect.fd_out);
-			shell->redirect.fd_out = -1;
-		}
+		if (shell->last_cmd->redir.fd > 0)
+			close(shell->last_cmd->redir.fd);
 		while ((tmp > 0))
 			tmp = wait(NULL);
 		shell->last_pid = -1;

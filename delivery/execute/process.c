@@ -88,6 +88,8 @@ static int	run_cmd(t_shell *shell, t_btnode *node, t_node_op parent_op)
 
 	content = (t_content_node *)node->content;
 	shell->last_cmd = &content->cmd;
+	if (content->cmd.redir.fd > 0)
+		shell->is_last_redirect = true;
 	search_and_expand(content->cmd.tokens, shell->variable_list, shell);
 	clean_token_quotes(content->cmd.tokens);
 	ret = handle_var_assign(shell, node);

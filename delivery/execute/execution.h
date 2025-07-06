@@ -31,7 +31,7 @@ int		process_pipe(t_shell *shell, t_btnode *node);
 int		process_redirect(t_shell *shell, int ret, t_btnode *node,
 						bool *should_continue);
 
-void	configure_redirect(t_shell *shell);
+void	configure_redirect(t_shell *shell, const t_cmd *cmd);
 void	create_op_list(t_btnode *tree, t_list **op_list);
 
 int		handle_var_assign(t_shell *shell, t_btnode *node);

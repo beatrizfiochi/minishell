@@ -6,7 +6,7 @@
 /*   By: djunho <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 10:56:42 by djunho            #+#    #+#             */
-/*   Updated: 2025/07/06 17:28:42 by djunho           ###   ########.fr       */
+/*   Updated: 2025/07/06 20:00:06 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,25 +40,54 @@ static t_node_op	get_next_operation(t_btnode *node)
 	return (((t_content_node *)aux->parent->content)->op);
 }
 
+static t_content_node	*get_next_cmd(t_btnode *node)
+{
+	if (node == NULL || node->content == NULL)
+		return (NULL);
+	while (node != NULL)
+	{
+		if (((t_content_node *)node->content)->op == OP_CMD)
+			return ((t_content_node *)node->content);
+		if (((t_content_node *)node->content)->op == OP_RD_OUTPUT)
+			node = node->left;
+		else
+			node = node->right;
+	}
+	return (NULL);
+}
+
+// Go to the previous command (or the last command to be executed before
+//  returning to the op_node) and mark its redirection
+//  To make the exactly same behavior of bash from the command example above
+// ls > oi1 > oi2
+// we need to create the file oi1, but not write anything to it
+// The file oi2 will be created and written to, as expected
 int	prepare_redirect(t_shell *shell, t_btnode *op_node)
 {
-	t_content_node	*redirect_cnt;
-	t_content_node	*content;
+	t_content_node	*previous_cmd;
+	int             fd;
 	int				flag;
 
-	content = (t_content_node *)op_node->content;
-	redirect_cnt = (t_content_node *)(op_node->right->content);
-	if (content->op == OP_RD_OUTPUT)
+	(void)shell;
+	if (((t_content_node *)op_node->content)->op == OP_RD_OUTPUT)
 		flag = O_CREAT | O_TRUNC | O_WRONLY;
-	else if (content->op == OP_APPEND_RD_OUTPUT)
-		flag = O_CREAT | O_APPEND | O_WRONLY;
 	else
+		flag = O_CREAT | O_APPEND | O_WRONLY;
+	fd = open(((t_content_node *)(op_node->right->content))->cmd.tokens->content,
+				flag, 0644);
+	previous_cmd = get_next_cmd(op_node->left);
+	if (previous_cmd == NULL)
+	{
+		ft_fprintf(STDERR_FILENO, "Could not find the commad on left of redirect\n");
 		return (EXIT_FAILURE);
-	shell->redirect.fd_out = open((char *)(redirect_cnt->cmd.tokens->content),
-			flag, 0644);
-	if (shell->redirect.fd_out < 0)
-		return (EXIT_FAILURE);
-	return (0);
+	}
+	if (previous_cmd->cmd.redir.fd != -1)
+	{
+		close(fd);
+		return (EXIT_SUCCESS);
+	}
+	previous_cmd->cmd.redir.fd = fd;
+	return (EXIT_SUCCESS);
 }
 
 int	process_pipe(t_shell *shell, t_btnode *node)
@@ -80,15 +109,13 @@ int	process_redirect(t_shell *shell, int ret, t_btnode *node,
 						bool *should_continue)
 {
 	*should_continue = false;
-	shell->is_running_redirect = true;
 	if (!shell->last_cmd->is_builtin && !shell->last_cmd->finished)
 		ret = wait_previous_process(shell);
-	shell->is_last_redirect = true;
 	(void)node;
 	return (ret);
 }
 
-void	configure_redirect(t_shell *shell)
+void	configure_redirect(t_shell *shell, const t_cmd *cmd)
 {
 	if (shell->pipe.carry_over_fd != -1)
 	{
@@ -96,9 +123,9 @@ void	configure_redirect(t_shell *shell)
 		close(shell->pipe.carry_over_fd);
 	}
 	close(shell->pipe.pipe[0]);
-	if (!shell->is_last_redirect)
+	if (cmd->redir.fd > 0)
+		dup2(cmd->redir.fd, STDOUT_FILENO);
+	else if (!shell->is_last_redirect)
 		dup2(shell->pipe.pipe[1], STDOUT_FILENO);
 	close(shell->pipe.pipe[1]);
-	if (shell->redirect.fd_out > 0)
-		dup2(shell->redirect.fd_out, STDOUT_FILENO);
 }

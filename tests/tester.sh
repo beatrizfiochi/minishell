@@ -453,7 +453,11 @@ tester_with_real 'rm /tmp/test && echo 1 > /tmp/test && echo 2 >> /tmp/test && c
 tester_with_real 'rm /tmp/test && echo 1 > /tmp/test && echo 2 >> /tmp/test && cat -e /tmp/test'
 tester_with_real 'rm /tmp/test && echo 1 >> /tmp/test && echo 2 >> /tmp/test && cat -e /tmp/test'
 tester_with_real 'rm /tmp/test && echo 1 >> /tmp/test && echo 2 > /tmp/test && cat -e /tmp/test'
-tester_with_real 'ls > oi | echo 1'
+tester_with_real 'rm /tmp/test && ls > /tmp/test | echo 1'
+tester_with_real 'rm /tmp/test && ls | grep mini > /tmp/test'
+tester_with_real 'rm /tmp/test && ls | grep mini > /tmp/test | echo 1'
+tester_with_real 'rm /tmp/test && ls | grep mini > /tmp/test | ls | grep mini'
+tester_with_real 'rm /tmp/test && ls | grep mini > /tmp/test && echo 1'
 
 echo -e "${MAGENTA}Testing parenthesis${RESET}"
 tester_with_real "ls"
