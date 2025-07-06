@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 13:37:40 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/06/26 16:37:12 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/07/06 16:07:20 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,10 @@
 # include "btree/btree.h"
 # include "cmd.h"
 
-# define	EXIT_INCORRECT_USAGE	2
-# define	EXIT_CMD_CANNOT_EXEC	126
-# define	EXIT_CMD_NOT_FOUND		127
-# define	EXIT_SIGNAL_BASE		128
+# define EXIT_INCORRECT_USAGE	2
+# define EXIT_CMD_CANNOT_EXEC	126
+# define EXIT_CMD_NOT_FOUND		127
+# define EXIT_SIGNAL_BASE		128
 
 typedef struct s_shell
 {
