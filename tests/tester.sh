@@ -442,6 +442,19 @@ tester_with_real 'x=10 y=1 w=3 && echo "$x $y $w"'
 tester_with_real "x=10 y=1 w=3 bash -c 'echo \"\$x \$y \$w\"'"
 tester_with_real "x=10 y=1 w=3 && bash -c 'echo \"\$x \$y \$w\"'"
 
+echo -e "${MAGENTA}Testing redirect${RESET}"
+touch /tmp/test
+tester_with_real 'rm /tmp/test && echo ola! > /tmp/test && cat -e /tmp/test'
+tester_with_real 'rm /tmp/test && pwd > /tmp/test && cat -e /tmp/test'
+tester_with_real 'rm /tmp/test && ls -la > /tmp/test && cat -e /tmp/test'
+tester_with_real 'rm /tmp/test && echo 1 > /tmp/test && cat -e /tmp/test'
+tester_with_real 'rm /tmp/test && echo 1 > /tmp/test && echo 2 > /tmp/test && cat -e /tmp/test'
+tester_with_real 'rm /tmp/test && echo 1 > /tmp/test && echo 2 >> /tmp/test && cat -e /tmp/test'
+tester_with_real 'rm /tmp/test && echo 1 > /tmp/test && echo 2 >> /tmp/test && cat -e /tmp/test'
+tester_with_real 'rm /tmp/test && echo 1 >> /tmp/test && echo 2 >> /tmp/test && cat -e /tmp/test'
+tester_with_real 'rm /tmp/test && echo 1 >> /tmp/test && echo 2 > /tmp/test && cat -e /tmp/test'
+tester_with_real 'ls > oi | echo 1'
+
 echo -e "${MAGENTA}Testing parenthesis${RESET}"
 tester_with_real "ls"
 tester_with_real "(ls)"
@@ -467,7 +480,7 @@ tester_with_real "(ls | grep mini | cat -e) || pwd"
 tester_with_real "(ls | grep mini | cat -e) && pwd"
 tester_with_real "(ls) | pwd"
 tester_with_real "(ls | grep mini | cat -e) | pwd"
-tester_grep      '(ls | pwd'            "Error: Missing closing parenthesis!"
+tester_grep      '(ls | pwd'             "Error: Missing closing parenthesis!"
 tester_grep      '(ls && pwd'            "Error: Missing closing parenthesis!"
 tester_grep      '(ls || pwd'            "Error: Missing closing parenthesis!"
 tester_grep      'ls | pwd)'             "Error: syntax error near unexpected token \")\""

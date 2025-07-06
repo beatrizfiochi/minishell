@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 18:59:31 by djunho            #+#    #+#             */
-/*   Updated: 2025/07/05 15:47:20 by djunho           ###   ########.fr       */
+/*   Updated: 2025/07/06 10:54:41 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,15 +48,22 @@ static void	init_var_list(t_shell *shell, char *envp[])
 
 	envp_list(shell, envp);
 }
+
+static void init_shell(t_shell *shell)
+{
+	shell->variable_list = NULL;
+	shell->tmp_var_list = NULL;
+	shell->last_exit_status = EXIT_SUCCESS;
+	shell->cmds = NULL;
+	shell->redirect.fd_out = -1;
+}
+
 static int	run_minishell(char *envp[])
 {
 	int		ret;
 	t_shell	shell;
 
-	shell.variable_list = NULL;
-	shell.tmp_var_list = NULL;
-	shell.last_exit_status = EXIT_SUCCESS;
-	shell.cmds = NULL;
+	init_shell(&shell);
 	init_var_list(&shell, envp);
 	update_shell_level(shell.variable_list);
 	ret = read_command(&shell);

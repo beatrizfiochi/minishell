@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 18:34:50 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/07/02 19:56:56 by djunho           ###   ########.fr       */
+/*   Updated: 2025/07/06 15:47:46 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ t_btnode	*expand_tree_pipe(t_btnode *tree, bool	*expanded)
 	while (i_expanded == true)
 	{
 		i_expanded = false;
-		tree = expand_btree_node(tree, EXP_PIPE, &i_expanded);
+		tree = expand_btree_node(tree, EXP_REDIR, &i_expanded);
 		if (tree == NULL)
 		{
 			printf("Error: Failed to expand pipe btree node\n");
