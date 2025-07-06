@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 19:55:45 by djunho            #+#    #+#             */
-/*   Updated: 2025/07/06 11:37:04 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/07/06 14:32:06 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,13 +112,34 @@ static int	handle_var_assign(t_shell *shell, t_btnode *node)
 
 static void	join_shell_variable_lists(t_shell *shell)
 {
-	t_list *last;
+	t_list			*tmp_node;
+	t_list			*new_node;
+	t_content_var	*tmp_content;
+	t_content_var	*new_var;
 
-	last = ft_lstlast(shell->variable_list);
-	if (last == NULL)
-		shell->variable_list = shell->tmp_var_list;
-	else
-		last->next = shell->tmp_var_list;
+	tmp_node = shell->tmp_var_list;
+	while(tmp_node != NULL)
+	{
+		tmp_content = (t_content_var *)tmp_node->content;
+		if (check_and_replace_var(shell->variable_list, tmp_content->var_name, tmp_content->var_value) == false)
+		{
+			new_var = malloc(sizeof(t_content_var));
+			if (new_var == NULL)
+				return ;
+			new_var->var_name = ft_strdup(tmp_content->var_name);
+			new_var->var_value = ft_strdup(tmp_content->var_value);
+			new_var->is_exported = tmp_content->is_exported;
+			new_node = ft_lstnew(new_var);
+			if (new_node == NULL)
+			{
+				free_var_content(new_var);
+				return ;
+			}
+			ft_lstadd_back(&shell->variable_list, new_node);
+		}
+		tmp_node = tmp_node->next;
+	}
+	ft_lstclear(&shell->tmp_var_list, free_var_content);
 	shell->tmp_var_list = NULL;
 }
 
