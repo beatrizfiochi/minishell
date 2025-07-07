@@ -78,16 +78,16 @@ $(OBJS_DIR)/%:
 libft/libft.a: libft
 
 libft:
-	make -C ./libft/ all
+	$(MAKE) -C ./libft/ all
 
 clean: soft_clean
-	make -C ./libft/ clean
+	$(MAKE) -C ./libft/ clean
 
 soft_clean:
 	rm -rf $(OBJS) $(DEPENDS) $(OBJS_DIR)
 
 fclean: soft_fclean
-	make -C ./libft/ fclean
+	$(MAKE) -C ./libft/ fclean
 
 soft_fclean: soft_clean
 	rm -rf $(NAME)
