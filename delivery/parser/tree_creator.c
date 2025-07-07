@@ -29,7 +29,7 @@ static t_btnode	*create_node(t_list *token_list, t_btnode *parent,
 	if (content == NULL)
 		return (NULL);
 	content->op = op((char *)(token_list->content));
-	if ((content->op == OP_CMD) || (content->op == OP_PAREN_OPEN))
+	if ((content->op == OP_CMD) || (content->op == OP_PAREN_OPEN) || (content->op == OP_RD_INPUT))
 	{
 		content->cmd.tokens = token_list;
 		content->cmd.is_builtin = false;
@@ -70,8 +70,13 @@ static t_btnode	*create_first(t_list **tokens, t_btnode *parent,
 	split = (struct s_split_token_list){
 		.left = *tokens, .op = NULL, .right = NULL, .remain = NULL
 	};
-	if (split_token_list(&split, true, *expand) == false)
+	if (split_token_list(&split, *expand) == false)
 		return (NULL);
+	if (split.left == split.op)
+	{
+		abort_tree_lst(NULL, &split, "Error: spliting tokens from list\n");
+		return (NULL);
+	}
 	tree = create_node(split.op, parent, NULL, NULL);
 	tree->left = create_node(split.left, tree, NULL, NULL);
 	tree->right = create_node(split.right, tree, NULL, NULL);
@@ -103,8 +108,10 @@ t_btnode	*create_basic_tree(t_list **token_list, t_btnode *parent,
 		split = (struct s_split_token_list){
 			.left = split.remain, .op = NULL, .right = NULL, .remain = NULL
 		};
-		if (split_token_list(&split, false, expand_type) == false)
-			return (abort_tree_lst(tree, &split.left, NULL));
+		if (split_token_list(&split, expand_type) == false)
+			return (abort_tree_lst(tree, &split, NULL));
+		if (split.left != split.op)
+			return (abort_tree_lst(tree, &split, NULL));
 		tree = create_node(split.op, parent, old_tree, NULL);
 		tree->right = create_node(split.right, tree, NULL, NULL);
 	}

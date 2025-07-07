@@ -29,7 +29,7 @@ static t_btnode	*expand_btree_node(t_btnode *node,
 	if (btree_is_leaf(node))
 	{
 		cnt = (t_content_node *)node->content;
-		if ((cnt->op == OP_CMD) || (cnt->op == OP_PAREN_OPEN))
+		if ((cnt->op == OP_CMD) || (cnt->op == OP_PAREN_OPEN) || (cnt->op == OP_RD_INPUT))
 		{
 			tree = create_basic_tree(&cnt->cmd.tokens, node->parent, expand);
 			if (is_btnode_different(node, tree))

@@ -37,20 +37,24 @@ void	free_btree_content(void *_content)
 	free(content);
 }
 
-void	*abort_tree_lst(t_btnode *tree, t_list **token_list,
-			const char *msg)
+void	*abort_tree_lst(t_btnode *tree, struct s_split_token_list *split,
+				const char *msg)
 {
 	if (msg != NULL)
 		printf("%s", msg);
 	if (tree != NULL)
 		btree_clear(&tree, free_btree_content);
-	if (token_list != NULL && *token_list != NULL)
-		ft_lstclear(token_list, free);
+	if (split != NULL)
+	{
+		ft_lstclear(&split->left, free);
+		ft_lstclear(&split->op, free);
+		ft_lstclear(&split->right, free);
+		ft_lstclear(&split->remain, free);
+	}
 	return (NULL);
 }
 
-bool	split_token_list(struct s_split_token_list *split, bool need_left,
-			enum e_expand_type expand_type)
+bool	split_token_list(struct s_split_token_list *split, enum e_expand_type expand_type)
 {
 	t_list	*aux;
 
@@ -62,11 +66,17 @@ bool	split_token_list(struct s_split_token_list *split, bool need_left,
 		if (split->op == NULL)
 			break ;
 		aux = prev_list_item(split->left, split->op);
-		if ((split->op->next == NULL) || (need_left && (aux == NULL)))
+		if (split->op->next == NULL)
 			break ;
 		split->right = split->op->next;
+		if ((aux == NULL) && (op_list(split->op) == OP_RD_INPUT))
+		{
+			aux = split->right->next;
+			split->left = aux;
+			split->right->next = split->left->next;
+		}
 		split->remain = search_op(split->right, expand_type);
-		if (split->remain == split->right)
+		if ((split->remain == split->right) || ((aux != NULL) && (split->remain == aux)))
 			break ;
 		if (aux != NULL)
 			aux->next = NULL;
@@ -75,7 +85,7 @@ bool	split_token_list(struct s_split_token_list *split, bool need_left,
 			prev_list_item(split->right, split->remain)->next = NULL;
 		return (true);
 	}
-	abort_tree_lst(NULL, &(split->left), "Error: spliting tokens from list\n");
+	abort_tree_lst(NULL, split, "Error: spliting tokens from list\n");
 	return (false);
 }
 
