@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 21:17:55 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/07/08 15:52:27 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/07/08 18:06:31 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,24 @@
 #include "../minishell.h"
 #include "../parser/parser.h"
 
+static char *value_utils(char *value, char *var_name)
+{
+	char	*var_value;
+
+	if (value != NULL)
+	{
+		var_value = ft_strdup(value);
+		if (var_value == NULL)
+		{
+			free(var_name);
+			return (NULL);
+		}
+	}
+	else
+		var_value = NULL;
+	return (var_value);
+}
+
 t_list	*create_var_node(char *name, char *value, bool is_exported)
 {
 	char			*var_name;
@@ -22,14 +40,9 @@ t_list	*create_var_node(char *name, char *value, bool is_exported)
 	t_content_var	*content;
 
 	var_name = ft_strdup(name);
-	var_value = ft_strdup(value);
 	if (var_name == NULL)
 		return (NULL);
-	if (var_value == NULL)
-	{
-		free(var_name);
-		return (NULL);
-	}
+	var_value = value_utils(value, var_name);
 	content = malloc(sizeof(t_content_var));
 	if (content == NULL)
 	{

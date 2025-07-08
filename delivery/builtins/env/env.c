@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 10:59:36 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/07/08 14:40:28 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/07/08 18:08:24 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ int	env(int argc, char *argv[], t_shell *shell)
 	while (var_list != NULL)
 	{
 		var_content = (t_content_var *)var_list->content;
-		if (var_content->is_exported == true)
+		if (var_content->is_exported == true && var_content->var_value != NULL)
 			ft_printf("%s=%s\n", var_content->var_name, var_content->var_value);
 		var_list = var_list->next;
 	}
