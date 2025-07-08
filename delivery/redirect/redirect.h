@@ -15,6 +15,7 @@
 
 # include "../minishell.h"
 
-int	prepare_redirect(t_shell *shell, t_btnode *op_node);
+int	prepare_redirect_out(t_shell *shell, t_btnode *op_node);
+int	prepare_redirect_in(t_shell *shell, t_btnode *op_node);
 
 #endif // REDIRECT_H

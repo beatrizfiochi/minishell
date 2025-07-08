@@ -66,12 +66,6 @@ bool	split_token_list(struct s_split_token_list *split, enum e_expand_type expan
 		if (split->op->next == NULL)
 			break ;
 		split->right = split->op->next;
-		if ((aux == NULL) && (op_list(split->op) == OP_RD_INPUT))
-		{
-			aux = split->right->next;
-			split->left = aux;
-			split->right->next = split->left->next;
-		}
 		split->remain = search_op(split->right, expand_type);
 		if ((split->remain == split->right) || ((aux != NULL) && (split->remain == aux)))
 			break ;

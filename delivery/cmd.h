@@ -40,7 +40,8 @@ typedef struct s_cmd
 							//	False by default
 	struct s_cmd_redirect
 	{
-		int		fd;
+		int		fd_in;
+		int		fd_out;
 	} redir;
 }	t_cmd;
 

@@ -58,6 +58,25 @@ int	run_child(t_cmd *cmd, t_shell *shell)
 	return (ret);
 }
 
+static void	close_possible_pipe(t_shell *shell)
+{
+	if (shell->pipe.pipe[0] != -1)
+	{
+		close(shell->pipe.pipe[0]);
+		shell->pipe.pipe[0] = -1;
+	}
+	if (shell->pipe.pipe[1] != -1)
+	{
+		close(shell->pipe.pipe[1]);
+		shell->pipe.pipe[1] = -1;
+	}
+	if (shell->pipe.carry_over_fd != -1)
+	{
+		close(shell->pipe.carry_over_fd);
+		shell->pipe.carry_over_fd = -1;
+	}
+}
+
 int	process_and(t_shell *shell, int ret, bool *should_continue)
 {
 	*should_continue = true;
@@ -72,6 +91,7 @@ int	process_and(t_shell *shell, int ret, bool *should_continue)
 	{
 		*should_continue = (ret == EXIT_SUCCESS);
 	}
+	close_possible_pipe(shell);
 	return (ret);
 }
 
@@ -89,5 +109,6 @@ int	process_or(t_shell *shell, int ret, bool *should_continue)
 	{
 		*should_continue = (ret != EXIT_SUCCESS);
 	}
+	close_possible_pipe(shell);
 	return (ret);
 }

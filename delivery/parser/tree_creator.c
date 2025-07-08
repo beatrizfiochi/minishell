@@ -32,7 +32,8 @@ static t_btnode	*create_node(t_list *token_list, t_btnode *parent,
 	content->cmd.tokens = token_list;
 	content->cmd.is_builtin = false;
 	content->cmd.finished = false;
-	content->cmd.redir.fd = -1;
+	content->cmd.redir.fd_in = -1;
+	content->cmd.redir.fd_out = -1;
 	tree_node = btree_new(content);
 	tree_node->parent = parent;
 	tree_node->left = left;
@@ -42,6 +43,54 @@ static t_btnode	*create_node(t_list *token_list, t_btnode *parent,
 	if (right != NULL)
 		right->parent = tree_node;
 	return (tree_node);
+}
+
+// This function tries to detect and fix the inverted order of OP_RD_INPUT and
+// OP_HEREDOC operators in the split token list.
+// It "converts" from:
+// < file cmd
+// to:
+// cmd < file
+static int	fix_split(struct s_split_token_list *split,
+								enum e_expand_type *expand)
+{
+	t_list *cmd;
+	t_list *after_cmd;
+	t_list *before_cmd;
+	t_list *last_remain;
+
+	if ((op_list(split->op) == OP_RD_INPUT) && (split->left == split->op))
+	{
+		if (split->remain == NULL)
+		{
+			split->left = split->right->next;
+			split->right->next = NULL;
+			return (EXIT_SUCCESS);
+		}
+		cmd = split->remain;
+		while ((cmd != NULL) && (op_list(cmd) == OP_RD_INPUT))
+		{
+			cmd = cmd->next->next;
+		}
+		if (cmd == NULL)
+			return (EXIT_FAILURE);
+		split->left = cmd;
+		// Get the previous of the command found
+		before_cmd = prev_list_item(split->remain, split->left);
+		if (before_cmd != split->remain)
+			before_cmd->next = NULL;
+		else
+			split->remain = NULL;
+		after_cmd = search_op(split->left, *expand);
+		if (after_cmd == NULL)
+			return (EXIT_SUCCESS);
+		last_remain = ft_lstlast(split->remain);
+		if (last_remain == NULL)
+			split->remain = after_cmd;
+		else
+			last_remain->next = after_cmd;
+	}
+	return (EXIT_SUCCESS);
 }
 
 static t_btnode	*create_first(t_list **tokens, t_btnode *parent,
@@ -66,10 +115,15 @@ static t_btnode	*create_first(t_list **tokens, t_btnode *parent,
 		.left = *tokens, .op = NULL, .right = NULL, .remain = NULL
 	};
 	if (split_token_list(&split, *expand) == false)
-		return (NULL);
-	if (split.left == split.op)
 	{
 		abort_tree_lst(NULL, &split, "Error: spliting tokens from list\n");
+		*tokens = NULL;
+		return (NULL);
+	}
+	if ((fix_split(&split, expand) == EXIT_FAILURE) || (split.left == split.op))
+	{
+		abort_tree_lst(NULL, &split, "Error: spliting tokens from list\n");
+		*tokens = NULL;
 		return (NULL);
 	}
 	tree = create_node(split.op, parent, NULL, NULL);
