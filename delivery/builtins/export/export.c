@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 14:43:42 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/07/08 16:11:06 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/07/08 17:23:33 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,12 +32,32 @@ static void	print_export(t_shell *shell)
 	}
 }
 
+static int	export_existent_variable(t_list *tmp_list, char *variable)
+{
+	t_content_var	*var_content;
+
+	while (tmp_list != NULL)
+	{
+		var_content = (t_content_var *)tmp_list->content;
+		if (is_strlen_equals(variable, var_content->var_name))
+		{
+			if (ft_strncmp(var_content->var_name, variable,
+			ft_strlen(variable)) == 0)
+			{
+				var_content->is_exported = true;
+				return (0);
+			}
+		}
+		tmp_list = tmp_list->next;
+	}
+	return (1);
+}
+
 int	export(int argc, char *argv[], t_shell *shell)
 {
 	int				i;
 	char			*var;
 	t_list			*tmp_list;
-	t_content_var	*var_content;
 
 	i = 1;
 	if (i == argc)
@@ -51,17 +71,7 @@ int	export(int argc, char *argv[], t_shell *shell)
 				return (1);
 			ft_strlcpy(var, argv[i], (ft_strlen(argv[i]) + 1));
 			tmp_list = shell->variable_list;
-			while (tmp_list != NULL)
-			{
-				var_content = (t_content_var *)tmp_list->content;
-				if (is_strlen_equals(var, var_content->var_name))
-				{
-					if (ft_strncmp(var_content->var_name, var,
-					ft_strlen(var)) == 0)
-						var_content->is_exported = true;
-				}
-				tmp_list = tmp_list->next;
-			}
+			export_existent_variable(tmp_list, var);
 			i++;
 		}
 	}
