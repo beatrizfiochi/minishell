@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 10:59:36 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/07/06 16:08:43 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/07/08 14:40:28 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 
 // env built-in without options and arguments
 //  this function works similar to printenv
-//  this will print all exported variables
+//  this will print all exported variables and yours environment variables
 int	env(int argc, char *argv[], t_shell *shell)
 {
 	t_list			*tmp_var_list;
