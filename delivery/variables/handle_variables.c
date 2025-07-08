@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 21:17:55 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/07/05 15:48:41 by djunho           ###   ########.fr       */
+/*   Updated: 2025/07/08 15:52:27 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ t_list	*create_var_node(char *name, char *value, bool is_exported)
 	return (ft_lstnew(content));
 }
 
-static bool	is_strlen_equals(char *text_1, char *text_2)
+bool	is_strlen_equals(char *text_1, char *text_2)
 {
 	int	len_1;
 	int	len_2;
