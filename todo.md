@@ -32,8 +32,6 @@ x=; y=1
 
 Ideia de solução. Ao entrar num parentesis, copiar a lista de váriáveis para uma outra. E usar essa outra
 
-# Update the SHLVL env var
-
 # HEREDOC
 ## dont expand before checking the eof
 cat << $somecar
@@ -55,3 +53,10 @@ bash: warning: here-document at line 31 delimited by end-of-file (wanted `a')
 $
 aaaaaaaaaaaaaaaaa$
 ```
+
+# Redirect out
+
+Com a estratégia implementada (marcar o possivel ultimo commando que será executado como redirect), teremos alguns problemas ao usar parentesis
+Por exemplo: `(ls || pwd) > /tmp/file`
+
+Ideia de solução: Rodar os parentesis em um fork a parte. O before iria fazer o fork. O filho iria rodar e todo output do filho iria para o arquivo.

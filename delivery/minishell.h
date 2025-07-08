@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 13:37:40 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/07/06 16:07:20 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/07/06 17:36:15 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,14 +40,15 @@ typedef struct s_shell
 									// 128 + n - fatal error signal "n"
 	t_list		*variable_list;		// Variable list
 	t_list		*tmp_var_list;		// Temporary variable list
+	bool		is_running_redirect;// Flag to indicate that the shell is running
+									//  a redirct (pipe, redirect in/out)
+	bool		is_last_redirect;	// Flag to indicate if this is the last
+									//  redirect in the chain. So it should print
+									//  at the stdout or the redirect output file
 	struct s_pipe
 	{
 		int		pipe[2];			// pipe file descriptors
 		int		carry_over_fd;		// file descriptor to carry over the pipe
-		bool	is_last_pipe;		// Flag to indicate if this is the last
-									//  pipe in the chain
-		bool	will_run_a_pipe;	// Flag to indicate that the next command
-									//  will run a pipe
 	} pipe;
 }	t_shell;
 

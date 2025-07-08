@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/13 16:12:37 by djunho            #+#    #+#             */
-/*   Updated: 2025/07/02 19:22:14 by djunho           ###   ########.fr       */
+/*   Updated: 2025/07/06 15:47:54 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,11 +75,11 @@ t_list	*search_op(t_list *tokens, enum e_expand_type expand_type)
 		oper = op(content_token);
 		if (inside == 0)
 		{
-			if ((oper == OP_AND) || (oper == OP_OR) || (oper == OP_HEREDOC)
-				|| (oper == OP_RD_INPUT) || (oper == OP_APPEND_RD_OUTPUT)
-				|| (oper == OP_RD_OUTPUT))
+			if ((oper == OP_AND) || (oper == OP_OR) || (oper == OP_HEREDOC))
 				return (tokens);
-			if ((expand_type == EXP_PIPE) && (oper == OP_PIPE))
+			if ((expand_type == EXP_REDIR) && ((oper == OP_PIPE)
+				|| (oper == OP_RD_OUTPUT) || (oper == OP_APPEND_RD_OUTPUT)
+				|| (oper == OP_RD_INPUT)))
 				return (tokens);
 			if ((expand_type == EXP_ASSIGN) && (oper == OP_VAR_ASSIGN))
 				return (tokens);

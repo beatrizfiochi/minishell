@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 18:10:01 by djunho            #+#    #+#             */
-/*   Updated: 2025/07/02 19:21:48 by djunho           ###   ########.fr       */
+/*   Updated: 2025/07/06 15:47:44 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ struct s_split_token_list
 enum e_expand_type
 {
 	EXP_NORMAL = 0,
-	EXP_PIPE,
+	EXP_REDIR,
 	EXP_PAREN,
 	EXP_ASSIGN
 };

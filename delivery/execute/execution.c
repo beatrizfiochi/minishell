@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/05 13:53:41 by djunho            #+#    #+#             */
-/*   Updated: 2025/06/26 16:35:58 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/07/06 14:58:00 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,16 +80,14 @@ int	execute_execve(t_btnode *node, t_shell *shell)
 	}
 	if (shell->last_pid == 0)
 	{
-		if (shell->pipe.will_run_a_pipe)
-			configure_pipe(shell->pipe.pipe,
-				shell->pipe.carry_over_fd,
-				shell->pipe.is_last_pipe);
+		if (shell->is_running_redirect)
+			configure_redirect(shell, &(((t_content_node *)node->content)->cmd));
 		exit(run_child(&((t_content_node *)node->content)->cmd, shell));
 	}
-	if (shell->pipe.is_last_pipe)
+	if (shell->is_last_redirect)
 	{
-		shell->pipe.will_run_a_pipe = false;
-		shell->pipe.is_last_pipe = false;
+		shell->is_running_redirect = false;
+		shell->is_last_redirect = false;
 	}
 	return (0);
 }
