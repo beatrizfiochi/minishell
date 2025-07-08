@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 14:43:42 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/07/08 18:06:53 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/07/08 18:46:53 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include "../../libft/libft.h"
 #include "../../execute/execution.h"
 #include "../../variables/variables.h"
+#include <unistd.h>
 
 static void	print_export(t_shell *shell)
 {
@@ -58,11 +59,25 @@ static int	export_existent_variable(t_shell *shell, char *variable)
 	return (1);
 }
 
+void	create_empty_variable_node(t_shell *shell, char *var)
+{
+	t_list	*new_node;
+
+	if (is_valid_name(var, ft_strlen(var)) == 0)
+	{
+		new_node = create_var_node(var, NULL, true);
+		if (new_node == NULL)
+			return ;
+		ft_lstadd_back(&shell->variable_list, new_node);
+	}
+	else
+		ft_fprintf(STDERR_FILENO, "Minishell: export: `%s': not a valid identifier\n", var);
+}
+
 int	export(int argc, char *argv[], t_shell *shell)
 {
 	int		i;
 	char	*var;
-	t_list	*new_node;
 
 	i = 1;
 	if (i == argc)
@@ -76,12 +91,7 @@ int	export(int argc, char *argv[], t_shell *shell)
 				return (1);
 			ft_strlcpy(var, argv[i], (ft_strlen(argv[i]) + 1));
 			if (export_existent_variable(shell, var) == 1)
-			{
-				new_node = create_var_node(var, NULL, true);
-				if (new_node == NULL)
-					return (1);
-				ft_lstadd_back(&shell->variable_list, new_node);
-			}
+				create_empty_variable_node(shell, var);
 			i++;
 		}
 	}

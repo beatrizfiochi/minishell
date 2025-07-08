@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 16:13:37 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/07/06 16:20:11 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/07/08 18:35:38 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,8 @@ int	handle_var_assign(t_shell *shell, t_btnode *node)
 		if (op_node == NULL)
 			break ;
 		name = prev_list_item(content->cmd.tokens, op_node);
+		if (name != content->cmd.tokens)
+			return (EXIT_SUCCESS);
 		value = op_node->next;
 		if (process_var_assign(name, op_node, value, shell) != 0)
 		{
