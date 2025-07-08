@@ -29,11 +29,8 @@ void	free_btree_content(void *_content)
 	t_content_node	*content;
 
 	content = (t_content_node *)_content;
-	if (content->op == OP_CMD)
-	{
-		if (content->cmd.tokens != NULL)
-			ft_lstclear(&content->cmd.tokens, free);
-	}
+	if (content->cmd.tokens != NULL)
+		ft_lstclear(&content->cmd.tokens, free);
 	free(content);
 }
 

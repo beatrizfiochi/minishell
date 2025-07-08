@@ -43,12 +43,7 @@ void	free_btree_node(void *content)
 	t_content_node	*node_content;
 
 	node_content = (t_content_node *)content;
-	if ((node_content->op == OP_CMD)
-		|| (node_content->op == OP_PAREN_OPEN)
-		|| (node_content->op == OP_PAREN_CLOSE))
-	{
-		ft_lstclear(&(node_content->cmd.tokens), free);
-	}
+	ft_lstclear(&(node_content->cmd.tokens), free);
 	free(node_content);
 }
 

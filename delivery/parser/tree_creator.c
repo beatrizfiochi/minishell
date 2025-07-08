@@ -29,15 +29,10 @@ static t_btnode	*create_node(t_list *token_list, t_btnode *parent,
 	if (content == NULL)
 		return (NULL);
 	content->op = op((char *)(token_list->content));
-	if ((content->op == OP_CMD) || (content->op == OP_PAREN_OPEN) || (content->op == OP_RD_INPUT))
-	{
-		content->cmd.tokens = token_list;
-		content->cmd.is_builtin = false;
-		content->cmd.finished = false;
-		content->cmd.redir.fd = -1;
-	}
-	else
-		ft_lstclear(&token_list, free);
+	content->cmd.tokens = token_list;
+	content->cmd.is_builtin = false;
+	content->cmd.finished = false;
+	content->cmd.redir.fd = -1;
 	tree_node = btree_new(content);
 	tree_node->parent = parent;
 	tree_node->left = left;

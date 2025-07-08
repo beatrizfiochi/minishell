@@ -16,6 +16,8 @@
 
 t_node_op	op_list(t_list *list)
 {
+	if (list == NULL)
+		return (OP_INVALID);
 	return (op((char *)(list->content)));
 }
 
