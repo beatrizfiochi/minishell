@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 11:48:18 by djunho            #+#    #+#             */
-/*   Updated: 2025/07/06 11:47:38 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/07/10 09:10:32 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,19 +14,35 @@
 #include "../../libft/libft.h"
 #include "../../minishell.h"
 
+static int	check_options(int argc, char *argv[], bool *no_nl)
+{
+	int	i;
+	int	j;
+
+	i = 1;
+	while (i < argc)
+	{
+		if (argv[i][0] != '-')
+			return (i);
+		j = 1;
+		while (argv[i][j] == 'n')
+			j++;
+		if ((j == 1) || (argv[i][j] != '\0'))
+			return (i);
+		*no_nl = true;
+		i++;
+	}
+	return (i);
+}
+
 int	echo(int argc, char *argv[], t_shell *shell)
 {
 	int		i;
 	bool	no_nl;
 
 	(void)shell;
-	i = 1;
 	no_nl = false;
-	if ((i < argc) && (ft_strncmp(argv[i], "-n", 2) == 0))
-	{
-		no_nl = true;
-		i++;
-	}
+	i = check_options(argc, argv, &no_nl);
 	if (i < argc)
 		ft_printf("%s", argv[i++]);
 	while (i < argc)
