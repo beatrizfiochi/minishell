@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   debug.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: djunho <djunho@student.42porto.com>        +#+  +:+       +#+        */
+/*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 18:22:37 by djunho            #+#    #+#             */
-/*   Updated: 2025/07/02 19:22:26 by djunho           ###   ########.fr       */
+/*   Updated: 2025/07/09 20:38:52 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ const char	*op_str(t_node_op op)
 		"OP_AND",
 		"OP_OR",
 		"OP_PIPE",
-		"OP_VAR_ASSIGN",
 		"OP_RD_INPUT",
 		"OP_RD_OUTPUT",
 		"OP_HEREDOC",

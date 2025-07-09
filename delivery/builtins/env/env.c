@@ -6,13 +6,13 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 10:59:36 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/07/08 18:08:24 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/07/09 21:03:51 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../libft/libft.h"
 #include "../../minishell.h"
-#include "../../parser/parser.h"
+#include "../../variables/variables.h"
 
 // env built-in without options and arguments
 //  this function works similar to printenv

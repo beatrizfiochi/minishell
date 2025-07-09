@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 16:13:37 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/07/08 18:35:38 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/07/09 22:16:33 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,8 @@
 int	handle_var_assign(t_shell *shell, t_btnode *node)
 {
 	t_content_node	*content;
-	t_list			*op_node;
-	t_list			*name;
-	t_list			*value;
+	t_list			*var;
+	enum e_var_exit	var_status;
 
 	content = (t_content_node *)node->content;
 	if (content->cmd.tokens == NULL)
@@ -34,21 +33,13 @@ int	handle_var_assign(t_shell *shell, t_btnode *node)
 	}
 	while (content->cmd.tokens != NULL)
 	{
-		op_node = search_op(content->cmd.tokens, EXP_ASSIGN);
-		if (op_node == NULL)
+		var = content->cmd.tokens;
+		var_status = handle_var(&shell->tmp_var_list, (char *)var->content, false);
+		if ((var_status != VAR_STATUS_SUCCESS_CREATED)
+			&& (var_status != VAR_STATUS_SUCCESS_UPDATED))
 			break ;
-		name = prev_list_item(content->cmd.tokens, op_node);
-		if (name != content->cmd.tokens)
-			return (EXIT_SUCCESS);
-		value = op_node->next;
-		if (process_var_assign(name, op_node, value, shell) != 0)
-		{
-			ft_fprintf(STDERR_FILENO, "Error: Invalid variable assignment\n");
-			return (EXIT_FAILURE);
-		}
-		content->cmd.tokens = value->next;
-		value->next = NULL;
-		ft_lstclear(&name, free);
+		content->cmd.tokens = var->next;
+		ft_lstdelone(var, free);
 	}
 	return (EXIT_SUCCESS);
 }

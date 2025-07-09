@@ -6,14 +6,14 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 21:17:55 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/07/08 18:06:31 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/07/09 21:05:31 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../libft/libft.h"
 #include "../cmd.h"
 #include "../minishell.h"
-#include "../parser/parser.h"
+#include "../variables/variables.h"
 
 static char *value_utils(char *value, char *var_name)
 {

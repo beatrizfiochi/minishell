@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 14:43:42 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/07/09 20:14:18 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/07/09 22:59:59 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,80 +67,43 @@ static int	create_empty_variable_node(t_shell *shell, char *var)
 	{
 		new_node = create_var_node(var, NULL, true);
 		if (new_node == NULL)
-			return (1);
-		ft_lstadd_back(&shell->variable_list, new_node);
-	}
-	else
-	{
-		ft_fprintf(STDERR_FILENO, "Minishell: export: `%s': not a valid identifier\n", var);
-		return (EXIT_FAILURE);
-	}
-	return (EXIT_SUCCESS);
-}
-
-static int	assign_or_change_value_variable(t_shell *shell, char *var)
-{
-	t_list			*new_node;
-	char			*var_value;
-	int				i;
-
-	var_value = NULL;
-	i = 0;
-	while (var[i] != '=')
-		i++;
-	var[i] = '\0';
-	var_value = &var[i + 1];
-	if (check_and_replace_var(shell->variable_list, var,
-		var_value) == true)
-		return (EXIT_SUCCESS);
-	else if(is_valid_name(var, ft_strlen(var)) == 0)
-	{
-		if (is_valid_name(var, ft_strlen(var)) == 0)
-		{
-			new_node = create_var_node(var, var_value, true);
-			if (new_node == NULL)
-				return (1);
-			ft_lstadd_back(&shell->variable_list, new_node);
-		}
-		else
-		{
-			ft_fprintf(STDERR_FILENO, "Minishell: export: `%s=%s': not a valid identifier\n", var, var_value);
 			return (EXIT_FAILURE);
-		}
+		ft_lstadd_back(&shell->variable_list, new_node);
+		return (EXIT_SUCCESS);
 	}
-	return (EXIT_SUCCESS);
+	return (EXIT_FAILURE);
 }
 
 int	export(int argc, char *argv[], t_shell *shell)
 {
 	int		i;
-	int		j;
 	int		ret;
+	enum e_var_exit	var_status;
+	bool	error;
 
 	i = 1;
-	j = 0;
-	ret = EXIT_SUCCESS;
 	if (i == argc)
 		print_export(shell);
-	else if (i < argc)
+	ret = EXIT_SUCCESS;
+	while (i < argc)
 	{
-		while (i < argc)
+		error = false;
+		var_status = handle_var(&shell->variable_list, argv[i], true);
+		if (var_status == VAR_STATUS_SUCCESS_UPDATED)
+			export_existent_variable(shell, argv[i]);
+		else if ((var_status == VAR_STATUS_EQUAL_NOT_FOUND)
+			&& (export_existent_variable(shell, argv[i]) == EXIT_FAILURE)
+				&& (create_empty_variable_node(shell, argv[i]) == EXIT_FAILURE))
+				error = true;
+		else if (var_status == VAR_STATUS_NAME_INVALID)
+			error = true;
+		if (error)
 		{
-			while (argv[i][j] != '\0')
-			{
-				if (argv[i][j] == '=')
-				{
-					if (assign_or_change_value_variable(shell, argv[i]) == EXIT_FAILURE)
-						ret = (EXIT_FAILURE);
-					break;
-				}
-				j++;
-			}
-			if (export_existent_variable(shell, argv[i]) == EXIT_FAILURE)
-				if (create_empty_variable_node(shell, argv[i]) == EXIT_FAILURE)
-					ret = EXIT_FAILURE;
-			i++;
+			ret = EXIT_FAILURE;
+			ft_fprintf(STDERR_FILENO, "Minishell: export: `%s': not a valid identifier\n", argv[i]);
 		}
+		i++;
 	}
 	return (ret);
 }
+

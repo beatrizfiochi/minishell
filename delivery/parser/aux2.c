@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/13 16:12:37 by djunho            #+#    #+#             */
-/*   Updated: 2025/07/09 10:01:03 by djunho           ###   ########.fr       */
+/*   Updated: 2025/07/09 20:39:27 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,6 @@ t_node_op	op(char *token)
 		return (OP_OR);
 	if ((*token == '|') && (*(token + 1) == '\0'))
 		return (OP_PIPE);
-	if ((*token == '=') && (*(token + 1) == '\0'))
-		return (OP_VAR_ASSIGN);
 	if ((*token == '<') && (*(token + 1) == '<') && (*(token + 2) == '\0'))
 		return (OP_HEREDOC);
 	if ((*token == '<') && (*(token + 1) == '\0'))
@@ -56,8 +54,7 @@ t_list	*search_any_op(t_list *tokens)
 	while (tokens != NULL)
 	{
 		content_token = tokens->content;
-		if ((op(content_token) != OP_CMD)
-			&& (op(content_token) != OP_VAR_ASSIGN))
+		if (op(content_token) != OP_CMD)
 			return (tokens);
 		tokens = tokens->next;
 	}
@@ -79,8 +76,6 @@ t_list	*search_op(t_list *tokens, enum e_expand_type expand_type)
 				return (tokens);
 			if ((expand_type == EXP_REDIR)
 				&& ((oper == OP_PIPE) || is_a_redirect_file_op(oper)))
-				return (tokens);
-			if ((expand_type == EXP_ASSIGN) && (oper == OP_VAR_ASSIGN))
 				return (tokens);
 		}
 		if (oper == OP_PAREN_OPEN)
