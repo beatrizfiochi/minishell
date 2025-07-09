@@ -40,11 +40,12 @@ typedef struct s_shell
 									// 128 + n - fatal error signal "n"
 	t_list		*variable_list;		// Variable list
 	t_list		*tmp_var_list;		// Temporary variable list
-	bool		is_running_redirect;// Flag to indicate that the shell is running
-									//  a redirct (pipe, redirect in/out)
+	bool		is_running_redirect;// Flag to indicate that the redirect is
+									//  running (pipe, redirect in/out)
 	bool		is_last_redirect;	// Flag to indicate if this is the last
-									//  redirect in the chain. So it should print
-									//  at the stdout or the redirect output file
+									//  redirect in the chain. So it should
+									//  print at the stdout or the redirect
+									//  output file
 	struct s_pipe
 	{
 		int		pipe[2];			// pipe file descriptors

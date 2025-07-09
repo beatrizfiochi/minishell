@@ -6,11 +6,12 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/13 16:12:37 by djunho            #+#    #+#             */
-/*   Updated: 2025/07/06 15:47:54 by djunho           ###   ########.fr       */
+/*   Updated: 2025/07/09 10:01:03 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../libft/libft.h"
+#include "../redirect/redirect_aux.h"	// is_a_redirect_file_op()
 #include "../cmd.h"
 #include "aux.h"
 
@@ -65,23 +66,19 @@ t_list	*search_any_op(t_list *tokens)
 
 t_list	*search_op(t_list *tokens, enum e_expand_type expand_type)
 {
-	char		*content_token;
 	t_node_op	oper;
 	int			inside;
 
 	inside = 0;
-	content_token = NULL;
 	while (tokens != NULL)
 	{
-		content_token = tokens->content;
-		oper = op(content_token);
+		oper = op(tokens->content);
 		if (inside == 0)
 		{
 			if ((oper == OP_AND) || (oper == OP_OR) || (oper == OP_HEREDOC))
 				return (tokens);
-			if ((expand_type == EXP_REDIR) && ((oper == OP_PIPE)
-				|| (oper == OP_RD_OUTPUT) || (oper == OP_APPEND_RD_OUTPUT)
-				|| (oper == OP_RD_INPUT)))
+			if ((expand_type == EXP_REDIR)
+				&& ((oper == OP_PIPE) || is_a_redirect_file_op(oper)))
 				return (tokens);
 			if ((expand_type == EXP_ASSIGN) && (oper == OP_VAR_ASSIGN))
 				return (tokens);

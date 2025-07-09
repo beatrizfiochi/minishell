@@ -49,10 +49,17 @@ void	free_btree_node(void *content)
 
 static char	*read_line(void)
 {
+	char	*line;
+
 	if (isatty(STDIN_FILENO))
-		return (readline(PROMPT));
+		line = readline(PROMPT);
 	else
-		return (readline(NULL));
+		line = readline(NULL);
+	if (line == NULL)
+		return (NULL);
+	if (line[0] != '\0')
+		add_history (line);
+	return (line);
 }
 
 // 0 -> success
@@ -66,8 +73,6 @@ int	read_command(t_shell *shell)
 	line = read_line();
 	if (line == NULL)
 		return (-1);
-	if ((line != NULL) && (*line != '\0'))
-		add_history (line);
 	token_list = tokenization(line);
 	debug_print_read_command(token_list, line);
 	while (token_list != NULL)

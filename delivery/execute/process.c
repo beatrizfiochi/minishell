@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 19:55:45 by djunho            #+#    #+#             */
-/*   Updated: 2025/07/06 19:01:17 by djunho           ###   ########.fr       */
+/*   Updated: 2025/07/09 09:19:20 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,21 +37,17 @@ static int	btree_operator_before_callback(t_btnode *node,
 
 	content = (t_content_node *)node->content;
 	ignore_signals();
-	*should_continue = true;
+	*should_continue = false;
 	if ((content->op == OP_RD_OUTPUT) || (content->op == OP_APPEND_RD_OUTPUT))
 		ret = prepare_redirect_out((t_shell *)_shell, node);
 	else if (content->op == OP_RD_INPUT)
 		ret = prepare_redirect_in((t_shell *)_shell, node);
 	if (ret != EXIT_SUCCESS)
-	{
-		*should_continue = false;
 		return (ret);
-	}
+	*should_continue = true;
 	if (!is_op_redirect_type(content->op))
 		return (0);
-	if ((node->right == NULL) || (node->right->content == NULL))
-		return (1);
-	if ((node->left == NULL) || (node->left->content == NULL))
+	if ((node->right == NULL) || (node->left == NULL))
 		return (1);
 	((t_shell *)_shell)->is_running_redirect = true;
 	((t_shell *)_shell)->is_last_redirect = false;

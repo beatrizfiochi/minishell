@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/05 13:53:41 by djunho            #+#    #+#             */
-/*   Updated: 2025/07/06 14:58:00 by djunho           ###   ########.fr       */
+/*   Updated: 2025/07/09 10:58:05 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ int	execute_execve(t_btnode *node, t_shell *shell)
 	if (shell->last_pid == 0)
 	{
 		if (shell->is_running_redirect)
-			configure_redirect(shell, &(((t_content_node *)node->content)->cmd));
+			configure_redir(shell, &(((t_content_node *)node->content)->cmd));
 		exit(run_child(&((t_content_node *)node->content)->cmd, shell));
 	}
 	if (shell->is_last_redirect)
