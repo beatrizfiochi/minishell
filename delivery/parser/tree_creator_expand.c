@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 18:34:50 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/07/06 15:47:46 by djunho           ###   ########.fr       */
+/*   Updated: 2025/07/09 09:38:37 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,13 @@
 #include "parser.h"
 #include "tree_creator.h"
 
+static bool	is_expansion_needed(t_node_op op)
+{
+	if ((op == OP_CMD) || (op == OP_PAREN_OPEN) || (op == OP_RD_INPUT))
+		return (true);
+	return (false);
+}
+
 static t_btnode	*expand_btree_node(t_btnode *node,
 						enum e_expand_type expand,
 						bool *had_expand)
@@ -29,7 +36,7 @@ static t_btnode	*expand_btree_node(t_btnode *node,
 	if (btree_is_leaf(node))
 	{
 		cnt = (t_content_node *)node->content;
-		if ((cnt->op == OP_CMD) || (cnt->op == OP_PAREN_OPEN))
+		if (is_expansion_needed(cnt->op))
 		{
 			tree = create_basic_tree(&cnt->cmd.tokens, node->parent, expand);
 			if (is_btnode_different(node, tree))

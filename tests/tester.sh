@@ -230,7 +230,7 @@ function tester_with_real() {
 	fi
 
 	# Run minishell
-	echo "$cmd" | valgrind --trace-children=yes --child-silent-after-fork=no --leak-check=full --show-leak-kinds=all --suppressions=$(pwd)/../delivery/valgrind-supression --log-file="$OUT_FILE_VALGRIND" ../delivery/minishell &> $OUT_FILE
+	echo "$cmd" | valgrind --track-origins=yes --trace-children=yes --child-silent-after-fork=no --leak-check=full --show-leak-kinds=all --suppressions=$(pwd)/../delivery/valgrind-supression --log-file="$OUT_FILE_VALGRIND" ../delivery/minishell &> $OUT_FILE
 	EXIT_STATUS=$?
 	if [ ! -f "$OUT_FILE" ]; then
 		echo -e "${RED}Test failed: $cmd${RESET}"
@@ -442,11 +442,13 @@ tester_with_real 'x=10 y=1 w=3 && echo "$x $y $w"'
 tester_with_real "x=10 y=1 w=3 bash -c 'echo \"\$x \$y \$w\"'"
 tester_with_real "x=10 y=1 w=3 && bash -c 'echo \"\$x \$y \$w\"'"
 
-echo -e "${MAGENTA}Testing redirect${RESET}"
+echo -e "${MAGENTA}Testing redirect output${RESET}"
 touch /tmp/test
+touch /tmp/test2
 tester_with_real 'rm /tmp/test && echo ola! > /tmp/test && cat -e /tmp/test'
 tester_with_real 'rm /tmp/test && pwd > /tmp/test && cat -e /tmp/test'
 tester_with_real 'rm /tmp/test && ls -la > /tmp/test && cat -e /tmp/test'
+tester_with_real 'rm /tmp/test && rm /tmp/test2 && ls -la > /tmp/test  > /tmp/test2 && echo "test" && cat -e /tmp/test && echo "test2" && cat -e /tmp/test2'
 tester_with_real 'rm /tmp/test && echo 1 > /tmp/test && cat -e /tmp/test'
 tester_with_real 'rm /tmp/test && echo 1 > /tmp/test && echo 2 > /tmp/test && cat -e /tmp/test'
 tester_with_real 'rm /tmp/test && echo 1 > /tmp/test && echo 2 >> /tmp/test && cat -e /tmp/test'
@@ -458,6 +460,15 @@ tester_with_real 'rm /tmp/test && ls | grep mini > /tmp/test'
 tester_with_real 'rm /tmp/test && ls | grep mini > /tmp/test | echo 1'
 tester_with_real 'rm /tmp/test && ls | grep mini > /tmp/test | ls | grep mini'
 tester_with_real 'rm /tmp/test && ls | grep mini > /tmp/test && echo 1'
+echo -e "${MAGENTA}Testing redirect input${RESET}"
+touch /tmp/test
+touch /tmp/test2
+tester_with_real 'echo ola! > /tmp/test && cat < /tmp/test'
+tester_with_real 'rm /tmp/test && echo ola! > /tmp/test && cat -e < /tmp/test'
+tester_with_real 'rm /tmp/test && echo ola! > /tmp/test && < /tmp/test cat -e'
+rm /tmp/test2
+tester_with_real 'rm /tmp/test && echo ola! > /tmp/test && < /tmp/test < /tmp/test2 cat -e'
+tester_with_real 'rm /tmp/test && echo ola! > /tmp/test && cat -e < /tmp/test < /tmp/test2'
 
 echo -e "${MAGENTA}Testing parenthesis${RESET}"
 tester_with_real "ls"

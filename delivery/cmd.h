@@ -40,17 +40,15 @@ typedef struct s_cmd
 							//	False by default
 	struct s_cmd_redirect
 	{
-		int		fd;
+		int		fd_in;
+		int		fd_out;
 	} redir;
 }	t_cmd;
 
 typedef struct s_content_node
 {
 	t_node_op	op;
-	union
-	{
-		t_cmd		cmd;
-	};
+	t_cmd		cmd;
 }	t_content_node;
 
 #endif // CMD_H

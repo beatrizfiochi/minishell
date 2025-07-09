@@ -6,7 +6,7 @@
 #    By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/27 13:09:33 by djunho            #+#    #+#              #
-#    Updated: 2025/07/06 17:30:51 by djunho           ###   ########.fr        #
+#    Updated: 2025/07/09 08:16:27 by djunho           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,8 @@ SRCS = main.c read_command.c utils.c debug.c \
 	btree/btree.c btree/btree_count.c btree/debug.c \
 	btree/btree_foreach.c \
 	parser/expand_variable.c parser/clean_token_quotes.c \
-	parser/expand_variable_utils.c parser/tokenization_utils.c\
+	parser/expand_variable_utils.c parser/tokenization_utils.c \
+	parser/tokens.c \
 	execute/execution.c execute/process.c execute/debug.c \
 	execute/execution_operations.c execute/env_utils.c \
 	execute/exec_utils.c execute/exec_utils2.c \
@@ -28,7 +29,7 @@ SRCS = main.c read_command.c utils.c debug.c \
 	signals/handle_signals.c \
 	variables/handle_variables.c variables/env_variables.c \
 	variables/shell_level_var.c \
-	redirect/redirect.c
+	redirect/redirect.c redirect/redirect_aux.c
 OBJS_DIR = objs
 OBJS = $(patsubst %.c,$(OBJS_DIR)/%.o,$(SRCS))
 DEPENDS = $(patsubst %.c,$(OBJS_DIR)/%.d,$(SRCS))
@@ -78,16 +79,16 @@ $(OBJS_DIR)/%:
 libft/libft.a: libft
 
 libft:
-	make -C ./libft/ all
+	$(MAKE) -C ./libft/ all
 
 clean: soft_clean
-	make -C ./libft/ clean
+	$(MAKE) -C ./libft/ clean
 
 soft_clean:
 	rm -rf $(OBJS) $(DEPENDS) $(OBJS_DIR)
 
 fclean: soft_fclean
-	make -C ./libft/ fclean
+	$(MAKE) -C ./libft/ fclean
 
 soft_fclean: soft_clean
 	rm -rf $(NAME)

@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 11:59:00 by djunho            #+#    #+#             */
-/*   Updated: 2025/07/06 17:37:31 by djunho           ###   ########.fr       */
+/*   Updated: 2025/07/09 10:56:31 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,27 @@
 #include "env_utils.h"
 #include "../minishell.h"
 
+static int	execute_command(char **args, char **envp, t_cmd *cmd,
+								t_shell *shell)
+{
+	int		ret;
+	char	*path;
+
+	if ((args == NULL) || (args[0] == NULL))
+		return (EXIT_FAILURE);
+	reset_signals();
+	ret = execute_builtin(cmd, shell);
+	if (ret != EXIT_CMD_NOT_FOUND)
+		return (ret);
+	execve(args[0], args, envp);
+	if (create_cmd_path(args[0], shell->variable_list, &path))
+		execve(path, args, envp);
+	perror(args[0]);
+	return (EXIT_FAILURE);
+}
+
 int	run_child(t_cmd *cmd, t_shell *shell)
 {
-	char	*path;
 	char	**args;
 	char	**envp;
 	int		ret;
@@ -35,27 +53,32 @@ int	run_child(t_cmd *cmd, t_shell *shell)
 
 	args = convert_list_to_vector(cmd->tokens, &argc);
 	envp = convert_list_to_envp(shell->variable_list, shell->tmp_var_list);
-	ret = 1;
-	while (1)
-	{
-		if ((args == NULL) || (args[0] == NULL))
-			break ;
-		reset_signals();
-		ret = execute_builtin(cmd, shell);
-		if (ret != EXIT_CMD_NOT_FOUND)
-			break ;
-		execve(args[0], args, envp);
-		if (create_cmd_path(args[0], shell->variable_list, &path))
-			execve(path, args, envp);
-		perror(args[0]);
-		break ;
-	}
+	ret = execute_command(args, envp, cmd, shell);
 	clear_minishell(shell);
 	if (args != NULL)
 		free(args);
 	if (envp != NULL)
 		free_envp(envp);
 	return (ret);
+}
+
+static void	close_possible_pipe(t_shell *shell)
+{
+	if (shell->pipe.pipe[0] != -1)
+	{
+		close(shell->pipe.pipe[0]);
+		shell->pipe.pipe[0] = -1;
+	}
+	if (shell->pipe.pipe[1] != -1)
+	{
+		close(shell->pipe.pipe[1]);
+		shell->pipe.pipe[1] = -1;
+	}
+	if (shell->pipe.carry_over_fd != -1)
+	{
+		close(shell->pipe.carry_over_fd);
+		shell->pipe.carry_over_fd = -1;
+	}
 }
 
 int	process_and(t_shell *shell, int ret, bool *should_continue)
@@ -72,6 +95,7 @@ int	process_and(t_shell *shell, int ret, bool *should_continue)
 	{
 		*should_continue = (ret == EXIT_SUCCESS);
 	}
+	close_possible_pipe(shell);
 	return (ret);
 }
 
@@ -89,5 +113,6 @@ int	process_or(t_shell *shell, int ret, bool *should_continue)
 	{
 		*should_continue = (ret != EXIT_SUCCESS);
 	}
+	close_possible_pipe(shell);
 	return (ret);
 }

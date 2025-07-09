@@ -1,21 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   redirect.h                                         :+:      :+:    :+:   */
+/*   redirect_aux.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: djunho <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 11:30:30 by djunho            #+#    #+#             */
-/*   Updated: 2025/07/06 17:29:16 by djunho           ###   ########.fr       */
+/*   Updated: 2025/07/08 20:22:15 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef REDIRECT_H
-# define REDIRECT_H
+#ifndef REDIRECT_AUX_H
+# define REDIRECT_AUX_H
 
-# include "../minishell.h"
+# include "../btree/btree.h"
+# include "../cmd.h"
 
-int	prepare_redirect_out(t_shell *shell, t_btnode *op_node);
-int	prepare_redirect_in(t_shell *shell, t_btnode *op_node);
+t_node_op		get_next_operation(t_btnode *node);
+bool			is_a_redirect_file_op(t_node_op op);
+t_content_node	*get_next_cmd(t_btnode *node);
+t_content_node	*get_first_cmd(t_btnode *node);
 
-#endif // REDIRECT_H
+#endif // REDIRECT_AUX_H

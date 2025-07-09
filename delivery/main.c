@@ -56,6 +56,11 @@ static void init_shell(t_shell *shell)
 	shell->last_exit_status = EXIT_SUCCESS;
 	shell->last_pid = -1;
 	shell->cmds = NULL;
+	shell->is_running_redirect = false;
+	shell->is_last_redirect = false;
+	shell->pipe.carry_over_fd = -1;
+	shell->pipe.pipe[0] = -1;
+	shell->pipe.pipe[1] = -1;
 }
 
 static int	run_minishell(char *envp[])
