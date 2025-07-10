@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 14:43:42 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/07/09 22:59:59 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/07/10 12:12:52 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,9 @@ static void	print_export(t_shell *shell)
 		var_content = (t_content_var *)var_list->content;
 		if (var_content->is_exported == true && var_content->var_value != NULL)
 			ft_printf("declare -x %s=\"%s\"\n",
-					var_content->var_name, var_content->var_value);
+				var_content->var_name, var_content->var_value);
 		else if (var_content->is_exported == true
-					&& var_content->var_value == NULL)
+			&& var_content->var_value == NULL)
 			ft_printf("declare -x %s\n", var_content->var_name);
 		var_list = var_list->next;
 	}
@@ -48,7 +48,7 @@ static int	export_existent_variable(t_shell *shell, char *variable)
 		if (is_strlen_equals(variable, var_content->var_name))
 		{
 			if (ft_strncmp(var_content->var_name, variable,
-			ft_strlen(variable)) == 0)
+					ft_strlen(variable)) == 0)
 			{
 				var_content->is_exported = true;
 				return (EXIT_SUCCESS);
@@ -74,12 +74,28 @@ static int	create_empty_variable_node(t_shell *shell, char *var)
 	return (EXIT_FAILURE);
 }
 
+static bool	handle_var_status(t_shell *sh, char *arg, enum e_var_exit status)
+{
+	bool	error;
+
+	error = false;
+	if (status == VAR_STATUS_SUCCESS_UPDATED)
+		export_existent_variable(sh, arg);
+	else if ((status == VAR_STATUS_EQUAL_NOT_FOUND)
+		&& (export_existent_variable(sh, arg) == EXIT_FAILURE)
+		&& (create_empty_variable_node(sh, arg) == EXIT_FAILURE))
+		error = true;
+	else if (status == VAR_STATUS_NAME_INVALID)
+		error = true;
+	return (error);
+}
+
 int	export(int argc, char *argv[], t_shell *shell)
 {
-	int		i;
-	int		ret;
+	int				i;
+	int				ret;
 	enum e_var_exit	var_status;
-	bool	error;
+	bool			error;
 
 	i = 1;
 	if (i == argc)
@@ -89,21 +105,14 @@ int	export(int argc, char *argv[], t_shell *shell)
 	{
 		error = false;
 		var_status = handle_var(&shell->variable_list, argv[i], true);
-		if (var_status == VAR_STATUS_SUCCESS_UPDATED)
-			export_existent_variable(shell, argv[i]);
-		else if ((var_status == VAR_STATUS_EQUAL_NOT_FOUND)
-			&& (export_existent_variable(shell, argv[i]) == EXIT_FAILURE)
-				&& (create_empty_variable_node(shell, argv[i]) == EXIT_FAILURE))
-				error = true;
-		else if (var_status == VAR_STATUS_NAME_INVALID)
-			error = true;
+		error = handle_var_status(shell, argv[i], var_status);
 		if (error)
 		{
 			ret = EXIT_FAILURE;
-			ft_fprintf(STDERR_FILENO, "Minishell: export: `%s': not a valid identifier\n", argv[i]);
+			ft_fprintf(STDERR_FILENO,
+				"Minishell: export: `%s': not a valid identifier\n", argv[i]);
 		}
 		i++;
 	}
 	return (ret);
 }
-

@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 16:13:37 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/07/09 22:16:33 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/07/10 11:41:36 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,8 @@ int	handle_var_assign(t_shell *shell, t_btnode *node)
 	while (content->cmd.tokens != NULL)
 	{
 		var = content->cmd.tokens;
-		var_status = handle_var(&shell->tmp_var_list, (char *)var->content, false);
+		var_status = handle_var(&shell->tmp_var_list,
+				(char *)var->content, false);
 		if ((var_status != VAR_STATUS_SUCCESS_CREATED)
 			&& (var_status != VAR_STATUS_SUCCESS_UPDATED))
 			break ;

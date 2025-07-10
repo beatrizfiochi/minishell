@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 21:17:55 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/07/09 21:05:31 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/07/10 11:43:40 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include "../minishell.h"
 #include "../variables/variables.h"
 
-static char *value_utils(char *value, char *var_name)
+static char	*value_utils(char *value, char *var_name)
 {
 	char	*var_value;
 
