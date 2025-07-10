@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 13:37:40 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/07/06 17:36:15 by djunho           ###   ########.fr       */
+/*   Updated: 2025/07/10 20:34:39 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ typedef struct s_shell
 	t_btnode	*cmds;
 	t_cmd		*last_cmd;
 	int			ncmds;
+	int			nlines;				// Number of lines read (readline calls)
 	pid_t		last_pid;
 	int			last_exit_status;	// 0 - 255
 									// 0 - success	(EXIT_SUCCESS)
@@ -57,5 +58,7 @@ int		read_command(t_shell *shell);
 void	free_btree_node(void *content);
 void	clear_minishell(t_shell *shell);
 void	printf_error(const char *error);
+char	*sh_read_line(t_shell *shell, const char *prompt);
+void	sh_add_history(t_shell *shell, const char *line);
 
 #endif

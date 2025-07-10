@@ -6,15 +6,13 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 17:00:20 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/07/02 19:22:44 by djunho           ###   ########.fr       */
+/*   Updated: 2025/07/10 20:38:05 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>				//free
 #include <stdio.h>				//printf
 #include <unistd.h>				//write
-#include <readline/readline.h>
-#include <readline/history.h>
 #include "libft/libft.h"
 #include "minishell.h"
 #include "parser/parser.h"
@@ -48,21 +46,6 @@ void	free_btree_node(void *content)
 	free(node_content);
 }
 
-static char	*read_line(void)
-{
-	char	*line;
-
-	if (isatty(STDIN_FILENO))
-		line = readline(PROMPT);
-	else
-		line = readline(NULL);
-	if (line == NULL)
-		return (NULL);
-	if (line[0] != '\0')
-		add_history (line);
-	return (line);
-}
-
 // 0 -> success
 // -1 -> error
 int	read_command(t_shell *shell)
@@ -71,9 +54,10 @@ int	read_command(t_shell *shell)
 	t_list		*token_list;
 
 	init_signals();
-	line = read_line();
+	line = sh_read_line(shell, PROMPT);
 	if (line == NULL)
 		return (-1);
+	sh_add_history(shell, line);
 	token_list = tokenization(line);
 	debug_print_read_command(token_list, line);
 	while (token_list != NULL)
