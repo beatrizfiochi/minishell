@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 15:26:54 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/07/05 11:45:15 by djunho           ###   ########.fr       */
+/*   Updated: 2025/07/09 20:33:30 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ static int	scan_until_op_or_error(char *l, char *c, int *len)
 	return (0);
 }
 
-static void	search_token_utils(char *l, char *c, int init, int *len)
+static void	search_token_utils(char *l, char *c, int *len)
 {
 	bool	valid_op;
 
@@ -65,39 +65,30 @@ static void	search_token_utils(char *l, char *c, int init, int *len)
 			*len = -1;
 			return ;
 		}
-		if ((is_op(&l[*len]) == 1) && (l[*len] == '=')
-			&& (is_valid_name(&l[init], *len - init) == -1))
-		{
-			valid_op = false;
-			(*len)++;
-		}
 	}
 }
 
-static void	search_token(char *line, char *c, int *len, bool *op_var_assign)
+static void	search_token(char *line, char *c, int *len)
 {
-	int		init;
 	int		op_len;
 
 	if (line == NULL)
 		return ;
 	op_len = is_op(&line[*len]);
 	if (op_len == 0 && ((line[*len] == '&') || (line[*len] == '|')
-			|| (line[*len] == '=') || (line[*len] == '<')
-			|| (line[*len] == '>')))
+			|| (line[*len] == '<') || (line[*len] == '>')))
 	{
 		*len = -1;
 		return ;
 	}
-	if (op_len > 0 && (*op_var_assign == false))
+	if (op_len > 0)
 	{
 		*len += op_len;
 		return ;
 	}
 	if (line[*len] == ' ' && *len == 0)
 		(*len)++;
-	init = *len;
-	search_token_utils(line, c, init, len);
+	search_token_utils(line, c, len);
 }
 
 // Tokenize the input line into a linked list of tokens.
@@ -110,22 +101,20 @@ t_list	*tokenization(char *line)
 	t_list	*prev_token;
 	char	quote;
 	int		len;
-	bool	last_op_was_assign;
 
 	head_token = NULL;
 	prev_token = NULL;
 	quote = 0;
-	last_op_was_assign = false;
 	if (line == NULL)
 		return (NULL);
 	while (*line != '\0')
 	{
-		while ((*line == ' ') && (last_op_was_assign == false))
+		while (*line == ' ')
 			line++;
 		if (*line == '\0')
 			break ;
 		len = 0;
-		search_token(line, &quote, &len, &last_op_was_assign);
+		search_token(line, &quote, &len);
 		if (len == -1)
 		{
 			printf_error("syntax error near unexpected token\n");
@@ -136,10 +125,6 @@ t_list	*tokenization(char *line)
 			new_token = create_token("", 0);
 		else
 			new_token = create_token(line, len);
-		if (op(new_token->content) == OP_VAR_ASSIGN)
-			last_op_was_assign = true;
-		else
-			last_op_was_assign = false;
 		if ((prev_token != NULL)
 			&& (is_token_operator(prev_token->content) == 1)
 			&& (is_token_operator(new_token->content) == 1))
@@ -155,11 +140,6 @@ t_list	*tokenization(char *line)
 		ft_lstadd_back(&head_token, new_token);
 		prev_token = new_token;
 		line += len;
-	}
-	if (last_op_was_assign == true)
-	{
-		new_token = create_token("", 0);
-		ft_lstadd_back(&head_token, new_token);
 	}
 	return (head_token);
 }

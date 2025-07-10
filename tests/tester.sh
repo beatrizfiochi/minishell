@@ -407,7 +407,7 @@ tester_grep             'x=10'                "var_name = x, var_value = 10"
 tester_grep             'y=20'                "var_name = y, var_value = 20"
 tester_grep             'w==20'               "var_name = w, var_value = =20"
 tester_grep             "a=\"123\"456'789'\"\". && echo \$a"      "var_name = a, var_value = 123456789."
-# tester_grep             "a=\"123\"456'789'\"\". && echo \$a"             "123456789." por enquanto da erro
+tester_grep             "a=\"123\"456'789'\"\". && echo \$a"             "123456789."
 tester_grep             'echo $'              '$'
 tester_grep             'echo $$'             '$$'
 tester_grep             'echo $$oi'           '$hi'
@@ -501,7 +501,7 @@ tester_grep      '(ls || pwd'            "Error: Missing closing parenthesis!"
 tester_grep      'ls | pwd)'             "Error: syntax error near unexpected token \")\""
 tester_grep      'ls && pwd)'            "Error: syntax error near unexpected token \")\""
 tester_grep      'ls || pwd)'            "Error: syntax error near unexpected token \")\""
-
+echo ""
 
 echo -e "${MAGENTA}Testing builtin commands${RESET}"
 echo -e "${MAGENTA}Testing echo${RESET}"
@@ -534,6 +534,20 @@ echo -e "${MAGENTA}Testing env${RESET}"
 tester_grep        "x=1 env"               "x=1"
 tester_grep        "x=1 y=2 env"               "x=1"
 tester_grep        "x=1 y=2 env"               "y=2"
+echo ""
+echo -e "${MAGENTA}Testing export"
+tester_with_real 'y=1 && export y && export | grep "declare -x y="'
+tester_with_real 'y=1 && export y d && export | grep "declare -x y="'
+tester_with_real 'y=1 && export y d && export | grep "declare -x d"'
+tester_with_real 'y=1 && export y d w=2 && export | grep "declare -x y="'
+tester_with_real 'y=1 && export y d w=2 && export | grep "declare -x d"'
+tester_with_real 'y=1 && export y d w=2 && export | grep "declare -x w="'
+echo ""
+echo -e "${MAGENTA}Testing export and env"
+tester_with_real 'y=1 && export y && env | grep "y=1"'
+tester_with_real 'export y && export | grep "declare -x y"'
+tester_with_real 'export y && env | grep "y="'
+tester_with_real '(export y && env | grep "y=") && y=2 && env | grep "y=2"'
 echo ""
 
 # Test a normal command

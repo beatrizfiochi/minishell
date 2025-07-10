@@ -6,12 +6,12 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 14:25:49 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/06/25 16:15:14 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/07/09 21:05:03 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../libft/libft.h"
-#include "parser.h"
+#include "variables.h"
 #include "../minishell.h"
 
 void	free_var_content(void *var_content)
