@@ -22,8 +22,9 @@
 #include "debug.h"
 #include "execute/execution.h"
 #include "signals/signals.h"
+#include "color.h"
 
-#define PROMPT "My shell > "
+#define PROMPT COLOR_GREEN"My shell > "COLOR_RESET
 
 int	g_signal;
 
