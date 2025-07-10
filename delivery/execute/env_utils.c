@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 13:57:47 by djunho            #+#    #+#             */
-/*   Updated: 2025/07/09 21:04:17 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/07/10 08:23:18 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,8 @@ static char	*ft_strjoin_free(char *s1, char *s2)
 {
 	char	*joined;
 
+	if (s2 == NULL)
+		return (s1);
 	joined = ft_strjoin(s1, s2);
 	free(s1);
 	return (joined);
