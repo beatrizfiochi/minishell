@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 18:59:31 by djunho            #+#    #+#             */
-/*   Updated: 2025/07/10 20:44:36 by djunho           ###   ########.fr       */
+/*   Updated: 2025/07/11 22:59:35 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@ void	clear_minishell(t_shell *shell)
 	btree_clear(&shell->cmds, free_btree_node);
 	if (shell->variable_list != NULL)
 		ft_lstclear(&shell->variable_list, free_var_content);
+	if (shell->tmp_var_list != NULL)
+		ft_lstclear(&shell->tmp_var_list, free_var_content);
 }
 
 static void	init_var_list(t_shell *shell, char *envp[])

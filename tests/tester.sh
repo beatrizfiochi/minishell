@@ -555,6 +555,37 @@ tester_with_real 'cd .. && pwd'
 tester_with_real 'cd .. && pwd && cd .. && pwd'
 tester_grep      'cd /tmp && pwd'                  "/tmp"
 echo ""
+echo -e "${MAGENTA}Testing exit${RESET}"
+tester_with_real 'exit'
+tester_with_real 'y=1 exit'
+tester_with_real 'x=1 && exit'
+tester_with_real 'ls && exit'
+tester_with_real 'pwd && exit'
+tester_with_real 'ls && pwd && exit'
+tester_with_real 'exit && pwd && ls'
+tester_with_real 'exit 12'
+tester_with_real 'exit +12'
+tester_with_real 'exit -12'
+tester_with_real 'exit ++12'
+tester_with_real 'exit --12'
+tester_with_real 'exit +-12'
+tester_with_real 'exit -+12'
+tester_with_real 'y=1 exit 13'
+tester_with_real 'x=1 && exit 14'
+tester_with_real 'ls && exit 15'
+tester_with_real 'pwd && exit 16'
+tester_with_real 'ls && pwd && exit 17'
+tester_with_real 'exit 18 && pwd && ls'
+tester_with_real 'exit 9223372036854775807'
+tester_with_real 'exit 9223372036854775808'
+tester_with_real 'exit 123h'
+tester_with_real 'exit asdj'
+# Too many arguments
+tester_with_real 'exit 1 2'
+tester_with_real 'exit 1 221'
+tester_with_real 'exit 1 221 1243'
+tester_with_real 'exit 1asd 221 1243'
+echo ""
 
 # Test a normal command
 echo -e "${MAGENTA}Testing a normal command${RESET}"
