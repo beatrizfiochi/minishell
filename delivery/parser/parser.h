@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 14:14:02 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/07/09 21:02:49 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/07/10 23:12:52 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 # include "../libft/libft.h"
 # include "../minishell.h"
 
-t_btnode	*create_tree(t_list **token_list, t_btnode *parent);
+int			create_tree(t_shell *shell, t_btnode **tree, t_list **token_list, t_btnode *parent);
 
 t_list		*tokenization(char *line);
 

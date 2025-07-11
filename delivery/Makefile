@@ -28,7 +28,8 @@ SRCS = main.c read_command.c utils.c debug.c readline.c \
 	variables/handle_variables.c variables/env_variables.c \
 	variables/shell_level_var.c variables/handle_var_utils.c \
 	variables/expand_variable.c variables/expand_variable_utils.c \
-	redirect/redirect.c redirect/redirect_aux.c
+	redirect/redirect.c redirect/redirect_aux.c \
+	heredoc/heredoc.c
 OBJS_DIR = objs
 OBJS = $(patsubst %.c,$(OBJS_DIR)/%.o,$(SRCS))
 DEPENDS = $(patsubst %.c,$(OBJS_DIR)/%.d,$(SRCS))

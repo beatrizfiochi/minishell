@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 17:00:20 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/07/11 08:51:04 by djunho           ###   ########.fr       */
+/*   Updated: 2025/07/11 09:40:46 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 #include "signals/signals.h"
 #include "color.h"
 
-#define PROMPT COLOR_GREEN"My shell > "COLOR_RESET
+#define PROMPT "My shell > "
 
 __attribute__((weak)) void	debug_print_tree(t_btnode *tree)
 {
@@ -50,9 +50,10 @@ int	read_command(t_shell *shell)
 {
 	char		*line;
 	t_list		*token_list;
+	int			ret;
 
 	init_signals();
-	line = sh_read_line(shell, PROMPT);
+	line = sh_read_line(shell, COLOR_GREEN PROMPT COLOR_RESET);
 	if (line == NULL)
 		return (-1);
 	sh_add_history(shell, line);
@@ -60,18 +61,16 @@ int	read_command(t_shell *shell)
 	debug_print_read_command(token_list, line);
 	while (token_list != NULL)
 	{
-		shell->cmds = create_tree(&token_list, NULL);
-		if (shell->cmds == NULL)
-		{
-			shell->last_exit_status = EXIT_INCORRECT_USAGE;
+		ret = create_tree(shell, &shell->cmds, &token_list, NULL);
+		if (ret != EXIT_SUCCESS)
 			break ;
-		}
 		debug_print_tree(shell->cmds);
-		shell->last_exit_status = execute(shell);
-		handle_signal_output(shell);
+		ret = execute(shell);
+		handle_signal_output(ret);
 		btree_clear(&shell->cmds, free_btree_node);
 		break ;
 	}
+	shell->last_exit_status = ret;
 	free(line);
 	return (shell->last_exit_status);
 }
