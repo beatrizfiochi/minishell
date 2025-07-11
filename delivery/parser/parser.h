@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 14:14:02 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/07/11 19:56:35 by djunho           ###   ########.fr       */
+/*   Updated: 2025/07/11 20:42:58 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,20 +17,22 @@
 # include "../libft/libft.h"
 # include "../minishell.h"
 
-int			create_tree(t_shell *shell, t_btnode **tree, t_list **token_list,
-				t_btnode *parent);
+int		create_tree(t_shell *shell, t_btnode **tree, t_list **token_list,
+			t_btnode *parent);
 
-t_list		*tokenization(char *line);
+t_list	*tokenization(char *line);
 
-void		free_var_content(void *var_content);
-void		search_and_expand(t_list *token_list,
-				t_list *var_list, t_shell *shell);
+void	free_var_content(void *var_content);
+void	search_and_expand_string(char **cont, t_list *var_list, t_shell *shell);
+void	search_and_expand(t_list *token_list,
+			t_list *var_list, t_shell *shell);
 
-char		*go_next_char(char *line, char c);
+char	*go_next_char(char *line, char c);
 
-int			is_op(char *line);
-int			is_token_operator(char *token);
+int		is_op(char *line);
+int		is_token_operator(char *token);
 
-bool		clean_token_quotes(t_list *token_list);
+bool	clean_token_quotes(t_list *token_list);
+bool	clean_string_quotes(char **content_ptr);
 
 #endif

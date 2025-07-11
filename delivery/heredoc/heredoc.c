@@ -6,7 +6,7 @@
 /*   By: djunho <djunho@student.42porto.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/10 18:31:10 by djunho            #+#    #+#             */
-/*   Updated: 2025/07/11 20:19:31 by djunho           ###   ########.fr       */
+/*   Updated: 2025/07/11 21:56:04 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,35 +22,22 @@
 #include "../color.h"
 #include "../minishell.h"
 #include "../signals/signals.h"
+#include "heredoc_aux.h"
 
 #define HEREDOC_PROMPT "> "
 
-static char	*get_heredoc_file_name(void)
+static int	heredoc_readlines(t_shell *shell, int fd, char *eof,
+				bool should_expand)
 {
-	static int	heredoc_counter = 0;
-	char		*file_name;
-	char		*id;
-
-	id = ft_itoa(heredoc_counter++);
-	if (id == NULL)
-		return (NULL);
-	file_name = ft_strjoin("/tmp/heredoc_", id);
-	free(id);
-	return (file_name);
-}
-
-static int	heredoc_read_document(t_shell *shell, int fd, char *eof)
-{
-	int		line_start;
 	char	*line;
 	int		ret;
 
 	ret = EXIT_SUCCESS;
-	line_start = shell->nlines;
 	line = sh_read_line(shell, COLOR_MAGENTA HEREDOC_PROMPT COLOR_RESET);
 	while ((line != NULL) && (ft_strncmp(line, eof, ft_strlen(eof) + 1) != 0))
 	{
 		ret = EXIT_FAILURE;
+		expand_line(shell, should_expand, &line);
 		if (write(fd, line, ft_strlen(line)) == -1)
 			break ;
 		ret = EXIT_SUCCESS;
@@ -61,10 +48,25 @@ static int	heredoc_read_document(t_shell *shell, int fd, char *eof)
 	if ((line == NULL) && (g_signal == SIGINT))
 		ret = EXIT_SIGNAL_BASE + g_signal;
 	else if (line == NULL)
-		ft_fprintf(STDERR_FILENO, "warning: here-document at line %d delimited"
-			"by end-of-file (wanted `%s')\n", line_start, eof);
+		ret = EXIT_SIGNAL_BASE + SIGTERM;
 	else
 		free(line);
+	return (ret);
+}
+
+static int	heredoc_doc(t_shell *shell, int fd, char *eof, bool should_expand)
+{
+	int		line_start;
+	int		ret;
+
+	line_start = shell->nlines;
+	ret = heredoc_readlines(shell, fd, eof, should_expand);
+	if (ret == (EXIT_SIGNAL_BASE + SIGTERM))
+	{
+		ret = EXIT_SUCCESS;
+		ft_fprintf(STDERR_FILENO, "warning: here-document at line %d delimited"
+			"by end-of-file (wanted `%s')\n", line_start, eof);
+	}
 	return (ret);
 }
 
@@ -83,7 +85,7 @@ static int	process_heredoc(t_shell *shell, t_content_node *content, char **eof)
 		return (EXIT_FAILURE);
 	}
 	heredoc_signals();
-	ret = heredoc_read_document(shell, fd, *eof);
+	ret = heredoc_doc(shell, fd, *eof, should_expand(eof));
 	heredoc_ignore_signals();
 	if (ret != EXIT_SUCCESS)
 	{

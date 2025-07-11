@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 11:33:43 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/06/23 18:30:58 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/07/11 20:36:45 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ static char	*remove_quotes(const char *src)
 	return (new_str);
 }
 
-static bool	clean_single_token_quotes(char **content_ptr)
+bool	clean_string_quotes(char **content_ptr)
 {
 	char	*new_str;
 
@@ -84,7 +84,7 @@ bool	clean_token_quotes(t_list *token_list)
 {
 	while (token_list != NULL)
 	{
-		if (clean_single_token_quotes((char **)&token_list->content) == false)
+		if (clean_string_quotes((char **)&token_list->content) == false)
 			return (false);
 		token_list = token_list->next;
 	}

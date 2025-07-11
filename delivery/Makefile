@@ -6,7 +6,7 @@
 #    By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/27 13:09:33 by djunho            #+#    #+#              #
-#    Updated: 2025/07/11 08:59:00 by djunho           ###   ########.fr        #
+#    Updated: 2025/07/11 21:42:57 by djunho           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,7 +29,7 @@ SRCS = main.c read_command.c utils.c debug.c readline.c \
 	variables/shell_level_var.c variables/handle_var_utils.c \
 	variables/expand_variable.c variables/expand_variable_utils.c \
 	redirect/redirect.c redirect/redirect_aux.c \
-	heredoc/heredoc.c
+	heredoc/heredoc.c heredoc/heredoc_aux.c
 OBJS_DIR = objs
 OBJS = $(patsubst %.c,$(OBJS_DIR)/%.o,$(SRCS))
 DEPENDS = $(patsubst %.c,$(OBJS_DIR)/%.d,$(SRCS))
