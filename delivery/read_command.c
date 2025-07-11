@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 17:00:20 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/07/10 20:38:05 by djunho           ###   ########.fr       */
+/*   Updated: 2025/07/11 08:51:04 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,6 @@
 #include "color.h"
 
 #define PROMPT COLOR_GREEN"My shell > "COLOR_RESET
-
-int	g_signal;
 
 __attribute__((weak)) void	debug_print_tree(t_btnode *tree)
 {
