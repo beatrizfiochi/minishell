@@ -517,6 +517,7 @@ tester_with_real "echo -nnxn -nnn look"
 tester_with_real "echo -nnnn -nxn look"
 tester_with_real_should_be_different "echo -e \"\nlook -n\""
 tester_with_real "/usr/bin/echo hello world"
+tester_with_real 'echo      456 $y 789 $x     456   '
 echo ""
 echo -e "${MAGENTA}Testing cd${RESET}"
 tester_with_real "cd"
