@@ -59,6 +59,7 @@ int	read_command(t_shell *shell)
 	sh_add_history(shell, line);
 	token_list = tokenization(line);
 	debug_print_read_command(token_list, line);
+	ret = shell->last_exit_status;
 	while (token_list != NULL)
 	{
 		ret = create_tree(shell, &shell->cmds, &token_list, NULL);
@@ -68,7 +69,6 @@ int	read_command(t_shell *shell)
 		ret = execute(shell);
 		handle_signal_output(ret);
 		btree_clear(&shell->cmds, free_btree_node);
-		break ;
 	}
 	shell->last_exit_status = ret;
 	free(line);

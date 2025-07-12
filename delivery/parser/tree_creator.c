@@ -106,8 +106,8 @@ t_btnode	*create_basic_tree(t_list **token_list, t_btnode *parent,
 		tree = create_node(split.op, parent, old_tree, NULL);
 		tree->right = create_node(split.right, tree, NULL, NULL);
 	}
-	return (tree);
 	*token_list = split.remain;
+	return (tree);
 }
 
 int	create_tree(t_shell *shell, t_btnode **tree, t_list **token_list,
