@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 12:13:21 by djunho            #+#    #+#             */
-/*   Updated: 2025/07/11 23:16:26 by djunho           ###   ########.fr       */
+/*   Updated: 2025/07/12 14:25:23 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,5 +31,6 @@ int		env(int argc, char *argv[], t_shell *shell);
 int		export(int argc, char *argv[], t_shell *shell);
 int		pwd(int argc, char *argv[], t_shell *shell);
 int		sh_exit(int argc, char *argv[], t_shell *shell);
+int		unset(int argc, char *argv[], t_shell *shell);
 
 #endif // BUILTINS_H
