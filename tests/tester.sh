@@ -535,7 +535,7 @@ tester_grep        "x=1 env"               "x=1"
 tester_grep        "x=1 y=2 env"               "x=1"
 tester_grep        "x=1 y=2 env"               "y=2"
 echo ""
-echo -e "${MAGENTA}Testing export"
+echo -e "${MAGENTA}Testing export${RESET}"
 tester_with_real 'y=1 && export y && export | grep "declare -x y="'
 tester_with_real 'y=1 && export y d && export | grep "declare -x y="'
 tester_with_real 'y=1 && export y d && export | grep "declare -x d"'
@@ -543,11 +543,17 @@ tester_with_real 'y=1 && export y d w=2 && export | grep "declare -x y="'
 tester_with_real 'y=1 && export y d w=2 && export | grep "declare -x d"'
 tester_with_real 'y=1 && export y d w=2 && export | grep "declare -x w="'
 echo ""
-echo -e "${MAGENTA}Testing export and env"
+echo -e "${MAGENTA}Testing export and env${RESET}"
 tester_with_real 'y=1 && export y && env | grep "y=1"'
 tester_with_real 'export y && export | grep "declare -x y"'
 tester_with_real 'export y && env | grep "y="'
 tester_with_real '(export y && env | grep "y=") && y=2 && env | grep "y=2"'
+echo ""
+echo -e "${MAGENTA}Testing pwd${RESET}"
+tester_with_real 'pwd'
+tester_with_real 'cd .. && pwd'
+tester_with_real 'cd .. && pwd && cd .. && pwd'
+tester_grep      'cd /tmp && pwd'                  "/tmp"
 echo ""
 
 # Test a normal command
