@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 13:30:38 by djunho            #+#    #+#             */
-/*   Updated: 2025/07/11 22:22:47 by djunho           ###   ########.fr       */
+/*   Updated: 2025/07/11 23:16:15 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ static int	run_builtin(int argc, char *argv[], t_shell *shell, int *ret)
 	{"env", env,},
 	{"export", export},
 	{"pwd", pwd},
+	{"exit", sh_exit},
 	};
 
 	*ret = EXIT_CMD_NOT_FOUND;
