@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/05 13:53:41 by djunho            #+#    #+#             */
-/*   Updated: 2025/07/09 10:58:05 by djunho           ###   ########.fr       */
+/*   Updated: 2025/07/10 21:03:42 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,11 +98,11 @@ int	get_fork_return(int wstatus)
 		return (WEXITSTATUS(wstatus));
 	else if (WIFSIGNALED(wstatus))
 	{
-		return (WTERMSIG(wstatus) + 128);
+		return (WTERMSIG(wstatus) + EXIT_SIGNAL_BASE);
 	}
 	else if (WIFSTOPPED(wstatus))
 	{
-		return (WSTOPSIG(wstatus) + 128);
+		return (WSTOPSIG(wstatus) + EXIT_SIGNAL_BASE);
 	}
 	else
 	{

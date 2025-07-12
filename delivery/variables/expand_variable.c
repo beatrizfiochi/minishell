@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 18:15:43 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/07/09 21:09:27 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/07/11 20:43:04 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,8 +65,7 @@ char	*handle_possible_var(char **cont, char *cnt,
 	return (cnt);
 }
 
-static void	search_and_expand_content(char **cont, t_list *var_list,
-		t_shell *shell)
+void	search_and_expand_string(char **cont, t_list *var_list, t_shell *shell)
 {
 	char	*cnt;
 	bool	dquote;
@@ -93,7 +92,7 @@ void	search_and_expand(t_list *token_list, t_list *var_list, t_shell *shell)
 {
 	while (token_list != NULL)
 	{
-		search_and_expand_content((char **)(&(token_list->content)),
+		search_and_expand_string((char **)(&(token_list->content)),
 			var_list, shell);
 		token_list = token_list->next;
 	}

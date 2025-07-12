@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 18:34:50 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/07/09 09:55:55 by djunho           ###   ########.fr       */
+/*   Updated: 2025/07/11 09:38:46 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include "../btree/btree.h"
 #include "../minishell.h"
 #include "../cmd.h"
+#include "../heredoc/heredoc.h"
 #include "aux.h"
 #include "parser.h"
 #include "tokens.h"
@@ -105,30 +106,35 @@ t_btnode	*create_basic_tree(t_list **token_list, t_btnode *parent,
 		tree = create_node(split.op, parent, old_tree, NULL);
 		tree->right = create_node(split.right, tree, NULL, NULL);
 	}
-	*token_list = split.remain;
 	return (tree);
+	*token_list = split.remain;
 }
 
-t_btnode	*create_tree(t_list **token_list, t_btnode *parent)
+int	create_tree(t_shell *shell, t_btnode **tree, t_list **token_list,
+					t_btnode *parent)
 {
-	t_btnode	*tree;
-	bool		expanded;
+	bool	expanded;
+	int		ret;
 
 	if (token_list == NULL || *token_list == NULL)
-		return (NULL);
-	tree = create_basic_tree(token_list, parent, false);
-	if (tree == NULL)
-		return (NULL);
+		return (EXIT_INCORRECT_USAGE);
+	*tree = create_basic_tree(token_list, parent, false);
+	if (*tree == NULL)
+		return (EXIT_INCORRECT_USAGE);
 	expanded = true;
 	while (expanded == true)
 	{
 		expanded = false;
-		tree = expand_tree_pipe(tree, &expanded);
-		if (tree == NULL)
-			return (NULL);
-		tree = expand_tree_parenthesis(tree, &expanded);
-		if (tree == NULL)
-			return (NULL);
+		*tree = expand_tree_pipe(*tree, &expanded);
+		*tree = expand_tree_parenthesis(*tree, &expanded);
+		if (*tree == NULL)
+			return (EXIT_INCORRECT_USAGE);
 	}
-	return (check_tree_syntax(tree));
+	*tree = check_tree_syntax(*tree);
+	if (*tree == NULL)
+		return (EXIT_INCORRECT_USAGE);
+	ret = check_tree_for_heredoc(shell, *tree);
+	if (ret != EXIT_SUCCESS)
+		btree_delete(tree, free_btree_node);
+	return (ret);
 }

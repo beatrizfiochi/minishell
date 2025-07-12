@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/21 19:54:13 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/07/03 14:38:07 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/07/11 22:51:55 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,11 @@
 #include "signals.h"
 #include "../minishell.h"
 
+int	g_signal;
+
 void	handle_sigint(int signal)
 {
+	g_signal = signal;
 	if (signal == SIGINT)
 	{
 		rl_replace_line("", 0);
@@ -29,6 +32,7 @@ void	handle_sigint(int signal)
 
 void	init_signals(void)
 {
+	g_signal = 0;
 	signal(SIGINT, handle_sigint);
 	signal(SIGQUIT, SIG_IGN);
 }
@@ -36,6 +40,7 @@ void	init_signals(void)
 // Reset SIGINT and SIGQUIT to Default
 void	reset_signals(void)
 {
+	g_signal = 0;
 	signal(SIGINT, SIG_DFL);
 	signal(SIGQUIT, SIG_DFL);
 }
@@ -44,14 +49,15 @@ void	reset_signals(void)
 //		used to ignore signals in the parent process before forking
 void	ignore_signals(void)
 {
+	g_signal = 0;
 	signal(SIGINT, SIG_IGN);
 	signal(SIGQUIT, SIG_IGN);
 }
 
-void	handle_signal_output(t_shell *shell)
+void	handle_signal_output(int ret)
 {
-	if (shell->last_exit_status == (128 + SIGINT))
+	if (ret == (EXIT_SIGNAL_BASE + SIGINT))
 		printf("\n");
-	else if (shell->last_exit_status == (128 + SIGQUIT))
+	else if (ret == (EXIT_SIGNAL_BASE + SIGQUIT))
 		printf("Quit (core dumped)\n");
 }

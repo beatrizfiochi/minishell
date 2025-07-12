@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 18:34:50 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/07/09 09:38:37 by djunho           ###   ########.fr       */
+/*   Updated: 2025/07/11 09:37:57 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,8 @@ t_btnode	*expand_tree_pipe(t_btnode *tree, bool	*expanded)
 {
 	bool	i_expanded;
 
+	if (tree == NULL)
+		return (NULL);
 	i_expanded = true;
 	while (i_expanded == true)
 	{
@@ -80,6 +82,8 @@ t_btnode	*expand_tree_parenthesis(t_btnode *tree, bool	*expanded)
 {
 	bool	i_expanded;
 
+	if (tree == NULL)
+		return (NULL);
 	i_expanded = true;
 	while (i_expanded == true)
 	{

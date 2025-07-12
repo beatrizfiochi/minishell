@@ -6,12 +6,12 @@
 #    By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/27 13:09:33 by djunho            #+#    #+#              #
-#    Updated: 2025/07/09 21:08:16 by bfiochi-         ###   ########.fr        #
+#    Updated: 2025/07/11 21:42:57 by djunho           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME= minishell
-SRCS = main.c read_command.c utils.c debug.c \
+SRCS = main.c read_command.c utils.c debug.c readline.c \
 	parser/tokenization.c parser/aux.c parser/aux2.c \
 	parser/tree_creator.c parser/tree_creator_checks.c \
 	parser/tree_creator_expand.c parser/tokens.c \
@@ -24,11 +24,12 @@ SRCS = main.c read_command.c utils.c debug.c \
 	execute/process_aux.c execute/process_utils.c \
 	builtins/builtins.c builtins/echo/echo.c builtins/cd/cd.c \
 	builtins/env/env.c builtins/export/export.c \
-	signals/handle_signals.c \
+	signals/handle_signals.c signals/heredoc_signals.c \
 	variables/handle_variables.c variables/env_variables.c \
 	variables/shell_level_var.c variables/handle_var_utils.c \
 	variables/expand_variable.c variables/expand_variable_utils.c \
-	redirect/redirect.c redirect/redirect_aux.c
+	redirect/redirect.c redirect/redirect_aux.c \
+	heredoc/heredoc.c heredoc/heredoc_aux.c
 OBJS_DIR = objs
 OBJS = $(patsubst %.c,$(OBJS_DIR)/%.o,$(SRCS))
 DEPENDS = $(patsubst %.c,$(OBJS_DIR)/%.d,$(SRCS))

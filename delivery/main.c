@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 18:59:31 by djunho            #+#    #+#             */
-/*   Updated: 2025/07/06 10:54:41 by djunho           ###   ########.fr       */
+/*   Updated: 2025/07/10 20:44:36 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ static void init_shell(t_shell *shell)
 	shell->variable_list = NULL;
 	shell->tmp_var_list = NULL;
 	shell->last_exit_status = EXIT_SUCCESS;
+	shell->nlines = 0;
 	shell->last_pid = -1;
 	shell->cmds = NULL;
 	shell->is_running_redirect = false;
