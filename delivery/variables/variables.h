@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 21:16:32 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/07/10 11:43:13 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/07/12 11:24:20 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@ t_list				*envp_list(t_shell *shell, char *envp[]);
 
 int					process_var_assign(t_list *name, t_list *op, t_list *value,
 						t_shell *sh);
-int					is_valid_name(char *name, int len);
 
 enum e_var_exit
 {
@@ -40,9 +39,11 @@ enum e_var_exit
 };
 enum e_var_exit		handle_var(t_list **var_list, char *var, bool is_exported);
 
+bool				is_valid_name(char *name, int len);
 bool				is_strlen_equals(char *text_1, char *text_2);
 bool				check_and_replace_var(t_list *current,
 						char *name, char *value);
+bool				name_and_value_split(char *str, char **name, char **value);
 
 void				update_shell_level(t_list *var_list);
 
