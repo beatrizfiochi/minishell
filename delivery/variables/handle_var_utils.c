@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 20:45:39 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/07/12 11:23:20 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/07/12 12:06:51 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,20 +53,31 @@ bool	name_and_value_split(char *str, char **name, char **value)
 	return (true);
 }
 
+enum e_var_exit	handle_var_name_and_value(t_list **var_list, char *name,
+					char *value, bool is_exported)
+{
+	t_list	*new_node;
+	bool	*ptr_is_export;
+
+	if (check_and_replace_var(*var_list, name, value, &ptr_is_export) == true)
+	{
+		*ptr_is_export = is_exported;
+		return (VAR_STATUS_SUCCESS_UPDATED);
+	}
+	new_node = create_var_node(name, value, is_exported);
+	if (new_node == NULL)
+		return (VAR_STATUS_GENERIC_ERROR);
+	ft_lstadd_back(var_list, new_node);
+	return (VAR_STATUS_SUCCESS_CREATED);
+}
+
 enum e_var_exit	handle_var(t_list **var_list, char *var, bool is_exported)
 {
-	t_list		*new_node;
 	char		*var_value;
 
 	if (name_and_value_split(var, &var, &var_value) == false)
 		return (VAR_STATUS_NAME_INVALID);
 	if (var_value == NULL)
 		return (VAR_STATUS_EQUAL_NOT_FOUND);
-	if (check_and_replace_var(*var_list, var, var_value) == true)
-		return (VAR_STATUS_SUCCESS_UPDATED);
-	new_node = create_var_node(var, var_value, is_exported);
-	if (new_node == NULL)
-		return (VAR_STATUS_GENERIC_ERROR);
-	ft_lstadd_back(var_list, new_node);
-	return (VAR_STATUS_SUCCESS_CREATED);
+	return (handle_var_name_and_value(var_list, var, var_value, is_exported));
 }

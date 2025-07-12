@@ -542,6 +542,7 @@ tester_with_real 'y=1 && export y d && export | grep "declare -x d"'
 tester_with_real 'y=1 && export y d w=2 && export | grep "declare -x y="'
 tester_with_real 'y=1 && export y d w=2 && export | grep "declare -x d"'
 tester_with_real 'y=1 && export y d w=2 && export | grep "declare -x w="'
+tester_with_real "y=1 && y=2 export y && export | grep 'declare -x y=\"2\"'"
 echo ""
 echo -e "${MAGENTA}Testing export and env${RESET}"
 tester_with_real 'y=1 && export y && env | grep "y=1"'

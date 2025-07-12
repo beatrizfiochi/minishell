@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 17:07:52 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/07/05 15:47:31 by djunho           ###   ########.fr       */
+/*   Updated: 2025/07/12 11:58:04 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ static bool	parse_env(char *env, char **name, char **value)
 //  if not found, returns false (caller is responsible for managing memory)
 static bool	handle_existing_var(t_shell *shell, char *name, char *value)
 {
-	if (check_and_replace_var(shell->variable_list, name, value) == true)
+	if (check_and_replace_var(shell->variable_list, name, value, NULL) == true)
 	{
 		free_name_value(name, value);
 		return (true);
