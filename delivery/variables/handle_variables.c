@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 21:17:55 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/07/10 11:43:40 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/07/12 12:30:48 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,24 +71,29 @@ bool	is_strlen_equals(char *text_1, char *text_2)
 // Checks if a variable already exists:
 //  - If it exists: replaces its value and returns true
 //  - If it doesn't exist: returns false
-bool	check_and_replace_var(t_list *current, char *name, char *value)
+bool	check_and_replace_var(t_list *current, char *name, char *value,
+			bool **is_export)
 {
-	t_content_var	*current_content;
+	t_content_var	*curr;
+	char			*aux;
 
 	while (current != NULL)
 	{
-		current_content = (t_content_var *)current->content;
-		if (is_strlen_equals(current_content->var_name, name))
+		curr = (t_content_var *)current->content;
+		if (is_strlen_equals(curr->var_name, name)
+			&& (ft_strncmp(curr->var_name, name, ft_strlen(name)) == 0))
 		{
-			if (ft_strncmp(current_content->var_name, name,
-					ft_strlen(name)) == 0)
-			{
-				free(current_content->var_value);
-				current_content->var_value = ft_strdup(value);
-				if (current_content->var_value == NULL)
-					return (false);
-				return (true);
-			}
+			aux = curr->var_value;
+			if (value != NULL)
+				curr->var_value = ft_strdup(value);
+			else
+				curr->var_value = NULL;
+			free(aux);
+			if (is_export != NULL)
+				*is_export = &(curr->is_exported);
+			if (curr->var_value == NULL)
+				return (false);
+			return (true);
 		}
 		current = current->next;
 	}
@@ -104,7 +109,7 @@ int	process_var_assign(t_list *name, t_list *op, t_list *value, t_shell *sh)
 		return (1);
 	current = sh->tmp_var_list;
 	if (check_and_replace_var(current, (char *)(name->content),
-		(char *)(value->content)) == true)
+		(char *)(value->content), NULL) == true)
 		return (0);
 	new_node = create_var_node((char *)(name->content),
 			(char *)(value->content), false);

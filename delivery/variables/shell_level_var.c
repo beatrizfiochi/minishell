@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/26 17:45:35 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/06/27 20:15:36 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/07/12 12:00:29 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,6 @@ void	update_shell_level(t_list *var_list)
 	new_value = ft_itoa(shlvl);
 	if (new_value == NULL)
 		return ;
-	check_and_replace_var(var_list, "SHLVL", new_value);
+	check_and_replace_var(var_list, "SHLVL", new_value, NULL);
 	free(new_value);
 }

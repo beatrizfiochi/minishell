@@ -3,13 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   readline.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: djunho <djunho@student.42porto.com>        +#+  +:+       +#+        */
+/*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/10 20:27:08 by djunho            #+#    #+#             */
-/*   Updated: 2025/07/10 20:42:29 by djunho           ###   ########.fr       */
+/*   Updated: 2025/07/12 13:33:19 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include <unistd.h>				// isatty
+
+#include <unistd.h>
 #include <readline/readline.h>
 #include <readline/history.h>
 #include "minishell.h"
@@ -37,4 +38,3 @@ void	sh_add_history(t_shell *shell, const char *line)
 			add_history(line);
 	}
 }
-

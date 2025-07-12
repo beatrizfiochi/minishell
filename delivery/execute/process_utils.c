@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 16:13:37 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/07/10 11:41:36 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/07/12 11:57:42 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ void	join_shell_variable_lists(t_shell *shell)
 	{
 		tmp_content = (t_content_var *)tmp_node->content;
 		if (check_and_replace_var(shell->variable_list,
-				tmp_content->var_name, tmp_content->var_value) == false)
+				tmp_content->var_name, tmp_content->var_value, NULL) == false)
 		{
 			new_node = create_var_node(tmp_content->var_name,
 					tmp_content->var_value, tmp_content->is_exported);

@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 20:45:39 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/07/09 22:52:10 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/07/12 12:06:51 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include "variables.h"
 #include "../parser/parser.h"
 
-int	is_valid_name(char *name, int len)
+bool	is_valid_name(char *name, int len)
 {
 	int	i;
 
@@ -29,33 +29,55 @@ int	is_valid_name(char *name, int len)
 			if ((ft_isalnum(name[i]) == true) || name[i] == '_')
 				i++;
 			else
-				return (-1);
+				return (false);
 		}
-		return (0);
+		return (true);
 	}
 	else
-		return (-1);
+		return (false);
 }
 
-enum e_var_exit	handle_var(t_list **var_list, char *var, bool is_exported)
+bool	name_and_value_split(char *str, char **name, char **value)
 {
-	t_list		*new_node;
-	char		*var_value;
+	*name = str;
+	*value = NULL;
+	while ((*str != '\0') && (*str != '='))
+		str++;
+	if (is_valid_name(*name, (str - *name)) == false)
+		return (false);
+	if (*str == '=')
+	{
+		*value = (str + 1);
+		*str = '\0';
+	}
+	return (true);
+}
 
-	var_value = var;
-	while ((*var_value != '\0') && (*var_value != '='))
-		var_value++;
-	if (*var_value == '\0')
-		return (VAR_STATUS_EQUAL_NOT_FOUND);
-	if (is_valid_name(var, var_value - var) != 0)
-		return (VAR_STATUS_NAME_INVALID);
-	*var_value = '\0';
-	var_value++;
-	if (check_and_replace_var(*var_list, var, var_value) == true)
+enum e_var_exit	handle_var_name_and_value(t_list **var_list, char *name,
+					char *value, bool is_exported)
+{
+	t_list	*new_node;
+	bool	*ptr_is_export;
+
+	if (check_and_replace_var(*var_list, name, value, &ptr_is_export) == true)
+	{
+		*ptr_is_export = is_exported;
 		return (VAR_STATUS_SUCCESS_UPDATED);
-	new_node = create_var_node(var, var_value, is_exported);
+	}
+	new_node = create_var_node(name, value, is_exported);
 	if (new_node == NULL)
 		return (VAR_STATUS_GENERIC_ERROR);
 	ft_lstadd_back(var_list, new_node);
 	return (VAR_STATUS_SUCCESS_CREATED);
+}
+
+enum e_var_exit	handle_var(t_list **var_list, char *var, bool is_exported)
+{
+	char		*var_value;
+
+	if (name_and_value_split(var, &var, &var_value) == false)
+		return (VAR_STATUS_NAME_INVALID);
+	if (var_value == NULL)
+		return (VAR_STATUS_EQUAL_NOT_FOUND);
+	return (handle_var_name_and_value(var_list, var, var_value, is_exported));
 }
