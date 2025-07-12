@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 14:25:49 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/07/09 21:05:03 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/07/12 15:09:59 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,8 @@ void	free_var_content(void *var_content)
 		return ;
 	content = (t_content_var *)var_content;
 	free(content->var_name);
-	free(content->var_value);
+	if (content->var_value != NULL)
+		free(content->var_value);
 	free(content);
 }
 

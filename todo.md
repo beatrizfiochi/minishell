@@ -61,9 +61,7 @@ Por exemplo: `(ls || pwd) > /tmp/file`
 
 Ideia de solução: Rodar os parentesis em um fork a parte. O before iria fazer o fork. O filho iria rodar e todo output do filho iria para o arquivo.
 
-# Export
+# echo
 
-Resolver problema:
-x=1 export x
-echo $x
-tem q printar 1, porque tem q atualizar o existe na tmp para a var_list
+verificar: echo 456 $x 789 -> output: 456  789
+no bash o output seria: 456 789
