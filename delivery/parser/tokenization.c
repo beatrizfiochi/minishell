@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 15:26:54 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/07/09 20:33:30 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/07/13 13:14:12 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,9 @@ static int	scan_until_op_or_error(char *l, char *c, int *len)
 		{
 			*c = l[*len];
 			*len = go_next_char(&l[*len + 1], *c) - l;
-			if (l[*len] == *c)
+			if (*len < 0)
+				return (-1);
+			else if (l[*len] == *c)
 				(*len)++;
 		}
 		else
