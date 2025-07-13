@@ -15,6 +15,20 @@ test="cho ola"
 e$test -> ola
 e"$test" -> echo ola: command not found
 
+```
+bfiochi-@c2r6s11:~/minishell/delivery$ var2="beatriz"
+bfiochi-@c2r6s11:~/minishell/delivery$ var1="daniel e $var2"
+bfiochi-@c2r6s11:~/minishell/delivery$ var="echo 'ola $var1   ola'&&ls"
+bfiochi-@c2r6s11:~/minishell/delivery$ echo "$var"
+echo 'ola daniel e beatriz   ola'&&ls
+bfiochi-@c2r6s11:~/minishell/delivery$ $var
+'ola daniel e beatriz ola'&&ls
+bfiochi-@c2r6s11:~/minishell/delivery$ ^C
+bfiochi-@c2r6s11:~/minishell/delivery$ echo $var
+echo 'ola daniel e beatriz ola'&&ls
+bfiochi-@c2r6s11:~/minishell/delivery$
+```
+
 ## Uso de parentesis, segundo o man bash não serão persistidos
 ```
 (list) list is executed in a subshell (see COMMAND EXECUTION ENVIRONMENT below for a description of a subshell environment).  Variable assignments and builtin commands that affect the shell's environment do not remain in effect after the command completes.  The return
@@ -111,4 +125,18 @@ bfiochi-@c2r6s11:/tmp/deleteme$ pwd
 /tmp/deleteme
 ```
 
+```
+My shell > cd /tmp
+My shell > mkdir test1
+My shell > cd test1/
+My shell > mkdir test1
+My shell > cd test1/
+My shell > pwd
+/tmp/test1/test1
+My shell > rm -rf ../../test1
+My shell > cd ..
+fish: Job 1, './minishell' terminated by signal SIGSEGV (Address boundary error)
+```
+
 Sugest~ao data 'e usar a vari'avel PWD quando o getcwd falhar!
+
