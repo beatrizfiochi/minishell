@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 18:15:43 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/07/11 20:43:04 by djunho           ###   ########.fr       */
+/*   Updated: 2025/07/13 17:33:55 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ void	search_and_expand_string(char **cont, t_list *var_list, t_shell *shell)
 			cnt = handle_possible_var(cont, cnt, var_list, shell);
 		else if (is_quote(*cnt) && (*cnt == '\'') && (dquote == false))
 			cnt = go_to_end_quote(cnt);
-		else if (is_quote(*cnt))
+		else if (is_quote(*cnt) && (*cnt == '"'))
 		{
 			dquote = !dquote;
 			cnt++;
