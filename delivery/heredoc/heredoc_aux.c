@@ -43,5 +43,5 @@ void	expand_line(t_shell *shell, bool should_expand, char **line)
 {
 	if (!should_expand)
 		return ;
-	search_and_expand_string(line, shell->variable_list, shell);
+	expand_variable_string(line, shell->variable_list, shell);
 }
