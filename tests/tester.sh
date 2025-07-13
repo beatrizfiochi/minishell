@@ -400,7 +400,7 @@ tester_grep             'ls <<<<< pwd'    'syntax error near unexpected token.*'
 tester_grep             'ls >>>>> pwd'    'syntax error near unexpected token.*'
 echo ""
 
-tester_grep             '1=10'       "1=10: No such file or directory"
+tester_grep             '1=10'       "1=10: command not found"
 echo ""
 
 tester_grep             'x=10'                "var_name = x, var_value = 10"
