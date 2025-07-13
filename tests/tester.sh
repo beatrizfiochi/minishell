@@ -558,6 +558,7 @@ tester_with_real "cd /tmp && mkdir t1 && cd t1 && mkdir t1 && cd t1 && rm -rf ..
 echo -e "${MAGENTA}Testing cd with PWD adn OLDPWD variables${RESET}"
 rm -rf /tmp/t1 &> /dev/null || echo -n ""
 tester_with_real "cd /tmp && env | grep PWD | sort && mkdir t1 && cd t1  && env | grep PWD | sort && mkdir t1 && cd t1  && env | grep PWD | sort && rm -rf ../../t1 && cd ../../ && env | grep PWD | sort "
+tester_grep      "cd . ls"              "cd: too many arguments"
 echo ""
 echo -e "${MAGENTA}Testing env${RESET}"
 tester_grep        "x=1 env"               "x=1"

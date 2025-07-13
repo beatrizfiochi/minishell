@@ -3,11 +3,17 @@ valgrind-supression -> valgrind-suppression
 
 # Variaveis
 
-## Variaveis na mesma linha
-lidar com x=10 y=20 (na mesma linha) --> deve guardar essas variaveis
-	se x=10 y=20 ls ou echo etc (outro comando), nao guarda as variaveis
-lidar com x=10 && echo $x
-	output esperado: 10
+## Expansao de variaveis
+exemplo e como se comporta no bash:
+var="echo var      ll"
+$var -> var      ll
+var="echo                var"
+echo $var -> echo var
+var="echo     ola | cat -e"
+$var -> ola | cat -e
+test="cho ola"
+e$test -> ola
+e"$test" -> echo ola: command not found
 
 ## Uso de parentesis, segundo o man bash não serão persistidos
 ```
@@ -65,3 +71,9 @@ Ideia de solução: Rodar os parentesis em um fork a parte. O before iria fazer 
 
 verificar: echo 456 $x 789 -> output: 456  789
 no bash o output seria: 456 789
+
+# cd
+
+exemplo: cd $invalid -> vai para HOME no bash
+cd "" -> nao faz nada no bash
+com esse exemplo podemos ver que ao expandir as variaveis, se o token estiver vazio, ele 'e deletado
