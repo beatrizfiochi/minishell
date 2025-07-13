@@ -97,7 +97,7 @@ int	cd(int argc, char *argv[], t_shell *shell)
 		new_path = get_home(shell);
 	else if (argc > 2)
 	{
-		ft_fprintf(STDERR_FILENO, "minishell: cd: too many arguments\n");
+		ft_fprintf(STDERR_FILENO, "cd: too many arguments\n");
 		return (EXIT_FAILURE);
 	}
 	else
@@ -106,7 +106,7 @@ int	cd(int argc, char *argv[], t_shell *shell)
 		return (1);
 	ret = chdir(new_path);
 	if (ret != 0)
-		p_error("minishell: cd: ", new_path);
+		p_error("cd: ", new_path);
 	else
 		update_variables(shell, new_path);
 	return (ret != 0);
