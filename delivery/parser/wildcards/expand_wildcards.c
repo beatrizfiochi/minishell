@@ -6,7 +6,7 @@
 /*   By: djunho <djunho@student.42porto.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/12 13:31:02 by djunho            #+#    #+#             */
-/*   Updated: 2025/07/13 17:48:05 by djunho           ###   ########.fr       */
+/*   Updated: 2025/07/13 21:44:48 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include <stdio.h>
@@ -15,6 +15,8 @@
 #include "../../parser/aux.h"
 #include "../../parser/parser.h"
 #include "../../execute/env_utils.h"
+
+static char	**get_files(char *pattern_ori);
 
 static int	ft_strcmp_insensitive(char *s1, char *s2)
 {
@@ -136,41 +138,64 @@ static char	**read_dir(char **files, int size, char *path, char *pattern)
 	return (files);
 }
 
-static bool	split_path(char *ori, char **path, char **pattern)
+// Find the far right / before a wildcards
+static char	*find_folder_sep(char *path)
 {
-	int	i;
+	char	*aux;
 
-	i = ft_strlen(ori);
-	while ((i > 0) && (ori[i] != '/'))
-		i--;
-	if (i != 0)
-		*path = ft_strndup(ori, i + 1);
-	else
-		*path = ft_strdup(".");
-	if (*path == NULL)
-		return (false);
-	if (i != 0)
-		*pattern = ft_strdup(&ori[i + 1]);
-	else
-		*pattern = ft_strdup(ori);
-	if (*pattern == NULL)
+	aux = path;
+	while ((path != NULL) && (*path != '\0'))
 	{
-		free(*path);
-		*path = NULL;
-		return (false);
+		while ((*aux != '\0') && (*aux != '/') && (*aux != '*'))
+			aux++;
+		if ((*aux == '\0') || (*aux == '*'))
+			return (NULL);
+		path = aux;
+		aux++;
+		while ((*aux != '\0') && (*aux != '/') && (*aux != '*'))
+			aux++;
+		if (*aux == '*')
+			return (path);
+		path = aux;
+	}
+	return (path);
+}
+
+static bool	split_path(char *ori, char **path, char **pattern, char	**remain)
+{
+	char	*sep_wild;
+	char	*sep_remain;
+
+	sep_wild = find_folder_sep(ori);
+	if (sep_wild == NULL)
+	{
+		*path = ft_strdup(".");
+		sep_wild = ori + 1;
+	}
+	else
+	{
+		*path = ft_strndup(ori, sep_wild - ori);
+		sep_wild++;
+	}
+	sep_remain = go_next_char(sep_wild + 1, '/');
+	if (sep_remain == NULL)
+	{
+		*pattern = ft_strdup(sep_wild);
+		*remain  = ft_strdup("");
+	}
+	else
+	{
+		*pattern = ft_strndup(sep_wild, sep_wild - ori);
+		*remain  = ft_strdup(sep_remain + 1);
 	}
 	return (true);
 }
 
-static char	**get_files(char *pattern_ori)
+static char	**get_files_files(char *path, char *pattern)
 {
 	char	**files;
 	int		size;
-	char	*path;
-	char	*pattern;
 
-	if (!split_path(pattern_ori, &path, &pattern))
-		return (NULL);
 	files = NULL;
 	while (1)
 	{
@@ -184,8 +209,51 @@ static char	**get_files(char *pattern_ori)
 		sort_envp(files, ft_strcmp_insensitive);
 		break ;
 	}
+	return (files);
+}
+
+static	char **get_files_path_pattern(char **files, int *i, char *path, char *pattern)
+{
+	char	*concat;
+	char	**files_i;
+	char	**final;
+
+	concat = ft_strjoin(path, pattern);
+	if (concat == NULL)
+		return (NULL);
+	files_i = get_files(concat);
+	if (files_i != NULL)
+	{
+		free(concat);
+		return (free_envp(files));
+	}
+	final = envp_cat(files_i, &(files[*i]));
+	*i += get_envp_size(files_i);
+	free(files_i);
+	free(files);
+	return (final);
+}
+
+static char	**get_files(char *pattern_ori)
+{
+	char	*path;
+	char	*pattern;
+	char	*remain;
+	char	**files;
+	int		i;
+
+	if (!split_path(pattern_ori, &path, &pattern, &remain))
+		return (NULL);
+	files = get_files_files(path, pattern);
+	i = 0;
+	while ((files != NULL) && (remain[0] != '\0'))
+	{
+		files = get_files_path_pattern(files, &i, files[i], pattern);
+		i++;
+	}
 	free(path);
 	free(pattern);
+	free(remain);
 	return (files);
 }
 
@@ -223,7 +291,7 @@ static bool	has_wildcards(char *str)
 {
 	bool	quote;
 
-	while (*str != '\0')
+	while ((str != NULL) && (*str != '\0'))
 	{
 		if (*str == '*')
 			return (true);
