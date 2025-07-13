@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 14:14:02 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/07/13 13:38:22 by djunho           ###   ########.fr       */
+/*   Updated: 2025/07/14 11:39:43 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ void	expand_wildcards_token(t_list *token);
 void	expand_variable_string(char **cont, t_list *var_list, t_shell *shell);
 void	search_and_expand(t_list *token_list,
 			t_list *var_list, t_shell *shell);
+void	remove_empty_token(t_list **token_list);
 
 char	*go_next_char(char *line, char c);
 

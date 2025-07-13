@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 16:13:37 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/07/12 11:57:42 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/07/13 20:07:46 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,11 +26,6 @@ int	handle_var_assign(t_shell *shell, t_btnode *node)
 	enum e_var_exit	var_status;
 
 	content = (t_content_node *)node->content;
-	if (content->cmd.tokens == NULL)
-	{
-		ft_fprintf(STDERR_FILENO, "Error: Invalid variable assignment\n");
-		return (EXIT_FAILURE);
-	}
 	while (content->cmd.tokens != NULL)
 	{
 		var = content->cmd.tokens;

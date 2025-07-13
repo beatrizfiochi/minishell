@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 19:55:45 by djunho            #+#    #+#             */
-/*   Updated: 2025/07/09 09:19:20 by djunho           ###   ########.fr       */
+/*   Updated: 2025/07/13 20:09:02 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,10 +94,9 @@ static int	run_cmd(t_shell *shell, t_btnode *node, t_node_op parent_op)
 	if (content->cmd.redir.fd_out > 0)
 		shell->is_last_redirect = true;
 	search_and_expand(content->cmd.tokens, shell->variable_list, shell);
+	remove_empty_token(&content->cmd.tokens);
 	clean_token_quotes(content->cmd.tokens);
-	ret = handle_var_assign(shell, node);
-	if (ret != EXIT_SUCCESS)
-		return (ret);
+	handle_var_assign(shell, node);
 	if (content->cmd.tokens == NULL)
 	{
 		content->cmd.is_builtin = true;

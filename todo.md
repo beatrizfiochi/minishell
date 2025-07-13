@@ -72,8 +72,43 @@ Ideia de solução: Rodar os parentesis em um fork a parte. O before iria fazer 
 verificar: echo 456 $x 789 -> output: 456  789
 no bash o output seria: 456 789
 
-# cd
+# delete of current folder
 
-exemplo: cd $invalid -> vai para HOME no bash
-cd "" -> nao faz nada no bash
-com esse exemplo podemos ver que ao expandir as variaveis, se o token estiver vazio, ele 'e deletado
+``` minishell
+My shell > cd /tmp/
+My shell > pwd
+/tmp
+My shell > mkdir deleteme
+My shell > cd deleteme/
+My shell > pwd
+/tmp/deleteme
+My shell > env | grep PWD
+PWD=/home/bfiochi-/minishell/delivery
+OLDPWD=/home/bfiochi-/minishell/delivery
+My shell > rm -rf ../deleteme
+My shell > pwd
+bash: pwd: getcwd failed: No such file or directory
+```
+
+```bash
+bfiochi-@c2r6s11:~$ cd /tmp
+bfiochi-@c2r6s11:/tmp$ mkdir test
+mkdir: cannot create directory ‘test’: File exists
+bfiochi-@c2r6s11:/tmp$ cd test
+bash: cd: test: Not a directory
+bfiochi-@c2r6s11:/tmp$ mkdir deleteme
+bfiochi-@c2r6s11:/tmp$ cd deleteme/
+bfiochi-@c2r6s11:/tmp/deleteme$ env | grep PWD
+PWD=/tmp/deleteme
+OLDPWD=/tmp
+bfiochi-@c2r6s11:/tmp/deleteme$ pwd
+/tmp/deleteme
+bfiochi-@c2r6s11:/tmp/deleteme$ rm -rf ../deleteme
+bfiochi-@c2r6s11:/tmp/deleteme$ env | grep PWD
+PWD=/tmp/deleteme
+OLDPWD=/tmp
+bfiochi-@c2r6s11:/tmp/deleteme$ pwd
+/tmp/deleteme
+```
+
+Sugest~ao data 'e usar a vari'avel PWD quando o getcwd falhar!

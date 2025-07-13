@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 18:48:52 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/07/09 21:00:19 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/07/13 20:32:18 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,4 +74,31 @@ int	is_token_operator(char *token)
 		|| ft_strncmp(token, ">", 2) == 0)
 		return (1);
 	return (0);
+}
+
+void	remove_empty_token(t_list **token_list)
+{
+	t_list	*current;
+	t_list	*prev;
+	char	*content;
+
+	current = *token_list;
+	prev = NULL;
+	while (current != NULL)
+	{
+		content = (char *)current->content;
+		if ((content != NULL) && (*content == '\0'))
+		{
+			if (prev != NULL)
+				prev->next = current->next;
+			else
+				*token_list = current->next;
+			ft_lstdelone(current, free);
+			current = prev;
+		}
+		else
+			prev = current;
+		if (current != NULL)
+			current = current->next;
+	}
 }
