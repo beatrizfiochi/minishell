@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 15:26:54 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/07/13 13:14:12 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/07/13 13:47:08 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,8 @@ t_list	*create_token(const char *line, int len)
 
 static int	scan_until_op_or_error(char *l, char *c, int *len)
 {
+	char	*next_char;
+
 	while (l[*len] != '\0' && l[*len] != ' ')
 	{
 		if (is_op(&l[*len]) > 0)
@@ -40,10 +42,11 @@ static int	scan_until_op_or_error(char *l, char *c, int *len)
 		if ((l[*len] == '\'' || l[*len] == '"') && l[*len] != '\0')
 		{
 			*c = l[*len];
-			*len = go_next_char(&l[*len + 1], *c) - l;
-			if (*len < 0)
+			next_char = go_next_char(&l[*len + 1], *c);
+			if (next_char == NULL)
 				return (-1);
-			else if (l[*len] == *c)
+			*len = next_char - l;
+			if (l[*len] == *c)
 				(*len)++;
 		}
 		else
