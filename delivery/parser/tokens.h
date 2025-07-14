@@ -3,12 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   tokens.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: djunho <djunho@student.42porto.com>        +#+  +:+       +#+        */
+/*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 08:08:11 by djunho            #+#    #+#             */
-/*   Updated: 2025/07/09 10:26:59 by djunho           ###   ########.fr       */
+/*   Updated: 2025/07/14 12:05:15 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 #ifndef TOKENS_H
 # define TOKENS_H
 
@@ -31,5 +32,7 @@ bool	split_token_list(struct s_split_token_list *split,
 
 void	*abort_tree_lst(t_btnode *tree,
 			struct s_split_token_list *token_list, const char *msg);
+
+t_list	*mini_tokenization(t_list **token_list);
 
 #endif // TOKENS_H
