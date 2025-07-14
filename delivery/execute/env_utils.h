@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 13:56:51 by djunho            #+#    #+#             */
-/*   Updated: 2025/07/05 15:30:26 by djunho           ###   ########.fr       */
+/*   Updated: 2025/07/13 14:50:19 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@ const char	*get_env(char *env, t_list *var_list);
 
 char		**convert_list_to_envp(t_list *var_list, t_list *tmp_var_list);
 
-void		free_envp(char **envp);
+char		**free_envp(char **envp);
+
+void		sort_envp(char **envp, int sort(char *, char *));
 
 #endif // ENV_UTILS_H

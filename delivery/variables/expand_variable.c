@@ -6,14 +6,14 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 18:15:43 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/07/13 17:33:55 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/07/13 18:40:38 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "variables.h"
 #include "expand_variables.h"
 #include "../minishell.h"
 #include "../parser/aux.h"
+#include "../parser/parser.h"
 
 static void	handle_special_var(char **cont, char **cnt,
 		char *var, t_shell *shell)
@@ -65,7 +65,7 @@ char	*handle_possible_var(char **cont, char *cnt,
 	return (cnt);
 }
 
-void	search_and_expand_string(char **cont, t_list *var_list, t_shell *shell)
+void	expand_variable_string(char **cont, t_list *var_list, t_shell *shell)
 {
 	char	*cnt;
 	bool	dquote;
@@ -90,10 +90,14 @@ void	search_and_expand_string(char **cont, t_list *var_list, t_shell *shell)
 
 void	search_and_expand(t_list *token_list, t_list *var_list, t_shell *shell)
 {
-	while (token_list != NULL)
+	t_list	*curr;
+
+	curr = token_list;
+	while (curr != NULL)
 	{
-		search_and_expand_string((char **)(&(token_list->content)),
+		expand_variable_string((char **)(&(curr->content)),
 			var_list, shell);
-		token_list = token_list->next;
+		curr = curr->next;
 	}
+	expand_wildcards_token(token_list);
 }

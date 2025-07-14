@@ -470,6 +470,16 @@ rm /tmp/test2
 tester_with_real 'rm /tmp/test && echo ola! > /tmp/test && < /tmp/test < /tmp/test2 cat -e'
 tester_with_real 'rm /tmp/test && echo ola! > /tmp/test && cat -e < /tmp/test < /tmp/test2'
 
+echo -e "${MAGENTA}Testing wildcards${RESET}"
+tester_with_real "cd ../delivery && ls *zzz"   # Will not found a file
+tester_with_real "cd ../delivery && ls *c"
+tester_with_real "cd ../delivery && ls *h"
+tester_with_real "cd ../delivery && ls m*h"
+tester_with_real "cd ../delivery && ls m*h"
+tester_with_real "cd ../delivery && ls m*n*"
+tester_with_real "cd ../delivery && ls m**n**"
+tester_with_real "cd ../delivery && ls *m*n*"
+
 echo -e "${MAGENTA}Testing parenthesis${RESET}"
 tester_with_real "ls"
 tester_with_real "(ls)"
