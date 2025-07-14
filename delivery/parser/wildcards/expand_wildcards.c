@@ -80,10 +80,7 @@ static t_list	*handle_possible_wildcard(char *pattern, t_list *prev,
 
 	files = get_files(pattern);
 	if (files == NULL)
-	{
-		perror("wildcards");
 		return (token->next);
-	}
 	i = -1;
 	new_list = prev;
 	aux = prev;
@@ -103,6 +100,7 @@ static bool	has_wildcards(char *str)
 {
 	bool	quote;
 
+	quote = false;
 	while (*str != '\0')
 	{
 		if (*str == '*')

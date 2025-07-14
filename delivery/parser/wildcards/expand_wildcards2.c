@@ -76,7 +76,10 @@ static int	check_dir_file(struct dirent *entry, char **file, char *path,
 	else
 		filename = ft_strjoin(path, entry->d_name);
 	if (filename == NULL)
+	{
 		ft_fprintf(STDERR_FILENO, "%s: error on malloc\n", __FUNCTION__);
+		return (EXIT_FAILURE);
+	}
 	(*file) = filename;
 	return (EXIT_SUCCESS);
 }
@@ -112,10 +115,10 @@ char	**read_dir(char **files, int size, char *path, char *pattern)
 	int				i;
 
 	if (size == 0)
-		return (NULL);
+		return (free_envp(files));
 	dir = opendir(path);
 	if (dir == NULL)
-		return (NULL);
+		return (free_envp(files));
 	i = 0;
 	entry = readdir(dir);
 	while (entry != NULL)

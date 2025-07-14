@@ -90,11 +90,14 @@ void	expand_variable_string(char **cont, t_list *var_list, t_shell *shell)
 
 void	search_and_expand(t_list *token_list, t_list *var_list, t_shell *shell)
 {
-	expand_wildcards_token(token_list);
-	while (token_list != NULL)
+	t_list	*curr;
+
+	curr = token_list;
+	while (curr != NULL)
 	{
-		expand_variable_string((char **)(&(token_list->content)),
+		expand_variable_string((char **)(&(curr->content)),
 			var_list, shell);
-		token_list = token_list->next;
+		curr = curr->next;
 	}
+	expand_wildcards_token(token_list);
 }
