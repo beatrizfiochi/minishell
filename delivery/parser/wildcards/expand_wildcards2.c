@@ -12,8 +12,8 @@
 #include <stdio.h>
 #include <dirent.h>
 #include <unistd.h>
-#include "../../parser/aux.h"
 #include "../../execute/env_utils.h"
+#include "../../variables/expand_variables.h"   // QUOTE_MARK
 
 int	ft_strcmp_insensitive(char *s1, char *s2)
 {
@@ -37,13 +37,13 @@ int	ft_strcmp_insensitive(char *s1, char *s2)
 	return (c1 - c2);
 }
 
-// Recursive function to match pattern to filename
+// Recursive function to match pattern to filename. Ignore the * inside QUOTE_MARK
 static bool	match_pattern(const char *filename, const char *pattern,
 							bool quoted)
 {
 	if (*pattern == '\0' && *filename == '\0')
 		return (true);
-	if (is_quote(*pattern))
+	if (*pattern == QUOTE_MARK)
 		quoted = !quoted;
 	if ((*pattern == '*') && !quoted)
 	{
@@ -55,7 +55,7 @@ static bool	match_pattern(const char *filename, const char *pattern,
 		}
 		return (match_pattern(filename, pattern + 1, quoted));
 	}
-	if (is_quote(*pattern))
+	if (*pattern == QUOTE_MARK)
 		return (match_pattern(filename, pattern + 1, quoted));
 	if (*filename == *pattern)
 		return (match_pattern(filename + 1, pattern + 1, quoted));

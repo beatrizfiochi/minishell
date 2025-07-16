@@ -16,6 +16,7 @@
 #include "../../parser/parser.h"
 #include "../../execute/env_utils.h"
 #include "expand_wildcards.h"
+#include "../../variables/expand_variables.h"   // QUOTE_MARK
 
 static bool	split_path(char *ori, char **path, char **pattern)
 {
@@ -105,9 +106,9 @@ static bool	has_wildcards(char *str)
 	{
 		if (*str == '*')
 			return (true);
-		else if (is_quote(*str) && (quote == false))
+		else if ((*str == QUOTE_MARK) && (quote == false))
 			str = go_to_end_quote(str);
-		else if (is_quote(*str))
+		else if (*str == QUOTE_MARK)
 		{
 			quote = !quote;
 			str++;

@@ -14,7 +14,6 @@
 #include "../minishell.h"
 #include "../parser/aux.h"
 #include "../parser/parser.h"
-#include "variables.h"
 #include <unistd.h>
 
 char	*handle_possible_var(char **cont, char *cnt,
@@ -97,10 +96,11 @@ void	expand_variable_token(t_list **curr, t_list *var_list, t_shell *shell)
 		else if ((*cnt == '$') && !dquote)
 			cnt = process_var_expansion(curr, cnt, var_list, shell);
 		else if ((*cnt == '\'') && (dquote == false))
-			cnt = copy_inside_quotes(cnt);
-		else if (is_quote(*cnt) && (*cnt == '"'))
+			cnt = mark_quotes(cnt);
+		else if ((*cnt == '"') || (*cnt == QUOTE_MARK))
 		{
-			ft_memmove(cnt, cnt + 1, ft_strlen(cnt + 1) + 1);
+			mark_quotes(cnt);
+			cnt++;
 			dquote = !dquote;
 		}
 		else
@@ -119,4 +119,5 @@ void	search_and_expand(t_list *token_list, t_list *var_list, t_shell *shell)
 		curr = curr->next;
 	}
 	expand_wildcards_token(token_list);
+	clean_token_quotes(token_list);
 }

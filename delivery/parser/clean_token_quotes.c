@@ -14,69 +14,25 @@
 #include "../libft/libft.h"
 #include <stdbool.h>
 #include "aux.h"
-
-static int	copy_inside_quotes(const char *src, char *new_str, int i, int *j)
-{
-	int		k;
-	char	quote;
-
-	quote = src[i];
-	k = i + 1;
-	while ((src[k] != '\0') && (src[k] != quote))
-		k++;
-	if (src[k] == quote)
-	{
-		i++;
-		while (i < k)
-			new_str[(*j)++] = src[i++];
-		return (k + 1);
-	}
-	else
-	{
-		new_str[(*j)++] = src[i++];
-		return (i);
-	}
-}
-
-static void	copy_without_matched_quotes(const char *src, char *new_str)
-{
-	int		i;
-	int		j;
-
-	i = 0;
-	j = 0;
-	while (src[i] != '\0')
-	{
-		if (is_quote(src[i]) == true)
-			i = copy_inside_quotes(src, new_str, i, &j);
-		else
-			new_str[j++] = src[i++];
-	}
-	new_str[j] = '\0';
-}
-
-static char	*remove_quotes(const char *src)
-{
-	char	*new_str;
-	int		len;
-
-	len = ft_strlen(src);
-	new_str = malloc(len + 1);
-	if (new_str == NULL)
-		return (NULL);
-	copy_without_matched_quotes(src, new_str);
-	return (new_str);
-}
+#include "../variables/expand_variables.h"
 
 bool	clean_string_quotes(char **content_ptr)
 {
 	char	*new_str;
+	char	*aux;
 
-	new_str = remove_quotes((const char *)*content_ptr);
-	if (new_str == NULL)
-		return (false);
-	free(*content_ptr);
-	*content_ptr = new_str;
+	new_str = *content_ptr;
+	while (*new_str != '\0')
+	{
+		if (*new_str == QUOTE_MARK)
+		{
+			aux = go_to_end_quote(new_str);
+			ft_memmove(aux - 1, aux, ft_strlen(aux) + 1);
+			ft_memmove(new_str, new_str + 1, ft_strlen(new_str + 1) + 1);
+			new_str = aux - 2;
+		} else
+			new_str++;
+	}
 	return (true);
 }
 

@@ -94,13 +94,12 @@ t_list	*handle_normal_var_with_retoken(t_list *curr, char **cnt,
 	return (retokenzine(curr, cnt, split, &i));
 }
 
-char	*copy_inside_quotes(char *string)
+char	*mark_quotes(char *string)
 {
 	char	*aux;
 
 	aux = go_to_end_quote(string);
-	ft_memmove(aux - 1, aux, ft_strlen(aux) + 1);
-	ft_memmove(string, string + 1, ft_strlen(string + 1) + 1);
-	string = aux - 2;
-	return (string);
+	*string = QUOTE_MARK;
+	*(aux - 1) = QUOTE_MARK;
+	return (aux);
 }
