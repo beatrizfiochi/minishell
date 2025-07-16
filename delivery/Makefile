@@ -6,7 +6,7 @@
 #    By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/27 13:09:33 by djunho            #+#    #+#              #
-#    Updated: 2025/07/14 11:40:49 by bfiochi-         ###   ########.fr        #
+#    Updated: 2025/07/16 10:42:08 by bfiochi-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,6 @@ SRCS = main.c read_command.c utils.c debug.c readline.c \
 	parser/clean_token_quotes.c parser/tokenization_utils.c \
 	parser/wildcards/expand_wildcards.c \
 	parser/wildcards/expand_wildcards2.c \
-	parser/mini_tokenization.c \
 	btree/btree.c btree/btree_count.c btree/debug.c \
 	btree/btree_foreach.c \
 	execute/execution.c execute/process.c execute/debug.c \
