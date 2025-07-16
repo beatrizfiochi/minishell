@@ -619,6 +619,7 @@ tester_with_real 'ls && pwd && exit 17'
 tester_with_real 'exit 18 && pwd && ls'
 tester_with_real 'exit 9223372036854775807'
 tester_with_real 'exit 9223372036854775808'
+tester_with_real 'exit 99999999999999999999999'
 tester_with_real 'exit 123h'
 tester_with_real 'exit asdj'
 # Too many arguments

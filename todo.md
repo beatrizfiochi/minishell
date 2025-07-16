@@ -67,3 +67,11 @@ Ideia de solução: Rodar os parentesis em um fork a parte. O before iria fazer 
 
 - env | sed 's/=.*//' | tr '\n' ' '
 -> erro
+
+# EXIT
+
+- Tem que funcionar no pai e não no filho?
+-- verificar:
+
+exit> out
+tem que criar out sem nada dentro (já faz isso) e entao dar exit do nosso shell (não faz isso)
