@@ -41,6 +41,7 @@ enum e_var_exit		handle_var(t_list **var_list, char *var, bool is_exported);
 enum e_var_exit		handle_var_name_and_value(t_list **var_list, char *name,
 						char *value, bool is_exported);
 
+int					get_variable_name_length(char *var);
 bool				is_valid_name(char *name, int len);
 bool				is_strlen_equals(char *text_1, char *text_2);
 bool				check_and_replace_var(t_list *current, char *name,
