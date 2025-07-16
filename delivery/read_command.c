@@ -44,6 +44,20 @@ void	free_btree_node(void *content)
 	free(node_content);
 }
 
+static int	execute_token(t_list **tokens, t_shell *shell)
+{
+	int	ret;
+
+	ret = create_tree(shell, &shell->cmds, tokens, NULL);
+	if (ret != EXIT_SUCCESS)
+		return (ret);
+	debug_print_tree(shell->cmds);
+	ret = execute(shell);
+	handle_signal_output(ret);
+	btree_clear(&shell->cmds, free_btree_node);
+	return (ret);
+}
+
 // 0 -> success
 // -1 -> error
 int	read_command(t_shell *shell)
@@ -58,17 +72,15 @@ int	read_command(t_shell *shell)
 		return (-1);
 	sh_add_history(shell, line);
 	token_list = tokenization(line);
+	if (token_list == NULL)
+		shell->last_exit_status = EXIT_INCORRECT_USAGE;
 	debug_print_read_command(token_list, line);
 	ret = shell->last_exit_status;
 	while (token_list != NULL)
 	{
-		ret = create_tree(shell, &shell->cmds, &token_list, NULL);
+		ret = execute_token(&token_list, shell);
 		if (ret != EXIT_SUCCESS)
 			break ;
-		debug_print_tree(shell->cmds);
-		ret = execute(shell);
-		handle_signal_output(ret);
-		btree_clear(&shell->cmds, free_btree_node);
 	}
 	shell->last_exit_status = ret;
 	free(line);

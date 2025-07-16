@@ -434,6 +434,13 @@ if [[ $? -ne 0 ]]; then
 	exit 1
 fi
 
+echo -e "${MAGENTA}Testing basic parser${RESET}"
+tester_with_real "echo hello'ops"          false
+tester_with_real 'echo hello"ops'          false
+tester_with_real 'echo hello &&'           false
+tester_with_real 'echo hello ||'           false
+tester_with_real 'echo hello |'            false
+
 echo -e "${MAGENTA}Testing var assignments${RESET}"
 tester_with_real 'x=10 echo $x'
 tester_with_real 'x=10 && echo $x'
