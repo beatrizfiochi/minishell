@@ -3,15 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: djunho <djunho@student.42porto.com>        +#+  +:+       +#+        */
+/*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/11 22:57:23 by djunho            #+#    #+#             */
-/*   Updated: 2025/07/12 00:50:28 by djunho           ###   ########.fr       */
+/*   Updated: 2025/07/16 14:50:48 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include <limits.h>		// LONG_MAX
+
 #include <stdlib.h>
 #include <unistd.h>
+#include <limits.h>            // LONG_MAX
 #include "../../minishell.h"
 
 static bool	check_if_bigger(char *input)
@@ -20,7 +21,7 @@ static bool	check_if_bigger(char *input)
 	long long	num2;
 
 	if (ft_strlen(input) > 19)
-		return (false);
+		return (true);
 	if ((*input == '-') || (*input == '+'))
 		return (false);
 	num = ft_atoll(input);
@@ -51,6 +52,8 @@ int	sh_exit(int argc, char *argv[], t_shell *shell)
 	long long	ret;
 
 	ret = 0;
+	if (isatty(STDIN_FILENO))
+		ft_fprintf(STDERR_FILENO, "exit\n");
 	if (argc >= 2)
 	{
 		ret = ft_atoll(argv[1]);
