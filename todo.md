@@ -58,3 +58,12 @@ Ideia de solução: Rodar os parentesis em um fork a parte. O before iria fazer 
 # Limpar
 
 - Verificar a Removoção do arquivo clean_token_quotes.c
+
+# History
+
+- Verificar o que aconteceu, está bugado
+
+# Wildcards
+
+- env | sed 's/=.*//' | tr '\n' ' '
+-> erro
