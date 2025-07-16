@@ -93,13 +93,15 @@ static int	run_cmd(t_shell *shell, t_btnode *node, t_node_op parent_op)
 	shell->last_cmd = &content->cmd;
 	if (content->cmd.redir.fd_out > 0)
 		shell->is_last_redirect = true;
-	search_and_expand(content->cmd.tokens, shell->variable_list, shell);
-	remove_empty_token(&content->cmd.tokens);
+	search_and_expand(&content->cmd.tokens, shell->variable_list, shell);
 	handle_var_assign(shell, node);
 	if (content->cmd.tokens == NULL)
 	{
 		content->cmd.is_builtin = true;
-		join_shell_variable_lists(shell);
+		if (!is_op_redirect_type(parent_op))
+			join_shell_variable_lists(shell);
+		else
+			ft_lstclear(&shell->tmp_var_list, free_var_content);
 		return (EXIT_SUCCESS);
 	}
 	ret = EXIT_CMD_NOT_FOUND;
