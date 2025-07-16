@@ -441,6 +441,7 @@ tester_with_real 'x=10 y=1 w=3 echo "$x $y $w"'
 tester_with_real 'x=10 y=1 w=3 && echo "$x $y $w"'
 tester_with_real "x=10 y=1 w=3 bash -c 'echo \"\$x \$y \$w\"'"
 tester_with_real "x=10 y=1 w=3 && bash -c 'echo \"\$x \$y \$w\"'"
+tester_with_real 'var1=one var1=one var2=two | var3=three && echo $var1 $var2 $var3'
 
 echo -e "${MAGENTA}Testing redirect output${RESET}"
 touch /tmp/test

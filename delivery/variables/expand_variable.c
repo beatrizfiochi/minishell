@@ -108,16 +108,17 @@ void	expand_variable_token(t_list **curr, t_list *var_list, t_shell *shell)
 	}
 }
 
-void	search_and_expand(t_list *token_list, t_list *var_list, t_shell *shell)
+void	search_and_expand(t_list **token_list, t_list *var_list, t_shell *shell)
 {
 	t_list	*curr;
 
-	curr = token_list;
+	curr = *token_list;
 	while (curr != NULL)
 	{
 		expand_variable_token(&curr, var_list, shell);
 		curr = curr->next;
 	}
-	expand_wildcards_token(token_list);
-	clean_token_quotes(token_list);
+	expand_wildcards_token(*token_list);
+	clean_token_quotes(*token_list);
+	remove_empty_token(token_list);
 }
