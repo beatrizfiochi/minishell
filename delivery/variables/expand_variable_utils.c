@@ -80,8 +80,7 @@ char	*replace_var_name_by_value(char *content, int var_pos,
 	return (new_content);
 }
 
-char	*expand_variable(char *content, char *var_pos,
-	char **cnt, char *var_value)
+char	*expand_var(char *content, char *var_pos, char **cnt, char *var_value)
 {
 	char	*new_content;
 	int		var_position;
