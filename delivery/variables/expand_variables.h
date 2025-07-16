@@ -16,6 +16,8 @@
 # include "../libft/libft.h"
 # include "../minishell.h"
 
+# define QUOTE_MARK  0x1D
+
 char	*search_var(const char *variable, t_list *var_list, int len);
 char	*remove_var_name(char *content, int var_pos, char **cnt);
 char	*replace_var_name_by_value(char *content, int var_pos,
@@ -28,6 +30,6 @@ void	handle_normal_var(char **cont, char **cnt, char *var, t_list *var_list);
 t_list	*retokenzine(t_list *curr, char **cnt, char **split, int *i);
 t_list	*handle_normal_var_with_retoken(t_list *curr, char **cnt, char *var,
 			t_list *var_list);
-char	*copy_inside_quotes(char *string);
+char	*mark_quotes(char *string);
 
 #endif
