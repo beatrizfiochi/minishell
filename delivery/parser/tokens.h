@@ -3,12 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   tokens.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: djunho <djunho@student.42porto.com>        +#+  +:+       +#+        */
+/*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 08:08:11 by djunho            #+#    #+#             */
-/*   Updated: 2025/07/09 10:26:59 by djunho           ###   ########.fr       */
+/*   Updated: 2025/07/16 10:42:01 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 #ifndef TOKENS_H
 # define TOKENS_H
 

@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 18:02:44 by djunho            #+#    #+#             */
-/*   Updated: 2025/07/06 11:47:31 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/07/13 18:45:57 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,13 +95,18 @@ int	cd(int argc, char *argv[], t_shell *shell)
 
 	if (argc == 1)
 		new_path = get_home(shell);
+	else if (argc > 2)
+	{
+		ft_fprintf(STDERR_FILENO, "cd: too many arguments\n");
+		return (EXIT_FAILURE);
+	}
 	else
 		new_path = argv[1];
 	if (new_path == NULL)
 		return (1);
 	ret = chdir(new_path);
 	if (ret != 0)
-		p_error("minishell: cd: ", new_path);
+		p_error("cd: ", new_path);
 	else
 		update_variables(shell, new_path);
 	return (ret != 0);

@@ -1,13 +1,6 @@
-Verificar se precisa implementar o |&
 valgrind-supression -> valgrind-suppression
 
 # Variaveis
-
-## Variaveis na mesma linha
-lidar com x=10 y=20 (na mesma linha) --> deve guardar essas variaveis
-	se x=10 y=20 ls ou echo etc (outro comando), nao guarda as variaveis
-lidar com x=10 && echo $x
-	output esperado: 10
 
 ## Uso de parentesis, segundo o man bash não serão persistidos
 ```
@@ -61,7 +54,7 @@ Por exemplo: `(ls || pwd) > /tmp/file`
 
 Ideia de solução: Rodar os parentesis em um fork a parte. O before iria fazer o fork. O filho iria rodar e todo output do filho iria para o arquivo.
 
-# echo
 
-verificar: echo 456 $x 789 -> output: 456  789
-no bash o output seria: 456 789
+# Limpar
+
+- Verificar a Removoção do arquivo clean_token_quotes.c

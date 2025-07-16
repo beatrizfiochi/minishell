@@ -13,7 +13,18 @@
 #include <unistd.h>
 #include "../libft/libft.h"
 #include "variables.h"
-#include "../parser/parser.h"
+
+int	get_variable_name_length(char *var)
+{
+	int	len;
+
+	len = 0;
+	if (var[len] != '\0' && (var[len] == '_' || ft_isalpha(var[len])))
+		len++;
+	while (var[len] != '\0' && (var[len] == '_' || ft_isalnum(var[len])))
+		len++;
+	return (len);
+}
 
 bool	is_valid_name(char *name, int len)
 {
