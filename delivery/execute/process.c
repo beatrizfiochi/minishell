@@ -95,7 +95,6 @@ static int	run_cmd(t_shell *shell, t_btnode *node, t_node_op parent_op)
 		shell->is_last_redirect = true;
 	search_and_expand(content->cmd.tokens, shell->variable_list, shell);
 	remove_empty_token(&content->cmd.tokens);
-	clean_token_quotes(content->cmd.tokens);
 	handle_var_assign(shell, node);
 	if (content->cmd.tokens == NULL)
 	{

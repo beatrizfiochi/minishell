@@ -80,16 +80,18 @@ char	*replace_var_name_by_value(char *content, int var_pos,
 	return (new_content);
 }
 
-char	*expand_variable(char *content, int var_pos,
+char	*expand_variable(char *content, char *var_pos,
 	char **cnt, char *var_value)
 {
 	char	*new_content;
+	int		var_position;
 
+	var_position = (int)(var_pos - content);
 	if (var_value != NULL)
-		new_content = replace_var_name_by_value(content, var_pos,
+		new_content = replace_var_name_by_value(content, var_position,
 				cnt, var_value);
 	else
-		new_content = remove_var_name(content, var_pos, cnt);
+		new_content = remove_var_name(content, var_position, cnt);
 	free(content);
 	return (new_content);
 }

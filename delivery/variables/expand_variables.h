@@ -20,7 +20,7 @@ char	*search_var(const char *variable, t_list *var_list, int len);
 char	*remove_var_name(char *content, int var_pos, char **cnt);
 char	*replace_var_name_by_value(char *content, int var_pos,
 			char **cnt, char *var_value);
-char	*expand_variable(char *content, int var_pos,
+char	*expand_variable(char *content, char *var_pos,
 			char **cnt, char *var_value);
 
 #endif

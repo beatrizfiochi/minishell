@@ -140,3 +140,6 @@ fish: Job 1, './minishell' terminated by signal SIGSEGV (Address boundary error)
 
 Sugest~ao data 'e usar a vari'avel PWD quando o getcwd falhar!
 
+# Limpar
+
+- Verificar a Removoção do arquivo clean_token_quotes.c
