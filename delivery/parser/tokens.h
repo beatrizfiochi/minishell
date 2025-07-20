@@ -30,7 +30,6 @@ int		split_tokens(t_list **tokens, struct s_split_token_list *split,
 bool	split_token_list(struct s_split_token_list *split,
 			enum e_expand_type expand_type);
 
-void	*abort_tree_lst(t_btnode *tree,
-			struct s_split_token_list *token_list, const char *msg);
+void	*abort_tree_lst(t_btnode *tree, struct s_split_token_list *split);
 
 #endif // TOKENS_H

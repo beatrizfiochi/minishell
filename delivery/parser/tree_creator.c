@@ -100,9 +100,9 @@ t_btnode	*create_basic_tree(t_list **token_list, t_btnode *parent,
 			.left = split.remain, .op = NULL, .right = NULL, .remain = NULL
 		};
 		if (split_token_list(&split, expand_type) == false)
-			return (abort_tree_lst(tree, &split, NULL));
-		if (split.left != split.op)
-			return (abort_tree_lst(tree, &split, NULL));
+			return (NULL);
+		if (split.left != NULL)
+			return (abort_tree_lst(tree, &split));
 		tree = create_node(split.op, parent, old_tree, NULL);
 		tree->right = create_node(split.right, tree, NULL, NULL);
 	}

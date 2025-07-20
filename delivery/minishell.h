@@ -57,7 +57,6 @@ typedef struct s_shell
 int		read_command(t_shell *shell);
 void	free_btree_node(void *content);
 void	clear_minishell(t_shell *shell);
-void	printf_error(const char *error);
 char	*sh_read_line(t_shell *shell, const char *prompt);
 void	sh_add_history(t_shell *shell, const char *line);
 

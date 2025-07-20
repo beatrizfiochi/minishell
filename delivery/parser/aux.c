@@ -41,11 +41,17 @@ bool	is_quote(char c)
 	return (c == '\'' || c == '"');
 }
 
-void	*abort_tree_lst(t_btnode *tree, struct s_split_token_list *split,
-				const char *msg)
+void	*abort_tree_lst(t_btnode *tree, struct s_split_token_list *split)
 {
-	if (msg != NULL)
-		ft_fprintf(STDERR_FILENO, "%s", msg);
+	if (split != NULL)
+	{
+		if (split->right != NULL)
+			ft_fprintf(STDERR_FILENO, "syntax error near unexpected token `%s'\n", (char *)split->right->content);
+		else if (split->op != NULL)
+			ft_fprintf(STDERR_FILENO, "syntax error near unexpected token `%s'\n", (char *)split->op->content);
+		else if (split->left != NULL)
+			ft_fprintf(STDERR_FILENO, "syntax error near unexpected token `%s'\n", (char *)split->left->content);
+	}
 	if (tree != NULL)
 		btree_clear(&tree, free_btree_content);
 	if (split != NULL)

@@ -122,7 +122,10 @@ t_list	*tokenization(char *line)
 		search_token(line, &quote, &len);
 		if (len == -1)
 		{
-			printf_error("syntax error near unexpected token\n");
+			if (prev_token != NULL)
+				ft_fprintf(STDERR_FILENO, "syntax error near unexpected token `%s'\n", (char *)prev_token->content);
+			else
+				ft_fprintf(STDERR_FILENO, "syntax error near unexpected token\n");
 			ft_lstclear(&head_token, free);
 			return (NULL);
 		}
@@ -130,18 +133,6 @@ t_list	*tokenization(char *line)
 			new_token = create_token("", 0);
 		else
 			new_token = create_token(line, len);
-		if ((prev_token != NULL)
-			&& (is_token_operator(prev_token->content) == 1)
-			&& (is_token_operator(new_token->content) == 1))
-		{
-			if ((op_list(new_token) != OP_RD_INPUT && op_list(new_token) != OP_HEREDOC))
-			{
-				ft_fprintf(STDERR_FILENO, "syntax error near unexpected token \"%s\"\n", (char *)(new_token->content));
-				ft_lstdelone(new_token, free);
-				ft_lstclear(&head_token, free);
-				return (NULL);
-			}
-		}
 		ft_lstadd_back(&head_token, new_token);
 		prev_token = new_token;
 		line += len;
