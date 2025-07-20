@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 13:37:40 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/07/21 22:50:33 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/07/23 09:17:50 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,5 +61,7 @@ char	*sh_read_line(t_shell *shell, const char *prompt);
 void	sh_add_history(t_shell *shell, const char *line);
 bool	is_directory(const char *path);
 bool	file_exist(const char *path);
+
+int		p_error(const char *msg, const int ret);
 
 #endif

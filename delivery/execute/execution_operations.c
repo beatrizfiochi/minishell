@@ -10,7 +10,6 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>			// perror, printf
 #include <stdbool.h>		// bool
 #include <sys/types.h>		// pid_t
 #include <unistd.h>			// execve, fork, pipe, dup2, close
@@ -18,7 +17,6 @@
 #include "../minishell.h"
 #include "../cmd.h"
 #include "../signals/signals.h"
-#include "../parser/parser.h"
 #include "../builtins/builtins.h"
 #include "execution.h"
 #include "exec_utils.h"

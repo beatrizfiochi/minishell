@@ -6,7 +6,7 @@
 /*   By: djunho <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 10:56:42 by djunho            #+#    #+#             */
-/*   Updated: 2025/07/09 19:07:58 by djunho           ###   ########.fr       */
+/*   Updated: 2025/07/20 22:58:10 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,18 +30,18 @@ int	prepare_redirect_out(t_shell *shell, t_btnode *op)
 	t_content_node	*previous_cmd;
 	int				fd;
 	int				flag;
+	char			*name;
 
 	shell->is_running_redirect = true;
 	flag = O_CREAT | O_APPEND | O_WRONLY;
 	if (((t_content_node *)op->content)->op == OP_RD_OUTPUT)
 		flag = O_CREAT | O_TRUNC | O_WRONLY;
-	fd = open(((t_content_node *)(op->right->content))->cmd.tokens->content,
-			flag, 0644);
-	if (fd < 0)
-	{
-		perror(((t_content_node *)(op->right->content))->cmd.tokens->content);
+	name = get_redir_filename(shell, op->right);
+	if (name == NULL)
 		return (EXIT_FAILURE);
-	}
+	fd = open(name, flag, 0644);
+	if (fd < 0)
+		return (p_error(name, EXIT_FAILURE));
 	previous_cmd = get_next_cmd(op->left);
 	if (previous_cmd == NULL)
 		return (EXIT_FAILURE);
@@ -58,15 +58,15 @@ int	prepare_redirect_in(t_shell *shell, t_btnode *op)
 {
 	t_content_node	*previous_cmd;
 	int				fd;
+	char			*name;
 
 	shell->is_running_redirect = true;
-	fd = open(((t_content_node *)(op->right->content))->cmd.tokens->content,
-			O_RDONLY);
-	if (fd < 0)
-	{
-		perror(((t_content_node *)(op->right->content))->cmd.tokens->content);
+	name = get_redir_filename(shell, op->right);
+	if (name == NULL)
 		return (EXIT_FAILURE);
-	}
+	fd = open(name, O_RDONLY);
+	if (fd < 0)
+		return (p_error(name, EXIT_FAILURE));
 	previous_cmd = get_first_cmd(op->left);
 	if (previous_cmd == NULL)
 		return (EXIT_FAILURE);

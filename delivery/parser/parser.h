@@ -26,6 +26,7 @@ t_list	*tokenization(char *line);
 void	free_var_content(void *var_content);
 void	expand_wildcards_token(t_list *token);
 void	expand_variable_string(char **cont, t_list *var_list, t_shell *shell);
+void	expand_variable_token(t_list **curr, t_list *var_list, t_shell *shell);
 void	search_and_expand(t_list **token_list, t_list *var_list,
 			t_shell *shell);
 void	remove_empty_token(t_list **token_list);
