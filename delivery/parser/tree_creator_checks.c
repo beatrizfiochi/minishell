@@ -6,7 +6,7 @@
 /*   By: djunho <djunho@student.42porto.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 18:57:02 by djunho            #+#    #+#             */
-/*   Updated: 2025/07/02 19:58:51 by djunho           ###   ########.fr       */
+/*   Updated: 2025/07/20 23:40:29 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include "../parser/aux.h"      // search_any_op
 #include "../cmd.h"             // t_content_node
 #include "../btree/btree.h"     // t_btnode
+#include "../redirect/redirect_aux.h"  // is_a_redirect_file_op
 
 bool	is_btnode_different(t_btnode *node1, t_btnode *node2)
 {
@@ -54,6 +55,9 @@ static t_btnode	*check_tree_syntax_leaf(t_btnode *node)
 	return (node);
 }
 
+// This function checks the syntax of the tree
+// All nodes should have left and right (with the exception of redirect nodes
+//  that may not have the left one)
 t_btnode	*check_tree_syntax(t_btnode *node)
 {
 	if (btree_is_leaf(node))
@@ -64,7 +68,9 @@ t_btnode	*check_tree_syntax(t_btnode *node)
 		node->left = check_tree_syntax(node->left);
 	if (node->right != NULL)
 		node->right = check_tree_syntax(node->right);
-	if ((node->left == NULL) || (node->right == NULL))
+	if (((node->left == NULL) && !is_redirect_file_op(
+				op_list(((t_content_node *)node->content)->cmd.tokens)))
+		|| (node->right == NULL))
 	{
 		btree_clear(&node, free_btree_node);
 		return (NULL);

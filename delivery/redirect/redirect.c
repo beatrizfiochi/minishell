@@ -6,7 +6,7 @@
 /*   By: djunho <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 10:56:42 by djunho            #+#    #+#             */
-/*   Updated: 2025/07/20 22:58:10 by djunho           ###   ########.fr       */
+/*   Updated: 2025/07/20 23:41:05 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,9 +43,7 @@ int	prepare_redirect_out(t_shell *shell, t_btnode *op)
 	if (fd < 0)
 		return (p_error(name, EXIT_FAILURE));
 	previous_cmd = get_next_cmd(op->left);
-	if (previous_cmd == NULL)
-		return (EXIT_FAILURE);
-	if (previous_cmd->cmd.redir.fd_out != -1)
+	if ((previous_cmd == NULL) || (previous_cmd->cmd.redir.fd_out != -1))
 	{
 		close(fd);
 		return (EXIT_SUCCESS);
@@ -68,9 +66,7 @@ int	prepare_redirect_in(t_shell *shell, t_btnode *op)
 	if (fd < 0)
 		return (p_error(name, EXIT_FAILURE));
 	previous_cmd = get_first_cmd(op->left);
-	if (previous_cmd == NULL)
-		return (EXIT_FAILURE);
-	if (previous_cmd->cmd.redir.fd_in != -1)
+	if ((previous_cmd == NULL) || (previous_cmd->cmd.redir.fd_in != -1))
 	{
 		close(fd);
 		return (EXIT_SUCCESS);
@@ -97,10 +93,11 @@ int	process_pipe(t_shell *shell, t_btnode *node)
 int	process_redirect(t_shell *shell, int ret, t_btnode *node,
 						bool *should_continue)
 {
-	*should_continue = false;
-	if (!shell->last_cmd->is_builtin && !shell->last_cmd->finished)
-		ret = wait_previous_process(shell);
 	(void)node;
+	*should_continue = false;
+	if ((shell->last_cmd != NULL)
+		&& (!shell->last_cmd->is_builtin && !shell->last_cmd->finished))
+		ret = wait_previous_process(shell);
 	return (ret);
 }
 

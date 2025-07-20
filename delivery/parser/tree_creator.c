@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 18:34:50 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/07/11 09:38:46 by djunho           ###   ########.fr       */
+/*   Updated: 2025/07/20 23:24:08 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@ static t_btnode	*create_node(t_list *token_list, t_btnode *parent,
 	t_content_node	*content;
 	t_btnode		*tree_node;
 
+	if (token_list == NULL)
+		return (NULL);
 	content = malloc(sizeof(t_content_node));
 	if (content == NULL)
 		return (NULL);

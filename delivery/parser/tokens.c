@@ -6,12 +6,13 @@
 /*   By: djunho <djunho@student.42porto.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 08:05:37 by djunho            #+#    #+#             */
-/*   Updated: 2025/07/09 10:15:54 by djunho           ###   ########.fr       */
+/*   Updated: 2025/07/20 23:37:42 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <unistd.h>
 #include "../libft/libft.h"
+#include "../redirect/redirect_aux.h"	// is_a_redirect_file_op()
 #include "tokens.h"
 #include "aux.h"
 
@@ -113,7 +114,8 @@ int	split_tokens(t_list **tokens, struct s_split_token_list *split,
 		*tokens = NULL;
 		return (EXIT_FAILURE);
 	}
-	if ((!fix_split(split, expand)) || (split->left == NULL))
+	if ((!fix_split(split, expand))
+		|| ((split->left == NULL) && !is_redirect_file_op(op_list(split->op))))
 	{
 		abort_tree_lst(NULL, split);
 		*tokens = NULL;
