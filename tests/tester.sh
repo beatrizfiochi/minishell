@@ -376,6 +376,12 @@ tester "oioi|"             0       2
 
 # Testing syntax error         cmd              text
 echo "################ Testing syntax error ################"
+tester_grep             '&&'              "syntax error near unexpected token \`&&'"
+tester_grep             '||'              "syntax error near unexpected token \`||'"
+tester_grep             '<'               "syntax error near unexpected token \`<'"
+tester_grep             '>'               "syntax error near unexpected token \`>'"
+tester_grep             '>>'              "syntax error near unexpected token \`>>'"
+tester_grep             '<<'              "syntax error near unexpected token \`<<'"
 tester_grep             'ls && || pwd'    "syntax error near unexpected token \`||'"
 tester_grep             'ls && ||pwd'     "syntax error near unexpected token \`||'"
 tester_grep             'ls&& || pwd'     "syntax error near unexpected token \`||'"
