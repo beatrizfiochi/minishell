@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 14:43:42 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/07/12 13:20:07 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/07/20 19:59:39 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ static void	handle_export_var(int *ret, char *str, t_shell *shell)
 	{
 		*ret = EXIT_FAILURE;
 		ft_fprintf(STDERR_FILENO,
-			"Minishell: export: `%s': not a valid identifier\n", str);
+			"export: `%s': not a valid identifier\n", str);
 		return ;
 	}
 	if (value == NULL)
