@@ -480,6 +480,8 @@ echo -e "${MAGENTA}Testing redirect output${RESET}"
 touch /tmp/test
 touch /tmp/test2
 touch /tmp/test$USER
+tester_with_real '> /tmp/oi'
+tester_with_real '>> /tmp/oi'
 tester_with_real 'rm /tmp/test$USER && echo ola! > /tmp/test$USER && cat -e /tmp/test$USER'
 tester_grep 'v="1 2" && echo ola! > /tmp/test$v'        'Ambiguous redirect'
 tester_with_real 'rm /tmp/test && echo ola! > /tmp/test && cat -e /tmp/test'
@@ -501,6 +503,9 @@ echo -e "${MAGENTA}Testing redirect input${RESET}"
 touch /tmp/test
 touch /tmp/test2
 touch /tmp/test$USER
+tester_with_real '< /tmp/oi'
+tester_with_real '< /tmp/nonexistent'
+tester_with_real '<< oi'
 tester_with_real 'echo ola! > /tmp/test$USER && cat < /tmp/test$USER'
 tester_grep 'v="99 88" && cat < /tmp/test$v'   'Ambiguous redirect'
 tester_with_real 'rm /tmp/test$USER && echo ola! >> /tmp/test$USER && cat < /tmp/test$USER'

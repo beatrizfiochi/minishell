@@ -6,7 +6,7 @@
 /*   By: djunho <djunho@student.42porto.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/10 18:31:10 by djunho            #+#    #+#             */
-/*   Updated: 2025/07/11 21:56:04 by djunho           ###   ########.fr       */
+/*   Updated: 2025/07/20 23:51:10 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ static int	heredoc_doc(t_shell *shell, int fd, char *eof, bool should_expand)
 	{
 		ret = EXIT_SUCCESS;
 		ft_fprintf(STDERR_FILENO, "warning: here-document at line %d delimited"
-			"by end-of-file (wanted `%s')\n", line_start, eof);
+			" by end-of-file (wanted `%s')\n", line_start, eof);
 	}
 	return (ret);
 }
