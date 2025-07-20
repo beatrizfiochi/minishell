@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   clean_token_quotes.c                               :+:      :+:    :+:   */
+/*   tokenization_utils2.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -15,6 +15,16 @@
 #include <stdbool.h>
 #include "aux.h"
 #include "../variables/expand_variables.h"
+
+t_list	*create_token(const char *line, int len)
+{
+	char	*content;
+
+	content = ft_strndup(line, len);
+	if (content == NULL)
+		return (NULL);
+	return (ft_lstnew(content));
+}
 
 bool	clean_string_quotes(char **content_ptr)
 {
@@ -30,7 +40,8 @@ bool	clean_string_quotes(char **content_ptr)
 			ft_memmove(aux - 1, aux, ft_strlen(aux) + 1);
 			ft_memmove(new_str, new_str + 1, ft_strlen(new_str + 1) + 1);
 			new_str = aux - 2;
-		} else
+		}
+		else
 			new_str++;
 	}
 	return (true);

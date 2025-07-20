@@ -74,6 +74,7 @@ static bool	fix_split(struct s_split_token_list *split,
 	return (true);
 }
 
+// Warning: This function assumes that the split->left is not NULL
 bool	split_token_list(struct s_split_token_list *split,
 							enum e_expand_type expand_type)
 {
@@ -82,12 +83,8 @@ bool	split_token_list(struct s_split_token_list *split,
 
 	while (1)
 	{
-		if (split->left == NULL)
-			break ;
 		aux = search_op(split->left, expand_type);
-		if (aux == NULL)
-			break ;
-		if (aux->next == NULL)
+		if ((aux == NULL) || (aux->next == NULL))
 			break ;
 		split->op = aux;
 		aux2 = prev_list_item(split->left, split->op);
