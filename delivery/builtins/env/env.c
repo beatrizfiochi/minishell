@@ -15,13 +15,12 @@
 #include "../../minishell.h"
 #include "../../variables/variables.h"
 
-static void	checK_list_and_print(t_list *var_list)
+static void	check_list_and_print(t_list *var_list)
 {
 	t_content_var	*content;
 
 	content = (t_content_var *)var_list->content;
 	ft_printf("%s=%s\n", content->var_name, content->var_value);
-
 }
 
 static int	env_error(void)
@@ -46,7 +45,7 @@ int	env(int argc, char *argv[], t_shell *shell)
 	var_list = shell->variable_list;
 	while (tmp_var_list != NULL)
 	{
-		checK_list_and_print(tmp_var_list);
+		check_list_and_print(tmp_var_list);
 		tmp_var_list = tmp_var_list->next;
 	}
 	while (var_list != NULL)

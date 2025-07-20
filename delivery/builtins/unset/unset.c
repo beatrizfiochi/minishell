@@ -31,7 +31,7 @@ int	unset(int argc, char *argv[], t_shell *shell)
 			var_list = (t_content_var *)curr->content;
 			if ((is_strlen_equals(var_list->var_name, argv[i]) == true)
 				&& (ft_strncmp(var_list->var_name, argv[i],
-					ft_strlen(argv[i])) == 0))
+						ft_strlen(argv[i])) == 0))
 			{
 				free_var_content(var_list);
 				ft_lstremove(&shell->variable_list, curr);

@@ -65,7 +65,7 @@ static int	fix_split_complex(struct s_split_token_list *split,
 static bool	fix_split(struct s_split_token_list *split,
 								enum e_expand_type *expand)
 {
-	if ((op_list(split->op) == OP_RD_INPUT) && (split->left == split->op))
+	if ((op_list(split->op) == OP_RD_INPUT) && (split->left == NULL))
 	{
 		if (fix_split_simple(split) == EXIT_SUCCESS)
 			return (true);
@@ -74,34 +74,35 @@ static bool	fix_split(struct s_split_token_list *split,
 	return (true);
 }
 
+// Warning: This function assumes that the split->left is not NULL
 bool	split_token_list(struct s_split_token_list *split,
 							enum e_expand_type expand_type)
 {
 	t_list	*aux;
+	t_list	*aux2;
 
 	while (1)
 	{
-		if (split->left == NULL)
+		aux = search_op(split->left, expand_type);
+		if ((aux == NULL) || (aux->next == NULL))
 			break ;
-		split->op = search_op(split->left, expand_type);
-		if (split->op == NULL)
-			break ;
-		aux = prev_list_item(split->left, split->op);
-		if (split->op->next == NULL)
-			break ;
+		split->op = aux;
+		aux2 = prev_list_item(split->left, split->op);
+		if (aux2 != NULL)
+			aux2->next = NULL;
+		else
+			split->left = NULL;
 		split->right = split->op->next;
-		split->remain = search_op(split->right, expand_type);
-		if ((split->remain == split->right)
-			|| ((aux != NULL) && (split->remain == aux)))
-			break ;
-		if (aux != NULL)
-			aux->next = NULL;
 		split->op->next = NULL;
+		aux = search_op(split->right, expand_type);
+		if (aux == split->right)
+			break ;
+		split->remain = aux;
 		if (split->remain != NULL)
 			prev_list_item(split->right, split->remain)->next = NULL;
 		return (true);
 	}
-	return (abort_tree_lst(NULL, split, "Error: spliting tokens\n") != NULL);
+	return (abort_tree_lst(NULL, split) != NULL);
 }
 
 int	split_tokens(t_list **tokens, struct s_split_token_list *split,
@@ -109,13 +110,12 @@ int	split_tokens(t_list **tokens, struct s_split_token_list *split,
 {
 	if (split_token_list(split, *expand) == false)
 	{
-		abort_tree_lst(NULL, split, "Error: spliting tokens from list\n");
 		*tokens = NULL;
 		return (EXIT_FAILURE);
 	}
-	if ((!fix_split(split, expand)) || (split->left == split->op))
+	if ((!fix_split(split, expand)) || (split->left == NULL))
 	{
-		abort_tree_lst(NULL, split, "Error: spliting tokens from list\n");
+		abort_tree_lst(NULL, split);
 		*tokens = NULL;
 		return (EXIT_FAILURE);
 	}

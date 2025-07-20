@@ -10,24 +10,10 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>       //printf
 #include <unistd.h>      //write
 #include <stdlib.h>
 #include "../libft/libft.h"
-#include "../minishell.h"
 #include "parser.h"
-#include "../cmd.h"
-#include "aux.h"
-
-t_list	*create_token(const char *line, int len)
-{
-	char	*content;
-
-	content = ft_strndup(line, len);
-	if (content == NULL)
-		return (NULL);
-	return (ft_lstnew(content));
-}
 
 static int	scan_until_op_or_error(char *l, char *c, int *len)
 {
@@ -73,10 +59,12 @@ static void	search_token_utils(char *l, char *c, int *len)
 	}
 }
 
-static void	search_token(char *line, char *c, int *len)
+static void	search_token(char *line, int *len)
 {
 	int		op_len;
+	char	c;
 
+	*len = 0;
 	if (line == NULL)
 		return ;
 	op_len = is_op(&line[*len]);
@@ -93,7 +81,18 @@ static void	search_token(char *line, char *c, int *len)
 	}
 	if (line[*len] == ' ' && *len == 0)
 		(*len)++;
-	search_token_utils(line, c, len);
+	search_token_utils(line, &c, len);
+}
+
+t_list	*exit_tokenization(t_list *prev_token, t_list *head_token)
+{
+	if (prev_token != NULL)
+		ft_fprintf(STDERR_FILENO, "syntax error near unexpected token `%s'\n",
+			(char *)prev_token->content);
+	else
+		ft_fprintf(STDERR_FILENO, "syntax error near unexpected token\n");
+	ft_lstclear(&head_token, free);
+	return (NULL);
 }
 
 // Tokenize the input line into a linked list of tokens.
@@ -104,12 +103,10 @@ t_list	*tokenization(char *line)
 	t_list	*head_token;
 	t_list	*new_token;
 	t_list	*prev_token;
-	char	quote;
 	int		len;
 
 	head_token = NULL;
 	prev_token = NULL;
-	quote = 0;
 	if (line == NULL)
 		return (NULL);
 	while (*line != '\0')
@@ -118,30 +115,10 @@ t_list	*tokenization(char *line)
 			line++;
 		if (*line == '\0')
 			break ;
-		len = 0;
-		search_token(line, &quote, &len);
+		search_token(line, &len);
 		if (len == -1)
-		{
-			printf_error("syntax error near unexpected token\n");
-			ft_lstclear(&head_token, free);
-			return (NULL);
-		}
-		if (*line == ' ')
-			new_token = create_token("", 0);
-		else
-			new_token = create_token(line, len);
-		if ((prev_token != NULL)
-			&& (is_token_operator(prev_token->content) == 1)
-			&& (is_token_operator(new_token->content) == 1))
-		{
-			if ((op_list(new_token) != OP_RD_INPUT && op_list(new_token) != OP_HEREDOC))
-			{
-				ft_fprintf(STDERR_FILENO, "syntax error near unexpected token \"%s\"\n", (char *)(new_token->content));
-				ft_lstdelone(new_token, free);
-				ft_lstclear(&head_token, free);
-				return (NULL);
-			}
-		}
+			return (exit_tokenization(prev_token, head_token));
+		new_token = create_token(line, len);
 		ft_lstadd_back(&head_token, new_token);
 		prev_token = new_token;
 		line += len;

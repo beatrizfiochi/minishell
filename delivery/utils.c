@@ -11,17 +11,6 @@
 /* ************************************************************************** */
 
 #include <unistd.h>           //write
-#include "libft/libft.h"
-
-void	printf_error(const char *error)
-{
-	int	len;
-
-	if (error == NULL)
-		return ;
-	len = ft_strlen(error);
-	write(2, error, len);
-}
 
 char	*go_next_char(char *line, char c)
 {

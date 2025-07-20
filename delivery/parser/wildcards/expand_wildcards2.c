@@ -37,7 +37,8 @@ int	ft_strcmp_insensitive(char *s1, char *s2)
 	return (c1 - c2);
 }
 
-// Recursive function to match pattern to filename. Ignore the * inside QUOTE_MARK
+// Recursive function to match pattern to filename. Ignore the * inside
+//  QUOTE_MARK
 static bool	match_pattern(const char *filename, const char *pattern,
 							bool quoted)
 {

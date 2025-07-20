@@ -21,7 +21,8 @@
 
 static bool	is_expansion_needed(t_node_op op)
 {
-	if ((op == OP_CMD) || (op == OP_PAREN_OPEN) || (op == OP_RD_INPUT))
+	if ((op == OP_CMD) || (op == OP_PAREN_OPEN) || (op == OP_RD_INPUT)
+		|| (op == OP_RD_OUTPUT) || (op == OP_APPEND_RD_OUTPUT))
 		return (true);
 	return (false);
 }
