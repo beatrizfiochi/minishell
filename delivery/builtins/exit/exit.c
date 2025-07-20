@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/11 22:57:23 by djunho            #+#    #+#             */
-/*   Updated: 2025/07/16 14:50:48 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/07/20 20:50:51 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ int	sh_exit(int argc, char *argv[], t_shell *shell)
 	long long	ret;
 
 	ret = 0;
-	if (isatty(STDIN_FILENO))
+	if (isatty(STDIN_FILENO) && isatty(STDOUT_FILENO))
 		ft_fprintf(STDERR_FILENO, "exit\n");
 	if (argc >= 2)
 	{
