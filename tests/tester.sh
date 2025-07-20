@@ -434,6 +434,26 @@ if [[ $? -ne 0 ]]; then
 	exit 1
 fi
 
+echo -e "${MAGENTA}Testing complex variable expansion${RESET}"
+tester_with_real "echo $"
+tester_with_real "ls \$empty"
+tester_with_real "echo $empty"
+# The use of $"something" and $'something' is a special situation in bash. That we don't implement for minishell
+tester_with_real_should_be_different 'echo $"USER"'
+tester_grep                          'echo $"USER"'            '$USER'
+tester_with_real_should_be_different "echo $'USER'"
+tester_grep                          "echo $'USER'"            '$USER'
+tester_with_real_should_be_different "echo hi $'' $\"\""
+tester_grep                          "echo hi $'' $\"\""       'hi $ $'
+tester_with_real_should_be_different '$"USER"'            # USER: command not found
+tester_grep                          '$"USER"'            '$USER: command not found'
+tester_with_real_should_be_different "$'USER'"            # USER: command not found
+tester_grep                          "$'USER'"            '$USER: command not found'
+tester_with_real_should_be_different '$""'                # command not found
+tester_grep                          '$""'                "[\$]: command not found"
+tester_with_real_should_be_different "$''"                # command not found
+tester_grep                          "$''"                "[\$]: command not found"
+
 echo -e "${MAGENTA}Testing basic parser${RESET}"
 tester_with_real "echo hello'ops"          false
 tester_with_real 'echo hello"ops'          false
@@ -558,7 +578,6 @@ tester_with_real "var='cho     ola' && e\$var"
 tester_with_real "var='echo        ola' && '\$var'"
 tester_with_real "var='echo        ola' && \"\$var\""
 tester_with_real "var='echo        ola \"hahaha\"' && \$var"
-tester_with_real "echo $empty"
 echo ""
 echo -e "${MAGENTA}Testing cd${RESET}"
 tester_with_real "cd"
@@ -657,7 +676,6 @@ echo ""
 # Test a normal command
 echo -e "${MAGENTA}Testing a normal command${RESET}"
 tester_with_real "ls"
-tester_with_real "ls \$empty"
 tester_with_real "ls empty"
 tester_with_real "echo opa"
 tester_with_real "ls && echo \$?"

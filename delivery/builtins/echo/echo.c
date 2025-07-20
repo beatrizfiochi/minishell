@@ -47,8 +47,7 @@ int	echo(int argc, char *argv[], t_shell *shell)
 		ft_printf("%s", argv[i++]);
 	while (i < argc)
 	{
-		if (argv[i][0] != '\0')
-			ft_printf(" %s", argv[i]);
+		ft_printf(" %s", argv[i]);
 		i++;
 	}
 	if (!no_nl)
