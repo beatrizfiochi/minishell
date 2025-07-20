@@ -119,6 +119,6 @@ void	search_and_expand(t_list **token_list, t_list *var_list, t_shell *shell)
 		curr = curr->next;
 	}
 	expand_wildcards_token(*token_list);
-	clean_token_quotes(*token_list);
 	remove_empty_token(token_list);
+	clean_token_quotes(*token_list);
 }
