@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 14:51:22 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/07/21 22:21:38 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/07/21 22:50:03 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,4 +31,9 @@ bool	is_directory(const char *path)
 	if (stat(path, &path_stat) != 0)
 		return (false);
 	return (S_ISDIR(path_stat.st_mode));
+}
+
+bool	file_exist(const char *path)
+{
+	return (access(path, F_OK) == 0);
 }
