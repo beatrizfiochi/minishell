@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 15:02:00 by djunho            #+#    #+#             */
-/*   Updated: 2025/07/21 23:02:26 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/07/21 23:44:05 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ int	wait_previous_process(t_shell *shell)
 
 int	check_file_exists(char **args, char **envp)
 {
-		if (args[0][0] == '.')
+	if (args[0][0] == '.')
 	{
 		if (file_exist(args[0]))
 			execve(args[0], args, envp);
