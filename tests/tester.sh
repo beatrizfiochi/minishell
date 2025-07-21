@@ -690,6 +690,7 @@ tester_with_real "ls && echo \$?"
 tester_with_real "ls llll && echo \$?"
 tester_with_real "ls && sleep 1 && pwd"
 tester_with_real "pwd && ls && sleep 3 && pwd && sleep 1 && ls"
+tester_grep "./huhu" "./huhu: No such file or directory"
 echo ""
 
 # test AND
