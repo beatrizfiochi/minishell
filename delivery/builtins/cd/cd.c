@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 18:02:44 by djunho            #+#    #+#             */
-/*   Updated: 2025/07/13 18:45:57 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/07/21 21:53:46 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,11 @@ int	cd(int argc, char *argv[], t_shell *shell)
 		return (EXIT_FAILURE);
 	}
 	else
+	{
+		if (argv[1][0] == '\0')
+			return (0);
 		new_path = argv[1];
+	}
 	if (new_path == NULL)
 		return (1);
 	ret = chdir(new_path);

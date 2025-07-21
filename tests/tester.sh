@@ -587,6 +587,7 @@ tester_with_real "var='echo        ola \"hahaha\"' && \$var"
 echo ""
 echo -e "${MAGENTA}Testing cd${RESET}"
 tester_with_real "cd"
+tester_with_real "cd \"\" && pwd"
 tester_with_real "cd .."
 tester_with_real "cd nonexistent"       false
 tester_with_real "cd \$invalid && pwd"
