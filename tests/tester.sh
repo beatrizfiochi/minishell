@@ -515,6 +515,10 @@ tester_with_real 'rm /tmp/test && echo ola! > /tmp/test && < /tmp/test cat -e'
 rm /tmp/test2
 tester_with_real 'rm /tmp/test && echo ola! > /tmp/test && < /tmp/test < /tmp/test2 cat -e'
 tester_with_real 'rm /tmp/test && echo ola! > /tmp/test && cat -e < /tmp/test < /tmp/test2'
+echo -e "${MAGENTA}Testing redirect input and output mixed${RESET}"
+tester_with_real 'rm /tmp/test && < ../delivery/Makefile > /tmp/test && cat -e /tmp/test'
+# tester_with_real 'rm /tmp/test && < ../delivery/Makefile > /tmp/test cat -e ../delivery/Makefile && cat /tmp/test'
+
 
 echo -e "${MAGENTA}Testing wildcards${RESET}"
 tester_with_real "cd ../delivery && echo \"*\""   # Should not be expanded

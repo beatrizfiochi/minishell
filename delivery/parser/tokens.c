@@ -6,7 +6,7 @@
 /*   By: djunho <djunho@student.42porto.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 08:05:37 by djunho            #+#    #+#             */
-/*   Updated: 2025/07/20 23:37:42 by djunho           ###   ########.fr       */
+/*   Updated: 2025/07/21 09:27:33 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@
 #include "tokens.h"
 #include "aux.h"
 
+// Fix the situation when remain is NULL
+// < file cmd
 static int	fix_split_simple(struct s_split_token_list *split)
 {
 	if (split->remain == NULL)
@@ -27,6 +29,8 @@ static int	fix_split_simple(struct s_split_token_list *split)
 	return (EXIT_FAILURE);
 }
 
+// Fix the situation when remain is NOT NULL
+// < file cmd && ls
 static int	fix_split_complex(struct s_split_token_list *split,
 								enum e_expand_type *expand)
 {
@@ -40,9 +44,12 @@ static int	fix_split_complex(struct s_split_token_list *split,
 		cmd = cmd->next->next;
 	if (cmd == NULL)
 		return (EXIT_FAILURE);
-	split->left = cmd;
+	if (is_basic_op_list(cmd))
+		split->left = NULL;
+	else
+		split->left = cmd;
 	before_cmd = prev_list_item(split->remain, split->left);
-	if (before_cmd != split->remain)
+	if ((before_cmd != NULL) && (before_cmd != split->remain))
 		before_cmd->next = NULL;
 	else
 		split->remain = NULL;

@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 18:10:01 by djunho            #+#    #+#             */
-/*   Updated: 2025/07/09 09:27:12 by djunho           ###   ########.fr       */
+/*   Updated: 2025/07/21 08:12:49 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ void		free_btree_content(void *_content);
 
 t_node_op	op_list(t_list *list);
 t_node_op	op(char *token_str);
+bool		is_basic_op_list(t_list *list);
 
 char		*go_to_end_quote(char *content);
 
