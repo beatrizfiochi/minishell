@@ -6,13 +6,14 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 15:02:00 by djunho            #+#    #+#             */
-/*   Updated: 2025/07/21 23:44:05 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/07/22 20:30:59 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 #include <sys/wait.h>
 #include <unistd.h>
+#include <errno.h>
 #include "execution.h"
 #include "../minishell.h"
 
@@ -46,6 +47,19 @@ int	check_file_exists(char **args, char **envp)
 			ft_fprintf(STDERR_FILENO, "%s: No such file or directory\n",
 				args[0]);
 			return (EXIT_CMD_NOT_FOUND);
+		}
+	}
+	else
+	{
+		if (file_exist(args[0]))
+		{
+			execve(args[0], args, envp);
+			if (errno == EACCES)
+			{
+				ft_fprintf(STDERR_FILENO, "%s: Permission denied\n",
+					args[0]);
+				return (EXIT_CMD_CANNOT_EXEC);
+			}
 		}
 	}
 	return (0);
