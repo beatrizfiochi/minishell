@@ -587,6 +587,7 @@ tester_with_real "var='echo        ola \"hahaha\"' && \$var"
 echo ""
 echo -e "${MAGENTA}Testing cd${RESET}"
 tester_with_real "cd"
+tester_with_real "cd \"\" && pwd"
 tester_with_real "cd .."
 tester_with_real "cd nonexistent"       false
 tester_with_real "cd \$invalid && pwd"
@@ -636,6 +637,7 @@ tester_with_real '(export y && env | grep "y=") && y=2 && env | grep "y=2"'
 echo ""
 echo -e "${MAGENTA}Testing pwd${RESET}"
 tester_with_real 'pwd'
+tester_with_real '$PWD && echo $?'
 tester_with_real 'cd .. && pwd'
 tester_with_real 'cd .. && pwd && cd .. && pwd'
 tester_grep      'cd /tmp && pwd'                  "/tmp"
@@ -688,6 +690,7 @@ tester_with_real "ls && echo \$?"
 tester_with_real "ls llll && echo \$?"
 tester_with_real "ls && sleep 1 && pwd"
 tester_with_real "pwd && ls && sleep 3 && pwd && sleep 1 && ls"
+tester_grep "./huhu" "./huhu: No such file or directory"
 echo ""
 
 # test AND

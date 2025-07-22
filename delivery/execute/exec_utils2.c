@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_utils2.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: djunho <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 15:02:00 by djunho            #+#    #+#             */
-/*   Updated: 2025/07/06 17:05:22 by djunho           ###   ########.fr       */
+/*   Updated: 2025/07/21 23:44:05 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,4 +33,20 @@ int	wait_previous_process(t_shell *shell)
 		return (get_fork_return(wstatus));
 	}
 	return (EXIT_FAILURE);
+}
+
+int	check_file_exists(char **args, char **envp)
+{
+	if (args[0][0] == '.')
+	{
+		if (file_exist(args[0]))
+			execve(args[0], args, envp);
+		else
+		{
+			ft_fprintf(STDERR_FILENO, "%s: No such file or directory\n",
+				args[0]);
+			return (EXIT_CMD_NOT_FOUND);
+		}
+	}
+	return (0);
 }

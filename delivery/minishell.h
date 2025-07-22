@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 13:37:40 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/07/10 20:34:39 by djunho           ###   ########.fr       */
+/*   Updated: 2025/07/21 22:50:33 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,5 +59,7 @@ void	free_btree_node(void *content);
 void	clear_minishell(t_shell *shell);
 char	*sh_read_line(t_shell *shell, const char *prompt);
 void	sh_add_history(t_shell *shell, const char *line);
+bool	is_directory(const char *path);
+bool	file_exist(const char *path);
 
 #endif
