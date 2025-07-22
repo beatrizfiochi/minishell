@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/11 22:57:23 by djunho            #+#    #+#             */
-/*   Updated: 2025/07/22 18:55:53 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/07/22 19:10:39 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 #define LLONG_MAX_STR "9223372036854775807"
 #define LLONG_MIN_STR "9223372036854775808"
 
-char	*skip_spaces(char *str)
+static char	*skip_spaces(char *str)
 {
 	while (*str == ' ' || *str == '\t' || *str == '\n'
 		|| *str == '\v' || *str == '\f' || *str == '\r')
