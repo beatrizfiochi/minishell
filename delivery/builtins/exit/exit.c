@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/11 22:57:23 by djunho            #+#    #+#             */
-/*   Updated: 2025/07/22 18:37:16 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/07/22 18:55:53 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,13 +52,11 @@ static bool	check_if_bigger(char *input)
 	if (len < 19)
 		return (false);
 	if (negative == true)
-		return (ft_strncmp(digits, LLONG_MIN_STR, len) > 0);
+		return (ft_strncmp(digits, LLONG_MIN_STR, 19) > 0);
 	else
-		return (ft_strncmp(digits, LLONG_MAX_STR, len) > 0);
+		return (ft_strncmp(digits, LLONG_MAX_STR, 19) > 0);
 }
 
-// hack: Avoid extensive checks by rejecting inputs longer than 19 characters,
-// as the maximum value for a long integer is 9223372036854775807
 static bool	check_input(char *input)
 {
 	int	i;
