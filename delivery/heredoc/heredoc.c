@@ -6,7 +6,7 @@
 /*   By: djunho <djunho@student.42porto.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/10 18:31:10 by djunho            #+#    #+#             */
-/*   Updated: 2025/07/20 23:51:10 by djunho           ###   ########.fr       */
+/*   Updated: 2025/07/22 08:37:14 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,14 +108,14 @@ int	check_tree_for_heredoc(t_shell *shell, t_btnode *node)
 	ret = EXIT_SUCCESS;
 	if (btree_is_leaf(node) || (node->right == NULL))
 		return (ret);
+	if (node->left != NULL)
+		ret = check_tree_for_heredoc(shell, node->left);
+	if ((ret == EXIT_SUCCESS) && (node->right != NULL))
+		ret = check_tree_for_heredoc(shell, node->right);
 	content = (t_content_node *)node->content;
 	right_content = (t_content_node *)node->right->content;
-	if (content->op == OP_HEREDOC)
+	if ((ret == EXIT_SUCCESS) && (content->op == OP_HEREDOC))
 		ret = process_heredoc(shell, content,
 				(char **)(&right_content->cmd.tokens->content));
-	else if (ret == EXIT_SUCCESS)
-		ret = check_tree_for_heredoc(shell, node->right);
-	if ((ret == EXIT_SUCCESS) && (node->left != NULL))
-		ret = check_tree_for_heredoc(shell, node->left);
 	return (ret);
 }
