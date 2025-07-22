@@ -6,7 +6,7 @@
 /*   By: djunho <djunho@student.42porto.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 08:05:37 by djunho            #+#    #+#             */
-/*   Updated: 2025/07/21 09:27:33 by djunho           ###   ########.fr       */
+/*   Updated: 2025/07/22 22:58:14 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,69 +15,49 @@
 #include "../redirect/redirect_aux.h"	// is_a_redirect_file_op()
 #include "tokens.h"
 #include "aux.h"
+#include "parser.h"
 
 // Fix the situation when remain is NULL
 // < file cmd
 static int	fix_split_simple(struct s_split_token_list *split)
 {
-	if (split->remain == NULL)
+	if (ft_lstsize(split->right) > 1)
 	{
-		split->left = split->right->next;
+		if (split->left != NULL)
+			ft_lstlast(split->left)->next = split->right->next;
+		else
+			split->left = split->right->next;
 		split->right->next = NULL;
-		return (EXIT_SUCCESS);
 	}
-	return (EXIT_FAILURE);
-}
-
-// Fix the situation when remain is NOT NULL
-// < file cmd && ls
-static int	fix_split_complex(struct s_split_token_list *split,
-								enum e_expand_type *expand)
-{
-	t_list	*cmd;
-	t_list	*after_cmd;
-	t_list	*before_cmd;
-	t_list	*last_remain;
-
-	cmd = split->remain;
-	while ((cmd != NULL) && (op_list(cmd) == OP_RD_INPUT))
-		cmd = cmd->next->next;
-	if (cmd == NULL)
-		return (EXIT_FAILURE);
-	if (is_basic_op_list(cmd))
-		split->left = NULL;
-	else
-		split->left = cmd;
-	before_cmd = prev_list_item(split->remain, split->left);
-	if ((before_cmd != NULL) && (before_cmd != split->remain))
-		before_cmd->next = NULL;
-	else
-		split->remain = NULL;
-	after_cmd = search_op(split->left, *expand);
-	if (after_cmd == NULL)
-		return (EXIT_SUCCESS);
-	last_remain = ft_lstlast(split->remain);
-	if (last_remain == NULL)
-		split->remain = after_cmd;
-	else
-		last_remain->next = after_cmd;
 	return (EXIT_SUCCESS);
 }
 
-// This function tries to detect and fix the inverted order of OP_RD_INPUT and
-// OP_HEREDOC operators in the split token list.
-// It "converts" from:
-// < file cmd
-// to:
-// cmd < file
-static bool	fix_split(struct s_split_token_list *split,
+static bool	fix_split(struct s_split_token_list *split, bool has_left,
 								enum e_expand_type *expand)
 {
-	if ((op_list(split->op) == OP_RD_INPUT) && (split->left == NULL))
+	t_list	*aux;
+
+	if (is_redirect_file_op(op_list(split->op)))
 	{
-		if (fix_split_simple(split) == EXIT_SUCCESS)
-			return (true);
-		return (fix_split_complex(split, expand) == EXIT_SUCCESS);
+		fix_split_simple(split);
+		// Check if is a redir with a command
+		if (is_redirect_file_op(op_list(split->op)))
+		{
+			if ((ft_lstsize(split->right) > 1)
+				|| (has_left && (split->left != NULL)))
+			{
+				aux = split->op;
+				split->op = create_token("&&", 2);
+				aux->next = split->right;
+				if (split->left != NULL)
+				{
+					ft_lstlast(split->left)->next = aux;
+					aux = split->left;
+					split->left = NULL;
+				}
+				split->right = aux;
+			}
+		}
 	}
 	return (true);
 }
@@ -103,8 +83,12 @@ bool	split_token_list(struct s_split_token_list *split,
 		split->right = split->op->next;
 		split->op->next = NULL;
 		aux = search_op(split->right, expand_type);
-		if (aux == split->right)
+		// Check for 2 operator toguether. It is possible to have a redir toguether with another
+		// For example: <infile grep i >grep | <grep wc
+		if ((aux == split->right) && !is_redirect_file_op(op_list(aux)))
 			break ;
+		if (aux == split->right)
+			aux = search_op(split->right->next, expand_type);
 		split->remain = aux;
 		if (split->remain != NULL)
 			prev_list_item(split->right, split->remain)->next = NULL;
@@ -113,7 +97,7 @@ bool	split_token_list(struct s_split_token_list *split,
 	return (abort_tree_lst(NULL, split) != NULL);
 }
 
-int	split_tokens(t_list **tokens, struct s_split_token_list *split,
+int	split_tokens(t_list **tokens, struct s_split_token_list *split, bool has_left,
 					enum e_expand_type *expand)
 {
 	if (split_token_list(split, *expand) == false)
@@ -121,8 +105,7 @@ int	split_tokens(t_list **tokens, struct s_split_token_list *split,
 		*tokens = NULL;
 		return (EXIT_FAILURE);
 	}
-	if ((!fix_split(split, expand))
-		|| ((split->left == NULL) && !is_redirect_file_op(op_list(split->op))))
+	if (!fix_split(split, has_left, expand))
 	{
 		abort_tree_lst(NULL, split);
 		*tokens = NULL;

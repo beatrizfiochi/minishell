@@ -6,7 +6,7 @@
 /*   By: djunho <djunho@student.42porto.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 18:57:02 by djunho            #+#    #+#             */
-/*   Updated: 2025/07/20 23:40:29 by djunho           ###   ########.fr       */
+/*   Updated: 2025/07/21 23:54:23 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,9 @@ bool	is_btnode_different(t_btnode *node1, t_btnode *node2)
 	cnt_node1 = (t_content_node *)node1->content;
 	cnt_node2 = (t_content_node *)node2->content;
 	if (cnt_node1->op != cnt_node2->op)
+		return (true);
+	if (((node1->left != NULL) != (node2->left != NULL))
+		|| ((node1->right != NULL) != (node2->right != NULL)))
 		return (true);
 	return (false);
 }

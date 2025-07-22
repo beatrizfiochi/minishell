@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 18:09:35 by djunho            #+#    #+#             */
-/*   Updated: 2025/07/09 08:54:35 by djunho           ###   ########.fr       */
+/*   Updated: 2025/07/22 09:42:14 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@
 t_list	*prev_list_item(t_list *first_node, t_list *current_node)
 {
 	if (first_node == NULL || first_node == current_node)
+		return (NULL);
+	if (current_node == NULL)
 		return (NULL);
 	while (first_node->next != NULL && first_node->next != current_node)
 		first_node = first_node->next;

@@ -6,11 +6,10 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 18:34:50 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/07/20 23:24:08 by djunho           ###   ########.fr       */
+/*   Updated: 2025/07/22 23:05:03 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>				// printf
 #include <stdlib.h>
 #include "../btree/btree.h"
 #include "../minishell.h"
@@ -70,7 +69,7 @@ static t_btnode	*create_first(t_list **tokens, t_btnode *parent,
 	split = (struct s_split_token_list){
 		.left = *tokens, .op = NULL, .right = NULL, .remain = NULL
 	};
-	if (split_tokens(tokens, &split, expand) == EXIT_FAILURE)
+	if (split_tokens(tokens, &split, false, expand) == EXIT_FAILURE)
 		return (NULL);
 	tree = create_node(split.op, parent, NULL, NULL);
 	tree->left = create_node(split.left, tree, NULL, NULL);
@@ -83,17 +82,17 @@ static t_btnode	*create_first(t_list **tokens, t_btnode *parent,
 // Every operator must be placed between 2 commands
 //
 t_btnode	*create_basic_tree(t_list **token_list, t_btnode *parent,
-								enum e_expand_type expand_type)
+								enum e_expand_type expand)
 {
 	t_btnode					*tree;
 	t_btnode					*old_tree;
 	struct s_split_token_list	split;
 
-	tree = create_first(token_list, parent, &expand_type);
+	tree = create_first(token_list, parent, &expand);
 	if (tree == NULL)
 		return (NULL);
 	split.remain = *token_list;
-	while ((split.remain != NULL) && !((expand_type == EXP_PAREN)
+	while ((split.remain != NULL) && !((expand == EXP_PAREN)
 			&& (split.remain->next == NULL)
 			&& (op_list(*token_list) == OP_PAREN_CLOSE)))
 	{
@@ -101,7 +100,7 @@ t_btnode	*create_basic_tree(t_list **token_list, t_btnode *parent,
 		split = (struct s_split_token_list){
 			.left = split.remain, .op = NULL, .right = NULL, .remain = NULL
 		};
-		if (split_token_list(&split, expand_type) == false)
+		if (split_tokens(token_list, &split, true, &expand) == EXIT_FAILURE)
 			return (NULL);
 		if (split.left != NULL)
 			return (abort_tree_lst(tree, &split));

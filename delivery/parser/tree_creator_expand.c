@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 18:34:50 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/07/11 09:37:57 by djunho           ###   ########.fr       */
+/*   Updated: 2025/07/22 09:00:12 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,8 @@
 static bool	is_expansion_needed(t_node_op op)
 {
 	if ((op == OP_CMD) || (op == OP_PAREN_OPEN) || (op == OP_RD_INPUT)
-		|| (op == OP_RD_OUTPUT) || (op == OP_APPEND_RD_OUTPUT))
+		|| (op == OP_RD_OUTPUT) || (op == OP_HEREDOC)
+		|| (op == OP_APPEND_RD_OUTPUT))
 		return (true);
 	return (false);
 }
