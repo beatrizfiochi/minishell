@@ -6,29 +6,55 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/11 22:57:23 by djunho            #+#    #+#             */
-/*   Updated: 2025/07/20 20:50:51 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/07/22 18:37:16 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 #include <unistd.h>
 #include <limits.h>            // LONG_MAX
+#include <stdbool.h>
+#include <string.h>
 #include "../../minishell.h"
+
+#define LLONG_MAX_STR "9223372036854775807"
+#define LLONG_MIN_STR "9223372036854775808"
+
+char	*skip_spaces(char *str)
+{
+	while (*str == ' ' || *str == '\t' || *str == '\n'
+		|| *str == '\v' || *str == '\f' || *str == '\r')
+		str++;
+	return (str);
+}
 
 static bool	check_if_bigger(char *input)
 {
-	long long	num;
-	long long	num2;
+	int		len;
+	bool	negative;
+	char	*digits;
 
-	if (ft_strlen(input) > 19)
+	input = skip_spaces(input);
+	negative = false;
+	if ((*input == '+') || (*input == '-'))
+	{
+		if (*input == '-')
+			negative = true;
+		digits = input + 1;
+	}
+	else
+		digits = input;
+	while (*digits == '0')
+		digits++;
+	len = ft_strlen(digits);
+	if (len > 19)
 		return (true);
-	if ((*input == '-') || (*input == '+'))
+	if (len < 19)
 		return (false);
-	num = ft_atoll(input);
-	num2 = ft_atoll(input + 1);
-	if (num2 < num)
-		return (false);
-	return (true);
+	if (negative == true)
+		return (ft_strncmp(digits, LLONG_MIN_STR, len) > 0);
+	else
+		return (ft_strncmp(digits, LLONG_MAX_STR, len) > 0);
 }
 
 // hack: Avoid extensive checks by rejecting inputs longer than 19 characters,
@@ -38,6 +64,7 @@ static bool	check_input(char *input)
 	int	i;
 
 	i = 0;
+	input = skip_spaces(input);
 	if ((input[i] == '-') || (input[i] == '+'))
 		i++;
 	while ((input[i] != '\0') && ft_isdigit(input[i]))
