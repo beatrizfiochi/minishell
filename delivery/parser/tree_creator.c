@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 18:34:50 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/07/25 21:15:44 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/07/23 19:20:04 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ static t_btnode	*create_node(t_list *token_list, t_btnode *parent,
 	content->cmd.tokens = token_list;
 	content->cmd.is_builtin = false;
 	content->cmd.finished = false;
+	content->cmd.is_parentheses = false;
 	content->cmd.redir.fd_in = -1;
 	content->cmd.redir.fd_out = -1;
 	tree_node = btree_new(content);

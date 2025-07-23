@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 18:34:50 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/07/25 01:34:48 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/07/23 21:00:14 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,17 @@ static bool	is_expansion_needed(t_node_op op)
 	return (false);
 }
 
+static	void	tag_node_and_flag(bool *had_expand, t_btnode *node,
+						enum e_expand_type expand)
+{
+	t_content_node	*cnt;
+
+	cnt = (t_content_node *)node->content;
+	*had_expand = true;
+	if (expand == EXP_PAREN)
+		cnt->cmd.is_parentheses = true;
+}
+
 static t_btnode	*expand_btree_node(t_btnode *node,
 						enum e_expand_type expand,
 						bool *had_expand)
@@ -42,7 +53,7 @@ static t_btnode	*expand_btree_node(t_btnode *node,
 		{
 			tree = create_basic_tree(&cnt->cmd.tokens, node->parent, expand);
 			if (is_btnode_different(node, tree))
-				*had_expand = true;
+				tag_node_and_flag(had_expand, tree, expand);
 			btree_delete(&node, free_btree_node);
 			return (tree);
 		}

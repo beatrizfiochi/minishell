@@ -6,7 +6,7 @@
 /*   By: djunho <djunho@student.42porto.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/21 20:35:44 by djunho            #+#    #+#             */
-/*   Updated: 2025/06/01 11:44:06 by djunho           ###   ########.fr       */
+/*   Updated: 2025/07/23 20:20:38 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,8 @@ int	btree_foreach_before_and_between_dfs(t_btnode *node,
 		return (ret);
 	if (node->right != NULL)
 		ret = btree_foreach_before_and_between_dfs(node->right, cfg);
+	if (cfg->cb_node_after != NULL)
+		ret = cfg->cb_node_after(node, ret, &should_continue, cfg->ctx);
 	return (ret);
 }
 

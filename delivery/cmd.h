@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 11:23:29 by djunho            #+#    #+#             */
-/*   Updated: 2025/07/09 20:38:48 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/07/23 19:19:40 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,8 @@ typedef struct s_cmd
 	bool	is_builtin;		// Updated once executed. False by default
 	bool	finished;		// Indicated if the pid was already waited for.
 							//	False by default
+	bool	is_parentheses;	// True if the operator or command is a begining
+							//	of a parentheses. False by default
 	struct s_cmd_redirect
 	{
 		int		fd_in;

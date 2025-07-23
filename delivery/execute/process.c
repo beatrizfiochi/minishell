@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 19:55:45 by djunho            #+#    #+#             */
-/*   Updated: 2025/07/23 08:15:44 by djunho           ###   ########.fr       */
+/*   Updated: 2025/07/23 21:02:47 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,15 +17,12 @@
 #include <sys/wait.h>		// wait
 #include "../libft/libft.h"
 #include "../cmd.h"
-#include "../builtins/builtins.h"
 #include "../debug.h"
-#include "../parser/parser.h"
 #include "../minishell.h"
 #include "../signals/signals.h"
 #include "execute_debug.h"
 #include "exec_utils.h"
 #include "execution.h"
-#include "../parser/parser.h"
 #include "../redirect/redirect.h"
 #include "../redirect/redirect_aux.h"	// is_redirect_file_op()
 
@@ -36,6 +33,10 @@ static int	btree_operator_before_callback(t_btnode *node,
 
 	content = (t_content_node *)node->content;
 	ignore_signals();
+	*should_continue = true;
+	ret = prepare_parenthesis(node, should_continue);
+	if (*should_continue == false)
+		return (ret);
 	*should_continue = false;
 	if ((content->op == OP_RD_OUTPUT) || (content->op == OP_APPEND_RD_OUTPUT))
 		ret = prepare_redirect_out((t_shell *)_shell, node);
@@ -77,33 +78,13 @@ static int	btree_operator_between_callback(t_btnode *node,
 	return (ret);
 }
 
-static int	run_cmd(t_shell *shell, t_btnode *node, t_node_op parent_op)
+static int	btree_operator_after_callback(t_btnode *node,
+				int ret, bool *should_continue, void *_shell)
 {
-	t_content_node	*content;
-	int				ret;
+	t_shell			*shell;
 
-	content = (t_content_node *)node->content;
-	shell->last_cmd = &content->cmd;
-	if (content->cmd.redir.fd_out > 0)
-		shell->is_last_redirect = true;
-	search_and_expand(&content->cmd.tokens, shell->variable_list, shell);
-	handle_var_assign(shell, node);
-	if (content->cmd.tokens == NULL)
-	{
-		content->cmd.is_builtin = true;
-		if (!is_op_redirect_type(parent_op))
-			join_shell_variable_lists(shell);
-		else
-			ft_lstclear(&shell->tmp_var_list, free_var_content);
-		return (EXIT_SUCCESS);
-	}
-	ret = EXIT_CMD_NOT_FOUND;
-	if (!is_op_redirect_type(parent_op))
-		ret = execute_builtin(&content->cmd, shell);
-	if (ret == EXIT_CMD_NOT_FOUND)
-		ret = execute_execve(node, shell);
-	ft_lstclear(&shell->tmp_var_list, free_var_content);
-	return (ret);
+	shell = _shell;
+	return (process_parenthesis(shell, node, ret, should_continue));
 }
 
 static int	btree_cmd_callback(t_btnode *node, void *_shell)
@@ -134,6 +115,7 @@ int	process(t_shell *shell)
 	const t_btree_foreach_dfs_cb	cfg = {
 		.cb_node_before = btree_operator_before_callback,
 		.cb_node_between = btree_operator_between_callback,
+		.cb_node_after = btree_operator_after_callback,
 		.cb_leaf = btree_cmd_callback,
 		.ctx = shell
 	};

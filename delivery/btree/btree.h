@@ -6,7 +6,7 @@
 /*   By: djunho <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 11:40:35 by djunho            #+#    #+#             */
-/*   Updated: 2025/06/03 10:23:13 by djunho           ###   ########.fr       */
+/*   Updated: 2025/07/23 20:32:00 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef BTREE_H
@@ -50,6 +50,8 @@ typedef struct s_btree_foreach_dfs_cb
 	t_foreach_node_cb	cb_node_before;
 	// cb_node_between	for the parent node between the left and the right calls
 	t_foreach_node_cb	cb_node_between;
+	// cb_node_after	for the parent node after calling the right node
+	t_foreach_node_cb	cb_node_after;
 	// cb_leaf			for a leaf node
 	t_foreach_leaf_cb	cb_leaf;
 	// ctx is the context passed to all callbacks
