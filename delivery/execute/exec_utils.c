@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/01 12:16:24 by djunho            #+#    #+#             */
-/*   Updated: 2025/06/27 18:40:14 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/07/23 12:08:19 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,7 @@ bool	create_cmd_path(char *cmd, t_list *var_list, char **path)
 		return (free_join(tmp));
 	}
 	free(*path);
+	*path = NULL;
 	return (!free_join(tmp));
 }
 

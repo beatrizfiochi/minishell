@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 17:08:47 by djunho            #+#    #+#             */
-/*   Updated: 2025/07/21 23:01:02 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/07/23 12:01:16 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,6 @@ char			**convert_list_to_vector(t_list *list, int *size);
 t_content_node	*get_last_command_run(t_btnode *parent);
 
 int				wait_previous_process(t_shell *shell);
-int				check_file_exists(char **args, char **envp);
+int				exec_cmd(t_shell *shell, char **args, char **envp);
 
 #endif // EXEC_UTILS_H
