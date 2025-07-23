@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 19:49:18 by djunho            #+#    #+#             */
-/*   Updated: 2025/07/09 10:58:10 by djunho           ###   ########.fr       */
+/*   Updated: 2025/07/22 20:51:29 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,9 +27,6 @@ int		get_fork_return(int wstatus);
 int		run_child(t_cmd *cmd, t_shell *shell);
 int		process_and(t_shell *shell, int previous_ret, bool *should_continue);
 int		process_or(t_shell *shell, int previous_ret, bool *should_continue);
-int		process_pipe(t_shell *shell, t_btnode *node);
-int		process_redirect(t_shell *shell, int ret, t_btnode *node,
-			bool *should_continue);
 
 void	configure_redir(t_shell *shell, const t_cmd *cmd);
 void	create_op_list(t_btnode *tree, t_list **op_list);

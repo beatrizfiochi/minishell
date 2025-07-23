@@ -6,15 +6,17 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 15:02:00 by djunho            #+#    #+#             */
-/*   Updated: 2025/07/22 20:30:59 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/07/23 18:44:05 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
+#include <string.h>
 #include <sys/wait.h>
 #include <unistd.h>
 #include <errno.h>
 #include "execution.h"
+#include "exec_utils.h"
 #include "../minishell.h"
 
 int	wait_previous_process(t_shell *shell)
@@ -36,31 +38,30 @@ int	wait_previous_process(t_shell *shell)
 	return (EXIT_FAILURE);
 }
 
-int	check_file_exists(char **args, char **envp)
+int	exec_cmd(t_shell *shell, char **args, char **envp)
 {
-	if (args[0][0] == '.')
-	{
-		if (file_exist(args[0]))
-			execve(args[0], args, envp);
-		else
-		{
-			ft_fprintf(STDERR_FILENO, "%s: No such file or directory\n",
-				args[0]);
-			return (EXIT_CMD_NOT_FOUND);
-		}
-	}
+	char	*path;
+	char	*msg;
+
+	path = NULL;
+	msg = NULL;
+	if ((args[0][0] == '.') || (args[0][0] == '/'))
+		execve(args[0], args, envp);
 	else
 	{
-		if (file_exist(args[0]))
-		{
-			execve(args[0], args, envp);
-			if (errno == EACCES)
-			{
-				ft_fprintf(STDERR_FILENO, "%s: Permission denied\n",
-					args[0]);
-				return (EXIT_CMD_CANNOT_EXEC);
-			}
-		}
+		if (create_cmd_path(args[0], shell->variable_list, &path))
+			execve(path, args, envp);
+		else
+			msg = "command not found";
 	}
-	return (0);
+	if (msg == NULL)
+		msg = strerror(errno);
+	ft_fprintf(STDERR_FILENO, "%s: %s\n", args[0], msg);
+	if (path != NULL)
+		free(path);
+	if (errno == EACCES)
+		return (EXIT_CMD_CANNOT_EXEC);
+	else if (errno == ENOENT)
+		return (EXIT_CMD_NOT_FOUND);
+	return (EXIT_CMD_NOT_FOUND);
 }

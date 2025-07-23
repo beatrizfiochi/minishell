@@ -6,14 +6,21 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 14:51:22 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/07/21 22:50:03 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/07/23 09:19:13 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stdio.h>			// perror
 #include <unistd.h>           //write
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <stdbool.h>
+
+int	p_error(const char *msg, const int ret)
+{
+	perror(msg);
+	return (ret);
+}
 
 char	*go_next_char(char *line, char c)
 {

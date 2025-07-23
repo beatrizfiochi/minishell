@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 18:02:44 by djunho            #+#    #+#             */
-/*   Updated: 2025/07/21 21:53:46 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/07/23 09:17:05 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 #include "../../minishell.h"
 #include "../../variables/variables.h"
 
-static void	p_error(const char *first, const char *second)
+static void	cd_error(const char *first, const char *second)
 {
 	char	*final;
 
@@ -110,7 +110,7 @@ int	cd(int argc, char *argv[], t_shell *shell)
 		return (1);
 	ret = chdir(new_path);
 	if (ret != 0)
-		p_error("cd: ", new_path);
+		cd_error("cd: ", new_path);
 	else
 		update_variables(shell, new_path);
 	return (ret != 0);

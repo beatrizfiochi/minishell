@@ -1,18 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   redirect2.c                                        :+:      :+:    :+:   */
+/*   redirect_aux.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: djunho <djunho@student.42porto.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 20:19:10 by djunho            #+#    #+#             */
-/*   Updated: 2025/07/08 20:20:17 by djunho           ###   ########.fr       */
+/*   Updated: 2025/07/20 23:44:33 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <unistd.h>
 #include "../btree/btree.h"
 #include "../cmd.h"
+#include "../minishell.h"
+#include "../parser/parser.h"
+
+char	*get_redir_filename(t_shell *shell, t_btnode *file_node)
+{
+	t_list	*token;
+
+	token = ((t_content_node *)(file_node->content))->cmd.tokens;
+	expand_variable_token(&token, shell->variable_list, shell);
+	if (ft_lstsize(((t_content_node *)(file_node->content))->cmd.tokens) != 1)
+	{
+		ft_fprintf(STDERR_FILENO, "Ambiguous redirect\n");
+		return (NULL);
+	}
+	return (((t_content_node *)(file_node->content))->cmd.tokens->content);
+}
 
 t_node_op	get_next_operation(t_btnode *node)
 {
@@ -36,7 +52,7 @@ t_node_op	get_next_operation(t_btnode *node)
 	return (((t_content_node *)aux->parent->content)->op);
 }
 
-bool	is_a_redirect_file_op(t_node_op op)
+bool	is_redirect_file_op(t_node_op op)
 {
 	return (op == OP_RD_OUTPUT || op == OP_APPEND_RD_OUTPUT
 		|| op == OP_RD_INPUT || op == OP_HEREDOC);
@@ -48,12 +64,11 @@ t_content_node	*get_next_cmd(t_btnode *node)
 	{
 		if (((t_content_node *)node->content)->op == OP_CMD)
 			return ((t_content_node *)node->content);
-		if (is_a_redirect_file_op(((t_content_node *)node->content)->op))
+		if (is_redirect_file_op(((t_content_node *)node->content)->op))
 			node = node->left;
 		else
 			node = node->right;
 	}
-	ft_fprintf(STDERR_FILENO, "Could not find left command of redirect\n");
 	return (NULL);
 }
 
@@ -65,6 +80,5 @@ t_content_node	*get_first_cmd(t_btnode *node)
 			return ((t_content_node *)node->content);
 		node = node->left;
 	}
-	ft_fprintf(STDERR_FILENO, "Could not find first command of redirect\n");
 	return (NULL);
 }

@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 08:08:11 by djunho            #+#    #+#             */
-/*   Updated: 2025/07/16 10:42:01 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/07/22 23:04:18 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ struct s_split_token_list
 };
 
 int		split_tokens(t_list **tokens, struct s_split_token_list *split,
-			enum e_expand_type *expand);
+			bool has_left, enum e_expand_type *expand);
 
 bool	split_token_list(struct s_split_token_list *split,
 			enum e_expand_type expand_type);

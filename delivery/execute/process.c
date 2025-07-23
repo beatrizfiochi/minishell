@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 19:55:45 by djunho            #+#    #+#             */
-/*   Updated: 2025/07/13 20:09:02 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/07/23 08:15:44 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,13 +22,12 @@
 #include "../parser/parser.h"
 #include "../minishell.h"
 #include "../signals/signals.h"
-#include "../variables/variables.h"
 #include "execute_debug.h"
 #include "exec_utils.h"
 #include "execution.h"
 #include "../parser/parser.h"
-#include "../parser/aux.h"
 #include "../redirect/redirect.h"
+#include "../redirect/redirect_aux.h"	// is_redirect_file_op()
 
 static int	btree_operator_before_callback(t_btnode *node,
 				int ret, bool *should_continue, void *_shell)
@@ -42,21 +41,12 @@ static int	btree_operator_before_callback(t_btnode *node,
 		ret = prepare_redirect_out((t_shell *)_shell, node);
 	else if (content->op == OP_RD_INPUT)
 		ret = prepare_redirect_in((t_shell *)_shell, node);
+	else if (content->op == OP_PIPE)
+		ret = prepare_pipe((t_shell *)_shell, node);
 	if (ret != EXIT_SUCCESS)
 		return (ret);
 	*should_continue = true;
-	if (!is_op_redirect_type(content->op))
-		return (0);
-	if ((node->right == NULL) || (node->left == NULL))
-		return (1);
-	((t_shell *)_shell)->is_running_redirect = true;
-	((t_shell *)_shell)->is_last_redirect = false;
-	if (((t_content_node *)node->left->content)->op == OP_PIPE)
-		return (0);
-	((t_shell *)_shell)->pipe.carry_over_fd = -1;
-	if (pipe(((t_shell *)_shell)->pipe.pipe) < 0)
-		return (1);
-	return (0);
+	return (ret);
 }
 
 static int	btree_operator_between_callback(t_btnode *node,
@@ -79,6 +69,9 @@ static int	btree_operator_between_callback(t_btnode *node,
 			|| (((t_content_node *)node->content)->op == OP_RD_OUTPUT)
 			|| (((t_content_node *)node->content)->op == OP_RD_INPUT))
 			ret = process_redirect(shell, ret, node, should_continue);
+		if (!is_redirect_file_op(((t_content_node *)node->content)->op)
+			&& (((t_content_node *)node->content)->op != OP_PIPE))
+			close_redirects(shell);
 	}
 	shell->last_exit_status = ret;
 	return (ret);
