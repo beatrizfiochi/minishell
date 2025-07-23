@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 11:59:00 by djunho            #+#    #+#             */
-/*   Updated: 2025/07/21 23:02:46 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/07/22 19:52:18 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,8 @@ static int	execute_command(char **args, char **envp, t_cmd *cmd,
 	}
 	if (check_file_exists(args, envp) == EXIT_CMD_NOT_FOUND)
 		return (EXIT_CMD_NOT_FOUND);
+	else if (check_file_exists(args, envp) == EXIT_CMD_CANNOT_EXEC)
+		return (EXIT_CMD_CANNOT_EXEC);
 	if (create_cmd_path(args[0], shell->variable_list, &path))
 	{
 		execve(path, args, envp);
