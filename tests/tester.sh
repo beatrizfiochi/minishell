@@ -323,6 +323,19 @@ OUT_REAL_FILE="/tmp/from_bash"
 OUT_FILE_VALGRIND_BASE="/tmp/my_minishell_valgrind"
 OUT_FILE_VALGRIND="${OUT_FILE_VALGRIND_BASE}_%p"
 
+if [ $# -ne 0 ]; then
+	functions=$(declare -F | sed 's/declare -f //' | tr '\n' ' ')
+	if ! [[ " $functions " =~ " $1 " ]]; then
+		echo -e "${RED}Error: Function $1 not found. PLease use one of [$functions]${RESET}"
+		exit 1
+	fi
+	# Calls the function $1 with the other parameters
+	"$@"
+	exit 1
+fi
+
+exit 1
+
 echo "################ Basic tests (parser and binary tree) ################"
 make -C ../delivery/ clean &> /dev/null
 make -C ../delivery/ -j 16 debug &> /dev/null
