@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/11 22:57:23 by djunho            #+#    #+#             */
-/*   Updated: 2025/07/22 19:10:39 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/07/23 20:39:58 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,8 @@ static bool	check_if_bigger(char *input)
 
 static bool	check_input(char *input)
 {
-	int	i;
+	int		i;
+	char	*aux;
 
 	i = 0;
 	input = skip_spaces(input);
@@ -67,7 +68,8 @@ static bool	check_input(char *input)
 		i++;
 	while ((input[i] != '\0') && ft_isdigit(input[i]))
 		i++;
-	if (input[i] != '\0')
+	aux = skip_spaces(&input[i]);
+	if (*aux != '\0')
 		return (false);
 	return (!check_if_bigger(input));
 }

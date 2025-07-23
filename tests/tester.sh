@@ -740,6 +740,7 @@ tester_with_real 'exit -9223372036854775808'
 tester_with_real 'exit -9223372036854775809'
 tester_with_real 'exit 00000000000000000001'
 tester_with_real 'exit "      42"'
+tester_with_real 'exit "      42 "'
 # Too many arguments
 tester_with_real 'exit 1 2'
 tester_with_real 'exit 1 221'
