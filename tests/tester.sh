@@ -12,49 +12,72 @@ BLUE='\033[0;34m'
 MAGENTA='\033[0;35m'
 RESET='\033[0m'
 
+function clean_valgrind_logs() {
+	for file in $(ls $OUT_FILE_VALGRIND_BASE* 2> /dev/null); do
+		if [[ -f "$file" ]]; then
+			rm "$file"
+		else
+			echo -e "${RED}Valgrind log file not found to delete: $file${RESET}"
+			exit 1
+		fi
+	done
+}
+
 function check_valgrind_logs() {
+	for file in $(ls $OUT_FILE_VALGRIND_BASE*); do
+		if [[ -f "$file" ]]; then
+			check_valgrind_logs_one "$file"
+		else
+			echo -e "${RED}Valgrind log file not found: $file${RESET}"
+			exit 1
+		fi
+	done
+}
+
+function check_valgrind_logs_one() {
+	file=$1
 	# Check leaks
 	# echo ---------------------------
 	# cat $OUT_FILE_VALGRIND
 	# echo ---------------------------
-	leak_still_reachable=$(cat $OUT_FILE_VALGRIND | grep -a "still reachable: " | grep -a -v "0 bytes in 0 blocks")
+	leak_still_reachable=$(cat $file | grep -a "still reachable: " | grep -a -v "0 bytes in 0 blocks")
 	if [[ ! -z "$leak_still_reachable" ]]; then
 		echo -e "${RED}LEAK detected!!! (still reachable)${RESET}"
 		echo -e "${BLUE}CMD send is: \"$cmd\"${RESET}"
 		echo -e "${BLUE}Output is:${RESET}"
 		cat $OUT_FILE
 		echo -e "${BLUE}Valgrind output is:${RESET}"
-		cat $OUT_FILE_VALGRIND
+		cat $file
 		exit 1
 	fi;
-	leak_def_lost=$(cat $OUT_FILE_VALGRIND | grep -a "definitely lost: " | grep -a -v "0 bytes in 0 blocks")
+	leak_def_lost=$(cat $file | grep -a "definitely lost: " | grep -a -v "0 bytes in 0 blocks")
 	if [[ ! -z "$leak_def_lost" ]]; then
 		echo -e "${RED}LEAK detected!!! (definitely lost)${RESET}"
 		echo -e "${BLUE}CMD send is: \"$cmd\"${RESET}"
 		echo -e "${BLUE}Output is:${RESET}"
 		cat $OUT_FILE
 		echo -e "${BLUE}Valgrind output is:${RESET}"
-		cat $OUT_FILE_VALGRIND
+		cat $file
 		exit 1
 	fi;
-	leak_indir_lost=$(cat $OUT_FILE_VALGRIND | grep -a "indirectly lost: " | grep -a -v "0 bytes in 0 blocks")
+	leak_indir_lost=$(cat $file | grep -a "indirectly lost: " | grep -a -v "0 bytes in 0 blocks")
 	if [[ ! -z "$leak_indir_lost" ]]; then
 		echo -e "${RED}LEAK detected!!! (indirectly lost)${RESET}"
 		echo -e "${BLUE}CMD send is: \"$cmd\"${RESET}"
 		echo -e "${BLUE}Output is:${RESET}"
 		cat $OUT_FILE
 		echo -e "${BLUE}Valgrind output is:${RESET}"
-		cat $OUT_FILE_VALGRIND
+		cat $file
 		exit 1
 	fi;
-	leak_poss_lost=$(cat $OUT_FILE_VALGRIND | grep -a "possibly lost: " | grep -a -v "0 bytes in 0 blocks")
+	leak_poss_lost=$(cat $file | grep -a "possibly lost: " | grep -a -v "0 bytes in 0 blocks")
 	if [[ ! -z "$leak_poss_lost" ]]; then
 		echo -e "${RED}LEAK detected!!! (possibly lost)${RESET}"
 		echo -e "${BLUE}CMD send is: \"$cmd\"${RESET}"
 		echo -e "${BLUE}Output is:${RESET}"
 		cat $OUT_FILE
 		echo -e "${BLUE}Valgrind output is:${RESET}"
-		cat $OUT_FILE_VALGRIND
+		cat $file
 		exit 1
 	fi;
 	# echo -e "${GREEN}No leaks detected${RESET}"
@@ -78,6 +101,7 @@ function tester() {
 
 	echo -e "${GREEN}Running ./minishell $cmd${RESET}"
 	rm "$OUT_FILE" &> /dev/null || echo -n ""
+	clean_valgrind_logs
 	echo "$cmd" | valgrind --trace-children=yes --child-silent-after-fork=no --leak-check=full --show-leak-kinds=all --suppressions=$(pwd)/../delivery/valgrind-supression --log-file="$OUT_FILE_VALGRIND" ../delivery/minishell &> $OUT_FILE
 	if [ ! -f "$OUT_FILE" ]; then
 		echo -e "${RED}Test failed: $cmd${RESET}"
@@ -168,6 +192,7 @@ function tester_grep() {
 
 	echo -e "${GREEN}Running ./minishell $cmd${RESET}"
 	rm "$OUT_FILE" &> /dev/null || echo -n ""
+	clean_valgrind_logs
 	echo "$cmd" | valgrind --trace-children=yes --child-silent-after-fork=no --leak-check=full --show-leak-kinds=all --suppressions=$(pwd)/../delivery/valgrind-supression --log-file="$OUT_FILE_VALGRIND" ../delivery/minishell &> $OUT_FILE
 	if [ ! -f "$OUT_FILE" ]; then
 		echo -e "${RED}Test failed: $cmd${RESET}"
@@ -230,6 +255,7 @@ function tester_with_real() {
 	fi
 
 	# Run minishell
+	clean_valgrind_logs
 	echo "$cmd" | valgrind --track-origins=yes --trace-children=yes --child-silent-after-fork=no --leak-check=full --show-leak-kinds=all --suppressions=$(pwd)/../delivery/valgrind-supression --log-file="$OUT_FILE_VALGRIND" ../delivery/minishell &> $OUT_FILE
 	EXIT_STATUS=$?
 	if [ ! -f "$OUT_FILE" ]; then
@@ -294,7 +320,8 @@ function tester_with_real_should_be_different() {
 
 OUT_FILE="/tmp/my_minishell"
 OUT_REAL_FILE="/tmp/from_bash"
-OUT_FILE_VALGRIND="/tmp/my_minishell_valgrind"
+OUT_FILE_VALGRIND_BASE="/tmp/my_minishell_valgrind"
+OUT_FILE_VALGRIND="${OUT_FILE_VALGRIND_BASE}_%p"
 
 echo "################ Basic tests (parser and binary tree) ################"
 make -C ../delivery/ clean &> /dev/null
@@ -499,6 +526,7 @@ tester_with_real 'rm /tmp/test && ls | grep mini > /tmp/test'
 tester_with_real 'rm /tmp/test && ls | grep mini > /tmp/test | echo 1'
 tester_with_real 'rm /tmp/test && ls | grep mini > /tmp/test | ls | grep mini'
 tester_with_real 'rm /tmp/test && ls | grep mini > /tmp/test && echo 1'
+
 echo -e "${MAGENTA}Testing redirect input${RESET}"
 touch /tmp/test
 touch /tmp/test2
@@ -517,8 +545,31 @@ tester_with_real 'rm /tmp/test && echo ola! > /tmp/test && < /tmp/test < /tmp/te
 tester_with_real 'rm /tmp/test && echo ola! > /tmp/test && cat -e < /tmp/test < /tmp/test2'
 echo -e "${MAGENTA}Testing redirect input and output mixed${RESET}"
 tester_with_real 'rm /tmp/test && < ../delivery/Makefile > /tmp/test && cat -e /tmp/test'
-# tester_with_real 'rm /tmp/test && < ../delivery/Makefile > /tmp/test cat -e ../delivery/Makefile && cat /tmp/test'
-
+tester_with_real 'rm /tmp/test && < ../delivery/Makefile > /tmp/test cat -e ../delivery/Makefile && cat /tmp/test'
+tester_with_real 'rm /tmp/test && < ../delivery/Makefile > /tmp/test cat -e ../delivery/Makefile < ../delivery/cmd.h && head -n 5 /tmp/test'
+tester_with_real '<< a << b'
+tester_with_real '<< a && << b'
+# The following test are not a good one, since the grep files could not be entire yet when the seconds command starts to execute
+# To ensure that the wc could reliable execute, without depending on the machine and the application performance. The best is to use a && instead of |
+# tester_with_real '<../delivery/Makefile grep i >grep | <grep wc'
+#                                                       ^ This | is replaced by &&
+# Here is an example of bash execution having different results for the same command
+# ```
+# $ <../delivery/Makefile grep i >grep | <grep wc
+#  53  224 2411
+# $ <../delivery/Makefile grep i >grep | <grep wc
+# 0 0 0
+# ```
+tester_with_real '<../delivery/Makefile grep i >grep && <grep wc'
+# Although the command below is not a good one, this test verifies that the
+# grep file is created and can be used by the second part of the command (the wc)
+tester_with_real '<infile grep i >grep | <grep wc'
+tester_with_real '< inacessible_file | cat -e > /tmp/output && cat /tmp/output'
+tester_with_real '< Makefile > /tmp/testfile && cat -e /tmp/testfile'
+tester_with_real 'cat -e < filenonexistent'
+tester_with_real '< filenonexistent cat -e '
+tester_with_real 'cat < filenonexistent -e '
+tester_with_real 'echo < Makefile < missing < Makefile'
 
 echo -e "${MAGENTA}Testing wildcards${RESET}"
 tester_with_real "cd ../delivery && echo \"*\""   # Should not be expanded

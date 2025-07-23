@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 17:00:20 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/07/11 09:40:46 by djunho           ###   ########.fr       */
+/*   Updated: 2025/07/22 18:41:52 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,8 @@ int	read_command(t_shell *shell)
 			break ;
 	}
 	shell->last_exit_status = ret;
+	shell->is_running_redirect = false;
+	shell->is_last_redirect = false;
 	free(line);
 	return (shell->last_exit_status);
 }
