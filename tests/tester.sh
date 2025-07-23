@@ -334,8 +334,6 @@ if [ $# -ne 0 ]; then
 	exit 1
 fi
 
-exit 1
-
 echo "################ Basic tests (parser and binary tree) ################"
 make -C ../delivery/ clean &> /dev/null
 make -C ../delivery/ -j 16 debug &> /dev/null
