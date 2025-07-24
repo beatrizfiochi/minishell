@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 18:15:43 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/07/24 19:41:08 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/07/24 20:14:49 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include "../minishell.h"
 #include "../parser/aux.h"
 #include "variables.h"
+#include "../execute/env_utils.h"
 #include <unistd.h>
 
 void	handle_special_var(char **cont, char **cnt,
@@ -45,6 +46,11 @@ t_list	*retokenize(t_list *curr, char **cnt, char **split, int *i)
 	t_list	*next;
 	char	*aux;
 
+	if (*i >= get_envp_size(split))
+	{
+		free(split);
+		return (curr);
+	}
 	next = curr->next;
 	while (split[*i] != NULL)
 	{

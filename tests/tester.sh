@@ -767,6 +767,7 @@ tester_grep "./huhu" "./huhu: No such file or directory"
 tester_with_real '$PWD && echo $?'
 tester_grep '$PWD' "$PWD: Is a directory"
 tester_grep '/dev/urandom' '/dev/urandom: Permission denied'
+tester_with_real 'var= && echo $var && $var'
 echo ""
 
 # test AND
