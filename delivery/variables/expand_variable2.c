@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 18:15:43 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/07/13 18:40:38 by djunho           ###   ########.fr       */
+/*   Updated: 2025/07/24 19:41:08 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void	handle_normal_var(char **cont, char **cnt,
 	*cont = expand_var(*cont, var, cnt, v_value);
 }
 
-t_list	*retokenzine(t_list *curr, char **cnt, char **split, int *i)
+t_list	*retokenize(t_list *curr, char **cnt, char **split, int *i)
 {
 	t_list	*next;
 	char	*aux;
@@ -82,7 +82,7 @@ t_list	*handle_normal_var_with_retoken(t_list *curr, char **cnt,
 	}
 	split = ft_split(v_value, ' ');
 	if (split == NULL)
-		ft_fprintf(STDERR_FILENO, "Error on retokinize var expansion\n");
+		ft_fprintf(STDERR_FILENO, "Error on retokenize var expansion\n");
 	if (split == NULL)
 		return (curr);
 	i = 0;
@@ -91,7 +91,7 @@ t_list	*handle_normal_var_with_retoken(t_list *curr, char **cnt,
 		curr->content = expand_var((char *)(curr->content), var, cnt, split[i]);
 		free(split[i++]);
 	}
-	return (retokenzine(curr, cnt, split, &i));
+	return (retokenize(curr, cnt, split, &i));
 }
 
 char	*mark_quotes(char *string)
