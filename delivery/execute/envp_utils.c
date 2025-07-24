@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 20:16:49 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/07/24 20:17:26 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/07/25 00:11:01 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	get_envp_size(char **envp)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (envp[i] != NULL)

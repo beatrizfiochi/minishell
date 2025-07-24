@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 11:33:43 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/07/11 20:36:45 by djunho           ###   ########.fr       */
+/*   Updated: 2025/07/25 00:09:29 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,4 +56,21 @@ bool	clean_token_quotes(t_list *token_list)
 		token_list = token_list->next;
 	}
 	return (true);
+}
+
+bool	remove_if_empty(t_list **token_list, t_list *current, t_list *prev)
+{
+	char	*content;
+
+	content = (char *)current->content;
+	if (content != NULL && *content == '\0')
+	{
+		if (prev == NULL)
+			*token_list = current->next;
+		else
+			prev->next = current->next;
+		ft_lstdelone(current, free);
+		return (true);
+	}
+	return (false);
 }

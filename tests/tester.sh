@@ -768,6 +768,10 @@ tester_with_real '$PWD && echo $?'
 tester_grep '$PWD' "$PWD: Is a directory"
 tester_grep '/dev/urandom' '/dev/urandom: Permission denied'
 tester_with_real 'var= && echo $var && $var'
+tester_with_real '$a'
+tester_with_real '$a $a'
+tester_with_real '456 $a $a 678 $h 898'
+tester_with_real '456 $a $a 678    $h 898 $t     $u'
 echo ""
 
 # test AND
