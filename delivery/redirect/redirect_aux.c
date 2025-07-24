@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirect_aux.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: djunho <djunho@student.42porto.com>        +#+  +:+       +#+        */
+/*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 20:19:10 by djunho            #+#    #+#             */
-/*   Updated: 2025/07/20 23:44:33 by djunho           ###   ########.fr       */
+/*   Updated: 2025/07/24 22:44:53 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ char	*get_redir_filename(t_shell *shell, t_btnode *file_node)
 
 	token = ((t_content_node *)(file_node->content))->cmd.tokens;
 	expand_variable_token(&token, shell->variable_list, shell);
+	clean_token_quotes(token);
 	if (ft_lstsize(((t_content_node *)(file_node->content))->cmd.tokens) != 1)
 	{
 		ft_fprintf(STDERR_FILENO, "Ambiguous redirect\n");
