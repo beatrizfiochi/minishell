@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/01 12:16:24 by djunho            #+#    #+#             */
-/*   Updated: 2025/07/23 12:08:19 by djunho           ###   ########.fr       */
+/*   Updated: 2025/07/25 00:33:08 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,8 @@ bool	create_cmd_path(char *cmd, t_list *var_list, char **path)
 	char		**tmp;
 	const char	*path_value;
 
+	if (*cmd == '\0')
+		return (false);
 	if (check_cmd(cmd, path))
 		return (true);
 	path_value = get_env("PATH", var_list);
