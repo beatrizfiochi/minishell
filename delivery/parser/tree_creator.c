@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 18:34:50 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/07/25 01:11:00 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/07/25 21:15:44 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,10 +134,7 @@ int	create_tree(t_shell *shell, t_btnode **tree, t_list **token_list,
 	}
 	*tree = check_tree_syntax(*tree);
 	if (*tree == NULL)
-	{
-		ft_fprintf(STDERR_FILENO, "syntax error near unexpected token\n");
 		return (EXIT_INCORRECT_USAGE);
-	}
 	ret = check_tree_for_heredoc(shell, *tree);
 	if (ret != EXIT_SUCCESS)
 		btree_delete(tree, free_btree_node);

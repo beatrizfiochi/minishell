@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 17:00:20 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/07/22 18:41:52 by djunho           ###   ########.fr       */
+/*   Updated: 2025/07/25 21:18:30 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,8 @@ static int	execute_token(t_list **tokens, t_shell *shell)
 	int	ret;
 
 	ret = create_tree(shell, &shell->cmds, tokens, NULL);
+	if (ret == EXIT_INCORRECT_USAGE)
+		ft_fprintf(STDERR_FILENO, "syntax error near unexpected token\n");
 	if (ret != EXIT_SUCCESS)
 		return (ret);
 	debug_print_tree(shell->cmds);
