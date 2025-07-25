@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 14:26:44 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/06/24 16:09:43 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/07/24 19:41:13 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ char	*expand_var(char *content, char *var_pos, char **cnt, char *var_value);
 // Internals functions
 void	handle_special_var(char **cont, char **cnt, char *var, t_shell *shell);
 void	handle_normal_var(char **cont, char **cnt, char *var, t_list *var_list);
-t_list	*retokenzine(t_list *curr, char **cnt, char **split, int *i);
+t_list	*retokenize(t_list *curr, char **cnt, char **split, int *i);
 t_list	*handle_normal_var_with_retoken(t_list *curr, char **cnt, char *var,
 			t_list *var_list);
 char	*mark_quotes(char *string);

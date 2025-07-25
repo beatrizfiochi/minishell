@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   tree_creator_checks.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: djunho <djunho@student.42porto.com>        +#+  +:+       +#+        */
+/*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 18:57:02 by djunho            #+#    #+#             */
-/*   Updated: 2025/07/21 23:54:23 by djunho           ###   ########.fr       */
+/*   Updated: 2025/07/25 21:17:02 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>              // printf
+#include <unistd.h>
 #include "../minishell.h"       // op
 #include "../parser/aux.h"      // search_any_op
 #include "../cmd.h"             // t_content_node

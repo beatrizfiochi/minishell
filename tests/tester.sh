@@ -431,6 +431,9 @@ tester_grep             'ls <<< pwd'      'syntax error near unexpected token.*'
 tester_grep             'ls <<<< pwd'     'syntax error near unexpected token.*'
 tester_grep             'ls <<<<< pwd'    'syntax error near unexpected token.*'
 tester_grep             'ls >>>>> pwd'    'syntax error near unexpected token.*'
+tester_grep             '&& echo 1'       'syntax error near unexpected token'
+tester_grep             '| echo 1'        'syntax error near unexpected token'
+tester_grep             '|| echo 1'       'syntax error near unexpected token'
 echo ""
 
 tester_grep             '1=10'       "1=10: command not found"
@@ -767,6 +770,11 @@ tester_grep "./huhu" "./huhu: No such file or directory"
 tester_with_real '$PWD && echo $?'
 tester_grep '$PWD' "$PWD: Is a directory"
 tester_grep '/dev/urandom' '/dev/urandom: Permission denied'
+tester_with_real 'var= && echo $var && $var'
+tester_with_real '$a'
+tester_with_real '$a $a'
+tester_with_real '456 $a $a 678 $h 898'
+tester_with_real '456 $a $a 678    $h 898 $t     $u'
 echo ""
 
 # test AND

@@ -6,12 +6,13 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 18:48:52 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/07/13 20:32:18 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/07/25 00:07:29 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdbool.h>
 #include "../libft/libft.h"
+#include "tokens.h"
 
 // 0 -> error | 1 -> success
 static int	is_a_possible_op(char c)
@@ -80,25 +81,15 @@ void	remove_empty_token(t_list **token_list)
 {
 	t_list	*current;
 	t_list	*prev;
-	char	*content;
+	t_list	*next;
 
 	current = *token_list;
 	prev = NULL;
 	while (current != NULL)
 	{
-		content = (char *)current->content;
-		if ((content != NULL) && (*content == '\0'))
-		{
-			if (prev != NULL)
-				prev->next = current->next;
-			else
-				*token_list = current->next;
-			ft_lstdelone(current, free);
-			current = prev;
-		}
-		else
+		next = current->next;
+		if (remove_if_empty(token_list, current, prev) == false)
 			prev = current;
-		if (current != NULL)
-			current = current->next;
+		current = next;
 	}
 }

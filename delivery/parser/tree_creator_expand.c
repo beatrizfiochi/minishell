@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 18:34:50 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/07/22 09:00:12 by djunho           ###   ########.fr       */
+/*   Updated: 2025/07/25 01:34:48 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,10 +47,7 @@ static t_btnode	*expand_btree_node(t_btnode *node,
 			return (tree);
 		}
 		else
-		{
-			printf("Error: Operator without command\n");
 			return (node);
-		}
 	}
 	if (node->left != NULL)
 		node->left = expand_btree_node(node->left, expand, had_expand);
@@ -71,10 +68,7 @@ t_btnode	*expand_tree_pipe(t_btnode *tree, bool	*expanded)
 		i_expanded = false;
 		tree = expand_btree_node(tree, EXP_REDIR, &i_expanded);
 		if (tree == NULL)
-		{
-			printf("Error: Failed to expand pipe btree node\n");
 			return (NULL);
-		}
 		*expanded = *expanded || i_expanded;
 	}
 	return (tree);
