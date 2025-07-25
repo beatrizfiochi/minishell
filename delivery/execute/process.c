@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 19:55:45 by djunho            #+#    #+#             */
-/*   Updated: 2025/07/23 21:02:47 by djunho           ###   ########.fr       */
+/*   Updated: 2025/07/25 22:49:16 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ static int	btree_operator_before_callback(t_btnode *node,
 	content = (t_content_node *)node->content;
 	ignore_signals();
 	*should_continue = true;
-	ret = prepare_parenthesis(node, should_continue);
+	ret = prepare_parenthesis((t_shell *)_shell, node, should_continue);
 	if (*should_continue == false)
 		return (ret);
 	*should_continue = false;

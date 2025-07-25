@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 11:23:29 by djunho            #+#    #+#             */
-/*   Updated: 2025/07/23 19:19:40 by djunho           ###   ########.fr       */
+/*   Updated: 2025/07/26 00:13:24 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define CMD_H
 
 # include "libft/libft.h"
+# include "btree/btree.h"
 
 typedef enum e_node_op
 {
@@ -41,8 +42,10 @@ typedef struct s_cmd
 							//	of a parentheses. False by default
 	struct s_cmd_redirect
 	{
-		int		fd_in;
-		int		fd_out;
+		int		fd_in;		// File descriptor for input redirection (placed 
+							//   on possible command and on operator)
+		int		fd_out;		// File descriptor for output redirection
+							//   on possible command and on operator)
 	} redir;
 }	t_cmd;
 
@@ -51,5 +54,7 @@ typedef struct s_content_node
 	t_node_op	op;
 	t_cmd		cmd;
 }	t_content_node;
+
+t_content_node	*node_cnt(t_btnode *node);
 
 #endif // CMD_H

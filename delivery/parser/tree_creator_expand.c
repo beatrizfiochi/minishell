@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 18:34:50 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/07/23 21:00:14 by djunho           ###   ########.fr       */
+/*   Updated: 2025/07/25 23:33:22 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,15 +28,22 @@ static bool	is_expansion_needed(t_node_op op)
 	return (false);
 }
 
-static	void	tag_node_and_flag(bool *had_expand, t_btnode *node,
-						enum e_expand_type expand)
+static	void	update_node_properties(bool *had_expand, t_btnode *new_node,
+						t_btnode *old_node, enum e_expand_type expand)
 {
-	t_content_node	*cnt;
+	t_content_node	*new_cnt;
+	t_content_node	*old_cnt;
 
-	cnt = (t_content_node *)node->content;
-	*had_expand = true;
-	if (expand == EXP_PAREN)
-		cnt->cmd.is_parentheses = true;
+	new_cnt = (t_content_node *)new_node->content;
+	if (is_btnode_different(old_node, new_node))
+	{
+		*had_expand = true;
+		if (expand == EXP_PAREN)
+			new_cnt->cmd.is_parentheses = true;
+	}
+	old_cnt = (t_content_node *)old_node->content;
+	if (old_cnt->cmd.is_parentheses)
+		new_cnt->cmd.is_parentheses = old_cnt->cmd.is_parentheses;
 }
 
 static t_btnode	*expand_btree_node(t_btnode *node,
@@ -52,8 +59,8 @@ static t_btnode	*expand_btree_node(t_btnode *node,
 		if (is_expansion_needed(cnt->op))
 		{
 			tree = create_basic_tree(&cnt->cmd.tokens, node->parent, expand);
-			if (is_btnode_different(node, tree))
-				tag_node_and_flag(had_expand, tree, expand);
+			if (tree != NULL)
+				update_node_properties(had_expand, tree, node, expand);
 			btree_delete(&node, free_btree_node);
 			return (tree);
 		}

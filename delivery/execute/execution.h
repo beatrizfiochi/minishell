@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 19:49:18 by djunho            #+#    #+#             */
-/*   Updated: 2025/07/23 21:02:34 by djunho           ###   ########.fr       */
+/*   Updated: 2025/07/23 21:25:54 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void	join_shell_variable_lists(t_shell *shell);
 
 bool	is_op_redirect_type(t_node_op op);
 
-int		prepare_parenthesis(t_btnode *node, bool *should_continue);
+int		prepare_parenthesis(t_shell *shell, t_btnode *node, bool *should_continue);
 int		process_parenthesis(t_shell *shell, t_btnode *node, int ret,
 			bool *should_continue);
 
