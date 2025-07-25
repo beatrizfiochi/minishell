@@ -431,6 +431,9 @@ tester_grep             'ls <<< pwd'      'syntax error near unexpected token.*'
 tester_grep             'ls <<<< pwd'     'syntax error near unexpected token.*'
 tester_grep             'ls <<<<< pwd'    'syntax error near unexpected token.*'
 tester_grep             'ls >>>>> pwd'    'syntax error near unexpected token.*'
+tester_grep             '&& echo 1'       'syntax error near unexpected token'
+tester_grep             '| echo 1'        'syntax error near unexpected token'
+tester_grep             '|| echo 1'       'syntax error near unexpected token'
 echo ""
 
 tester_grep             '1=10'       "1=10: command not found"
