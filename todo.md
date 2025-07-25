@@ -1,29 +1,9 @@
 valgrind-supression -> valgrind-suppression
 
-# Variaveis
+# Parenthesis
 
-## Uso de parentesis, segundo o man bash não serão persistidos
-```
-(list) list is executed in a subshell (see COMMAND EXECUTION ENVIRONMENT below for a description of a subshell environment).  Variable assignments and builtin commands that affect the shell's environment do not remain in effect after the command completes.  The return
-              status is the exit status of list.
-```
-O seguinte exemplo mostra esse comportamento:
-```
-$ a=1 && echo outside $a && (echo inside $a && a=2 && echo inside $a) && echo outside $a
-outside 1
-inside 1
-inside 2
-outside 1
-```
-
-Outro exemplo:
-```
-$ y=1 && (x=11 && y=2 && echo "x=$x; y=$y") && echo "x=$x; y=$y"
-x=11; y=2
-x=; y=1
-```
-
-Ideia de solução. Ao entrar num parentesis, copiar a lista de váriáveis para uma outra. E usar essa outra
+## cat | ()
+- Gives a segfault
 
 # HEREDOC
 ## dont expand before checking the eof
