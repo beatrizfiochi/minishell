@@ -670,10 +670,7 @@ tester_with_real '(ls | echo oi) > /tmp/outfile > /tmp/outfile2'
 #
 tester_grep 'cat (echo)'             'Error: syntax error near unexpected token .*'
 tester_grep 'cat | "(ls")'           'Error: syntax error near unexpected token .*'
-#
-# This one is nor printing anything, but the error is correct
-# tester_grep 'cat | ()'               'Error: syntax error near unexpected token .*'
-#
+tester_grep 'cat | ()'               'syntax error near unexpected token.*'
 tester_with_real 'cat | (ls)'
 tester_with_real 'echo oi |  > /tmp/outfile && ls'
 #
