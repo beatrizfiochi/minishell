@@ -326,12 +326,12 @@ OUT_FILE_VALGRIND="${OUT_FILE_VALGRIND_BASE}_%p"
 if [ $# -ne 0 ]; then
 	functions=$(declare -F | sed 's/declare -f //' | tr '\n' ' ')
 	if ! [[ " $functions " =~ " $1 " ]]; then
-		echo -e "${RED}Error: Function $1 not found. PLease use one of [$functions]${RESET}"
+		echo -e "${RED}Error: Function $1 not found. Please use one of [$functions]${RESET}"
 		exit 1
 	fi
 	# Calls the function $1 with the other parameters
 	"$@"
-	exit 1
+	exit $?
 fi
 
 echo "################ Basic tests (parser and binary tree) ################"
@@ -579,11 +579,11 @@ tester_with_real '<../delivery/Makefile grep i >grep && <grep wc'
 # grep file is created and can be used by the second part of the command (the wc)
 tester_with_real '<infile grep i >grep | <grep wc'
 tester_with_real '< inacessible_file | cat -e > /tmp/output && cat /tmp/output'
-tester_with_real '< Makefile > /tmp/testfile && cat -e /tmp/testfile'
+tester_with_real '< ../delivery/Makefile > /tmp/testfile && cat -e /tmp/testfile'
 tester_with_real 'cat -e < filenonexistent'
 tester_with_real '< filenonexistent cat -e '
 tester_with_real 'cat < filenonexistent -e '
-tester_with_real 'echo < Makefile < missing < Makefile'
+tester_with_real 'echo < ../delivery/Makefile < missing < ../delivery/Makefile'
 
 echo -e "${MAGENTA}Testing wildcards${RESET}"
 tester_with_real "cd ../delivery && echo \"*\""   # Should not be expanded
@@ -653,10 +653,7 @@ tester_with_real 'cat | (sort | wc)'
 tester_with_real '(cat | sort ) && wc'
 tester_with_real 'cat | sort && wc | grep -e || echo -n oi'
 tester_with_real 'ls | (((cat | echo oi ) && echo tchau) || echo fim)'
-#
-# TODO: Check this test!!!!!!!!
-# tester_with_real 'cat -e | sort | (< ../delivery/Makefile > /tmp/out)'
-#
+tester_with_real 'cat -e | sort | (< ../delivery/Makefile > /tmp/out)'
 tester_grep 'cat |&& ls'             'syntax error near unexpected token .*'
 tester_grep 'cat ||&& ls'            'syntax error near unexpected token .*'
 tester_with_real 'echo ok | (ls) > /tmp/outfile'

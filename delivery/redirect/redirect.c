@@ -78,7 +78,7 @@ int	prepare_redirect_in(t_shell *shell, t_btnode *op)
 		return (EXIT_SUCCESS);
 	}
 	previous_cmd->cmd.redir.fd_in = fd;
-	((t_content_node *)op->content)->cmd.redir.fd_out = fd;
+	((t_content_node *)op->content)->cmd.redir.fd_in = fd;
 	return (EXIT_SUCCESS);
 }
 

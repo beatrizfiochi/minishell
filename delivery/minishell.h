@@ -32,7 +32,6 @@ typedef struct s_shell
 	int			ncmds;
 	int			nlines;				// Number of lines read (readline calls)
 	pid_t		last_pid;
-	pid_t		parenthesis_pid;
 	int			last_exit_status;	// 0 - 255
 									// 0 - success	(EXIT_SUCCESS)
 									// 1 - generic error (EXIT_FAILURE)

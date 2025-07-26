@@ -24,6 +24,7 @@ static void	handle_fd_on_parenthesis(t_shell *shell, t_content_node	*content)
 	t_cmd	*cmd;
 
 	shell->last_pid = -1;
+	shell->last_cmd = NULL;
 	is_pipe = (shell->pipe.pipe[0] != -1);
 	cmd = &content->cmd;
 	if (cmd->redir.fd_out > 0)
