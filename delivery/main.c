@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 18:59:31 by djunho            #+#    #+#             */
-/*   Updated: 2025/07/11 22:59:35 by djunho           ###   ########.fr       */
+/*   Updated: 2025/07/24 09:21:41 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,8 @@ static void init_shell(t_shell *shell)
 	shell->pipe.carry_over_fd = -1;
 	shell->pipe.pipe[0] = -1;
 	shell->pipe.pipe[1] = -1;
+	shell->in_fd = STDIN_FILENO;
+	shell->out_fd = STDOUT_FILENO;
 }
 
 static int	run_minishell(char *envp[])

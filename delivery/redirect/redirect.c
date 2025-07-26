@@ -6,7 +6,7 @@
 /*   By: djunho <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 10:56:42 by djunho            #+#    #+#             */
-/*   Updated: 2025/07/23 08:39:52 by djunho           ###   ########.fr       */
+/*   Updated: 2025/07/25 23:56:42 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ int	prepare_redirect_out(t_shell *shell, t_btnode *op)
 		return (EXIT_SUCCESS);
 	}
 	previous_cmd->cmd.redir.fd_out = fd;
+	((t_content_node *)op->content)->cmd.redir.fd_out = fd;
 	return (EXIT_SUCCESS);
 }
 
@@ -77,6 +78,7 @@ int	prepare_redirect_in(t_shell *shell, t_btnode *op)
 		return (EXIT_SUCCESS);
 	}
 	previous_cmd->cmd.redir.fd_in = fd;
+	((t_content_node *)op->content)->cmd.redir.fd_in = fd;
 	return (EXIT_SUCCESS);
 }
 
@@ -101,12 +103,8 @@ void	configure_redir(t_shell *shell, const t_cmd *cmd)
 		dup2(cmd->redir.fd_in, STDIN_FILENO);
 		close(cmd->redir.fd_in);
 	}
-	else if (is_pipe && shell->pipe.carry_over_fd != -1)
-	{
+	else if (shell->pipe.carry_over_fd != -1)
 		dup2(shell->pipe.carry_over_fd, STDIN_FILENO);
-		close(shell->pipe.carry_over_fd);
-	}
-	close(shell->pipe.pipe[0]);
 	if (cmd->redir.fd_out > 0)
 	{
 		dup2(cmd->redir.fd_out, STDOUT_FILENO);
@@ -114,7 +112,7 @@ void	configure_redir(t_shell *shell, const t_cmd *cmd)
 	}
 	else if (is_pipe && !shell->is_last_redirect)
 		dup2(shell->pipe.pipe[1], STDOUT_FILENO);
-	close(shell->pipe.pipe[1]);
-	shell->pipe.pipe[0] = -1;
-	shell->pipe.pipe[1] = -1;
+	else if (shell->out_fd != STDOUT_FILENO)
+		dup2(shell->out_fd, STDOUT_FILENO);
+	close_any_possible_fd(shell);
 }

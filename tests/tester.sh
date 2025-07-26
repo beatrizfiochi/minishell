@@ -323,6 +323,17 @@ OUT_REAL_FILE="/tmp/from_bash"
 OUT_FILE_VALGRIND_BASE="/tmp/my_minishell_valgrind"
 OUT_FILE_VALGRIND="${OUT_FILE_VALGRIND_BASE}_%p"
 
+if [ $# -ne 0 ]; then
+	functions=$(declare -F | sed 's/declare -f //' | tr '\n' ' ')
+	if ! [[ " $functions " =~ " $1 " ]]; then
+		echo -e "${RED}Error: Function $1 not found. Please use one of [$functions]${RESET}"
+		exit 1
+	fi
+	# Calls the function $1 with the other parameters
+	"$@"
+	exit $?
+fi
+
 echo "################ Basic tests (parser and binary tree) ################"
 make -C ../delivery/ clean &> /dev/null
 make -C ../delivery/ -j 16 debug &> /dev/null
@@ -568,11 +579,11 @@ tester_with_real '<../delivery/Makefile grep i >grep && <grep wc'
 # grep file is created and can be used by the second part of the command (the wc)
 tester_with_real '<infile grep i >grep | <grep wc'
 tester_with_real '< inacessible_file | cat -e > /tmp/output && cat /tmp/output'
-tester_with_real '< Makefile > /tmp/testfile && cat -e /tmp/testfile'
+tester_with_real '< ../delivery/Makefile > /tmp/testfile && cat -e /tmp/testfile'
 tester_with_real 'cat -e < filenonexistent'
 tester_with_real '< filenonexistent cat -e '
 tester_with_real 'cat < filenonexistent -e '
-tester_with_real 'echo < Makefile < missing < Makefile'
+tester_with_real 'echo < ../delivery/Makefile < missing < ../delivery/Makefile'
 
 echo -e "${MAGENTA}Testing wildcards${RESET}"
 tester_with_real "cd ../delivery && echo \"*\""   # Should not be expanded
@@ -620,12 +631,82 @@ tester_with_real "(ls | grep mini | cat -e) || pwd"
 tester_with_real "(ls | grep mini | cat -e) && pwd"
 tester_with_real "(ls) | pwd"
 tester_with_real "(ls | grep mini | cat -e) | pwd"
+# Check for subshell properties
+tester_with_real 'a=1 && echo outside $a && (echo inside $a && a=2 && echo inside $a) && echo outside $a'
+tester_with_real 'y=1 && (x=11 && y=2 && echo "x=$x; y=$y") && echo "x=$x; y=$y"'
+# Check for subshell output to file
+tester_with_real '(ls | grep cmd) > /tmp/file'
+tester_with_real '(ls && grep cmd) > /tmp/file'
+tester_with_real '(ls || grep cmd) > /tmp/file'
+# parser
 tester_grep      '(ls | pwd'             "Error: Missing closing parenthesis!"
 tester_grep      '(ls && pwd'            "Error: Missing closing parenthesis!"
 tester_grep      '(ls || pwd'            "Error: Missing closing parenthesis!"
 tester_grep      'ls | pwd)'             "Error: syntax error near unexpected token \")\""
 tester_grep      'ls && pwd)'            "Error: syntax error near unexpected token \")\""
 tester_grep      'ls || pwd)'            "Error: syntax error near unexpected token \")\""
+
+# All Mariaoli tests for parenthesis
+tester_with_real 'ls | (echo oi | echo fim) | sort && echo alo'
+tester_with_real '(ls | cat) | sort && echo oi'
+tester_with_real 'cat | (sort | wc)'
+tester_with_real '(cat | sort ) && wc'
+tester_with_real 'cat | sort && wc | grep -e || echo -n oi'
+tester_with_real 'ls | (((cat | echo oi ) && echo tchau) || echo fim)'
+tester_with_real 'cat -e | sort | (< ../delivery/Makefile > /tmp/out)'
+tester_grep 'cat |&& ls'             'syntax error near unexpected token .*'
+tester_grep 'cat ||&& ls'            'syntax error near unexpected token .*'
+tester_with_real 'echo ok | (ls) > /tmp/outfile'
+# tester_with_real 'echo oi | > outfile (ls)'
+tester_with_real '(ls | echo oi) > /tmp/outfile'
+tester_with_real 'ls | (echo oi > /tmp/outfile)'
+tester_with_real '(ls | echo oi) > /tmp/outfile > /tmp/outfile2'
+# tester_with_real '(ls | echo oi) > outfile cat'
+#
+# tester_with_real 'echo oi | (ls) >| out' ->>>>>>>>>>>>>>>>>>>>>> leak de memória
+# Output is:
+# syntax error near unexpected token `|'
+# Error: Failed to expand pipe btree node
+#
+tester_grep 'cat (echo)'             'Error: syntax error near unexpected token .*'
+tester_grep 'cat | "(ls")'           'Error: syntax error near unexpected token .*'
+tester_grep 'cat | ()'               'syntax error near unexpected token.*'
+tester_with_real 'cat | (ls)'
+tester_with_real 'echo oi |  > /tmp/outfile && ls'
+#
+# This one is returning 126 instead of 127. To simplify -> tester_with_real '""'
+# tester_with_real 'cat | "" "((echo oi)) echo fim)"'
+#
+# This one should return return syntax error for the #
+# tester_grep '(ls)  |  (cat| #)'           'Error: syntax error near unexpected token .*'
+#
+tester_with_real '(ls | echo oi) | > /tmp/outfile'
+tester_with_real '(ls) > /tmp/outfile | (ls)'
+tester_with_real '(echo oi || echo ola) | echo fim'
+tester_with_real '(ls || ls - l) | sort'
+tester_with_real '(echo oi && echo tchau) | wc -l'
+tester_with_real '(ls -l || echo ls) | cat | cat | ls'
+tester_with_real '(echo oi && echo tchau) | wc -l > /tmp/out'
+tester_with_real '(pwd && echo pwdinho) | sort | cat'
+tester_with_real '(echo oi || echo ola) | wc -l && (ls || echo tchau)'
+# This one gives the error: Error: Missing closing parenthesis!
+# tester_with_real '(echo oi && (echo ola || ls) | echo meio) | cat > out'
+# tester_with_real '(ls && (echo oi || echo ola) | cat) && echo fim'
+#
+tester_with_real '(echo um || echo dois) || (echo tres && echo quatro) && echo cinco'
+tester_with_real '(ls && ls -la) | grep mi'
+tester_with_real '(export var1=123 && echo $var1) | echo $var1'
+tester_with_real '(export var2=789) && (echo $var2)'
+tester_with_real '(cd) && pwd > out && (ls | cat out)'
+# No meaning comparing the env command between bash and the minishell
+# tester_with_real 'env | (sort -r && cat)'
+tester_with_real 'export var2=789 && (echo $var2)'
+tester_with_real '(echo "Line 1" && echo "Line 2" >/tmp/file1 || echo "Fallback") >/tmp/combined_output'
+tester_with_real '((echo "Inner subshell") && (echo "Outer subshell" >nestedfile)) || echo "Error"'
+tester_with_real '(cat <<EOF | grep "word") | (cat >/tmp/pipelinefile && echo "Pipeline Done")'
+tester_with_real 'tm -rf /tmp/dir && (mkdir /tmp/dir && cd /tmp/dir && touch /tmp/file && echo "Success") || echo "Failed"'
+tester_with_real '(ls nonexistentfile && echo "This wont print") || echo "Handled failure" >/tmp/errorlog'
+tester_with_real '(yes "Data stream" | head -n 5) | echo "Pipe failed gracefully"'
 echo ""
 
 echo -e "${MAGENTA}Testing builtin commands${RESET}"

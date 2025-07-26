@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 13:37:40 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/07/23 09:17:50 by djunho           ###   ########.fr       */
+/*   Updated: 2025/07/24 11:11:26 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,8 @@ typedef struct s_shell
 									//  redirect in the chain. So it should
 									//  print at the stdout or the redirect
 									//  output file
+	int			in_fd;
+	int			out_fd;
 	struct s_pipe
 	{
 		int		pipe[2];			// pipe file descriptors

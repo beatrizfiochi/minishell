@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 11:59:00 by djunho            #+#    #+#             */
-/*   Updated: 2025/07/23 13:21:12 by djunho           ###   ########.fr       */
+/*   Updated: 2025/07/25 22:17:11 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,27 +72,15 @@ static void	close_possible_pipe(t_shell *shell)
 		close(shell->pipe.pipe[1]);
 		shell->pipe.pipe[1] = -1;
 	}
-	if (shell->pipe.carry_over_fd != -1)
-	{
-		close(shell->pipe.carry_over_fd);
-		shell->pipe.carry_over_fd = -1;
-	}
 }
 
 int	process_and(t_shell *shell, int ret, bool *should_continue)
 {
 	*should_continue = true;
-	if ((shell->last_cmd != NULL) && (ret == EXIT_SUCCESS))
-	{
-		if (!shell->last_cmd->is_builtin && !shell->last_cmd->finished)
-			ret = wait_previous_process(shell);
-		if (ret != EXIT_SUCCESS)
-			*should_continue = false;
-	}
-	else
-	{
-		*should_continue = (ret == EXIT_SUCCESS);
-	}
+	if (shell->last_pid > 0)
+		ret = wait_previous_process(shell);
+	if (ret != EXIT_SUCCESS)
+		*should_continue = false;
 	close_possible_pipe(shell);
 	return (ret);
 }
@@ -100,17 +88,10 @@ int	process_and(t_shell *shell, int ret, bool *should_continue)
 int	process_or(t_shell *shell, int ret, bool *should_continue)
 {
 	*should_continue = true;
-	if ((shell->last_cmd != NULL) && (ret == EXIT_SUCCESS))
-	{
-		if (!shell->last_cmd->is_builtin && !shell->last_cmd->finished)
-			ret = wait_previous_process(shell);
-		if (ret == EXIT_SUCCESS)
-			*should_continue = false;
-	}
-	else
-	{
-		*should_continue = (ret != EXIT_SUCCESS);
-	}
+	if (shell->last_pid > 0)
+		ret = wait_previous_process(shell);
+	if (ret == EXIT_SUCCESS)
+		*should_continue = false;
 	close_possible_pipe(shell);
 	return (ret);
 }

@@ -6,7 +6,7 @@
 #    By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/27 13:09:33 by djunho            #+#    #+#              #
-#    Updated: 2025/07/24 20:18:23 by bfiochi-         ###   ########.fr        #
+#    Updated: 2025/07/26 09:15:47 by djunho           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,7 +23,7 @@ SRCS = main.c read_command.c utils.c debug.c readline.c \
 	execute/execution.c execute/process.c execute/debug.c \
 	execute/execution_operations.c execute/env_utils.c \
 	execute/exec_utils.c execute/exec_utils2.c \
-	execute/process_aux.c execute/process_utils.c \
+	execute/process_aux.c execute/process_utils.c execute/parenthesis.c \
 	execute/envp_utils.c \
 	builtins/builtins.c builtins/echo/echo.c builtins/cd/cd.c \
 	builtins/env/env.c builtins/export/export.c builtins/pwd/pwd.c \

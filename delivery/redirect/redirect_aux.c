@@ -3,32 +3,39 @@
 /*                                                        :::      ::::::::   */
 /*   redirect_aux.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: djunho <djunho@student.42porto.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 20:19:10 by djunho            #+#    #+#             */
-/*   Updated: 2025/07/24 22:44:53 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/07/26 00:25:19 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <unistd.h>
 #include "../btree/btree.h"
 #include "../cmd.h"
-#include "../minishell.h"
-#include "../parser/parser.h"
 
-char	*get_redir_filename(t_shell *shell, t_btnode *file_node)
+static t_node_op	get_next_operation_above(t_btnode *node)
 {
-	t_list	*token;
+	t_btnode		*aux;
 
-	token = ((t_content_node *)(file_node->content))->cmd.tokens;
-	expand_variable_token(&token, shell->variable_list, shell);
-	clean_token_quotes(token);
-	if (ft_lstsize(((t_content_node *)(file_node->content))->cmd.tokens) != 1)
+	if (node->parent == NULL)
+		return (OP_INVALID);
+	aux = node;
+	while (aux != NULL)
 	{
-		ft_fprintf(STDERR_FILENO, "Ambiguous redirect\n");
-		return (NULL);
+		if (node_cnt(aux)->cmd.is_parentheses)
+			return (OP_INVALID);
+		if ((aux->parent != NULL)
+			&& (node_cnt(aux->parent)->cmd.is_parentheses == false)
+			&& (aux->parent->right != aux))
+			break ;
+		aux = aux->parent;
 	}
-	return (((t_content_node *)(file_node->content))->cmd.tokens->content);
+	if (aux == NULL)
+		return (OP_INVALID);
+	if (node_cnt(aux->parent)->cmd.is_parentheses)
+		return (OP_INVALID);
+	return (node_cnt(aux->parent)->op);
 }
 
 t_node_op	get_next_operation(t_btnode *node)
@@ -37,20 +44,19 @@ t_node_op	get_next_operation(t_btnode *node)
 
 	if (node == NULL || node->content == NULL)
 		return (OP_INVALID);
-	if (((t_content_node *)node->right->content)->op == OP_CMD)
-	{
-		if (node->parent == NULL)
-			return (OP_INVALID);
-		return (((t_content_node *)node->parent->content)->op);
-	}
+	if (node_cnt(node->right)->op == OP_CMD)
+		return (get_next_operation_above(node));
 	aux = node->right;
-	if (((t_content_node *)aux->content)->op == OP_CMD)
+	if (node_cnt(aux)->op == OP_CMD)
 		return (OP_INVALID);
-	while (aux->left != NULL)
+	while ((aux->left != NULL)
+		&& (node_cnt(aux->parent)->cmd.is_parentheses == false))
 	{
 		aux = aux->left;
 	}
-	return (((t_content_node *)aux->parent->content)->op);
+	if (node_cnt(aux->parent)->cmd.is_parentheses == true)
+		return (OP_INVALID);
+	return (node_cnt(aux->parent)->op);
 }
 
 bool	is_redirect_file_op(t_node_op op)
@@ -64,6 +70,8 @@ t_content_node	*get_next_cmd(t_btnode *node)
 	while (node != NULL)
 	{
 		if (((t_content_node *)node->content)->op == OP_CMD)
+			return ((t_content_node *)node->content);
+		if (((t_content_node *)node->content)->cmd.is_parentheses)
 			return ((t_content_node *)node->content);
 		if (is_redirect_file_op(((t_content_node *)node->content)->op))
 			node = node->left;

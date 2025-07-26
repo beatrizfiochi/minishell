@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 19:49:18 by djunho            #+#    #+#             */
-/*   Updated: 2025/07/22 20:51:29 by djunho           ###   ########.fr       */
+/*   Updated: 2025/07/23 21:25:54 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 
 int		process(t_shell *shell);
 int		execute(t_shell *shell);
-int		execute_execve(t_btnode *node, t_shell *shell);
+int		run_cmd(t_shell *shell, t_btnode *node, t_node_op parent_op);
 
 int		get_fork_return(int wstatus);
 int		run_child(t_cmd *cmd, t_shell *shell);
@@ -35,5 +35,9 @@ int		handle_var_assign(t_shell *shell, t_btnode *node);
 void	join_shell_variable_lists(t_shell *shell);
 
 bool	is_op_redirect_type(t_node_op op);
+
+int		prepare_parenthesis(t_shell *shell, t_btnode *node, bool *should_continue);
+int		process_parenthesis(t_shell *shell, t_btnode *node, int ret,
+			bool *should_continue);
 
 #endif // EXECUTION_H

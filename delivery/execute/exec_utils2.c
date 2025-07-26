@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 15:02:00 by djunho            #+#    #+#             */
-/*   Updated: 2025/07/23 18:44:05 by djunho           ###   ########.fr       */
+/*   Updated: 2025/07/25 22:11:51 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,19 @@
 #include "exec_utils.h"
 #include "../minishell.h"
 
+void	close_any_possible_fd(t_shell *shell)
+{
+	if (shell->pipe.pipe[0] > 0)
+		close(shell->pipe.pipe[0]);
+	if (shell->pipe.pipe[1] > 0)
+		close(shell->pipe.pipe[1]);
+	if (shell->pipe.carry_over_fd > 0)
+		close(shell->pipe.carry_over_fd);
+	shell->pipe.pipe[0] = -1;
+	shell->pipe.pipe[1] = -1;
+	shell->pipe.carry_over_fd = -1;
+}
+
 int	wait_previous_process(t_shell *shell)
 {
 	int	wstatus;
@@ -27,9 +40,11 @@ int	wait_previous_process(t_shell *shell)
 	tmp = waitpid(shell->last_pid, &wstatus, 0);
 	if (tmp > 0)
 	{
-		shell->last_cmd->finished = true;
-		if (shell->last_cmd->redir.fd_out > 0)
-			close(shell->last_cmd->redir.fd_out);
+		close_any_possible_fd(shell);
+		if (shell->last_cmd != NULL)
+		{
+			shell->last_cmd->finished = true;
+		}
 		while ((tmp > 0))
 			tmp = wait(NULL);
 		shell->last_pid = -1;

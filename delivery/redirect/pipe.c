@@ -6,7 +6,7 @@
 /*   By: djunho <djunho@student.42porto.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 19:23:07 by djunho            #+#    #+#             */
-/*   Updated: 2025/07/23 08:43:26 by djunho           ###   ########.fr       */
+/*   Updated: 2025/07/25 23:35:22 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,10 @@ int	prepare_pipe(t_shell *shell, const t_btnode *node)
 		return (EXIT_FAILURE);
 	shell->is_running_redirect = true;
 	shell->is_last_redirect = false;
-	if (((t_content_node *)node->left->content)->op == OP_PIPE)
+	if ((((t_content_node *)node->left->content)->op == OP_PIPE)
+		&& (((t_content_node *)node->left->content)->cmd.is_parentheses
+			== false))
 		return (EXIT_SUCCESS);
-	shell->pipe.carry_over_fd = -1;
 	if (pipe(shell->pipe.pipe) < 0)
 		return (EXIT_FAILURE);
 	return (EXIT_SUCCESS);

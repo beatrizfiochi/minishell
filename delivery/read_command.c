@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 17:00:20 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/07/25 21:18:30 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/07/24 08:49:50 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,7 @@ int	read_command(t_shell *shell)
 	shell->last_exit_status = ret;
 	shell->is_running_redirect = false;
 	shell->is_last_redirect = false;
+	shell->pipe.carry_over_fd = -1;
 	free(line);
 	return (shell->last_exit_status);
 }
