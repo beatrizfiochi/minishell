@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/12 13:31:02 by djunho            #+#    #+#             */
-/*   Updated: 2025/07/26 14:17:07 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/07/26 14:23:11 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,17 @@
 
 static bool	split_path(char *ori, char **path, char **pattern)
 {
+	*pattern = NULL;
 	*path = ft_strdup(".");
-	*pattern = ft_strdup(ori);
+	if (*path != NULL)
+		*pattern = ft_strdup(ori);
+	if ((*path == NULL) || (*pattern == NULL))
+	{
+		if (*path != NULL)
+			free(*path);
+		ft_fprintf(STDERR_FILENO, "Malloc error\n");
+		return (false);
+	}
 	return (true);
 }
 
