@@ -3,15 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   expand_wildcards.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: djunho <djunho@student.42porto.com>        +#+  +:+       +#+        */
+/*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/12 13:31:02 by djunho            #+#    #+#             */
-/*   Updated: 2025/07/13 21:58:22 by djunho           ###   ########.fr       */
+/*   Updated: 2025/07/26 14:23:11 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include <stdio.h>
+
 #include <dirent.h>
 #include <unistd.h>
+#include <stdio.h>
 #include "../../parser/aux.h"
 #include "../../parser/parser.h"
 #include "../../execute/env_utils.h"
@@ -20,25 +21,15 @@
 
 static bool	split_path(char *ori, char **path, char **pattern)
 {
-	int	i;
-
-	i = ft_strlen(ori);
-	while ((i > 0) && (ori[i] != '/'))
-		i--;
-	if (i != 0)
-		*path = ft_strndup(ori, i + 1);
-	else
-		*path = ft_strdup(".");
-	if (*path == NULL)
-		return (false);
-	if (i != 0)
-		*pattern = ft_strdup(&ori[i + 1]);
-	else
+	*pattern = NULL;
+	*path = ft_strdup(".");
+	if (*path != NULL)
 		*pattern = ft_strdup(ori);
-	if (*pattern == NULL)
+	if ((*path == NULL) || (*pattern == NULL))
 	{
-		free(*path);
-		*path = NULL;
+		if (*path != NULL)
+			free(*path);
+		ft_fprintf(STDERR_FILENO, "Malloc error\n");
 		return (false);
 	}
 	return (true);

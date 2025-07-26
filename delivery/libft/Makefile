@@ -6,7 +6,7 @@
 #    By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/27 13:09:33 by djunho            #+#    #+#              #
-#    Updated: 2025/04/22 17:04:38 by bfiochi-         ###   ########.fr        #
+#    Updated: 2025/07/26 11:57:31 by bfiochi-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,7 +29,7 @@ SRCSPRINTF = ft_printf/ft_printf.c ft_printf/ft_putnbr_base_fd.c \
 		ft_printf/ft_printf_specifier.c ft_printf/ft_printf_args_numbers_helper.c
 SRCSGETNEXTLINE = get_next_line/get_next_line_bonus.c \
 		get_next_line/get_next_line_utils_bonus.c
-SRCSUTILSMINISHELL = ft_strndup.c
+SRCSUTILSMINISHELL = ft_strndup.c ft_strcmp_insensitive.c
 
 OBJS = $(SRCS:.c=.o)
 OBJSPARTTWO = $(SRCSPARTTWO:.c=.o)
