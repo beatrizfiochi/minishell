@@ -605,7 +605,9 @@ tester_with_real "cd ../delivery && var=\"*m*n*\" && echo '\$var'"
 tester_with_real "cd ../delivery && var='*m*n*' && echo \$var"
 tester_with_real "cd ../delivery && var='*m*n*' && echo \"\$var\""
 tester_with_real "cd ../delivery && var='*m*n*' && echo '\$var'"
-
+tester_with_real 'echo *'
+tester_with_real 'echo .*/'
+echo ""
 echo -e "${MAGENTA}Testing parenthesis${RESET}"
 tester_with_real "ls"
 tester_with_real "(ls)"

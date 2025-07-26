@@ -3,64 +3,50 @@
 /*                                                        :::      ::::::::   */
 /*   expand_wildcards2.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: djunho <djunho@student.42porto.com>        +#+  +:+       +#+        */
+/*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/12 13:31:02 by djunho            #+#    #+#             */
-/*   Updated: 2025/07/13 21:57:54 by djunho           ###   ########.fr       */
+/*   Updated: 2025/07/26 12:37:22 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 #include <stdio.h>
 #include <dirent.h>
 #include <unistd.h>
+#include "../../libft/libft.h"
 #include "../../execute/env_utils.h"
 #include "../../variables/expand_variables.h"   // QUOTE_MARK
 
-int	ft_strcmp_insensitive(char *s1, char *s2)
-{
-	int	i;
-	int	c1;
-	int	c2;
-
-	i = 0;
-	while (1)
-	{
-		c1 = s1[i];
-		if (c1 >= 'A' && c1 <= 'Z')
-			c1 += ('a' - 'A');
-		c2 = s2[i];
-		if (c2 >= 'A' && c2 <= 'Z')
-			c2 += ('a' - 'A');
-		if ((c1 == '\0') || (c2 == '\0') || (c1 != c2))
-			break ;
-		i++;
-	}
-	return (c1 - c2);
-}
-
 // Recursive function to match pattern to filename. Ignore the * inside
 //  QUOTE_MARK
-static bool	match_pattern(const char *filename, const char *pattern,
-							bool quoted)
+static bool	match_pattern_internal(const char *filename, const char *pattern,
+									bool quoted, bool first_call)
 {
+	if (first_call && filename[0] == '.' && pattern[0] != '.')
+		return (false);
 	if (*pattern == '\0' && *filename == '\0')
 		return (true);
 	if (*pattern == QUOTE_MARK)
-		quoted = !quoted;
-	if ((*pattern == '*') && !quoted)
+		return (match_pattern_internal(filename, pattern + 1, !quoted, false));
+	if (*pattern == '*' && !quoted)
 	{
-		while (*filename != '\0')
-		{
-			if (match_pattern(filename, pattern + 1, quoted))
-				return (true);
-			filename++;
-		}
-		return (match_pattern(filename, pattern + 1, quoted));
+		if (match_pattern_internal(filename, pattern + 1, quoted, false))
+			return (true);
+		if (*filename != '\0'
+			&& match_pattern_internal(filename + 1, pattern, quoted, false))
+			return (true);
+		return (false);
 	}
-	if (*pattern == QUOTE_MARK)
-		return (match_pattern(filename, pattern + 1, quoted));
 	if (*filename == *pattern)
-		return (match_pattern(filename + 1, pattern + 1, quoted));
+		return (match_pattern_internal(filename + 1, pattern + 1, quoted,
+				false));
 	return (false);
+}
+
+static bool	match_pattern(const char *filename, const char *pattern,
+	bool quoted)
+{
+	return (match_pattern_internal(filename, pattern, quoted, true));
 }
 
 static int	check_dir_file(struct dirent *entry, char **file, char *path,
