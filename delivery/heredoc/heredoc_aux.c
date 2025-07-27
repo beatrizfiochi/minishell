@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc_aux.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: djunho <djunho@student.42porto.com>        +#+  +:+       +#+        */
+/*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/11 21:20:02 by djunho            #+#    #+#             */
-/*   Updated: 2025/07/11 21:40:54 by djunho           ###   ########.fr       */
+/*   Updated: 2025/07/27 17:29:19 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include "../libft/libft.h"
 #include "../parser/aux.h"			// is_quote()
 #include "../parser/parser.h"		// clean_string_quotes()
+#include "../variables/expand_variables.h"
 
 char	*get_heredoc_file_name(void)
 {
@@ -31,10 +32,11 @@ char	*get_heredoc_file_name(void)
 
 bool	should_expand(char **eof)
 {
-	if (is_quote((*eof)[0]) && clean_string_quotes(eof) && !is_quote((*eof)[0]))
-	{
+	if (((*eof)[0] == '"') || ((*eof)[0] == '\''))
+		mark_quotes(*eof);
+	if (((*eof)[0] == QUOTE_MARK) && clean_string_quotes(eof)
+		&& ((*eof)[0] != QUOTE_MARK))
 		return (false);
-	}
 	return (true);
 }
 

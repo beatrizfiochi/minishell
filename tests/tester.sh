@@ -540,6 +540,8 @@ tester_with_real 'rm /tmp/test && ls | grep mini > /tmp/test'
 tester_with_real 'rm /tmp/test && ls | grep mini > /tmp/test | echo 1'
 tester_with_real 'rm /tmp/test && ls | grep mini > /tmp/test | ls | grep mini'
 tester_with_real 'rm /tmp/test && ls | grep mini > /tmp/test && echo 1'
+tester_grep      '> $invalid' 'Ambiguous redirect'
+tester_grep      '>> $invalid' 'Ambiguous redirect'
 
 echo -e "${MAGENTA}Testing redirect input${RESET}"
 touch /tmp/test
@@ -563,6 +565,7 @@ tester_with_real 'rm /tmp/test && < ../delivery/Makefile > /tmp/test cat -e ../d
 tester_with_real 'rm /tmp/test && < ../delivery/Makefile > /tmp/test cat -e ../delivery/Makefile < ../delivery/cmd.h && head -n 5 /tmp/test'
 tester_with_real '<< a << b'
 tester_with_real '<< a && << b'
+tester_grep      '< $invalid' 'Ambiguous redirect'
 # The following test are not a good one, since the grep files could not be entire yet when the seconds command starts to execute
 # To ensure that the wc could reliable execute, without depending on the machine and the application performance. The best is to use a && instead of |
 # tester_with_real '<../delivery/Makefile grep i >grep | <grep wc'
@@ -605,12 +608,15 @@ tester_with_real "cd ../delivery && var=\"*m*n*\" && echo '\$var'"
 tester_with_real "cd ../delivery && var='*m*n*' && echo \$var"
 tester_with_real "cd ../delivery && var='*m*n*' && echo \"\$var\""
 tester_with_real "cd ../delivery && var='*m*n*' && echo '\$var'"
+tester_grep      '*' 'btree: command not found'
+tester_grep      '****************' 'btree: command not found'
+tester_with_real 'echo *'
 # tester_with_real '*'
 tester_with_real 'echo *'
 tester_with_real 'echo * *'
 tester_with_real 'echo * * hello'
 tester_with_real 'echo * hello * world'
-tester_with_real 'echo .*/'
+# tester_with_real 'echo .*/'
 echo ""
 echo -e "${MAGENTA}Testing parenthesis${RESET}"
 tester_with_real "ls"

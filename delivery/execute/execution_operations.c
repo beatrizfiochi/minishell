@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 11:59:00 by djunho            #+#    #+#             */
-/*   Updated: 2025/07/25 22:17:11 by djunho           ###   ########.fr       */
+/*   Updated: 2025/07/27 17:32:07 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,10 +34,13 @@ static int	execute_command(char **args, char **envp, t_cmd *cmd,
 	ret = execute_builtin(cmd, shell);
 	if (ret != EXIT_CMD_NOT_FOUND)
 		return (ret);
-	if (is_directory(args[0]))
+	if ((args[0][0] == '.') || (args[0][0] == '/'))
 	{
-		ft_fprintf(STDERR_FILENO, "%s: Is a directory\n", args[0]);
-		return (EXIT_CMD_CANNOT_EXEC);
+		if (is_directory(args[0]))
+		{
+			ft_fprintf(STDERR_FILENO, "%s: Is a directory\n", args[0]);
+			return (EXIT_CMD_CANNOT_EXEC);
+		}
 	}
 	return (exec_cmd(shell, args, envp));
 }

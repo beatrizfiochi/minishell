@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/12 13:31:02 by djunho            #+#    #+#             */
-/*   Updated: 2025/07/26 14:23:11 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/07/27 17:31:04 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,7 +122,8 @@ void	expand_wildcards_token(t_list **token_lst)
 		{
 			new_lst = create_new_lst_from_wildcards((char *)token->content);
 			if (new_lst != NULL)
-				token = replace_lst_item_by_lst(token_lst, new_lst, prev, token);
+				token = replace_lst_item_by_lst(token_lst, new_lst,
+						prev, token);
 		}
 		prev = token;
 		token = token->next;
