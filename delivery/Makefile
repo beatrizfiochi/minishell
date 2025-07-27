@@ -18,6 +18,7 @@ SRCS = main.c read_command.c utils.c debug.c readline.c \
 	parser/tokenization_utils2.c parser/tokenization_utils.c \
 	parser/wildcards/expand_wildcards.c \
 	parser/wildcards/expand_wildcards2.c \
+	parser/wildcards/expand_wildcards3.c \
 	btree/btree.c btree/btree_count.c btree/debug.c \
 	btree/btree_foreach.c \
 	execute/execution.c execute/process.c execute/debug.c \
