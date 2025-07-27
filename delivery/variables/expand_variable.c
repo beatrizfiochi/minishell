@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 18:15:43 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/07/13 18:40:38 by djunho           ###   ########.fr       */
+/*   Updated: 2025/07/27 18:46:44 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,43 +81,9 @@ char	*process_var_expansion(t_list **curr, char *cnt, t_list *var_list,
 	return (cnt);
 }
 
-void	expand_variable_token(t_list **curr, t_list *var_list, t_shell *shell)
-{
-	char	*cnt;
-	bool	dquote;
-
-	cnt = (char *)((*curr)->content);
-	dquote = false;
-	while (*cnt != '\0')
-	{
-		if ((*cnt == '$') && dquote)
-			cnt = handle_possible_var((char **)&((*curr)->content), cnt,
-					var_list, shell);
-		else if ((*cnt == '$') && !dquote)
-			cnt = process_var_expansion(curr, cnt, var_list, shell);
-		else if ((*cnt == '\'') && (dquote == false))
-			cnt = mark_quotes(cnt);
-		else if ((*cnt == '"') || (*cnt == QUOTE_MARK))
-		{
-			mark_quotes(cnt);
-			cnt++;
-			dquote = !dquote;
-		}
-		else
-			cnt++;
-	}
-}
-
 void	search_and_expand(t_list **token_list, t_list *var_list, t_shell *shell)
 {
-	t_list	*curr;
-
-	curr = *token_list;
-	while (curr != NULL)
-	{
-		expand_variable_token(&curr, var_list, shell);
-		curr = curr->next;
-	}
+	expand_variable_token(token_list, var_list, shell);
 	expand_wildcards_token(token_list);
 	remove_empty_token(token_list);
 	clean_token_quotes(*token_list);

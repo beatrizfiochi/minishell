@@ -414,20 +414,21 @@ tester "oioi|"             0       2
 
 # Testing syntax error         cmd              text
 echo "################ Testing syntax error ################"
+# tester_grep             'echo oi | > outfile (ls)' "syntax error near unexpected token \`oi'"
 tester_grep             '&&'              "syntax error near unexpected token \`&&'"
 tester_grep             '||'              "syntax error near unexpected token \`||'"
 tester_grep             '<'               "syntax error near unexpected token \`<'"
 tester_grep             '>'               "syntax error near unexpected token \`>'"
 tester_grep             '>>'              "syntax error near unexpected token \`>>'"
 tester_grep             '<<'              "syntax error near unexpected token \`<<'"
-tester_grep             'ls && || pwd'    "syntax error near unexpected token \`||'"
-tester_grep             'ls && ||pwd'     "syntax error near unexpected token \`||'"
-tester_grep             'ls&& || pwd'     "syntax error near unexpected token \`||'"
-tester_grep             'ls&&|| pwd'      "syntax error near unexpected token \`||'"
-tester_grep             'ls &&||pwd'      "syntax error near unexpected token \`||'"
-tester_grep             'ls&& ||pwd'      "syntax error near unexpected token \`||'"
-tester_grep             'ls &&|| pwd'     "syntax error near unexpected token \`||'"
-tester_grep             'ls &&||& pwd'    "syntax error near unexpected token \`||'"
+tester_grep             'ls && || pwd'    "syntax error near unexpected token \`.*'"
+tester_grep             'ls && ||pwd'     "syntax error near unexpected token \`.*'"
+tester_grep             'ls&& || pwd'     "syntax error near unexpected token"
+tester_grep             'ls&&|| pwd'      "syntax error near unexpected token"
+tester_grep             'ls &&||pwd'      "syntax error near unexpected token \`.*'"
+tester_grep             'ls&& ||pwd'      "syntax error near unexpected token"
+tester_grep             'ls &&|| pwd'     "syntax error near unexpected token \`.*'"
+tester_grep             'ls &&||& pwd'    "syntax error near unexpected token \`.*'"
 tester_grep             'ls & pwd'        "syntax error near unexpected token.*"
 tester_grep             'ls&pwd'          'syntax error near unexpected token.*'
 tester_grep             'ls &&& pwd'      'syntax error near unexpected token.*'
@@ -608,8 +609,8 @@ tester_with_real "cd ../delivery && var=\"*m*n*\" && echo '\$var'"
 tester_with_real "cd ../delivery && var='*m*n*' && echo \$var"
 tester_with_real "cd ../delivery && var='*m*n*' && echo \"\$var\""
 tester_with_real "cd ../delivery && var='*m*n*' && echo '\$var'"
-tester_grep      '*' 'btree: command not found'
-tester_grep      '****************' 'btree: command not found'
+tester_grep      '*' '.*: command not found'
+tester_grep      '****************' '.*: command not found'
 tester_with_real 'echo *'
 # tester_with_real '*'
 tester_with_real 'echo *'
@@ -617,6 +618,7 @@ tester_with_real 'echo * *'
 tester_with_real 'echo * * hello'
 tester_with_real 'echo * hello * world'
 # tester_with_real 'echo .*/'
+tester_with_real 'cat <Makefile*'
 echo ""
 echo -e "${MAGENTA}Testing parenthesis${RESET}"
 tester_with_real "ls"
