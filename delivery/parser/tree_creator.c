@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 18:34:50 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/07/23 19:20:04 by djunho           ###   ########.fr       */
+/*   Updated: 2025/07/27 12:30:29 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,8 +128,9 @@ int	create_tree(t_shell *shell, t_btnode **tree, t_list **token_list,
 	while (expanded == true)
 	{
 		expanded = false;
-		*tree = expand_tree_pipe(*tree, &expanded);
-		*tree = expand_tree_parenthesis(*tree, &expanded);
+		*tree = expand_tree_by_type(*tree, EXP_PIPE, &expanded);
+		*tree = expand_tree_by_type(*tree, EXP_REDIR, &expanded);
+		*tree = expand_tree_by_type(*tree, EXP_PAREN, &expanded);
 		if (*tree == NULL)
 			return (EXIT_INCORRECT_USAGE);
 	}
