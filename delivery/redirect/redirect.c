@@ -6,7 +6,7 @@
 /*   By: djunho <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 10:56:42 by djunho            #+#    #+#             */
-/*   Updated: 2025/07/25 23:56:42 by djunho           ###   ########.fr       */
+/*   Updated: 2025/07/27 17:26:57 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,8 +103,10 @@ void	configure_redir(t_shell *shell, const t_cmd *cmd)
 		dup2(cmd->redir.fd_in, STDIN_FILENO);
 		close(cmd->redir.fd_in);
 	}
-	else if (shell->pipe.carry_over_fd != -1)
+	else if ((shell->pipe.carry_over_fd != -1) && (is_pipe))
 		dup2(shell->pipe.carry_over_fd, STDIN_FILENO);
+	else if (is_pipe)
+		close(shell->pipe.pipe[0]);
 	if (cmd->redir.fd_out > 0)
 	{
 		dup2(cmd->redir.fd_out, STDOUT_FILENO);

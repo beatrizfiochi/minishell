@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 15:02:00 by djunho            #+#    #+#             */
-/*   Updated: 2025/07/25 22:11:51 by djunho           ###   ########.fr       */
+/*   Updated: 2025/07/27 13:28:00 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,6 @@ int	wait_previous_process(t_shell *shell)
 	tmp = waitpid(shell->last_pid, &wstatus, 0);
 	if (tmp > 0)
 	{
-		close_any_possible_fd(shell);
 		if (shell->last_cmd != NULL)
 		{
 			shell->last_cmd->finished = true;

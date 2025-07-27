@@ -6,7 +6,7 @@
 /*   By: djunho <djunho@student.42porto.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/23 19:20:56 by djunho            #+#    #+#             */
-/*   Updated: 2025/07/25 22:48:46 by djunho           ###   ########.fr       */
+/*   Updated: 2025/07/27 14:23:53 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include <stdio.h>			// p_error
@@ -78,6 +78,7 @@ int	process_parenthesis(t_shell *shell, t_btnode *node, int ret,
 	content = (t_content_node *)node->content;
 	if (content->cmd.is_parentheses)
 	{
+		close_any_possible_fd(shell);
 		if (shell->last_pid > 0)
 			ret = wait_previous_process(shell);
 		clear_minishell(shell);
