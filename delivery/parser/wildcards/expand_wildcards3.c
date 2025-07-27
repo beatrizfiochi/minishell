@@ -1,23 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   expand_wildcards.h                                 :+:      :+:    :+:   */
+/*   expand_wildcards3.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: djunho <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/13 21:55:46 by djunho            #+#    #+#             */
-/*   Updated: 2025/07/13 21:58:03 by djunho           ###   ########.fr       */
+/*   Created: 2025/07/12 13:31:02 by djunho            #+#    #+#             */
+/*   Updated: 2025/07/26 12:37:22 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#ifndef EXPAND_WILDCARDS_H
-# define EXPAND_WILDCARDS_H
 
-# include "../../libft/libft.h"
+#include "../../libft/libft.h"
 
-int		ft_strcmp_insensitive(char *s1, char *s2);
-int		get_number_files(char *path, char *pattern);
-char	**read_dir(char **files, int size, char *path, char *pattern);
 t_list	*replace_lst_item_by_lst(t_list **token_lst, t_list *new_lst,
-			t_list *prev, t_list *token);
+						t_list *prev, t_list *token)
+{
+	t_list	*aux;
 
-#endif // EXPAND_WILDCARDS_H
+	if (prev == NULL)
+		*token_lst = new_lst;
+	else
+		prev->next = new_lst;
+	aux = token->next;
+	ft_lstdelone(token, free);
+	token = ft_lstlast(new_lst);
+	token->next = aux;
+	return (token);
+}

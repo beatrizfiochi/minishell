@@ -62,30 +62,28 @@ static char	**get_files(char *pattern_ori)
 	return (files);
 }
 
-static t_list	*handle_possible_wildcard(char *pattern, t_list *prev,
-											t_list *token)
+static t_list	*create_new_lst_from_wildcards(char *pattern)
 {
 	char	**files;
 	int		i;
-	t_list	*new_list;
+	t_list	*new_lst;
 	t_list	*aux;
 
 	files = get_files(pattern);
 	if (files == NULL)
-		return (token->next);
+		return (NULL);
 	i = -1;
-	new_list = prev;
-	aux = prev;
-	while ((files != NULL) && (files[++i] != NULL))
+	new_lst = NULL;
+	aux = NULL;
+	while (files[++i] != NULL)
 	{
 		aux = create_token(files[i], ft_strlen(files[i]));
-		new_list->next = aux;
-		new_list = aux;
+		if (aux == NULL)
+			break ;
+		ft_lstadd_back(&new_lst, aux);
 	}
-	aux->next = token->next;
 	free_envp(files);
-	ft_lstdelone(token, free);
-	return (aux->next);
+	return (new_lst);
 }
 
 static bool	has_wildcards(char *str)
@@ -110,21 +108,23 @@ static bool	has_wildcards(char *str)
 	return (false);
 }
 
-void	expand_wildcards_token(t_list *token)
+void	expand_wildcards_token(t_list **token_lst)
 {
-	char	*cnt;
 	t_list	*prev;
-	t_list	*aux;
+	t_list	*token;
+	t_list	*new_lst;
 
+	token = *token_lst;
 	prev = NULL;
 	while (token != NULL)
 	{
-		cnt = (char *)token->content;
-		aux = token;
-		if (has_wildcards(cnt))
-			token = handle_possible_wildcard(cnt, prev, token);
-		else
-			token = token->next;
-		prev = aux;
+		if (has_wildcards((char *)token->content))
+		{
+			new_lst = create_new_lst_from_wildcards((char *)token->content);
+			if (new_lst != NULL)
+				token = replace_lst_item_by_lst(token_lst, new_lst, prev, token);
+		}
+		prev = token;
+		token = token->next;
 	}
 }
