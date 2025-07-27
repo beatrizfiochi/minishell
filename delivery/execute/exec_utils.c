@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/01 12:16:24 by djunho            #+#    #+#             */
-/*   Updated: 2025/07/25 00:33:08 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/07/27 14:49:23 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,17 +31,6 @@ bool	free_join(char **args)
 	return (true);
 }
 
-static bool	check_cmd(char *cmd, char **path)
-{
-	*path = NULL;
-	if (access(cmd, X_OK) == 0)
-	{
-		*path = ft_strdup(cmd);
-		return (true);
-	}
-	return (false);
-}
-
 static char	*build_path(char *base, char *cmd)
 {
 	char	*tmp_path;
@@ -61,8 +50,6 @@ bool	create_cmd_path(char *cmd, t_list *var_list, char **path)
 
 	if (*cmd == '\0')
 		return (false);
-	if (check_cmd(cmd, path))
-		return (true);
 	path_value = get_env("PATH", var_list);
 	if (path_value == NULL)
 		return (false);
