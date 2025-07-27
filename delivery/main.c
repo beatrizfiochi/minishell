@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 18:59:31 by djunho            #+#    #+#             */
-/*   Updated: 2025/07/24 09:21:41 by djunho           ###   ########.fr       */
+/*   Updated: 2025/07/27 17:28:34 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ static void	init_var_list(t_shell *shell, char *envp[])
 	envp_list(shell, envp);
 }
 
-static void init_shell(t_shell *shell)
+static void	init_shell(t_shell *shell)
 {
 	shell->variable_list = NULL;
 	shell->tmp_var_list = NULL;

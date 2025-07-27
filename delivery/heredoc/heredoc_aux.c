@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/11 21:20:02 by djunho            #+#    #+#             */
-/*   Updated: 2025/07/27 16:30:52 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/07/27 17:29:19 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ char	*get_heredoc_file_name(void)
 bool	should_expand(char **eof)
 {
 	if (((*eof)[0] == '"') || ((*eof)[0] == '\''))
-			mark_quotes(*eof);
+		mark_quotes(*eof);
 	if (((*eof)[0] == QUOTE_MARK) && clean_string_quotes(eof)
 		&& ((*eof)[0] != QUOTE_MARK))
 		return (false);

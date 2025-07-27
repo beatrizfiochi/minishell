@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/23 08:14:24 by djunho            #+#    #+#             */
-/*   Updated: 2025/07/27 15:30:38 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/07/27 17:32:42 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,4 +40,3 @@ char	*get_redir_filename(t_shell *shell, t_btnode *file_node)
 	}
 	return (((t_content_node *)(file_node->content))->cmd.tokens->content);
 }
-
