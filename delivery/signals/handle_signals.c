@@ -35,14 +35,16 @@ void	init_signals(void)
 	g_signal = 0;
 	signal(SIGINT, handle_sigint);
 	signal(SIGQUIT, SIG_IGN);
+	signal(SIGPIPE, handle_sigint);
 }
 
 // Reset SIGINT and SIGQUIT to Default
-void	reset_signals(void)
+void	subprocess_signals(void)
 {
 	g_signal = 0;
 	signal(SIGINT, SIG_DFL);
 	signal(SIGQUIT, SIG_DFL);
+	signal(SIGPIPE, handle_sigint);
 }
 
 // Ignore SIGINT and SIGQUIT
@@ -52,6 +54,7 @@ void	ignore_signals(void)
 	g_signal = 0;
 	signal(SIGINT, SIG_IGN);
 	signal(SIGQUIT, SIG_IGN);
+	signal(SIGPIPE, SIG_IGN);
 }
 
 void	handle_signal_output(int ret)

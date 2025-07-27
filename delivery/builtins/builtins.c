@@ -6,10 +6,11 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 13:30:38 by djunho            #+#    #+#             */
-/*   Updated: 2025/07/12 14:26:30 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/07/28 23:45:37 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <signal.h>
 #include "../cmd.h"
 #include "../execute/exec_utils.h"
 #include "../libft/libft.h"

@@ -30,7 +30,7 @@ static int	execute_command(char **args, char **envp, t_cmd *cmd,
 
 	if ((args == NULL) || (args[0] == NULL))
 		return (EXIT_FAILURE);
-	reset_signals();
+	subprocess_signals();
 	ret = execute_builtin(cmd, shell);
 	if (ret != EXIT_CMD_NOT_FOUND)
 		return (ret);
