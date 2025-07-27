@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 15:02:00 by djunho            #+#    #+#             */
-/*   Updated: 2025/07/27 13:28:00 by djunho           ###   ########.fr       */
+/*   Updated: 2025/07/27 18:13:02 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,20 @@ void	close_any_possible_fd(t_shell *shell)
 	shell->pipe.pipe[0] = -1;
 	shell->pipe.pipe[1] = -1;
 	shell->pipe.carry_over_fd = -1;
+}
+
+void	close_all_pipes(t_btnode *node)
+{
+	if (node_cnt(node)->op == OP_PIPE)
+	{
+		if (node_cnt(node)->cmd.pipe_fd > 0)
+			close(node_cnt(node)->cmd.pipe_fd);
+	}
+	if (node->left != NULL)
+		close_all_pipes(node->left);
+	if (node->right != NULL)
+		close_all_pipes(node->right);
+	return ;
 }
 
 int	wait_previous_process(t_shell *shell)

@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 14:51:22 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/07/26 00:12:54 by djunho           ###   ########.fr       */
+/*   Updated: 2025/07/27 18:06:00 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ bool	file_exist(const char *path)
 	return (access(path, F_OK) == 0);
 }
 
-t_content_node	*node_cnt(t_btnode *node)
+t_content_node	*node_cnt(const t_btnode *node)
 {
 	if (node == NULL || node->content == NULL)
 		return (NULL);

@@ -39,6 +39,7 @@ static t_btnode	*create_node(t_list *token_list, t_btnode *parent,
 	content->cmd.is_parentheses = false;
 	content->cmd.redir.fd_in = -1;
 	content->cmd.redir.fd_out = -1;
+	content->cmd.pipe_fd = -1;
 	tree_node = btree_new(content);
 	tree_node->parent = parent;
 	tree_node->left = left;

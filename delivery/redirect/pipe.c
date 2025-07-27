@@ -6,7 +6,7 @@
 /*   By: djunho <djunho@student.42porto.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 19:23:07 by djunho            #+#    #+#             */
-/*   Updated: 2025/07/27 12:56:08 by djunho           ###   ########.fr       */
+/*   Updated: 2025/07/27 18:08:26 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ int	process_pipe(t_shell *shell, t_btnode *node)
 		shell->pipe.carry_over_fd = dup(shell->pipe.pipe[0]);
 	else
 		shell->pipe.carry_over_fd = -1;
+	node_cnt(node)->cmd.pipe_fd = shell->pipe.carry_over_fd;
 	close(shell->pipe.pipe[0]);
 	close(shell->pipe.pipe[1]);
 	if (pipe(shell->pipe.pipe) < 0)
