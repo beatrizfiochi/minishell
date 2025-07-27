@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 18:46:29 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/07/27 18:47:59 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/07/27 20:34:49 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,8 @@
 #include "../minishell.h"
 #include "expand_variables.h"
 
-static void	expand_variable_token_i(t_list **curr, t_list *var_list, t_shell *shell)
+static void	expand_variable_token_i(t_list **curr, t_list *var_list,
+	t_shell *shell)
 {
 	char	*cnt;
 	bool	dquote;
@@ -40,7 +41,9 @@ static void	expand_variable_token_i(t_list **curr, t_list *var_list, t_shell *sh
 			cnt++;
 	}
 }
-void	expand_variable_token(t_list **token_list, t_list *var_list, t_shell *shell)
+
+void	expand_variable_token(t_list **token_list, t_list *var_list,
+	t_shell *shell)
 {
 	t_list	*curr;
 
