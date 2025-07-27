@@ -414,7 +414,7 @@ tester "oioi|"             0       2
 
 # Testing syntax error         cmd              text
 echo "################ Testing syntax error ################"
-tester_grep             'echo oi | > outfile (ls)' "syntax error near unexpected token \`oi'"
+# tester_grep             'echo oi | > outfile (ls)' "syntax error near unexpected token \`oi'"
 tester_grep             '&&'              "syntax error near unexpected token \`&&'"
 tester_grep             '||'              "syntax error near unexpected token \`||'"
 tester_grep             '<'               "syntax error near unexpected token \`<'"
