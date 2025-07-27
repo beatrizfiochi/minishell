@@ -608,8 +608,8 @@ tester_with_real "cd ../delivery && var=\"*m*n*\" && echo '\$var'"
 tester_with_real "cd ../delivery && var='*m*n*' && echo \$var"
 tester_with_real "cd ../delivery && var='*m*n*' && echo \"\$var\""
 tester_with_real "cd ../delivery && var='*m*n*' && echo '\$var'"
-tester_grep      '*' 'btree: command not found'
-tester_grep      '****************' 'btree: command not found'
+tester_grep      '*' '.*: command not found'
+tester_grep      '****************' '.*: command not found'
 tester_with_real 'echo *'
 # tester_with_real '*'
 tester_with_real 'echo *'
@@ -617,6 +617,7 @@ tester_with_real 'echo * *'
 tester_with_real 'echo * * hello'
 tester_with_real 'echo * hello * world'
 # tester_with_real 'echo .*/'
+tester_with_real 'cat <Makefile*'
 echo ""
 echo -e "${MAGENTA}Testing parenthesis${RESET}"
 tester_with_real "ls"
