@@ -18,10 +18,11 @@
 #include "../execute/exec_utils.h"
 #include "redirect_aux.h"
 
-static void	common_redirect_prepare(t_shell *shell)
+static void	common_redirect_prepare(t_shell *shell, bool is_output)
 {
 	shell->is_running_redirect = true;
-	shell->is_last_redirect = true;
+	if (is_output)
+		shell->is_last_redirect = true;
 }
 
 // Go to the previous command (or the last command to be executed before
@@ -37,7 +38,7 @@ int	prepare_redirect_out(t_shell *shell, t_btnode *op)
 	int				flag;
 	char			*name;
 
-	common_redirect_prepare(shell);
+	common_redirect_prepare(shell, true);
 	flag = O_CREAT | O_APPEND | O_WRONLY;
 	if (((t_content_node *)op->content)->op == OP_RD_OUTPUT)
 		flag = O_CREAT | O_TRUNC | O_WRONLY;
@@ -64,7 +65,7 @@ int	prepare_redirect_in(t_shell *shell, t_btnode *op)
 	int				fd;
 	char			*name;
 
-	common_redirect_prepare(shell);
+	common_redirect_prepare(shell, false);
 	name = get_redir_filename(shell, op->right);
 	if (name == NULL)
 		return (EXIT_FAILURE);
