@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 11:59:00 by djunho            #+#    #+#             */
-/*   Updated: 2025/07/27 17:32:07 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/07/28 22:45:52 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ int	run_child(t_cmd *cmd, t_shell *shell)
 	return (ret);
 }
 
-static void	close_possible_pipe(t_shell *shell)
+void	close_possible_pipe(t_shell *shell)
 {
 	if (shell->pipe.pipe[0] != -1)
 	{
@@ -84,7 +84,7 @@ int	process_and(t_shell *shell, int ret, bool *should_continue)
 		ret = wait_previous_process(shell);
 	if (ret != EXIT_SUCCESS)
 		*should_continue = false;
-	close_possible_pipe(shell);
+	close_any_possible_fd(shell);
 	return (ret);
 }
 
@@ -95,6 +95,6 @@ int	process_or(t_shell *shell, int ret, bool *should_continue)
 		ret = wait_previous_process(shell);
 	if (ret == EXIT_SUCCESS)
 		*should_continue = false;
-	close_possible_pipe(shell);
+	close_any_possible_fd(shell);
 	return (ret);
 }

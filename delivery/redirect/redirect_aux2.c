@@ -6,22 +6,20 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/23 08:14:24 by djunho            #+#    #+#             */
-/*   Updated: 2025/07/27 18:49:23 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/07/28 21:57:31 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <unistd.h>                    // close
 #include "../minishell.h"
 #include "../parser/parser.h"
+#include "../execute/execution.h"
 
 void	close_redirects(t_shell *shell)
 {
 	shell->is_running_redirect = false;
 	shell->is_last_redirect = false;
-	close(shell->pipe.pipe[0]);
-	close(shell->pipe.pipe[1]);
-	shell->pipe.pipe[0] = -1;
-	shell->pipe.pipe[1] = -1;
+	close_possible_pipe(shell);
 }
 
 char	*get_redir_filename(t_shell *shell, t_btnode *file_node)

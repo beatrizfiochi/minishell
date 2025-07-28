@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 19:49:18 by djunho            #+#    #+#             */
-/*   Updated: 2025/07/27 17:31:34 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/07/28 21:51:25 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ int		process_or(t_shell *shell, int previous_ret, bool *should_continue);
 void	configure_redir(t_shell *shell, const t_cmd *cmd);
 void	create_op_list(t_btnode *tree, t_list **op_list);
 
+void	close_possible_pipe(t_shell *shell);
 int		handle_var_assign(t_shell *shell, t_btnode *node);
 void	join_shell_variable_lists(t_shell *shell);
 
