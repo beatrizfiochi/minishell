@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 15:26:54 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/07/13 17:35:39 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/07/29 23:18:20 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include <stdlib.h>
 #include "../libft/libft.h"
 #include "parser.h"
+#include "aux.h"
 
 static int	scan_until_op_or_error(char *l, char *c, int *len)
 {
@@ -120,6 +121,8 @@ t_list	*tokenization(char *line)
 			return (exit_tokenization(prev_token, head_token));
 		new_token = create_token(line, len);
 		ft_lstadd_back(&head_token, new_token);
+		if (check_token(prev_token, new_token) == EXIT_FAILURE)
+			return (exit_tokenization(new_token, head_token));
 		prev_token = new_token;
 		line += len;
 	}

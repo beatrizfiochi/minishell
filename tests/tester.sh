@@ -446,6 +446,7 @@ tester_grep             'ls >>>>> pwd'    'syntax error near unexpected token.*'
 tester_grep             '&& echo 1'       'syntax error near unexpected token'
 tester_grep             '| echo 1'        'syntax error near unexpected token'
 tester_grep             '|| echo 1'       'syntax error near unexpected token'
+tester_grep             "echo oi | > outfile (ls)"              "syntax error near unexpected token \`('"
 echo ""
 
 tester_grep             '1=10'       "1=10: command not found"
@@ -682,7 +683,7 @@ tester_with_real '(ls | echo oi) > /tmp/outfile > /tmp/outfile2'
 # syntax error near unexpected token `|'
 # Error: Failed to expand pipe btree node
 #
-tester_grep 'cat (echo)'             'Error: syntax error near unexpected token .*'
+tester_grep 'cat (echo)'             'syntax error near unexpected token .*'
 tester_grep 'cat | "(ls")'           'Error: syntax error near unexpected token .*'
 tester_grep 'cat | ()'               'syntax error near unexpected token.*'
 tester_with_real 'cat | (ls)'

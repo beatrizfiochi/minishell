@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 18:10:01 by djunho            #+#    #+#             */
-/*   Updated: 2025/07/27 12:24:35 by djunho           ###   ########.fr       */
+/*   Updated: 2025/07/29 23:19:31 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ enum e_expand_type
 };
 
 bool		is_quote(char c);
+bool		is_basic_op_list(t_list *list);
 
 t_list		*search_any_op(t_list *tokens);
 t_list		*search_op(t_list *tokens, enum e_expand_type expand_type);
@@ -38,8 +39,9 @@ void		free_btree_content(void *_content);
 
 t_node_op	op_list(t_list *list);
 t_node_op	op(char *token_str);
-bool		is_basic_op_list(t_list *list);
 
 char		*go_to_end_quote(char *content);
+
+int			check_token(t_list *prev, t_list *curr);
 
 #endif // AUX_H
