@@ -6,7 +6,7 @@
 #    By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/27 13:09:33 by djunho            #+#    #+#              #
-#    Updated: 2025/07/27 16:14:04 by djunho           ###   ########.fr        #
+#    Updated: 2025/07/29 21:17:41 by djunho           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -109,7 +109,9 @@ re: fclean all
 soft_re: soft_fclean all
 
 valgrind: all
-	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --suppressions=valgrind-supression ./$(NAME) $(RUN_ARGS)
+	valgrind --trace-children=yes --child-silent-after-fork=no --track-origins=yes \
+		--leak-check=full --show-leak-kinds=all --suppressions=valgrind-supression \
+		./$(NAME) $(RUN_ARGS)
 
 test: all
 	./$(NAME) $(RUN_ARGS)
