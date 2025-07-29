@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 11:23:29 by djunho            #+#    #+#             */
-/*   Updated: 2025/07/26 00:13:24 by djunho           ###   ########.fr       */
+/*   Updated: 2025/07/27 18:15:31 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,9 @@ typedef struct s_cmd
 							//	False by default
 	bool	is_parentheses;	// True if the operator or command is a begining
 							//	of a parentheses. False by default
+	int		pipe_fd;		// The file descriptor that is forward to the other
+							//  cmd. This field will only be used by OP_PIPE
+							//  operator
 	struct s_cmd_redirect
 	{
 		int		fd_in;		// File descriptor for input redirection (placed 
@@ -55,6 +58,6 @@ typedef struct s_content_node
 	t_cmd		cmd;
 }	t_content_node;
 
-t_content_node	*node_cnt(t_btnode *node);
+t_content_node	*node_cnt(const t_btnode *node);
 
 #endif // CMD_H

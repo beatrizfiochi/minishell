@@ -12,12 +12,14 @@
 #ifndef COLOR_H
 # define COLOR_H
 
-# define COLOR_RED     "\x1b[31m"
-# define COLOR_GREEN   "\x1b[32m"
-# define COLOR_YELLOW  "\x1b[33m"
-# define COLOR_BLUE    "\x1b[34m"
-# define COLOR_MAGENTA "\x1b[35m"
-# define COLOR_CYAN    "\x1b[36m"
-# define COLOR_RESET   "\x1b[0m"
+// The \1 and the \2 are the RL_PROMPT_START_IGNORE and RL_PROMPT_END_IGNORE
+
+# define COLOR_RED     "\1\x1b[31m\2"
+# define COLOR_GREEN   "\1\x1b[32m\2"
+# define COLOR_YELLOW  "\1\x1b[33m\2"
+# define COLOR_BLUE    "\1\x1b[34m\2"
+# define COLOR_MAGENTA "\1\x1b[35m\2"
+# define COLOR_CYAN    "\1\x1b[36m\2"
+# define COLOR_RESET   "\1\x1b[0m\2"
 
 #endif // COLOR_H

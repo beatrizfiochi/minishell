@@ -6,7 +6,7 @@
 #    By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/27 13:09:33 by djunho            #+#    #+#              #
-#    Updated: 2025/07/27 20:32:50 by bfiochi-         ###   ########.fr        #
+#    Updated: 2025/07/29 21:17:41 by djunho           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@ NAME= minishell
 SRCS = main.c read_command.c utils.c debug.c readline.c \
 	parser/tokenization.c parser/aux.c parser/aux2.c parser/aux3.c \
 	parser/tree_creator.c parser/tree_creator_checks.c \
-	parser/tree_creator_expand.c parser/tokens.c \
+	parser/tree_creator_expand.c parser/tokens.c parser/tokens2.c \
 	parser/tokenization_utils2.c parser/tokenization_utils.c \
 	parser/wildcards/expand_wildcards.c \
 	parser/wildcards/expand_wildcards2.c \
@@ -109,7 +109,9 @@ re: fclean all
 soft_re: soft_fclean all
 
 valgrind: all
-	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --suppressions=valgrind-supression ./$(NAME) $(RUN_ARGS)
+	valgrind --trace-children=yes --child-silent-after-fork=no --track-origins=yes \
+		--leak-check=full --show-leak-kinds=all --suppressions=valgrind-supression \
+		./$(NAME) $(RUN_ARGS)
 
 test: all
 	./$(NAME) $(RUN_ARGS)

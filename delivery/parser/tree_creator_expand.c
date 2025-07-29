@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 18:34:50 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/07/25 23:33:22 by djunho           ###   ########.fr       */
+/*   Updated: 2025/07/27 12:29:27 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,8 @@ static t_btnode	*expand_btree_node(t_btnode *node,
 	return (node);
 }
 
-t_btnode	*expand_tree_pipe(t_btnode *tree, bool	*expanded)
+t_btnode	*expand_tree_by_type(t_btnode *tree, enum e_expand_type type,
+							bool *expanded)
 {
 	bool	i_expanded;
 
@@ -84,30 +85,9 @@ t_btnode	*expand_tree_pipe(t_btnode *tree, bool	*expanded)
 	while (i_expanded == true)
 	{
 		i_expanded = false;
-		tree = expand_btree_node(tree, EXP_REDIR, &i_expanded);
+		tree = expand_btree_node(tree, type, &i_expanded);
 		if (tree == NULL)
 			return (NULL);
-		*expanded = *expanded || i_expanded;
-	}
-	return (tree);
-}
-
-t_btnode	*expand_tree_parenthesis(t_btnode *tree, bool	*expanded)
-{
-	bool	i_expanded;
-
-	if (tree == NULL)
-		return (NULL);
-	i_expanded = true;
-	while (i_expanded == true)
-	{
-		i_expanded = false;
-		tree = expand_btree_node(tree, EXP_PAREN, &i_expanded);
-		if (tree == NULL)
-		{
-			printf("Error: Failed to expand parenthesis btree node\n");
-			return (NULL);
-		}
 		*expanded = *expanded || i_expanded;
 	}
 	return (tree);

@@ -610,9 +610,9 @@ tester_with_real "cd ../delivery && var='*m*n*' && echo \$var"
 tester_with_real "cd ../delivery && var='*m*n*' && echo \"\$var\""
 tester_with_real "cd ../delivery && var='*m*n*' && echo '\$var'"
 tester_grep      '*' '.*: command not found'
+tester_with_real '*'
 tester_grep      '****************' '.*: command not found'
 tester_with_real 'echo *'
-# tester_with_real '*'
 tester_with_real 'echo *'
 tester_with_real 'echo * *'
 tester_with_real 'echo * * hello'
@@ -687,10 +687,7 @@ tester_grep 'cat | "(ls")'           'Error: syntax error near unexpected token 
 tester_grep 'cat | ()'               'syntax error near unexpected token.*'
 tester_with_real 'cat | (ls)'
 tester_with_real 'echo oi |  > /tmp/outfile && ls'
-#
-# This one is returning 126 instead of 127. To simplify -> tester_with_real '""'
-# tester_with_real 'cat | "" "((echo oi)) echo fim)"'
-#
+tester_with_real 'cat | "" "((echo oi)) echo fim)"'
 # This one should return return syntax error for the #
 # tester_grep '(ls)  |  (cat| #)'           'Error: syntax error near unexpected token .*'
 #
@@ -876,25 +873,21 @@ echo ""
 echo -e "${MAGENTA}Testing AND operator${RESET}"
 tester_with_real "ls && pwd"
 tester_with_real "ls aaa && pwd"
-# TODO: Enable the test bellow one we are able to implement the printf for stderr
-# tester_with_real "lssss && pwd"
+tester_with_real "lssss && pwd"
 echo ""
 
 # test OR
 echo -e "${MAGENTA}Testing OR operator${RESET}"
 tester_with_real "ls || pwd"
 tester_with_real "ls aaa || pwd"
-# TODO: Enable the test bellow one we are able to implement the printf for stderr
-# tester_with_real "lssss || pwd"
+tester_with_real "lssss || pwd"
 echo ""
 
 # Test PIPE
 echo -e "${MAGENTA}Testing PIPE operator${RESET}"
 tester_with_real "ls | cat -e"
 tester_with_real "ls aaa | cat -e"
-# TODO: Enable the test bellow one we are able to implement the printf for stderr
-# and chnage the msg from ' lssss: No such file or directory' to 'lssss: command not found'
-# tester_with_real "lssss | cat -e"
+tester_with_real "lssss | cat -e"
 tester_with_real "ls ../delivery | cat -e"
 tester_with_real "ls ../delivery | grep mini | cat -e"
 tester_with_real "ls ../delivery | grep mini | cat -e | grep '\.h'"

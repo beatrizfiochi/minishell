@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 18:34:50 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/07/23 19:20:04 by djunho           ###   ########.fr       */
+/*   Updated: 2025/07/27 12:30:29 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ static t_btnode	*create_node(t_list *token_list, t_btnode *parent,
 	content->cmd.is_parentheses = false;
 	content->cmd.redir.fd_in = -1;
 	content->cmd.redir.fd_out = -1;
+	content->cmd.pipe_fd = -1;
 	tree_node = btree_new(content);
 	tree_node->parent = parent;
 	tree_node->left = left;
@@ -128,8 +129,9 @@ int	create_tree(t_shell *shell, t_btnode **tree, t_list **token_list,
 	while (expanded == true)
 	{
 		expanded = false;
-		*tree = expand_tree_pipe(*tree, &expanded);
-		*tree = expand_tree_parenthesis(*tree, &expanded);
+		*tree = expand_tree_by_type(*tree, EXP_PIPE, &expanded);
+		*tree = expand_tree_by_type(*tree, EXP_REDIR, &expanded);
+		*tree = expand_tree_by_type(*tree, EXP_PAREN, &expanded);
 		if (*tree == NULL)
 			return (EXIT_INCORRECT_USAGE);
 	}

@@ -6,7 +6,7 @@
 /*   By: djunho <djunho@student.42porto.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 08:05:37 by djunho            #+#    #+#             */
-/*   Updated: 2025/07/23 09:28:01 by djunho           ###   ########.fr       */
+/*   Updated: 2025/07/27 16:10:24 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,22 +17,7 @@
 #include "aux.h"
 #include "parser.h"
 
-// Fix the situation when remain is NULL
-// < file cmd
-static int	fix_split_simple(struct s_split_token_list *split)
-{
-	if (ft_lstsize(split->right) > 1)
-	{
-		if (split->left != NULL)
-			ft_lstlast(split->left)->next = split->right->next;
-		else
-			split->left = split->right->next;
-		split->right->next = NULL;
-	}
-	return (EXIT_SUCCESS);
-}
-
-// When teh split is done in a redirect operatior, the operator can be always
+// When the split is done in a redirect operatior, the operator can be always
 //  anywhere in the token list.
 // For example:
 //    < file cmd -arg
@@ -48,7 +33,7 @@ static bool	fix_split(struct s_split_token_list *split, bool has_left,
 	(void)expand;
 	if (is_redirect_file_op(op_list(split->op)))
 	{
-		fix_split_simple(split);
+		fix_split_redirect(split);
 		if (is_redirect_file_op(op_list(split->op)))
 		{
 			if ((ft_lstsize(split->right) > 1)

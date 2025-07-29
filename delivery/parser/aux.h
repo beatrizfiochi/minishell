@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 18:10:01 by djunho            #+#    #+#             */
-/*   Updated: 2025/07/21 08:12:49 by djunho           ###   ########.fr       */
+/*   Updated: 2025/07/27 12:24:35 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ t_list		*prev_list_item(t_list *first_node, t_list *current_node);
 enum e_expand_type
 {
 	EXP_NORMAL = 0,
+	EXP_PIPE,
 	EXP_REDIR,
 	EXP_PAREN,
 	EXP_ASSIGN

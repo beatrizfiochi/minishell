@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/05 13:53:41 by djunho            #+#    #+#             */
-/*   Updated: 2025/07/23 20:44:39 by djunho           ###   ########.fr       */
+/*   Updated: 2025/07/29 18:49:03 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,8 +63,8 @@ int	run_cmd(t_shell *shell, t_btnode *node, t_node_op parent_op)
 		return (EXIT_SUCCESS);
 	}
 	ret = EXIT_CMD_NOT_FOUND;
-	if (!is_op_redirect_type(parent_op))
-		ret = execute_builtin(&content->cmd, shell);
+	if (!is_pipe(node))
+		ret = execute_builtin(&content->cmd, shell, true);
 	if (ret == EXIT_CMD_NOT_FOUND)
 		ret = execute_execve(node, shell);
 	ft_lstclear(&shell->tmp_var_list, free_var_content);

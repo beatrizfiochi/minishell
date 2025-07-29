@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 11:59:00 by djunho            #+#    #+#             */
-/*   Updated: 2025/07/27 17:32:07 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/07/29 18:42:10 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,8 @@ static int	execute_command(char **args, char **envp, t_cmd *cmd,
 
 	if ((args == NULL) || (args[0] == NULL))
 		return (EXIT_FAILURE);
-	reset_signals();
-	ret = execute_builtin(cmd, shell);
+	subprocess_signals();
+	ret = execute_builtin(cmd, shell, false);
 	if (ret != EXIT_CMD_NOT_FOUND)
 		return (ret);
 	if ((args[0][0] == '.') || (args[0][0] == '/'))
@@ -63,7 +63,7 @@ int	run_child(t_cmd *cmd, t_shell *shell)
 	return (ret);
 }
 
-static void	close_possible_pipe(t_shell *shell)
+void	close_possible_pipe(t_shell *shell)
 {
 	if (shell->pipe.pipe[0] != -1)
 	{
@@ -84,7 +84,7 @@ int	process_and(t_shell *shell, int ret, bool *should_continue)
 		ret = wait_previous_process(shell);
 	if (ret != EXIT_SUCCESS)
 		*should_continue = false;
-	close_possible_pipe(shell);
+	close_any_possible_fd(shell);
 	return (ret);
 }
 
@@ -95,6 +95,6 @@ int	process_or(t_shell *shell, int ret, bool *should_continue)
 		ret = wait_previous_process(shell);
 	if (ret == EXIT_SUCCESS)
 		*should_continue = false;
-	close_possible_pipe(shell);
+	close_any_possible_fd(shell);
 	return (ret);
 }

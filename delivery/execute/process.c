@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 19:55:45 by djunho            #+#    #+#             */
-/*   Updated: 2025/07/25 22:49:16 by djunho           ###   ########.fr       */
+/*   Updated: 2025/07/27 18:13:28 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,7 +125,11 @@ int	process(t_shell *shell)
 	if (ret != 0)
 		return (ret);
 	if (shell->last_pid > 0)
+	{
+		close_any_possible_fd(shell);
+		close_all_pipes(shell->cmds);
 		return (wait_previous_process(shell));
+	}
 	else
 		return (ret);
 }

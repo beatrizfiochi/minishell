@@ -6,7 +6,7 @@
 /*   By: djunho <djunho@student.42porto.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/23 19:20:56 by djunho            #+#    #+#             */
-/*   Updated: 2025/07/25 22:48:46 by djunho           ###   ########.fr       */
+/*   Updated: 2025/07/28 21:43:22 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include <stdio.h>			// p_error
@@ -27,6 +27,13 @@ static void	handle_fd_on_parenthesis(t_shell *shell, t_content_node	*content)
 	shell->last_cmd = NULL;
 	is_pipe = (shell->pipe.pipe[0] != -1);
 	cmd = &content->cmd;
+	if (cmd->redir.fd_in > 0)
+	{
+		dup2(cmd->redir.fd_in, STDIN_FILENO);
+		close(cmd->redir.fd_in);
+	}
+	else if ((shell->pipe.carry_over_fd != -1) && (is_pipe))
+		dup2(shell->pipe.carry_over_fd, STDIN_FILENO);
 	if (cmd->redir.fd_out > 0)
 	{
 		dup2(cmd->redir.fd_out, STDOUT_FILENO);
@@ -39,9 +46,7 @@ static void	handle_fd_on_parenthesis(t_shell *shell, t_content_node	*content)
 		shell->out_fd = dup(STDOUT_FILENO);
 	else
 		shell->out_fd = dup(shell->pipe.pipe[1]);
-	close(shell->pipe.pipe[1]);
-	shell->pipe.pipe[0] = -1;
-	shell->pipe.pipe[1] = -1;
+	close_any_possible_fd(shell);
 }
 
 int	prepare_parenthesis(t_shell *shell, t_btnode *node, bool *should_continue)
@@ -78,6 +83,7 @@ int	process_parenthesis(t_shell *shell, t_btnode *node, int ret,
 	content = (t_content_node *)node->content;
 	if (content->cmd.is_parentheses)
 	{
+		close_any_possible_fd(shell);
 		if (shell->last_pid > 0)
 			ret = wait_previous_process(shell);
 		clear_minishell(shell);
