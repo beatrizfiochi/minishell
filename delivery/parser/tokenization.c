@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 15:26:54 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/07/30 10:58:43 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/07/30 15:41:01 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include "../libft/libft.h"
 #include "parser.h"
 #include "aux.h"
+#include "../redirect/redirect_aux.h"
 
 static int	scan_until_op_or_error(char *l, char *c, int *len)
 {
@@ -127,6 +128,8 @@ t_list	*tokenization(char *line)
 		line += len;
 	}
 	if (check_token(prev_token, NULL) == EXIT_FAILURE)
-			return (exit_tokenization(new_token, head_token));
+		return (exit_tokenization(new_token, head_token));
+	if (check_special_with_reddir(head_token) == EXIT_FAILURE)
+		return (exit_tokenization(new_token, head_token));
 	return (head_token);
 }

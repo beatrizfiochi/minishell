@@ -430,6 +430,7 @@ tester_grep             'ls&& ||pwd'      "syntax error near unexpected token.*"
 tester_grep             'ls &&|| pwd'     "syntax error near unexpected token \`.*'"
 tester_grep             'ls &&||& pwd'    "syntax error near unexpected token \`.*'"
 tester_grep             'ls & pwd'        "syntax error near unexpected token.*"
+tester_grep             '(ls | echo oi) > outfile cat'        "syntax error near unexpected token.*"
 tester_grep             'ls&pwd'          'syntax error near unexpected token.*'
 tester_grep             'ls &&& pwd'      'syntax error near unexpected token.*'
 tester_grep             'ls&&&pwd'        'syntax error near unexpected token.*'
@@ -446,7 +447,7 @@ tester_grep             'ls >>>>> pwd'    'syntax error near unexpected token.*'
 tester_grep             '&& echo 1'       'syntax error near unexpected token.*'
 tester_grep             '| echo 1'        'syntax error near unexpected token.*'
 tester_grep             '|| echo 1'       'syntax error near unexpected token.*'
-tester_grep             "echo oi | > outfile (ls)"              "syntax error near unexpected token.*"
+tester_grep             "echo oi | > outfile (ls)"             "syntax error near unexpected token.*"
 echo ""
 
 tester_grep             '1=10'       "1=10: command not found"
