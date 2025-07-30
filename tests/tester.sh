@@ -383,8 +383,6 @@ tester "oi &&&&& oi"        0       0
 cmds=("oi" "oi")
 ops=("OP_AND")
 tester "oi&&oi"             "&&"    3      "cmds"     "ops"
-tester "oioi&&"             0       2
-tester "&&oioi"             0       2
 
 # Testing with operator ||
 tester 'oi "||" oi'         0       3
@@ -398,8 +396,6 @@ tester "oi ||||| oi"        0       0
 cmds=("oi" "oi")
 ops=("OP_OR")
 tester "oi||oi"             "||"    3      "cmds"     "ops"
-tester "oioi||"             0       2
-tester "||oioi"             0       2
 
 # Testing with operator |
 tester 'oi "|" oi'         0       3
@@ -410,26 +406,31 @@ tester "oi | oi"           "|"     3      "cmds"     "ops"
 cmds=("oi" "oi")
 ops=("OP_PIPE")
 tester "oi|oi"             "|"     3      "cmds"     "ops"
-tester "oioi|"             0       2
 
 # Testing syntax error         cmd              text
 echo "################ Testing syntax error ################"
-# tester_grep             'echo oi | > outfile (ls)' "syntax error near unexpected token \`oi'"
+tester_grep             'echo oi | > outfile (ls)' "syntax error near unexpected token.*"
 tester_grep             '&&'              "syntax error near unexpected token \`&&'"
+tester_grep             '&&oioi'          "syntax error near unexpected token \`&&'"
+tester_grep             'oioi&&'          "syntax error near unexpected token \`&&'"
 tester_grep             '||'              "syntax error near unexpected token \`||'"
+tester_grep             '||oioi'          "syntax error near unexpected token \`||'"
+tester_grep             'oioi||'          "syntax error near unexpected token \`||'"
+tester_grep             'oioi|'          "syntax error near unexpected token \`|'"
 tester_grep             '<'               "syntax error near unexpected token \`<'"
 tester_grep             '>'               "syntax error near unexpected token \`>'"
 tester_grep             '>>'              "syntax error near unexpected token \`>>'"
 tester_grep             '<<'              "syntax error near unexpected token \`<<'"
 tester_grep             'ls && || pwd'    "syntax error near unexpected token \`.*'"
 tester_grep             'ls && ||pwd'     "syntax error near unexpected token \`.*'"
-tester_grep             'ls&& || pwd'     "syntax error near unexpected token"
-tester_grep             'ls&&|| pwd'      "syntax error near unexpected token"
+tester_grep             'ls&& || pwd'     "syntax error near unexpected token.*"
+tester_grep             'ls&&|| pwd'      "syntax error near unexpected token.*"
 tester_grep             'ls &&||pwd'      "syntax error near unexpected token \`.*'"
-tester_grep             'ls&& ||pwd'      "syntax error near unexpected token"
+tester_grep             'ls&& ||pwd'      "syntax error near unexpected token.*"
 tester_grep             'ls &&|| pwd'     "syntax error near unexpected token \`.*'"
 tester_grep             'ls &&||& pwd'    "syntax error near unexpected token \`.*'"
 tester_grep             'ls & pwd'        "syntax error near unexpected token.*"
+tester_grep             '(ls | echo oi) > outfile cat'        "syntax error near unexpected token.*"
 tester_grep             'ls&pwd'          'syntax error near unexpected token.*'
 tester_grep             'ls &&& pwd'      'syntax error near unexpected token.*'
 tester_grep             'ls&&&pwd'        'syntax error near unexpected token.*'
@@ -443,9 +444,16 @@ tester_grep             'ls <<< pwd'      'syntax error near unexpected token.*'
 tester_grep             'ls <<<< pwd'     'syntax error near unexpected token.*'
 tester_grep             'ls <<<<< pwd'    'syntax error near unexpected token.*'
 tester_grep             'ls >>>>> pwd'    'syntax error near unexpected token.*'
-tester_grep             '&& echo 1'       'syntax error near unexpected token'
-tester_grep             '| echo 1'        'syntax error near unexpected token'
-tester_grep             '|| echo 1'       'syntax error near unexpected token'
+tester_grep             '&& echo 1'       'syntax error near unexpected token.*'
+tester_grep             '| echo 1'        'syntax error near unexpected token.*'
+tester_grep             '|| echo 1'       'syntax error near unexpected token.*'
+tester_grep             "echo oi | > outfile (ls)"             "syntax error near unexpected token.*"
+tester_grep             '(ls | pwd'             "syntax error near unexpected token.*"
+tester_grep             '(ls && pwd'            "syntax error near unexpected token.*"
+tester_grep             '(ls || pwd'            "syntax error near unexpected token.*"
+tester_grep             'ls | pwd)'             "syntax error near unexpected token.*"
+tester_grep             'ls && pwd)'            "syntax error near unexpected token.*"
+tester_grep             'ls || pwd)'            "syntax error near unexpected token.*"
 echo ""
 
 tester_grep             '1=10'       "1=10: command not found"
@@ -557,7 +565,7 @@ tester_with_real 'rm /tmp/test$USER && echo ola! >> /tmp/test$USER && cat < /tmp
 tester_with_real 'echo ola! > /tmp/test && cat < /tmp/test'
 tester_with_real 'rm /tmp/test && echo ola! > /tmp/test && cat -e < /tmp/test'
 tester_with_real 'rm /tmp/test && echo ola! > /tmp/test && < /tmp/test cat -e'
-rm /tmp/test2
+rm -f /tmp/test2
 tester_with_real 'rm /tmp/test && echo ola! > /tmp/test && < /tmp/test < /tmp/test2 cat -e'
 tester_with_real 'rm /tmp/test && echo ola! > /tmp/test && cat -e < /tmp/test < /tmp/test2'
 echo -e "${MAGENTA}Testing redirect input and output mixed${RESET}"
@@ -582,6 +590,7 @@ tester_with_real '<../delivery/Makefile grep i >grep && <grep wc'
 # Although the command below is not a good one, this test verifies that the
 # grep file is created and can be used by the second part of the command (the wc)
 tester_with_real '<infile grep i >grep | <grep wc'
+rm -f grep
 tester_with_real '< inacessible_file | cat -e > /tmp/output && cat /tmp/output'
 tester_with_real '< ../delivery/Makefile > /tmp/testfile && cat -e /tmp/testfile'
 tester_with_real 'cat -e < filenonexistent'
@@ -652,13 +661,9 @@ tester_with_real 'y=1 && (x=11 && y=2 && echo "x=$x; y=$y") && echo "x=$x; y=$y"
 tester_with_real '(ls | grep cmd) > /tmp/file'
 tester_with_real '(ls && grep cmd) > /tmp/file'
 tester_with_real '(ls || grep cmd) > /tmp/file'
-# parser
-tester_grep      '(ls | pwd'             "Error: Missing closing parenthesis!"
-tester_grep      '(ls && pwd'            "Error: Missing closing parenthesis!"
-tester_grep      '(ls || pwd'            "Error: Missing closing parenthesis!"
-tester_grep      'ls | pwd)'             "Error: syntax error near unexpected token \")\""
-tester_grep      'ls && pwd)'            "Error: syntax error near unexpected token \")\""
-tester_grep      'ls || pwd)'            "Error: syntax error near unexpected token \")\""
+# tester_with_real '((echo oi && (echo ola || ls) | echo meio) | cat > out) | cat out'
+tester_with_real '((echo oi && (echo ola || ls) | echo meio) | cat > out) && cat out'
+rm -f out
 
 # All Mariaoli tests for parenthesis
 tester_with_real 'ls | (echo oi | echo fim) | sort && echo alo'
@@ -682,8 +687,8 @@ tester_with_real '(ls | echo oi) > /tmp/outfile > /tmp/outfile2'
 # syntax error near unexpected token `|'
 # Error: Failed to expand pipe btree node
 #
-tester_grep 'cat (echo)'             'Error: syntax error near unexpected token .*'
-tester_grep 'cat | "(ls")'           'Error: syntax error near unexpected token .*'
+tester_grep 'cat (echo)'             'syntax error near unexpected token .*'
+tester_grep 'cat | "(ls")'           'syntax error near unexpected token .*'
 tester_grep 'cat | ()'               'syntax error near unexpected token.*'
 tester_with_real 'cat | (ls)'
 tester_with_real 'echo oi |  > /tmp/outfile && ls'
@@ -709,11 +714,13 @@ tester_with_real '(ls && ls -la) | grep mi'
 tester_with_real '(export var1=123 && echo $var1) | echo $var1'
 tester_with_real '(export var2=789) && (echo $var2)'
 tester_with_real '(cd) && pwd > out && (ls | cat out)'
+rm -f out
 # No meaning comparing the env command between bash and the minishell
 # tester_with_real 'env | (sort -r && cat)'
 tester_with_real 'export var2=789 && (echo $var2)'
 tester_with_real '(echo "Line 1" && echo "Line 2" >/tmp/file1 || echo "Fallback") >/tmp/combined_output'
 tester_with_real '((echo "Inner subshell") && (echo "Outer subshell" >nestedfile)) || echo "Error"'
+rm -f nestedfile
 tester_with_real '(cat <<EOF | grep "word") | (cat >/tmp/pipelinefile && echo "Pipeline Done")'
 tester_with_real 'tm -rf /tmp/dir && (mkdir /tmp/dir && cd /tmp/dir && touch /tmp/file && echo "Success") || echo "Failed"'
 tester_with_real '(ls nonexistentfile && echo "This wont print") || echo "Handled failure" >/tmp/errorlog'

@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 18:57:02 by djunho            #+#    #+#             */
-/*   Updated: 2025/07/25 21:17:02 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/07/30 22:15:57 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,8 @@
 #include "../btree/btree.h"     // t_btnode
 #include "../redirect/redirect_aux.h"  // is_a_redirect_file_op
 
-bool	is_btnode_different(t_btnode *node1, t_btnode *node2)
+bool	is_btnode_different(t_btnode *node1, int node1_size, t_btnode *node2,
+								int node2_size)
 {
 	const t_content_node	*cnt_node1;
 	const t_content_node	*cnt_node2;
@@ -29,6 +30,8 @@ bool	is_btnode_different(t_btnode *node1, t_btnode *node2)
 		return (true);
 	cnt_node1 = (t_content_node *)node1->content;
 	cnt_node2 = (t_content_node *)node2->content;
+	if (node1_size != node2_size)
+		return (true);
 	if (cnt_node1->op != cnt_node2->op)
 		return (true);
 	if (((node1->left != NULL) != (node2->left != NULL))
@@ -51,7 +54,7 @@ static t_btnode	*check_tree_syntax_leaf(t_btnode *node)
 	operator = search_any_op(content->cmd.tokens);
 	if (operator != NULL)
 	{
-		printf("Error: syntax error near unexpected token \"%s\"\n",
+		printf("syntax error near unexpected token \"%s\"\n",
 			(char *)operator->content);
 		btree_delete(&node, free_btree_node);
 		return (NULL);
@@ -90,10 +93,7 @@ bool	check_enclosure(t_list **token_list, enum e_expand_type *expand_type)
 
 	last = ft_lstlast(*token_list);
 	if (op((char *)last->content) != OP_PAREN_CLOSE)
-	{
-		printf("Error: Missing closing parenthesis!\n");
 		return (false);
-	}
 	first = *token_list;
 	prev = prev_list_item(*token_list, last);
 	prev->next = NULL;

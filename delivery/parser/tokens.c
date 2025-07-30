@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokens.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: djunho <djunho@student.42porto.com>        +#+  +:+       +#+        */
+/*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 08:05:37 by djunho            #+#    #+#             */
-/*   Updated: 2025/07/27 16:10:24 by djunho           ###   ########.fr       */
+/*   Updated: 2025/07/30 15:45:09 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,41 +55,61 @@ static bool	fix_split(struct s_split_token_list *split, bool has_left,
 	return (true);
 }
 
+static bool	find_and_split_operator(struct s_split_token_list *split,
+								enum e_expand_type expand_type)
+{
+	t_list	*aux;
+	t_list	*prev;
+
+	aux = search_op(split->left, expand_type);
+	if ((aux == NULL) || (aux->next == NULL))
+		return (false);
+	split->op = aux;
+	prev = prev_list_item(split->left, split->op);
+	if (prev != NULL)
+		prev->next = NULL;
+	else
+		split->left = NULL;
+	split->right = split->op->next;
+	split->op->next = NULL;
+	return (true);
+}
+
+static void	find_remain_part(struct s_split_token_list *split,
+						enum e_expand_type expand_type)
+{
+	t_list	*aux;
+	t_list	*prev;
+
+	aux = search_op(split->right, expand_type);
+	if ((aux == split->right) && (!is_redirect_file_op(op_list(aux))))
+	{
+		split->remain = NULL;
+		return ;
+	}
+	if (aux == split->right)
+		aux = search_op(split->right->next, expand_type);
+	split->remain = aux;
+	if (split->remain != NULL)
+	{
+		prev = prev_list_item(split->right, split->remain);
+		if (prev != NULL)
+			prev->next = NULL;
+	}
+}
+
 // Warning: This function assumes that the split->left is not NULL
 // In this function there are 2 checks for the right operator. with and without
 // the is_redirect_file_op. It is possible to have a redir together with
 // another.
 // For example: <infile grep i >grep | <grep wc
 bool	split_token_list(struct s_split_token_list *split,
-							enum e_expand_type expand_type)
+						enum e_expand_type expand_type)
 {
-	t_list	*aux;
-	t_list	*aux2;
-
-	while (1)
-	{
-		aux = search_op(split->left, expand_type);
-		if ((aux == NULL) || (aux->next == NULL))
-			break ;
-		split->op = aux;
-		aux2 = prev_list_item(split->left, split->op);
-		if (aux2 != NULL)
-			aux2->next = NULL;
-		else
-			split->left = NULL;
-		split->right = split->op->next;
-		split->op->next = NULL;
-		aux = search_op(split->right, expand_type);
-		if ((aux == split->right) && !is_redirect_file_op(op_list(aux)))
-			break ;
-		if (aux == split->right)
-			aux = search_op(split->right->next, expand_type);
-		split->remain = aux;
-		if (split->remain != NULL)
-			prev_list_item(split->right, split->remain)->next = NULL;
-		return (true);
-	}
-	return (abort_tree_lst(NULL, split) != NULL);
+	if (!find_and_split_operator(split, expand_type))
+		return (abort_tree_lst(NULL, split) != NULL);
+	find_remain_part(split, expand_type);
+	return (true);
 }
 
 int	split_tokens(t_list **tokens, struct s_split_token_list *split,

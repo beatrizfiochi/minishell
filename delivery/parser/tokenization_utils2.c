@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 11:33:43 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/07/25 00:09:29 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/07/30 22:27:48 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,4 +73,22 @@ bool	remove_if_empty(t_list **token_list, t_list *current, t_list *prev)
 		return (true);
 	}
 	return (false);
+}
+
+int	check_parentheses_syntax(t_list *token)
+{
+	t_node_op	operator;
+	int			i;
+
+	i = 0;
+	while (token != NULL)
+	{
+		operator = op(token->content);
+		if (operator == OP_PAREN_OPEN)
+			i++;
+		if (operator == OP_PAREN_CLOSE)
+			i--;
+		token = token->next;
+	}
+	return (i);
 }

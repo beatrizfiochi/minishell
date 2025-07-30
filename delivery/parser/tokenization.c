@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 15:26:54 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/07/13 17:35:39 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/07/30 22:20:34 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 #include <stdlib.h>
 #include "../libft/libft.h"
 #include "parser.h"
+#include "aux.h"
+#include "../redirect/redirect_aux.h"
 
 static int	scan_until_op_or_error(char *l, char *c, int *len)
 {
@@ -59,7 +61,7 @@ static void	search_token_utils(char *l, char *c, int *len)
 	}
 }
 
-static void	search_token(char *line, int *len)
+void	search_token(char *line, int *len)
 {
 	int		op_len;
 	char	c;
@@ -101,27 +103,19 @@ t_list	*exit_tokenization(t_list *prev_token, t_list *head_token)
 t_list	*tokenization(char *line)
 {
 	t_list	*head_token;
-	t_list	*new_token;
-	t_list	*prev_token;
-	int		len;
+	t_list	*last_token;
 
 	head_token = NULL;
-	prev_token = NULL;
+	last_token = NULL;
 	if (line == NULL)
 		return (NULL);
-	while (*line != '\0')
-	{
-		while (*line == ' ')
-			line++;
-		if (*line == '\0')
-			break ;
-		search_token(line, &len);
-		if (len == -1)
-			return (exit_tokenization(prev_token, head_token));
-		new_token = create_token(line, len);
-		ft_lstadd_back(&head_token, new_token);
-		prev_token = new_token;
-		line += len;
-	}
+	if (process_tokens(line, &head_token, &last_token) == EXIT_FAILURE)
+		return (NULL);
+	if (check_token(last_token, NULL) == EXIT_FAILURE)
+		return (exit_tokenization(last_token, head_token));
+	if (check_special_with_reddir(head_token) == EXIT_FAILURE)
+		return (exit_tokenization(last_token, head_token));
+	if (check_parentheses_syntax(head_token) != 0)
+		return (exit_tokenization(last_token, head_token));
 	return (head_token);
 }
