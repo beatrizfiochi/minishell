@@ -6,13 +6,14 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/29 23:17:46 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/07/30 16:03:17 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/07/30 16:07:05 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../libft/libft.h"
 #include "aux.h"
 #include "../cmd.h"
+#include "parser.h"
 #include "../redirect/redirect_aux.h"
 
 // Basic op: && || |

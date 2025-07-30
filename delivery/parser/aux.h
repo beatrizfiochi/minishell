@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 18:10:01 by djunho            #+#    #+#             */
-/*   Updated: 2025/07/30 16:03:40 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/07/30 16:06:24 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,10 @@ bool		is_basic_op(t_node_op op);
 
 t_list		*search_any_op(t_list *tokens);
 t_list		*search_op(t_list *tokens, enum e_expand_type expand_type);
+t_list		*exit_tokenization(t_list *prev_token, t_list *head_token);
 
 void		free_btree_content(void *_content);
+void		search_token(char *line, int *len);
 
 t_node_op	op_list(t_list *list);
 t_node_op	op(char *token_str);

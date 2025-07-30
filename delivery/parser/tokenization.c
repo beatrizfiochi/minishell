@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 15:26:54 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/07/30 16:03:51 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/07/30 16:51:03 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ static void	search_token_utils(char *l, char *c, int *len)
 	}
 }
 
-static void	search_token(char *line, int *len)
+void	search_token(char *line, int *len)
 {
 	int		op_len;
 	char	c;
