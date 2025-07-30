@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 18:34:50 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/07/27 12:29:27 by djunho           ###   ########.fr       */
+/*   Updated: 2025/07/30 21:58:53 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,39 +28,43 @@ static bool	is_expansion_needed(t_node_op op)
 	return (false);
 }
 
-static	void	update_node_properties(bool *had_expand, t_btnode *new_node,
-						t_btnode *old_node, enum e_expand_type expand)
+static bool	update_node_properties(t_btnode *new_node, t_btnode *old_node,
+				int old_size, enum e_expand_type expand)
 {
-	t_content_node	*new_cnt;
 	t_content_node	*old_cnt;
+	bool			ret;
 
-	new_cnt = (t_content_node *)new_node->content;
-	if (is_btnode_different(old_node, new_node))
+	ret = false;
+	if (is_btnode_different(old_node, old_size, new_node,
+			ft_lstsize(node_cnt(new_node)->cmd.tokens)))
 	{
-		*had_expand = true;
+		ret = true;
 		if (expand == EXP_PAREN)
-			new_cnt->cmd.is_parentheses = true;
+			node_cnt(new_node)->cmd.is_parentheses = true;
 	}
 	old_cnt = (t_content_node *)old_node->content;
 	if (old_cnt->cmd.is_parentheses)
-		new_cnt->cmd.is_parentheses = old_cnt->cmd.is_parentheses;
+		node_cnt(new_node)->cmd.is_parentheses = old_cnt->cmd.is_parentheses;
+	return (ret);
 }
 
 static t_btnode	*expand_btree_node(t_btnode *node,
 						enum e_expand_type expand,
 						bool *had_expand)
 {
-	t_content_node	*cnt;
 	t_btnode		*tree;
+	int				size_before;
 
 	if (btree_is_leaf(node))
 	{
-		cnt = (t_content_node *)node->content;
-		if (is_expansion_needed(cnt->op))
+		if (is_expansion_needed(node_cnt(node)->op))
 		{
-			tree = create_basic_tree(&cnt->cmd.tokens, node->parent, expand);
+			size_before = ft_lstsize(node_cnt(node)->cmd.tokens);
+			tree = create_basic_tree(&node_cnt(node)->cmd.tokens, node->parent,
+					expand);
 			if (tree != NULL)
-				update_node_properties(had_expand, tree, node, expand);
+				if (update_node_properties(tree, node, size_before, expand))
+					*had_expand = true;
 			btree_delete(&node, free_btree_node);
 			return (tree);
 		}

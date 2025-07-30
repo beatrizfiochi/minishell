@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 18:10:01 by djunho            #+#    #+#             */
-/*   Updated: 2025/07/30 16:06:24 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/07/30 22:27:10 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,5 +48,6 @@ char		*go_to_end_quote(char *content);
 int			check_token(t_list *prev, t_list *curr);
 int			check_special_with_reddir(t_list *token);
 int			process_tokens(char *line, t_list **head, t_list **prev);
+int			check_parentheses_syntax(t_list *token);
 
 #endif // AUX_H

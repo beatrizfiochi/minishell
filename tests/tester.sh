@@ -448,6 +448,12 @@ tester_grep             '&& echo 1'       'syntax error near unexpected token.*'
 tester_grep             '| echo 1'        'syntax error near unexpected token.*'
 tester_grep             '|| echo 1'       'syntax error near unexpected token.*'
 tester_grep             "echo oi | > outfile (ls)"             "syntax error near unexpected token.*"
+tester_grep             '(ls | pwd'             "syntax error near unexpected token.*"
+tester_grep             '(ls && pwd'            "syntax error near unexpected token.*"
+tester_grep             '(ls || pwd'            "syntax error near unexpected token.*"
+tester_grep             'ls | pwd)'             "syntax error near unexpected token.*"
+tester_grep             'ls && pwd)'            "syntax error near unexpected token.*"
+tester_grep             'ls || pwd)'            "syntax error near unexpected token.*"
 echo ""
 
 tester_grep             '1=10'       "1=10: command not found"
@@ -584,6 +590,7 @@ tester_with_real '<../delivery/Makefile grep i >grep && <grep wc'
 # Although the command below is not a good one, this test verifies that the
 # grep file is created and can be used by the second part of the command (the wc)
 tester_with_real '<infile grep i >grep | <grep wc'
+rm grep
 tester_with_real '< inacessible_file | cat -e > /tmp/output && cat /tmp/output'
 tester_with_real '< ../delivery/Makefile > /tmp/testfile && cat -e /tmp/testfile'
 tester_with_real 'cat -e < filenonexistent'
@@ -654,13 +661,9 @@ tester_with_real 'y=1 && (x=11 && y=2 && echo "x=$x; y=$y") && echo "x=$x; y=$y"
 tester_with_real '(ls | grep cmd) > /tmp/file'
 tester_with_real '(ls && grep cmd) > /tmp/file'
 tester_with_real '(ls || grep cmd) > /tmp/file'
-# parser
-tester_grep      '(ls | pwd'             "Error: Missing closing parenthesis!"
-tester_grep      '(ls && pwd'            "Error: Missing closing parenthesis!"
-tester_grep      '(ls || pwd'            "Error: Missing closing parenthesis!"
-tester_grep      'ls | pwd)'             "syntax error near unexpected token \")\""
-tester_grep      'ls && pwd)'            "syntax error near unexpected token \")\""
-tester_grep      'ls || pwd)'            "syntax error near unexpected token \")\""
+# tester_with_real '((echo oi && (echo ola || ls) | echo meio) | cat > out) | cat out'
+tester_with_real '((echo oi && (echo ola || ls) | echo meio) | cat > out) && cat out'
+rm out
 
 # All Mariaoli tests for parenthesis
 tester_with_real 'ls | (echo oi | echo fim) | sort && echo alo'
@@ -711,11 +714,13 @@ tester_with_real '(ls && ls -la) | grep mi'
 tester_with_real '(export var1=123 && echo $var1) | echo $var1'
 tester_with_real '(export var2=789) && (echo $var2)'
 tester_with_real '(cd) && pwd > out && (ls | cat out)'
+rm out
 # No meaning comparing the env command between bash and the minishell
 # tester_with_real 'env | (sort -r && cat)'
 tester_with_real 'export var2=789 && (echo $var2)'
 tester_with_real '(echo "Line 1" && echo "Line 2" >/tmp/file1 || echo "Fallback") >/tmp/combined_output'
 tester_with_real '((echo "Inner subshell") && (echo "Outer subshell" >nestedfile)) || echo "Error"'
+rm nestedfile
 tester_with_real '(cat <<EOF | grep "word") | (cat >/tmp/pipelinefile && echo "Pipeline Done")'
 tester_with_real 'tm -rf /tmp/dir && (mkdir /tmp/dir && cd /tmp/dir && touch /tmp/file && echo "Success") || echo "Failed"'
 tester_with_real '(ls nonexistentfile && echo "This wont print") || echo "Handled failure" >/tmp/errorlog'

@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 18:34:50 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/07/27 12:30:29 by djunho           ###   ########.fr       */
+/*   Updated: 2025/07/30 22:06:51 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,9 +58,11 @@ static t_btnode	*create_first(t_list **tokens, t_btnode *parent,
 	t_btnode					*tree;
 	struct s_split_token_list	split;
 
-	if ((*expand == EXP_PAREN) && (op_list(*tokens) == OP_PAREN_OPEN)
-		&& (check_enclosure(tokens, expand) == false))
-		return (NULL);
+	if ((*expand == EXP_PAREN) && (op_list(*tokens) == OP_PAREN_OPEN))
+	{
+		if (check_enclosure(tokens, expand) == false)
+			*expand = EXP_NORMAL;
+	}
 	op_node = search_op(*tokens, *expand);
 	if ((op_node == NULL) || ((op_node->next == NULL)
 			&& (op_list(op_node) == OP_PAREN_CLOSE)))
