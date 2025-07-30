@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 15:26:54 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/07/30 15:41:01 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/07/30 16:03:51 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,33 +103,17 @@ t_list	*exit_tokenization(t_list *prev_token, t_list *head_token)
 t_list	*tokenization(char *line)
 {
 	t_list	*head_token;
-	t_list	*new_token;
-	t_list	*prev_token;
-	int		len;
+	t_list	*last_token;
 
 	head_token = NULL;
-	prev_token = NULL;
+	last_token = NULL;
 	if (line == NULL)
 		return (NULL);
-	while (*line != '\0')
-	{
-		while (*line == ' ')
-			line++;
-		if (*line == '\0')
-			break ;
-		search_token(line, &len);
-		if (len == -1)
-			return (exit_tokenization(prev_token, head_token));
-		new_token = create_token(line, len);
-		ft_lstadd_back(&head_token, new_token);
-		if (check_token(prev_token, new_token) == EXIT_FAILURE)
-			return (exit_tokenization(new_token, head_token));
-		prev_token = new_token;
-		line += len;
-	}
-	if (check_token(prev_token, NULL) == EXIT_FAILURE)
-		return (exit_tokenization(new_token, head_token));
+	if (process_tokens(line, &head_token, &last_token) == EXIT_FAILURE)
+		return (NULL);
+	if (check_token(last_token, NULL) == EXIT_FAILURE)
+		return (exit_tokenization(last_token, head_token));
 	if (check_special_with_reddir(head_token) == EXIT_FAILURE)
-		return (exit_tokenization(new_token, head_token));
+		return (exit_tokenization(last_token, head_token));
 	return (head_token);
 }

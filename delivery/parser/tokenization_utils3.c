@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/29 23:17:46 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/07/30 15:18:23 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/07/30 16:03:17 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,30 @@ int	check_token(t_list *prev, t_list *curr)
 		return (EXIT_FAILURE);
 	else if ((curr_op == OP_CMD) && (prev_op == OP_PAREN_CLOSE))
 		return (EXIT_FAILURE);
+	return (EXIT_SUCCESS);
+}
+
+int	process_tokens(char *line, t_list **head, t_list **prev)
+{
+	t_list	*new_token;
+	int		len;
+
+	while (*line != '\0')
+	{
+		while (*line == ' ')
+			line++;
+		if (*line == '\0')
+			break ;
+		search_token(line, &len);
+		if (len == -1)
+			return (exit_tokenization(*prev, *head), EXIT_FAILURE);
+		new_token = create_token(line, len);
+		ft_lstadd_back(head, new_token);
+		if (check_token(*prev, new_token) == EXIT_FAILURE)
+			return (exit_tokenization(new_token, *head), EXIT_FAILURE);
+		*prev = new_token;
+		line += len;
+	}
 	return (EXIT_SUCCESS);
 }
 
