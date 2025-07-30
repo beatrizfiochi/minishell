@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 18:10:01 by djunho            #+#    #+#             */
-/*   Updated: 2025/07/30 22:27:10 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/07/30 23:40:12 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,6 @@ enum e_expand_type
 };
 
 bool		is_quote(char c);
-bool		is_basic_op_list(t_list *list);
 bool		is_basic_op(t_node_op op);
 
 t_list		*search_any_op(t_list *tokens);
