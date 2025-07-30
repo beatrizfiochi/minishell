@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tree_creator.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: djunho <djunho@student.42porto.com>        +#+  +:+       +#+        */
+/*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 19:01:19 by djunho            #+#    #+#             */
-/*   Updated: 2025/07/27 12:29:43 by djunho           ###   ########.fr       */
+/*   Updated: 2025/07/30 15:16:22 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,6 @@ bool		check_enclosure(t_list **token_list,
 				enum e_expand_type *expand_type);
 
 t_btnode	*expand_tree_by_type(t_btnode *tree, enum e_expand_type type,
-							bool *expanded);
+				bool *expanded);
 
 #endif // TREE_CREATOR_H

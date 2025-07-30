@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 18:57:02 by djunho            #+#    #+#             */
-/*   Updated: 2025/07/30 10:24:14 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/07/30 15:15:51 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,4 +103,3 @@ bool	check_enclosure(t_list **token_list, enum e_expand_type *expand_type)
 	*expand_type = EXP_NORMAL;
 	return (true);
 }
-
