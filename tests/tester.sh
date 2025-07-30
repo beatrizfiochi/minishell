@@ -590,7 +590,7 @@ tester_with_real '<../delivery/Makefile grep i >grep && <grep wc'
 # Although the command below is not a good one, this test verifies that the
 # grep file is created and can be used by the second part of the command (the wc)
 tester_with_real '<infile grep i >grep | <grep wc'
-rm grep
+rm -f grep
 tester_with_real '< inacessible_file | cat -e > /tmp/output && cat /tmp/output'
 tester_with_real '< ../delivery/Makefile > /tmp/testfile && cat -e /tmp/testfile'
 tester_with_real 'cat -e < filenonexistent'
