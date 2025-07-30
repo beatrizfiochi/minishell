@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 15:26:54 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/07/29 23:18:20 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/07/30 10:58:43 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,5 +126,7 @@ t_list	*tokenization(char *line)
 		prev_token = new_token;
 		line += len;
 	}
+	if (check_token(prev_token, NULL) == EXIT_FAILURE)
+			return (exit_tokenization(new_token, head_token));
 	return (head_token);
 }

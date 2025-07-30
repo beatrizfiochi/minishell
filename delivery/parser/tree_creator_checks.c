@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 18:57:02 by djunho            #+#    #+#             */
-/*   Updated: 2025/07/25 21:17:02 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/07/30 10:24:14 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ static t_btnode	*check_tree_syntax_leaf(t_btnode *node)
 	operator = search_any_op(content->cmd.tokens);
 	if (operator != NULL)
 	{
-		printf("Error: syntax error near unexpected token \"%s\"\n",
+		printf("syntax error near unexpected token \"%s\"\n",
 			(char *)operator->content);
 		btree_delete(&node, free_btree_node);
 		return (NULL);
@@ -103,3 +103,4 @@ bool	check_enclosure(t_list **token_list, enum e_expand_type *expand_type)
 	*expand_type = EXP_NORMAL;
 	return (true);
 }
+
