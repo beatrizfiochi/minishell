@@ -6,7 +6,7 @@
 /*   By: djunho <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 11:30:30 by djunho            #+#    #+#             */
-/*   Updated: 2025/07/23 08:40:45 by djunho           ###   ########.fr       */
+/*   Updated: 2025/07/30 23:21:58 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ int		process_redirect(t_shell *shell, int ret, t_btnode *node,
 int		prepare_pipe(t_shell *shell, const t_btnode *node);
 int		prepare_redirect_out(t_shell *shell, t_btnode *op_node);
 int		prepare_redirect_in(t_shell *shell, t_btnode *op_node);
+int		prepare_redirect(t_shell *shell, t_btnode *node, t_cmd *cmd);
 
 void	close_redirects(t_shell *shell);
 

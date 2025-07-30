@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/05 13:53:41 by djunho            #+#    #+#             */
-/*   Updated: 2025/07/29 18:49:03 by djunho           ###   ########.fr       */
+/*   Updated: 2025/07/30 23:54:03 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 #include "execution.h"
 #include "../parser/parser.h"
 #include "../builtins/builtins.h"
+#include "../redirect/redirect.h"
 
 static int	execute_execve(t_btnode *node, t_shell *shell)
 {
@@ -51,6 +52,9 @@ int	run_cmd(t_shell *shell, t_btnode *node, t_node_op parent_op)
 	shell->last_cmd = &content->cmd;
 	if (content->cmd.redir.fd_out > 0)
 		shell->is_last_redirect = true;
+	ret = prepare_redirect(shell, node->parent, &content->cmd);
+	if (ret != EXIT_SUCCESS)
+		return (ret);
 	search_and_expand(&content->cmd.tokens, shell->variable_list, shell);
 	handle_var_assign(shell, node);
 	if (content->cmd.tokens == NULL)

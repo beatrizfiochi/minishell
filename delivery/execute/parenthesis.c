@@ -6,7 +6,7 @@
 /*   By: djunho <djunho@student.42porto.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/23 19:20:56 by djunho            #+#    #+#             */
-/*   Updated: 2025/07/28 21:43:22 by djunho           ###   ########.fr       */
+/*   Updated: 2025/07/30 23:23:10 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include <stdio.h>			// p_error
@@ -15,6 +15,7 @@
 #include "../minishell.h"
 #include "../cmd.h"
 #include "../btree/btree.h"
+#include "../redirect/redirect.h"
 #include "exec_utils.h"
 #include "execution.h"
 
@@ -53,6 +54,7 @@ int	prepare_parenthesis(t_shell *shell, t_btnode *node, bool *should_continue)
 {
 	t_content_node	*content;
 	pid_t			pid;
+	int				ret;
 
 	content = (t_content_node *)node->content;
 	if (!content->cmd.is_parentheses)
@@ -65,6 +67,9 @@ int	prepare_parenthesis(t_shell *shell, t_btnode *node, bool *should_continue)
 	}
 	if (pid == 0)
 	{
+		ret = prepare_redirect(shell, node->parent, &content->cmd);
+		if (ret != EXIT_SUCCESS)
+			return (ret);
 		handle_fd_on_parenthesis(shell, content);
 		return (EXIT_SUCCESS);
 	}
