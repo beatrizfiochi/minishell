@@ -6,7 +6,7 @@
 /*   By: djunho <djunho@student.42porto.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/23 19:20:56 by djunho            #+#    #+#             */
-/*   Updated: 2025/07/28 21:43:22 by djunho           ###   ########.fr       */
+/*   Updated: 2025/07/31 11:25:22 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include <stdio.h>			// p_error
@@ -15,18 +15,13 @@
 #include "../minishell.h"
 #include "../cmd.h"
 #include "../btree/btree.h"
+#include "../redirect/redirect.h"
 #include "exec_utils.h"
 #include "execution.h"
 
-static void	handle_fd_on_parenthesis(t_shell *shell, t_content_node	*content)
+static void	handle_fd_on_parenthesis_in(t_shell *shell, t_cmd *cmd,
+				bool is_pipe)
 {
-	bool	is_pipe;
-	t_cmd	*cmd;
-
-	shell->last_pid = -1;
-	shell->last_cmd = NULL;
-	is_pipe = (shell->pipe.pipe[0] != -1);
-	cmd = &content->cmd;
 	if (cmd->redir.fd_in > 0)
 	{
 		dup2(cmd->redir.fd_in, STDIN_FILENO);
@@ -34,6 +29,11 @@ static void	handle_fd_on_parenthesis(t_shell *shell, t_content_node	*content)
 	}
 	else if ((shell->pipe.carry_over_fd != -1) && (is_pipe))
 		dup2(shell->pipe.carry_over_fd, STDIN_FILENO);
+}
+
+static void	handle_fd_on_parenthesis_out(t_shell *shell, t_cmd *cmd,
+				bool is_pipe)
+{
 	if (cmd->redir.fd_out > 0)
 	{
 		dup2(cmd->redir.fd_out, STDOUT_FILENO);
@@ -46,6 +46,19 @@ static void	handle_fd_on_parenthesis(t_shell *shell, t_content_node	*content)
 		shell->out_fd = dup(STDOUT_FILENO);
 	else
 		shell->out_fd = dup(shell->pipe.pipe[1]);
+}
+
+static void	handle_fd_on_parenthesis(t_shell *shell, t_content_node	*content)
+{
+	bool	is_pipe;
+	t_cmd	*cmd;
+
+	shell->last_pid = -1;
+	shell->last_cmd = NULL;
+	is_pipe = (shell->pipe.pipe[0] != -1);
+	cmd = &content->cmd;
+	handle_fd_on_parenthesis_in(shell, cmd, is_pipe);
+	handle_fd_on_parenthesis_out(shell, cmd, is_pipe);
 	close_any_possible_fd(shell);
 }
 
@@ -53,6 +66,7 @@ int	prepare_parenthesis(t_shell *shell, t_btnode *node, bool *should_continue)
 {
 	t_content_node	*content;
 	pid_t			pid;
+	int				ret;
 
 	content = (t_content_node *)node->content;
 	if (!content->cmd.is_parentheses)
@@ -65,6 +79,9 @@ int	prepare_parenthesis(t_shell *shell, t_btnode *node, bool *should_continue)
 	}
 	if (pid == 0)
 	{
+		ret = prepare_redirect(shell, node->parent, &content->cmd);
+		if (ret != EXIT_SUCCESS)
+			return (ret);
 		handle_fd_on_parenthesis(shell, content);
 		return (EXIT_SUCCESS);
 	}

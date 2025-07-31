@@ -549,6 +549,7 @@ tester_with_real 'rm /tmp/test && ls | grep mini > /tmp/test'
 tester_with_real 'rm /tmp/test && ls | grep mini > /tmp/test | echo 1'
 tester_with_real 'rm /tmp/test && ls | grep mini > /tmp/test | ls | grep mini'
 tester_with_real 'rm /tmp/test && ls | grep mini > /tmp/test && echo 1'
+tester_with_real 'cat < /tmp/nonexistentfile >> /tmp/nonexistentfile'
 tester_grep      '> $invalid' 'Ambiguous redirect'
 tester_grep      '>> $invalid' 'Ambiguous redirect'
 
@@ -591,6 +592,10 @@ tester_with_real '<../delivery/Makefile grep i >grep && <grep wc'
 # grep file is created and can be used by the second part of the command (the wc)
 tester_with_real '<infile grep i >grep | <grep wc'
 rm -f grep
+#
+# The following command is tested twice, because the Pipe can invert the order of the "No such file or directory" messages
+tester_grep '(rm infile || echo -n) && (rm grep || echo -n) && <infile grep i >grep | <grep wc' 'grep: No such file or directory'
+tester_grep '(rm infile || echo -n) && (rm grep || echo -n) && <infile grep i >grep | <grep wc' 'infile: No such file or directory'
 tester_with_real '< inacessible_file | cat -e > /tmp/output && cat /tmp/output'
 tester_with_real '< ../delivery/Makefile > /tmp/testfile && cat -e /tmp/testfile'
 tester_with_real 'cat -e < filenonexistent'

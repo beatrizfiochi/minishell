@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 18:59:31 by djunho            #+#    #+#             */
-/*   Updated: 2025/07/27 17:28:34 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/07/31 15:06:59 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,40 +14,15 @@
 #include <stdio.h>				// printf
 #include "libft/libft.h"
 #include "minishell.h"
+#include "debug.h"
 #include "parser/parser.h"
 #include "variables/variables.h"
 #include "signals/signals.h"
 #include "execute/execute_debug.h"		// debug_execution_pos();
 
-void	clear_minishell(t_shell *shell)
-{
-	btree_clear(&shell->cmds, free_btree_node);
-	if (shell->variable_list != NULL)
-		ft_lstclear(&shell->variable_list, free_var_content);
-	if (shell->tmp_var_list != NULL)
-		ft_lstclear(&shell->tmp_var_list, free_var_content);
-}
-
 static void	init_var_list(t_shell *shell, char *envp[])
 {
-	#ifdef TEST
-	char	*name_1 = "oi";
-	char	*value_1 = "hi";
-	char	*name_2 = "tchau";
-	char	*value_2 = "bye";
-	char	*name_3 = "oooi";
-	char	*value_3 = "hhhi";
-	char	*name_4 = "oiii";
-	char	*value_4 = "hiii";
-
-	shell->variable_list = create_var_node(name_1, value_1, false);
-	shell->variable_list->next = create_var_node(name_2, value_2, false);
-	shell->variable_list->next->next = create_var_node(name_3, value_3, false);
-	shell->variable_list->next->next->next = create_var_node(name_4, value_4, false);
-	shell->variable_list->next->next->next->next = NULL;
-
-	#endif // TEST
-
+	debug_env_var_init(shell);
 	envp_list(shell, envp);
 }
 
@@ -55,15 +30,10 @@ static void	init_shell(t_shell *shell)
 {
 	shell->variable_list = NULL;
 	shell->tmp_var_list = NULL;
-	shell->last_exit_status = EXIT_SUCCESS;
 	shell->nlines = 0;
 	shell->last_pid = -1;
 	shell->cmds = NULL;
-	shell->is_running_redirect = false;
-	shell->is_last_redirect = false;
-	shell->pipe.carry_over_fd = -1;
-	shell->pipe.pipe[0] = -1;
-	shell->pipe.pipe[1] = -1;
+	reset_minishell(shell, EXIT_SUCCESS);
 	shell->in_fd = STDIN_FILENO;
 	shell->out_fd = STDOUT_FILENO;
 }
@@ -80,25 +50,7 @@ static int	run_minishell(char *envp[])
 	while (ret >= 0)
 	{
 		debug_execution_pos(&shell);
-		#ifdef TEST
-		t_list	*variable_iter;
-		variable_iter = shell.variable_list;
-		while (variable_iter != NULL)
-		{
-			printf("var_name = %s, var_value = %s\n",
-				((t_content_var *)(variable_iter->content))->var_name,
-				((t_content_var *)(variable_iter->content))->var_value);
-			variable_iter = variable_iter->next;
-		}
-		variable_iter = shell.tmp_var_list;
-		while (variable_iter != NULL)
-		{
-			printf("var_name = %s, var_value = %s\n",
-				((t_content_var *)(variable_iter->content))->var_name,
-				((t_content_var *)(variable_iter->content))->var_value);
-			variable_iter = variable_iter->next;
-		}
-		#endif // TEST
+		debug_print_env_var(&shell);
 		ret = read_command(&shell);
 	}
 	clear_minishell(&shell);
