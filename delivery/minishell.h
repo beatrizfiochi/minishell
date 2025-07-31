@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 13:37:40 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/07/24 11:11:26 by djunho           ###   ########.fr       */
+/*   Updated: 2025/07/31 14:34:04 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ typedef struct s_shell
 int		read_command(t_shell *shell);
 void	free_btree_node(void *content);
 void	clear_minishell(t_shell *shell);
+void	reset_minishell(t_shell *shell, int ret);
 char	*sh_read_line(t_shell *shell, const char *prompt);
 void	sh_add_history(t_shell *shell, const char *line);
 bool	is_directory(const char *path);

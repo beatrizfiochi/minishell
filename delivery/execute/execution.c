@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/05 13:53:41 by djunho            #+#    #+#             */
-/*   Updated: 2025/07/30 23:54:03 by djunho           ###   ########.fr       */
+/*   Updated: 2025/07/31 14:11:49 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,18 @@ static int	execute_execve(t_btnode *node, t_shell *shell)
 	return (0);
 }
 
+static int	run_cmd_execution(t_shell *shell, t_btnode *node)
+{
+	int	ret;
+
+	ret = EXIT_CMD_NOT_FOUND;
+	if (!is_pipe(node))
+		ret = execute_builtin(&node_cnt(node)->cmd, shell, true);
+	if (ret == EXIT_CMD_NOT_FOUND)
+		ret = execute_execve(node, shell);
+	return (ret);
+}
+
 int	run_cmd(t_shell *shell, t_btnode *node, t_node_op parent_op)
 {
 	t_content_node	*content;
@@ -66,11 +78,7 @@ int	run_cmd(t_shell *shell, t_btnode *node, t_node_op parent_op)
 			ft_lstclear(&shell->tmp_var_list, free_var_content);
 		return (EXIT_SUCCESS);
 	}
-	ret = EXIT_CMD_NOT_FOUND;
-	if (!is_pipe(node))
-		ret = execute_builtin(&content->cmd, shell, true);
-	if (ret == EXIT_CMD_NOT_FOUND)
-		ret = execute_execve(node, shell);
+	ret = run_cmd_execution(shell, node);
 	ft_lstclear(&shell->tmp_var_list, free_var_content);
 	return (ret);
 }
