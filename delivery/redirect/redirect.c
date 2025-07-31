@@ -111,7 +111,7 @@ int	process_redirect(t_shell *shell, int ret, t_btnode *node,
 {
 	(void)node;
 	*should_continue = false;
-	if ((shell->last_cmd != NULL)
+	if ((shell->last_cmd != NULL) && (shell->last_pid != -1)
 		&& (!shell->last_cmd->is_builtin && !shell->last_cmd->finished))
 		ret = wait_previous_process(shell);
 	return (ret);

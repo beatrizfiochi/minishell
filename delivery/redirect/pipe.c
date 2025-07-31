@@ -6,7 +6,7 @@
 /*   By: djunho <djunho@student.42porto.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 19:23:07 by djunho            #+#    #+#             */
-/*   Updated: 2025/07/27 18:08:26 by djunho           ###   ########.fr       */
+/*   Updated: 2025/07/31 09:53:29 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ int	process_pipe(t_shell *shell, t_btnode *node)
 	close(shell->pipe.pipe[1]);
 	if (pipe(shell->pipe.pipe) < 0)
 		return (1);
-	if (!is_op_redirect_type(get_next_operation(node)))
+	if (get_next_operation(node) != OP_PIPE)
 	{
 		shell->is_last_redirect = true;
 	}
