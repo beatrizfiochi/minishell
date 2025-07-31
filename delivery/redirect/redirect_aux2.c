@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/23 08:14:24 by djunho            #+#    #+#             */
-/*   Updated: 2025/07/31 23:08:26 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/07/31 21:19:36 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include "../parser/parser.h"
 #include "../execute/execution.h"
 #include "../execute/exec_utils.h"
+#include "redirect_aux.h"
 
 void	close_redirects(t_shell *shell)
 {
@@ -67,4 +68,38 @@ void	configure_redir(t_shell *shell, const t_cmd *cmd)
 	else if (shell->out_fd != STDOUT_FILENO)
 		dup2(shell->out_fd, STDOUT_FILENO);
 	close_any_possible_fd(shell);
+}
+
+/**
+ * Checks whether the given binary tree node represents a command branch.
+ *
+ * This function traverses the binary tree starting from the given node and
+ * determines if the node or any of its relevant children represent a command
+ * operation (OP_CMD). It also handles cases where the node contains redirection
+ * file operations.
+ *
+ * @param node A pointer to the binary tree node to check. The node is expected
+ *             to be of type `t_btnode` and may contain operation and content data.
+ * @return `true` if the node or its relevant children represent a command branch,
+ *         `false` otherwise.
+ */
+bool	is_cmd_branch(t_btnode *node)
+{
+	t_btnode		*aux;
+
+	if (node == NULL || node->content == NULL)
+		return (false);
+	aux = node;
+	if (node_cnt(aux)->op == OP_CMD)
+		return (true);
+	while (aux != NULL)
+	{
+		if (is_redirect_file_op(node_cnt(aux)->op))
+			aux = aux->left;
+		else if (node_cnt(aux)->op == OP_CMD)
+			return (true);
+		else
+			return (false);
+	}
+	return (false);
 }

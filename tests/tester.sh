@@ -550,6 +550,8 @@ tester_with_real 'rm /tmp/test && ls | grep mini > /tmp/test | echo 1'
 tester_with_real 'rm /tmp/test && ls | grep mini > /tmp/test | ls | grep mini'
 tester_with_real 'rm /tmp/test && ls | grep mini > /tmp/test && echo 1'
 tester_with_real 'cat < /tmp/nonexistentfile >> /tmp/nonexistentfile'
+touch /tmp/file2 
+tester_with_real 'rm /tmp/file2 || echo -n && <../delivery/Makefile cat>/tmp/outfile -e | < ../delivery/cmd.h sort | >> /tmp/file2 wc && cat /tmp/file2'
 tester_grep      '> $invalid' 'Ambiguous redirect'
 tester_grep      '>> $invalid' 'Ambiguous redirect'
 
