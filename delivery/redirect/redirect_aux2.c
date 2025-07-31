@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/23 08:14:24 by djunho            #+#    #+#             */
-/*   Updated: 2025/07/31 11:08:29 by djunho           ###   ########.fr       */
+/*   Updated: 2025/07/31 23:08:26 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,10 +31,11 @@ char	*get_redir_filename(t_shell *shell, t_btnode *file_node)
 	token = ((t_content_node *)(file_node->content))->cmd.tokens;
 	expand_variable_token(&token, shell->variable_list, shell);
 	expand_wildcards_token(&token);
+	remove_empty_token(&token);
 	clean_token_quotes(token);
 	((t_content_node *)(file_node->content))->cmd.tokens = token;
 	size = ft_lstsize(token);
-	if ((size != 1) || (((char *)token->content)[0] == '\0'))
+	if (size != 1)
 	{
 		ft_fprintf(STDERR_FILENO, "Ambiguous redirect\n");
 		return (NULL);
