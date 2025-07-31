@@ -23,43 +23,37 @@
 #include "env_utils.h"
 #include "../minishell.h"
 
-static int	execute_command(char **args, char **envp, t_cmd *cmd,
-								t_shell *shell)
+static int	execute_command(t_cmd *cmd, t_shell *shell)
 {
 	int		ret;
+	char	**args;
+	char	**envp;
+	int		argc;
 
-	if ((args == NULL) || (args[0] == NULL))
-		return (EXIT_FAILURE);
 	subprocess_signals();
 	ret = execute_builtin(cmd, shell, false);
 	if (ret != EXIT_CMD_NOT_FOUND)
 		return (ret);
-	if ((args[0][0] == '.') || (args[0][0] == '/'))
-	{
-		if (is_directory(args[0]))
-		{
-			ft_fprintf(STDERR_FILENO, "%s: Is a directory\n", args[0]);
-			return (EXIT_CMD_CANNOT_EXEC);
-		}
-	}
-	return (exec_cmd(shell, args, envp));
-}
-
-int	run_child(t_cmd *cmd, t_shell *shell)
-{
-	char	**args;
-	char	**envp;
-	int		ret;
-	int		argc;
-
+	ret = EXIT_FAILURE;
 	args = convert_list_to_vector(cmd->tokens, &argc);
+	if ((args == NULL) || (args[0] == NULL))
+		return (EXIT_FAILURE);
 	envp = convert_list_to_envp(shell->variable_list, shell->tmp_var_list);
-	ret = execute_command(args, envp, cmd, shell);
-	clear_minishell(shell);
+	if (envp != NULL)
+		ret = exec_cmd(shell, args, envp);
 	if (args != NULL)
 		free(args);
 	if (envp != NULL)
 		free_envp(envp);
+	return (ret);
+}
+
+int	run_child(t_cmd *cmd, t_shell *shell)
+{
+	int		ret;
+
+	ret = execute_command(cmd, shell);
+	clear_minishell(shell);
 	return (ret);
 }
 
