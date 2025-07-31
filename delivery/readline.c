@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/10 20:27:08 by djunho            #+#    #+#             */
-/*   Updated: 2025/07/12 13:33:19 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/07/31 20:55:28 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 #include "minishell.h"
+#include "signals/signals.h"
 
 char	*sh_read_line(t_shell *shell, const char *prompt)
 {

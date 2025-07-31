@@ -6,7 +6,7 @@
 #    By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/27 13:09:33 by djunho            #+#    #+#              #
-#    Updated: 2025/07/31 15:07:47 by djunho           ###   ########.fr        #
+#    Updated: 2025/07/31 20:50:22 by bfiochi-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,6 +31,7 @@ SRCS = main.c read_command.c utils.c debug.c debug2.c readline.c shell_aux.c \
 	builtins/env/env.c builtins/export/export.c builtins/pwd/pwd.c \
 	builtins/unset/unset.c \
 	signals/handle_signals.c signals/heredoc_signals.c \
+	signals/handle_signals_utils.c \
 	builtins/exit/exit.c \
 	variables/handle_variables.c variables/env_variables.c \
 	variables/shell_level_var.c variables/handle_var_utils.c \

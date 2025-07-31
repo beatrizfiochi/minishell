@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 15:26:54 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/07/30 22:20:34 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/08/01 00:00:39 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static int	scan_until_op_or_error(char *l, char *c, int *len)
 {
 	char	*next_char;
 
-	while (l[*len] != '\0' && l[*len] != ' ')
+	while (l[*len] != '\0' && !ft_isspace(l[*len]))
 	{
 		if (is_op(&l[*len]) > 0)
 			break ;
@@ -47,7 +47,7 @@ static void	search_token_utils(char *l, char *c, int *len)
 {
 	bool	valid_op;
 
-	if ((*l == ' ') && (*len == 1))
+	if ((ft_isspace(*l)) && (*len == 1))
 		return ;
 	valid_op = false;
 	while (valid_op != true)
@@ -81,7 +81,7 @@ void	search_token(char *line, int *len)
 		*len += op_len;
 		return ;
 	}
-	if (line[*len] == ' ' && *len == 0)
+	if (ft_isspace(line[*len]) && *len == 0)
 		(*len)++;
 	search_token_utils(line, &c, len);
 }

@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 17:00:20 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/07/31 14:34:25 by djunho           ###   ########.fr       */
+/*   Updated: 2025/07/31 20:56:30 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,7 @@ int	read_command(t_shell *shell)
 	line = sh_read_line(shell, COLOR_GREEN PROMPT COLOR_RESET);
 	if (line == NULL)
 		return (-1);
+	handle_ctrl_c(shell);
 	sh_add_history(shell, line);
 	token_list = tokenization(line);
 	if (token_list == NULL)

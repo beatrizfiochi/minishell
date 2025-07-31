@@ -1,29 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   signals.h                                          :+:      :+:    :+:   */
+/*   ft_isspace.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/21 21:18:36 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/07/31 20:48:36 by bfiochi-         ###   ########.fr       */
+/*   Created: 2025/07/31 22:20:22 by bfiochi-          #+#    #+#             */
+/*   Updated: 2025/07/31 22:20:35 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef SIGNALS_H
-# define SIGNALS_H
-
-# include "../minishell.h"
-
-extern int	g_signal;
-
-void		handle_sigint(int signal);
-void		init_signals(void);
-void		heredoc_signals(void);
-void		subprocess_signals(void);
-void		ignore_signals(void);
-void		handle_signal_output(int ret);
-void		heredoc_ignore_signals(void);
-void		handle_ctrl_c(t_shell *shell);
-
-#endif
+int	ft_isspace(char c)
+{
+	if (c == '\t' || c == '\n' || c == '\v' || c == '\f'
+		|| c == '\r' || c == ' ')
+		return (1);
+	return (0);
+}
