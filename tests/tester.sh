@@ -856,6 +856,8 @@ tester_with_real 'exit 1 221'
 tester_with_real 'exit 1 221 1243'
 tester_with_real 'exit 1asd 221 1243'
 tester_with_real 'exit | exit | exit'
+tester_with_real 'exit > /tmp/out && cat /tmp/out'
+tester_with_real 'exit 3 > /tmp/out && cat /tmp/out'
 echo ""
 echo -e "${MAGENTA}Testing unset${RESET}"
 tester_with_real "unset"
