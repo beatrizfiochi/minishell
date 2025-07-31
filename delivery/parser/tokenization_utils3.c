@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/29 23:17:46 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/07/30 16:07:05 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/07/31 22:21:36 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ int	process_tokens(char *line, t_list **head, t_list **prev)
 
 	while (*line != '\0')
 	{
-		while (*line == ' ')
+		while (ft_isspace(*line) == 1)
 			line++;
 		if (*line == '\0')
 			break ;
