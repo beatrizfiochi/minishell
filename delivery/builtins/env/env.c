@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 10:59:36 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/07/16 13:34:39 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/07/31 21:18:25 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ static void	check_list_and_print(t_list *var_list)
 static int	env_error(void)
 {
 	ft_fprintf(STDERR_FILENO, "env: Arguments and options not allowed\n");
-	return (EXIT_FAILURE);
+	return (EXIT_INCORRECT_USAGE);
 }
 
 // env built-in without options and arguments
