@@ -6,7 +6,7 @@
 /*   By: djunho <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 10:56:42 by djunho            #+#    #+#             */
-/*   Updated: 2025/07/30 23:56:59 by djunho           ###   ########.fr       */
+/*   Updated: 2025/07/31 11:08:37 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 #include <fcntl.h>			// open()
 #include <unistd.h>
 #include "../minishell.h"
-#include "../execute/execution.h"
 #include "../execute/exec_utils.h"
 #include "redirect_aux.h"
 
@@ -115,30 +114,4 @@ int	process_redirect(t_shell *shell, int ret, t_btnode *node,
 		&& (!shell->last_cmd->is_builtin && !shell->last_cmd->finished))
 		ret = wait_previous_process(shell);
 	return (ret);
-}
-
-void	configure_redir(t_shell *shell, const t_cmd *cmd)
-{
-	bool	is_pipe;
-
-	is_pipe = (shell->pipe.pipe[0] != -1);
-	if (cmd->redir.fd_in > 0)
-	{
-		dup2(cmd->redir.fd_in, STDIN_FILENO);
-		close(cmd->redir.fd_in);
-	}
-	else if ((shell->pipe.carry_over_fd != -1) && (is_pipe))
-		dup2(shell->pipe.carry_over_fd, STDIN_FILENO);
-	else if (is_pipe)
-		close(shell->pipe.pipe[0]);
-	if (cmd->redir.fd_out > 0)
-	{
-		dup2(cmd->redir.fd_out, STDOUT_FILENO);
-		close(cmd->redir.fd_out);
-	}
-	else if (is_pipe && !shell->is_last_redirect)
-		dup2(shell->pipe.pipe[1], STDOUT_FILENO);
-	else if (shell->out_fd != STDOUT_FILENO)
-		dup2(shell->out_fd, STDOUT_FILENO);
-	close_any_possible_fd(shell);
 }

@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/23 08:14:24 by djunho            #+#    #+#             */
-/*   Updated: 2025/07/28 21:57:31 by djunho           ###   ########.fr       */
+/*   Updated: 2025/07/31 11:08:29 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include "../minishell.h"
 #include "../parser/parser.h"
 #include "../execute/execution.h"
+#include "../execute/exec_utils.h"
 
 void	close_redirects(t_shell *shell)
 {
@@ -39,4 +40,30 @@ char	*get_redir_filename(t_shell *shell, t_btnode *file_node)
 		return (NULL);
 	}
 	return (((t_content_node *)(file_node->content))->cmd.tokens->content);
+}
+
+void	configure_redir(t_shell *shell, const t_cmd *cmd)
+{
+	bool	is_pipe;
+
+	is_pipe = (shell->pipe.pipe[0] != -1);
+	if (cmd->redir.fd_in > 0)
+	{
+		dup2(cmd->redir.fd_in, STDIN_FILENO);
+		close(cmd->redir.fd_in);
+	}
+	else if ((shell->pipe.carry_over_fd != -1) && (is_pipe))
+		dup2(shell->pipe.carry_over_fd, STDIN_FILENO);
+	else if (is_pipe)
+		close(shell->pipe.pipe[0]);
+	if (cmd->redir.fd_out > 0)
+	{
+		dup2(cmd->redir.fd_out, STDOUT_FILENO);
+		close(cmd->redir.fd_out);
+	}
+	else if (is_pipe && !shell->is_last_redirect)
+		dup2(shell->pipe.pipe[1], STDOUT_FILENO);
+	else if (shell->out_fd != STDOUT_FILENO)
+		dup2(shell->out_fd, STDOUT_FILENO);
+	close_any_possible_fd(shell);
 }
