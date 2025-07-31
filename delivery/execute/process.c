@@ -122,12 +122,11 @@ int	process(t_shell *shell)
 	ret = btree_foreach_before_and_between_dfs(shell->cmds, &cfg);
 	if (ret != 0)
 		return (ret);
+	close_any_possible_fd(shell);
+	close_all_pipes(shell->cmds);
 	if (shell->last_pid > 0)
-	{
-		close_any_possible_fd(shell);
-		close_all_pipes(shell->cmds);
 		return (wait_previous_process(shell));
-	}
 	else
-		return (ret);
+		wait_previous_process(shell);
+	return (ret);
 }
