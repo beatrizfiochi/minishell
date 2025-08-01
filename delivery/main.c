@@ -6,18 +6,19 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 18:59:31 by djunho            #+#    #+#             */
-/*   Updated: 2025/08/03 11:24:06 by djunho           ###   ########.fr       */
+/*   Updated: 2025/08/18 19:35:37 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <fcntl.h>
 #include <unistd.h>				// isatty
-#include <stdio.h>				// printf
+#include "banner.h"
+#include "color.h"
 #include "libft/libft.h"
 #include "minishell.h"
 #include "debug.h"
-#include "parser/parser.h"
+#include "variables/expand_variables.h"
 #include "variables/variables.h"
-#include "signals/signals.h"
 #include "execute/execute_debug.h"		// debug_execution_pos();
 
 static void	init_var_list(t_shell *shell, char *envp[])
@@ -45,6 +46,11 @@ static int	run_minishell(char *envp[])
 
 	init_shell(&shell);
 	init_var_list(&shell, envp);
+	if (isatty(STDIN_FILENO))
+	{
+		print_banner(&shell);
+		ft_printf(COLOR_RESET"Developed by: bfiochi- and djunho\n\n");
+	}
 	update_shell_level(shell.variable_list);
 	ret = read_command(&shell);
 	while (ret >= 0)
@@ -64,9 +70,5 @@ int	main(int argc, char *argv[], char *envp[])
 {
 	(void)argc;
 	(void)argv;
-	if (isatty(STDIN_FILENO))
-	{
-		ft_printf("Hello, World of minishell!\n");
-	}
 	return (run_minishell(envp));
 }
