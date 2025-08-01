@@ -64,30 +64,43 @@ int	wait_previous_process(t_shell *shell)
 	return (EXIT_FAILURE);
 }
 
-int	exec_cmd(t_shell *shell, char **args, char **envp)
+static int	check_if_directory(char **argv)
+{
+	if ((argv[0][0] == '.') || (argv[0][0] == '/'))
+	{
+		if (is_directory(argv[0]))
+		{
+			ft_fprintf(STDERR_FILENO, "%s: Is a directory\n", argv[0]);
+			return (EXIT_CMD_CANNOT_EXEC);
+		}
+	}
+	return (EXIT_SUCCESS);
+}
+
+int	exec_cmd(t_shell *shell, char **argv, char **envp)
 {
 	char	*path;
 	char	*msg;
 
 	path = NULL;
 	msg = NULL;
-	if ((args[0][0] == '.') || (args[0][0] == '/'))
-		execve(args[0], args, envp);
+	if (check_if_directory(argv) != EXIT_SUCCESS)
+		return (EXIT_CMD_CANNOT_EXEC);
+	if ((argv[0][0] == '.') || (argv[0][0] == '/'))
+		execve(argv[0], argv, envp);
 	else
 	{
-		if (create_cmd_path(args[0], shell->variable_list, &path))
-			execve(path, args, envp);
+		if (create_cmd_path(argv[0], shell->variable_list, &path))
+			execve(path, argv, envp);
 		else
 			msg = "command not found";
 	}
 	if (msg == NULL)
 		msg = strerror(errno);
-	ft_fprintf(STDERR_FILENO, "%s: %s\n", args[0], msg);
+	ft_fprintf(STDERR_FILENO, "%s: %s\n", argv[0], msg);
 	if (path != NULL)
 		free(path);
 	if (errno == EACCES)
 		return (EXIT_CMD_CANNOT_EXEC);
-	else if (errno == ENOENT)
-		return (EXIT_CMD_NOT_FOUND);
 	return (EXIT_CMD_NOT_FOUND);
 }

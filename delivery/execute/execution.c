@@ -57,25 +57,25 @@ static int	run_cmd_execution(t_shell *shell, t_btnode *node)
 
 int	run_cmd(t_shell *shell, t_btnode *node, t_node_op parent_op)
 {
-	t_content_node	*content;
 	int				ret;
 
-	content = (t_content_node *)node->content;
-	shell->last_cmd = &content->cmd;
-	if (content->cmd.redir.fd_out > 0)
+	shell->last_cmd = &node_cnt(node)->cmd;
+	if (node_cnt(node)->cmd.redir.fd_out > 0)
 		shell->is_last_redirect = true;
-	ret = prepare_redirect(shell, node->parent, &content->cmd);
+	ret = prepare_redirect(shell, node->parent, &node_cnt(node)->cmd);
 	if (ret != EXIT_SUCCESS)
 		return (ret);
-	search_and_expand(&content->cmd.tokens, shell->variable_list, shell);
+	search_and_expand(&node_cnt(node)->cmd.tokens, shell->variable_list, shell);
 	handle_var_assign(shell, node);
-	if (content->cmd.tokens == NULL)
+	if (node_cnt(node)->cmd.tokens == NULL)
 	{
-		content->cmd.is_builtin = true;
+		node_cnt(node)->cmd.is_builtin = true;
 		if (!is_op_redirect_type(parent_op))
 			join_shell_variable_lists(shell);
 		else
 			ft_lstclear(&shell->tmp_var_list, free_var_content);
+		node_cnt(node)->cmd.finished = true;
+		shell->last_pid = -1;
 		return (EXIT_SUCCESS);
 	}
 	ret = run_cmd_execution(shell, node);

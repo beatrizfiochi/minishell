@@ -26,6 +26,12 @@
 #include "../redirect/redirect.h"
 #include "../redirect/redirect_aux.h"	// is_redirect_file_op()
 
+// Callback functions for the btree traversal
+// Special cases:
+//   A redirect (with no command) that is inside a pipe will return success
+//     no matter what.
+//     Example: `< a | < b` will have exit status as 0. But `< a` will have
+//     exit status as 1
 static int	btree_operator_before_callback(t_btnode *node,
 				int ret, bool *should_continue, void *_shell)
 {
@@ -39,7 +45,11 @@ static int	btree_operator_before_callback(t_btnode *node,
 		return (ret);
 	*should_continue = false;
 	if ((node->left == NULL) && (is_redirect_file_op(content->op)))
+	{
 		ret = prepare_redirect((t_shell *)_shell, node, NULL);
+		if (((t_shell *)_shell)->pipe.pipe[0] != -1)
+			ret = 0;
+	}
 	else if (content->op == OP_PIPE)
 		ret = prepare_pipe((t_shell *)_shell, node);
 	if (ret != EXIT_SUCCESS)
@@ -122,12 +132,11 @@ int	process(t_shell *shell)
 	ret = btree_foreach_before_and_between_dfs(shell->cmds, &cfg);
 	if (ret != 0)
 		return (ret);
+	close_any_possible_fd(shell);
+	close_all_pipes(shell->cmds);
 	if (shell->last_pid > 0)
-	{
-		close_any_possible_fd(shell);
-		close_all_pipes(shell->cmds);
 		return (wait_previous_process(shell));
-	}
 	else
-		return (ret);
+		wait_previous_process(shell);
+	return (ret);
 }

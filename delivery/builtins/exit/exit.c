@@ -79,7 +79,7 @@ int	sh_exit(int argc, char *argv[], t_shell *shell)
 	long long	ret;
 
 	ret = 0;
-	if (isatty(STDIN_FILENO) && isatty(STDOUT_FILENO))
+	if (isatty(STDIN_FILENO))
 		ft_fprintf(STDERR_FILENO, "exit\n");
 	if (argc >= 2)
 	{

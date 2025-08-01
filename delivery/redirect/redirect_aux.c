@@ -6,13 +6,14 @@
 /*   By: djunho <djunho@student.42porto.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 20:19:10 by djunho            #+#    #+#             */
-/*   Updated: 2025/07/26 00:25:19 by djunho           ###   ########.fr       */
+/*   Updated: 2025/07/31 21:14:11 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <unistd.h>
 #include "../btree/btree.h"
 #include "../cmd.h"
+#include "redirect_aux.h"
 
 static t_node_op	get_next_operation_above(t_btnode *node)
 {
@@ -44,7 +45,7 @@ t_node_op	get_next_operation(t_btnode *node)
 
 	if (node == NULL || node->content == NULL)
 		return (OP_INVALID);
-	if (node_cnt(node->right)->op == OP_CMD)
+	if (is_cmd_branch(node->right))
 		return (get_next_operation_above(node));
 	aux = node->right;
 	if (node_cnt(aux)->op == OP_CMD)
