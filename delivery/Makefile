@@ -6,7 +6,7 @@
 #    By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/27 13:09:33 by djunho            #+#    #+#              #
-#    Updated: 2025/08/03 12:30:48 by bfiochi-         ###   ########.fr        #
+#    Updated: 2025/08/03 13:01:01 by bfiochi-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -212,9 +212,16 @@ clean: soft_clean
 
 soft_clean:
 	rm -rf $(OBJS) $(OBJS_BONUS) $(DEPENDS) $(DEPENDS_BONUS) \
-			$(OBJS_DIR) $(OBJS_DIR_BONUS)debug
+			$(OBJS_DIR) $(OBJS_DIR_BONUS)
+
+soft_fclean: soft_clean
+	rm -rf $(NAME)
+
 soft_fclean_bonus: soft_clean
 	rm -rf $(BONUS_NAME)
+
+fclean: soft_fclean soft_fclean_bonus
+	$(MAKE) -C ./libft/ fclean
 
 norminette:
 	norminette --use-gitignore -R CheckForbiddenSourceHeader || echo "Norminette fail!!"
