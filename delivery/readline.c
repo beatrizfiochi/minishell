@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/10 20:27:08 by djunho            #+#    #+#             */
-/*   Updated: 2025/07/31 20:55:28 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/08/03 11:22:49 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,4 +38,9 @@ void	sh_add_history(t_shell *shell, const char *line)
 		if (isatty(STDIN_FILENO))
 			add_history(line);
 	}
+}
+
+void	sh_clean_history(void)
+{
+	rl_clear_history();
 }

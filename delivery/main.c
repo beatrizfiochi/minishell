@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 18:59:31 by djunho            #+#    #+#             */
-/*   Updated: 2025/07/31 15:06:59 by djunho           ###   ########.fr       */
+/*   Updated: 2025/08/03 11:24:06 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ static int	run_minishell(char *envp[])
 	clear_minishell(&shell);
 	if (isatty(STDIN_FILENO))
 		write(STDOUT_FILENO, "exit\n", 5);
+	sh_clean_history();
 	return (shell.last_exit_status);
 }
 
@@ -63,7 +64,6 @@ int	main(int argc, char *argv[], char *envp[])
 {
 	(void)argc;
 	(void)argv;
-	(void)envp;
 	if (isatty(STDIN_FILENO))
 	{
 		ft_printf("Hello, World of minishell!\n");

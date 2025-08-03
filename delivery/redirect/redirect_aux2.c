@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/23 08:14:24 by djunho            #+#    #+#             */
-/*   Updated: 2025/07/31 21:19:36 by djunho           ###   ########.fr       */
+/*   Updated: 2025/08/03 11:26:05 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,9 +79,10 @@ void	configure_redir(t_shell *shell, const t_cmd *cmd)
  * file operations.
  *
  * @param node A pointer to the binary tree node to check. The node is expected
- *             to be of type `t_btnode` and may contain operation and content data.
- * @return `true` if the node or its relevant children represent a command branch,
- *         `false` otherwise.
+ *             to be of type `t_btnode` and may contain operation and content
+ *             data.
+ * @return `true` if the node or its relevant children represent a command
+ *             branch, `false` otherwise.
  */
 bool	is_cmd_branch(t_btnode *node)
 {
