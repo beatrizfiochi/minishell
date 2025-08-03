@@ -13,8 +13,8 @@
 #include <signal.h>
 #include <unistd.h>
 #include <readline/readline.h>
-#include "signals.h"
-#include "../minishell.h"
+#include "signals_bonus.h"
+#include "../minishell_bonus.h"
 
 int	g_signal;
 

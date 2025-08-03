@@ -10,8 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
-#include "signals.h"
+#include "../minishell_bonus.h"
+#include "signals_bonus.h"
 
 void	handle_ctrl_c(t_shell *shell)
 {

@@ -15,8 +15,8 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <stdbool.h>
-#include "btree/btree.h"
-#include "cmd.h"
+#include "btree/btree_bonus.h"
+#include "cmd_bonus.h"
 
 int	p_error(const char *msg, const int ret)
 {

@@ -10,8 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
-#include "parser/parser.h"
+#include "minishell_bonus.h"
+#include "parser/parser_bonus.h"
 
 void	clear_minishell(t_shell *shell)
 {

@@ -13,7 +13,7 @@
 #include <signal.h>
 #include <unistd.h>
 #include <readline/readline.h>
-#include "signals.h"
+#include "signals_bonus.h"
 
 void	handle_sigint_on_heredoc(int signal)
 {

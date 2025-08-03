@@ -12,9 +12,9 @@
 
 #include <stdbool.h>
 #include "../../libft/libft.h"
-#include "../parser/aux.h"			// is_quote()
-#include "../parser/parser.h"		// clean_string_quotes()
-#include "../variables/expand_variables.h"
+#include "../parser/aux_bonus.h"			// is_quote()
+#include "../parser/parser_bonus.h"		// clean_string_quotes()
+#include "../variables/expand_variables_bonus.h"
 
 char	*get_heredoc_file_name(void)
 {

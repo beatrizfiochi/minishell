@@ -13,9 +13,9 @@
 #include <stdbool.h>
 #include <stdlib.h>
 #include <unistd.h>			// pipe
-#include "../minishell.h"
-#include "../execute/execution.h"
-#include "../redirect/redirect_aux.h"
+#include "../minishell_bonus.h"
+#include "../execute/execution_bonus.h"
+#include "../redirect/redirect_aux_bonus.h"
 
 int	prepare_pipe(t_shell *shell, const t_btnode *node)
 {

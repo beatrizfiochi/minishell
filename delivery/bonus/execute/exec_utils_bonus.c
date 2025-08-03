@@ -16,7 +16,7 @@
 #include <stdbool.h>		// bool
 #include <unistd.h>			// access
 #include "../../libft/libft.h"	// ft_.*()
-#include "env_utils.h"		// get_env()
+#include "env_utils_bonus.h"		// get_env()
 
 bool	free_join(char **args)
 {

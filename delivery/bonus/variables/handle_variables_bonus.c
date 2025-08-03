@@ -11,9 +11,9 @@
 /* ************************************************************************** */
 
 #include "../../libft/libft.h"
-#include "../cmd.h"
-#include "../minishell.h"
-#include "../variables/variables.h"
+#include "../cmd_bonus.h"
+#include "../minishell_bonus.h"
+#include "../variables/variables_bonus.h"
 
 static char	*value_utils(char *value, char *var_name)
 {

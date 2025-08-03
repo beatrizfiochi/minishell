@@ -11,9 +11,9 @@
 /* ************************************************************************** */
 
 #include <stdio.h>
-#include "../cmd.h"
-#include "../btree/btree.h"
-#include "../minishell.h"
+#include "../cmd_bonus.h"
+#include "../btree/btree_bonus.h"
+#include "../minishell_bonus.h"
 
 #ifdef TEST
 

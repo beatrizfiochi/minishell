@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 #include <stddef.h>
-#include "btree.h"
+#include "btree_bonus.h"
 
 int	btree_count_leaves(t_btnode *node)
 {

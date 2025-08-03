@@ -12,12 +12,12 @@
 #include <stdio.h>			// p_error
 #include <sys/wait.h>		// waitpid
 #include <unistd.h>			// fork
-#include "../minishell.h"
-#include "../cmd.h"
-#include "../btree/btree.h"
-#include "../redirect/redirect.h"
-#include "exec_utils.h"
-#include "execution.h"
+#include "../minishell_bonus.h"
+#include "../cmd_bonus.h"
+#include "../btree/btree_bonus.h"
+#include "../redirect/redirect_bonus.h"
+#include "exec_utils_bonus.h"
+#include "execution_bonus.h"
 
 static void	handle_fd_on_parenthesis_in(t_shell *shell, t_cmd *cmd,
 				bool is_pipe)

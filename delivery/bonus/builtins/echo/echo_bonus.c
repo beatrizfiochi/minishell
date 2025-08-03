@@ -12,7 +12,7 @@
 
 #include <stdbool.h>
 #include "../../../libft/libft.h"
-#include "../../minishell.h"
+#include "../../minishell_bonus.h"
 
 static int	check_options(int argc, char *argv[], bool *no_nl)
 {

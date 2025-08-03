@@ -12,7 +12,7 @@
 
 #include <unistd.h>
 #include "../../libft/libft.h"
-#include "variables.h"
+#include "variables_bonus.h"
 
 int	get_variable_name_length(char *var)
 {

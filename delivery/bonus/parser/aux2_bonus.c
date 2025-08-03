@@ -11,9 +11,9 @@
 /* ************************************************************************** */
 
 #include "../../libft/libft.h"
-#include "../redirect/redirect_aux.h"	// is_a_redirect_file_op()
-#include "../cmd.h"
-#include "aux.h"
+#include "../redirect/redirect_aux_bonus.h"	// is_a_redirect_file_op()
+#include "../cmd_bonus.h"
+#include "aux_bonus.h"
 
 t_node_op	op_list(t_list *list)
 {

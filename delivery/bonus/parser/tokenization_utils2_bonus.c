@@ -10,11 +10,11 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "parser.h"
+#include "parser_bonus.h"
 #include "../../libft/libft.h"
 #include <stdbool.h>
-#include "aux.h"
-#include "../variables/expand_variables.h"
+#include "aux_bonus.h"
+#include "../variables/expand_variables_bonus.h"
 
 t_list	*create_token(const char *line, int len)
 {

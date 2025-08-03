@@ -16,10 +16,10 @@
 #include <fcntl.h>			// open
 #include <unistd.h>			// close
 #include "../../libft/libft.h"	// ft_printf
-#include "execution.h"
-#include "../parser/parser.h"
-#include "../builtins/builtins.h"
-#include "../redirect/redirect.h"
+#include "execution_bonus.h"
+#include "../parser/parser_bonus.h"
+#include "../builtins/builtins_bonus.h"
+#include "../redirect/redirect_bonus.h"
 
 static int	execute_execve(t_btnode *node, t_shell *shell)
 {

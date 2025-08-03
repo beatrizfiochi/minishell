@@ -10,9 +10,9 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../minishell.h"
-#include "../../variables/variables.h"
-#include "../../parser/parser.h"
+#include "../../minishell_bonus.h"
+#include "../../variables/variables_bonus.h"
+#include "../../parser/parser_bonus.h"
 
 int	unset(int argc, char *argv[], t_shell *shell)
 {

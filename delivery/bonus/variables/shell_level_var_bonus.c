@@ -11,8 +11,8 @@
 /* ************************************************************************** */
 
 #include "../../libft/libft.h"
-#include "../parser/parser.h"
-#include "variables.h"
+#include "../parser/parser_bonus.h"
+#include "variables_bonus.h"
 
 // Search for the var_name and returns the var_value
 //  if don't find, return NULL

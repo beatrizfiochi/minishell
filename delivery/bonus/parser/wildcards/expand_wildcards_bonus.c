@@ -13,11 +13,11 @@
 #include <dirent.h>
 #include <unistd.h>
 #include <stdio.h>
-#include "../../parser/aux.h"
-#include "../../parser/parser.h"
-#include "../../execute/env_utils.h"
-#include "expand_wildcards.h"
-#include "../../variables/expand_variables.h"   // QUOTE_MARK
+#include "../../parser/aux_bonus.h"
+#include "../../parser/parser_bonus.h"
+#include "../../execute/env_utils_bonus.h"
+#include "expand_wildcards_bonus.h"
+#include "../../variables/expand_variables_bonus.h"   // QUOTE_MARK
 
 static bool	split_path(char *ori, char **path, char **pattern)
 {

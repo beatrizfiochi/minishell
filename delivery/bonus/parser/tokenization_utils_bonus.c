@@ -12,7 +12,7 @@
 
 #include <stdbool.h>
 #include "../../libft/libft.h"
-#include "tokens.h"
+#include "tokens_bonus.h"
 
 // 0 -> error | 1 -> success
 static int	is_a_possible_op(char c)

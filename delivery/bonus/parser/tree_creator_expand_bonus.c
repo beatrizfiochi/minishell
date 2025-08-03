@@ -12,12 +12,12 @@
 
 #include <stdio.h>				// printf
 #include <stdlib.h>
-#include "../btree/btree.h"
-#include "../minishell.h"
-#include "../cmd.h"
-#include "aux.h"
-#include "parser.h"
-#include "tree_creator.h"
+#include "../btree/btree_bonus.h"
+#include "../minishell_bonus.h"
+#include "../cmd_bonus.h"
+#include "aux_bonus.h"
+#include "parser_bonus.h"
+#include "tree_creator_bonus.h"
 
 static bool	is_expansion_needed(t_node_op op)
 {

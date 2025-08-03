@@ -12,12 +12,12 @@
 
 #include <stdio.h>
 #include <unistd.h>
-#include "../cmd.h"
-#include "../execute/exec_utils.h"
-#include "../execute/execution.h"
+#include "../cmd_bonus.h"
+#include "../execute/exec_utils_bonus.h"
+#include "../execute/execution_bonus.h"
 #include "../../libft/libft.h"
-#include "../minishell.h"
-#include "builtins.h"
+#include "../minishell_bonus.h"
+#include "builtins_bonus.h"
 
 static t_builtin_func	get_builtin(char *progname)
 {

@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include "../../libft/libft.h"		// ft_strlen()
-#include "../variables/variables.h"
+#include "../variables/variables_bonus.h"
 
 // Search for the environment variable at the var_list
 //   env doesn't contain the = at the end, we compare with len + 1

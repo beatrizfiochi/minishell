@@ -11,10 +11,10 @@
 /* ************************************************************************** */
 
 #include "../../libft/libft.h"
-#include "aux.h"
-#include "../cmd.h"
-#include "parser.h"
-#include "../redirect/redirect_aux.h"
+#include "aux_bonus.h"
+#include "../cmd_bonus.h"
+#include "parser_bonus.h"
+#include "../redirect/redirect_aux_bonus.h"
 
 // Basic op: && || |
 bool	is_basic_op(t_node_op op)

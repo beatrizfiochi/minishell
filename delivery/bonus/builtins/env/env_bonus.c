@@ -12,8 +12,8 @@
 
 #include <unistd.h>
 #include "../../../libft/libft.h"
-#include "../../minishell.h"
-#include "../../variables/variables.h"
+#include "../../minishell_bonus.h"
+#include "../../variables/variables_bonus.h"
 
 static void	check_list_and_print(t_list *var_list)
 {

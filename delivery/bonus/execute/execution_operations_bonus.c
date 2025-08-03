@@ -14,14 +14,14 @@
 #include <sys/types.h>		// pid_t
 #include <unistd.h>			// execve, fork, pipe, dup2, close
 #include <sys/wait.h>		// wait
-#include "../minishell.h"
-#include "../cmd.h"
-#include "../signals/signals.h"
-#include "../builtins/builtins.h"
-#include "execution.h"
-#include "exec_utils.h"
-#include "env_utils.h"
-#include "../minishell.h"
+#include "../minishell_bonus.h"
+#include "../cmd_bonus.h"
+#include "../signals/signals_bonus.h"
+#include "../builtins/builtins_bonus.h"
+#include "execution_bonus.h"
+#include "exec_utils_bonus.h"
+#include "env_utils_bonus.h"
+#include "../minishell_bonus.h"
 
 static int	execute_command(t_cmd *cmd, t_shell *shell)
 {

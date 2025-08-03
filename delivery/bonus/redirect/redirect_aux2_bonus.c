@@ -11,11 +11,11 @@
 /* ************************************************************************** */
 
 #include <unistd.h>                    // close
-#include "../minishell.h"
-#include "../parser/parser.h"
-#include "../execute/execution.h"
-#include "../execute/exec_utils.h"
-#include "redirect_aux.h"
+#include "../minishell_bonus.h"
+#include "../parser/parser_bonus.h"
+#include "../execute/execution_bonus.h"
+#include "../execute/exec_utils_bonus.h"
+#include "redirect_aux_bonus.h"
 
 void	close_redirects(t_shell *shell)
 {

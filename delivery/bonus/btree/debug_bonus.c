@@ -12,9 +12,9 @@
 
 #include <stdio.h>
 #include "../../libft/libft.h"
-#include "btree.h"
-#include "../cmd.h"
-#include "../debug.h"
+#include "btree_bonus.h"
+#include "../cmd_bonus.h"
+#include "../debug_bonus.h"
 
 #ifdef TEST
 

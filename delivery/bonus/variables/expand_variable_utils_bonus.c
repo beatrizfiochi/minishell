@@ -11,8 +11,8 @@
 /* ************************************************************************** */
 
 #include "../../libft/libft.h"
-#include "variables.h"
-#include "../minishell.h"
+#include "variables_bonus.h"
+#include "../minishell_bonus.h"
 
 void	free_var_content(void *var_content)
 {

@@ -10,10 +10,10 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "expand_variables.h"
-#include "../minishell.h"
-#include "../parser/aux.h"
-#include "../parser/parser.h"
+#include "expand_variables_bonus.h"
+#include "../minishell_bonus.h"
+#include "../parser/aux_bonus.h"
+#include "../parser/parser_bonus.h"
 #include <unistd.h>
 
 char	*handle_possible_var(char **cont, char *cnt,

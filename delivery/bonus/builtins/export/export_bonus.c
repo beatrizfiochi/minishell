@@ -10,12 +10,12 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../minishell.h"
-#include "../../parser/parser.h"
+#include "../../minishell_bonus.h"
+#include "../../parser/parser_bonus.h"
 #include "../../../libft/libft.h"
-#include "../../execute/execution.h"
-#include "../../variables/variables.h"
-#include "../../variables/expand_variables.h"
+#include "../../execute/execution_bonus.h"
+#include "../../variables/variables_bonus.h"
+#include "../../variables/expand_variables_bonus.h"
 #include <unistd.h>
 
 static void	print_export(t_shell *shell)

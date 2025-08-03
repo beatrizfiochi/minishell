@@ -14,8 +14,8 @@
 #include <dirent.h>
 #include <unistd.h>
 #include "../../../libft/libft.h"
-#include "../../execute/env_utils.h"
-#include "../../variables/expand_variables.h"   // QUOTE_MARK
+#include "../../execute/env_utils_bonus.h"
+#include "../../variables/expand_variables_bonus.h"   // QUOTE_MARK
 
 // Recursive function to match pattern to filename. Ignore the * inside
 //  QUOTE_MARK

@@ -13,12 +13,12 @@
 #include <unistd.h>				// isatty
 #include <stdio.h>				// printf
 #include "../libft/libft.h"
-#include "minishell.h"
-#include "debug.h"
-#include "parser/parser.h"
-#include "variables/variables.h"
-#include "signals/signals.h"
-#include "execute/execute_debug.h"		// debug_execution_pos();
+#include "minishell_bonus.h"
+#include "debug_bonus.h"
+#include "parser/parser_bonus.h"
+#include "variables/variables_bonus.h"
+#include "signals/signals_bonus.h"
+#include "execute/execute_debug_bonus.h"		// debug_execution_pos();
 
 static void	init_var_list(t_shell *shell, char *envp[])
 {

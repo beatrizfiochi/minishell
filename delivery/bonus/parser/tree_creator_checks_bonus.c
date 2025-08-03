@@ -12,11 +12,11 @@
 
 #include <stdio.h>              // printf
 #include <unistd.h>
-#include "../minishell.h"       // op
-#include "../parser/aux.h"      // search_any_op
-#include "../cmd.h"             // t_content_node
-#include "../btree/btree.h"     // t_btnode
-#include "../redirect/redirect_aux.h"  // is_a_redirect_file_op
+#include "../minishell_bonus.h"       // op
+#include "../parser/aux_bonus.h"      // search_any_op
+#include "../cmd_bonus.h"             // t_content_node
+#include "../btree/btree_bonus.h"     // t_btnode
+#include "../redirect/redirect_aux_bonus.h"  // is_a_redirect_file_op
 
 bool	is_btnode_different(t_btnode *node1, int node1_size, t_btnode *node2,
 								int node2_size)

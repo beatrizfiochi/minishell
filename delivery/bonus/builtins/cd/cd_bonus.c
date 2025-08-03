@@ -14,9 +14,9 @@
 #include <stdlib.h>	// free
 #include <unistd.h>
 #include "../../../libft/libft.h"
-#include "../../execute/env_utils.h"
-#include "../../minishell.h"
-#include "../../variables/variables.h"
+#include "../../execute/env_utils_bonus.h"
+#include "../../minishell_bonus.h"
+#include "../../variables/variables_bonus.h"
 
 static void	cd_error(const char *first, const char *second)
 {

@@ -15,9 +15,9 @@
 #include <sys/wait.h>
 #include <unistd.h>
 #include <errno.h>
-#include "execution.h"
-#include "exec_utils.h"
-#include "../minishell.h"
+#include "execution_bonus.h"
+#include "exec_utils_bonus.h"
+#include "../minishell_bonus.h"
 
 void	close_any_possible_fd(t_shell *shell)
 {

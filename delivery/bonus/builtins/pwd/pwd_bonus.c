@@ -12,7 +12,7 @@
 
 #include <stdio.h>				// perror
 #include <unistd.h>				// getcwd
-#include "../../minishell.h"
+#include "../../minishell_bonus.h"
 
 int	pwd(int argc, char *argv[], t_shell *shell)
 {

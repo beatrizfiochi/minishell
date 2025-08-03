@@ -10,9 +10,9 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "variables.h"
-#include "../parser/parser.h"
-#include "../cmd.h"
+#include "variables_bonus.h"
+#include "../parser/parser_bonus.h"
+#include "../cmd_bonus.h"
 #include "../../libft/libft.h"
 
 static void	free_name_value(char *name, char *value)

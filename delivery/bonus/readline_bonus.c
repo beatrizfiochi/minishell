@@ -13,8 +13,8 @@
 #include <unistd.h>
 #include <readline/readline.h>
 #include <readline/history.h>
-#include "minishell.h"
-#include "signals/signals.h"
+#include "minishell_bonus.h"
+#include "signals/signals_bonus.h"
 
 char	*sh_read_line(t_shell *shell, const char *prompt)
 {

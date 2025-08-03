@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 #include <stddef.h>
 #include <stdlib.h>		// malloc
-#include "btree.h"
+#include "btree_bonus.h"
 
 t_btnode	*btree_new(void *content)
 {

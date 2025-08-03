@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include <stdbool.h>
-#include "../cmd.h"
+#include "../cmd_bonus.h"
 
 bool	is_op_redirect_type(t_node_op op)
 {

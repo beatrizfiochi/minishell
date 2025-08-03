@@ -17,12 +17,12 @@
 #include <readline/readline.h>		// readline()
 #include <unistd.h>					// write()
 #include "../../libft/libft.h"
-#include "../btree/btree.h"
-#include "../cmd.h"
-#include "../color.h"
-#include "../minishell.h"
-#include "../signals/signals.h"
-#include "heredoc_aux.h"
+#include "../btree/btree_bonus.h"
+#include "../cmd_bonus.h"
+#include "../color_bonus.h"
+#include "../minishell_bonus.h"
+#include "../signals/signals_bonus.h"
+#include "heredoc_aux_bonus.h"
 
 #define HEREDOC_PROMPT "> "
 

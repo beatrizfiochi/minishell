@@ -10,9 +10,9 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../redirect/redirect_aux.h"	// is_a_redirect_file_op()
-#include "tokens.h"
-#include "aux.h"
+#include "../redirect/redirect_aux_bonus.h"	// is_a_redirect_file_op()
+#include "tokens_bonus.h"
+#include "aux_bonus.h"
 
 static t_list	*move_item(struct s_split_token_list *split, t_list *prev,
 						t_list *item)

@@ -13,9 +13,9 @@
 #include <unistd.h>      //write
 #include <stdlib.h>
 #include "../../libft/libft.h"
-#include "parser.h"
-#include "aux.h"
-#include "../redirect/redirect_aux.h"
+#include "parser_bonus.h"
+#include "aux_bonus.h"
+#include "../redirect/redirect_aux_bonus.h"
 
 static int	scan_until_op_or_error(char *l, char *c, int *len)
 {

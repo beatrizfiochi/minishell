@@ -13,9 +13,9 @@
 #include <stdio.h>
 #include <unistd.h>				// STDERR_FILENO
 #include "../../libft/libft.h"
-#include "../cmd.h"
-#include "aux.h"
-#include "tokens.h"	// struct s_split_token_list
+#include "../cmd_bonus.h"
+#include "aux_bonus.h"
+#include "tokens_bonus.h"	// struct s_split_token_list
 
 t_list	*prev_list_item(t_list *first_node, t_list *current_node)
 {

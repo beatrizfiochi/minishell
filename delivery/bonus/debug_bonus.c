@@ -13,8 +13,8 @@
 #include <assert.h>
 #include <stdio.h>
 #include "../libft/libft.h"
-#include "cmd.h"
-#include "variables/variables.h"
+#include "cmd_bonus.h"
+#include "variables/variables_bonus.h"
 
 #ifdef TEST
 

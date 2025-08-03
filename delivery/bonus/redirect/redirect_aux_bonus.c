@@ -11,9 +11,9 @@
 /* ************************************************************************** */
 
 #include <unistd.h>
-#include "../btree/btree.h"
-#include "../cmd.h"
-#include "redirect_aux.h"
+#include "../btree/btree_bonus.h"
+#include "../cmd_bonus.h"
+#include "redirect_aux_bonus.h"
 
 static t_node_op	get_next_operation_above(t_btnode *node)
 {

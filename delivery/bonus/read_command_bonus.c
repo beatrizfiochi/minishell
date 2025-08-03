@@ -14,13 +14,13 @@
 #include <stdio.h>				//printf
 #include <unistd.h>				//write
 #include "../libft/libft.h"
-#include "minishell.h"
-#include "parser/parser.h"
-#include "cmd.h"
-#include "debug.h"
-#include "execute/execution.h"
-#include "signals/signals.h"
-#include "color.h"
+#include "minishell_bonus.h"
+#include "parser/parser_bonus.h"
+#include "cmd_bonus.h"
+#include "debug_bonus.h"
+#include "execute/execution_bonus.h"
+#include "signals/signals_bonus.h"
+#include "color_bonus.h"
 
 #define PROMPT "My shell > "
 

@@ -16,15 +16,15 @@
 #include <unistd.h>			// pipe
 #include <sys/wait.h>		// wait
 #include "../../libft/libft.h"
-#include "../cmd.h"
-#include "../debug.h"
-#include "../minishell.h"
-#include "../signals/signals.h"
-#include "execute_debug.h"
-#include "exec_utils.h"
-#include "execution.h"
-#include "../redirect/redirect.h"
-#include "../redirect/redirect_aux.h"	// is_redirect_file_op()
+#include "../cmd_bonus.h"
+#include "../debug_bonus.h"
+#include "../minishell_bonus.h"
+#include "../signals/signals_bonus.h"
+#include "execute_debug_bonus.h"
+#include "exec_utils_bonus.h"
+#include "execution_bonus.h"
+#include "../redirect/redirect_bonus.h"
+#include "../redirect/redirect_aux_bonus.h"	// is_redirect_file_op()
 
 // Callback functions for the btree traversal
 // Special cases:

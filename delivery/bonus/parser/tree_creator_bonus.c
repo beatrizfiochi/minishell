@@ -12,14 +12,14 @@
 
 #include <stdlib.h>
 #include <unistd.h>
-#include "../btree/btree.h"
-#include "../minishell.h"
-#include "../cmd.h"
-#include "../heredoc/heredoc.h"
-#include "aux.h"
-#include "parser.h"
-#include "tokens.h"
-#include "tree_creator.h"
+#include "../btree/btree_bonus.h"
+#include "../minishell_bonus.h"
+#include "../cmd_bonus.h"
+#include "../heredoc/heredoc_bonus.h"
+#include "aux_bonus.h"
+#include "parser_bonus.h"
+#include "tokens_bonus.h"
+#include "tree_creator_bonus.h"
 
 static t_btnode	*create_node(t_list *token_list, t_btnode *parent,
 								t_btnode *left, t_btnode *right)

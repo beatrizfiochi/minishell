@@ -13,9 +13,9 @@
 #include <stdlib.h>			// EXIT_FAILURE
 #include <fcntl.h>			// open()
 #include <unistd.h>
-#include "../minishell.h"
-#include "../execute/exec_utils.h"
-#include "redirect_aux.h"
+#include "../minishell_bonus.h"
+#include "../execute/exec_utils_bonus.h"
+#include "redirect_aux_bonus.h"
 
 static void	common_redirect_prepare(t_shell *shell, bool is_output)
 {

@@ -10,11 +10,11 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "expand_variables.h"
-#include "../minishell.h"
-#include "../parser/aux.h"
-#include "variables.h"
-#include "../execute/env_utils.h"
+#include "expand_variables_bonus.h"
+#include "../minishell_bonus.h"
+#include "../parser/aux_bonus.h"
+#include "variables_bonus.h"
+#include "../execute/env_utils_bonus.h"
 #include <unistd.h>
 
 void	handle_special_var(char **cont, char **cnt,

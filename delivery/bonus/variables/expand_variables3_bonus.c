@@ -11,8 +11,8 @@
 /* ************************************************************************** */
 
 #include <unistd.h>
-#include "../minishell.h"
-#include "expand_variables.h"
+#include "../minishell_bonus.h"
+#include "expand_variables_bonus.h"
 
 static void	expand_variable_token_i(t_list **curr, t_list *var_list,
 	t_shell *shell)

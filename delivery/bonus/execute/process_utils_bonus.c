@@ -11,10 +11,10 @@
 /* ************************************************************************** */
 
 #include <unistd.h>
-#include "../minishell.h"
-#include "../parser/parser.h"
-#include "../parser/aux.h"
-#include "../variables/variables.h"
+#include "../minishell_bonus.h"
+#include "../parser/parser_bonus.h"
+#include "../parser/aux_bonus.h"
+#include "../variables/variables_bonus.h"
 
 // This function processes variable assignment commands into the
 //  shell->tmp_var_list.
