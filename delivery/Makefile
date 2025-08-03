@@ -6,7 +6,7 @@
 #    By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/27 13:09:33 by djunho            #+#    #+#              #
-#    Updated: 2025/08/03 13:20:33 by bfiochi-         ###   ########.fr        #
+#    Updated: 2025/08/03 13:42:16 by djunho           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -188,16 +188,16 @@ $(OBJS_DIR_BONUS)/%.o:%.c Makefile | $(OBJS_DIR_BONUS) $(dir $@)
 # Create the object directory if it doesn't exist
 # Create the directory for the object file if it doesn't exist
 $(OBJS_DIR):
-	mkdir -p $(OBJS_DIR)
+	@mkdir -p $(OBJS_DIR)
 
 $(OBJS_DIR)/%:
-	mkdir -p $(dir $@)
+	@mkdir -p $(dir $@)
 
 $(OBJS_DIR_BONUS):
-	mkdir -p $(OBJS_DIR_BONUS)
+	@mkdir -p $(OBJS_DIR_BONUS)
 
 $(OBJS_DIR_BONUS)/%:
-	mkdir -p $(dir $@)
+	@mkdir -p $(dir $@)
 
 libft/libft.a: libft
 
