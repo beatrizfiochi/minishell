@@ -13,9 +13,9 @@
 #ifndef PARSER_H
 # define PARSER_H
 
-# include "../btree/btree.h"
-# include "../libft/libft.h"
-# include "../minishell.h"
+# include "../btree/btree_bonus.h"
+# include "../../libft/libft.h"
+# include "../minishell_bonus.h"
 
 t_list	*create_token(const char *line, int len);
 int		create_tree(t_shell *shell, t_btnode **tree, t_list **token_list,

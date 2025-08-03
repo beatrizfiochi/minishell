@@ -13,8 +13,8 @@
 #ifndef CMD_H
 # define CMD_H
 
-# include "libft/libft.h"
-# include "btree/btree.h"
+# include "../libft/libft.h"
+# include "btree/btree_bonus.h"
 
 typedef enum e_node_op
 {

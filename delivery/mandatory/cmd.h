@@ -6,14 +6,14 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 11:23:29 by djunho            #+#    #+#             */
-/*   Updated: 2025/07/27 18:15:31 by djunho           ###   ########.fr       */
+/*   Updated: 2025/08/03 12:51:51 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CMD_H
 # define CMD_H
 
-# include "libft/libft.h"
+# include "../libft/libft.h"
 # include "btree/btree.h"
 
 typedef enum e_node_op
@@ -45,7 +45,7 @@ typedef struct s_cmd
 							//  operator
 	struct s_cmd_redirect
 	{
-		int		fd_in;		// File descriptor for input redirection (placed 
+		int		fd_in;		// File descriptor for input redirection (placed
 							//   on possible command and on operator)
 		int		fd_out;		// File descriptor for output redirection
 							//   on possible command and on operator)

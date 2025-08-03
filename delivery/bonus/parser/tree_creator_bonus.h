@@ -13,9 +13,9 @@
 #ifndef TREE_CREATOR_H
 # define TREE_CREATOR_H
 
-# include "../btree/btree.h"     // t_btnode
-# include "../parser/aux.h"      // enum e_expand_type *expand_type);
-# include "../libft/libft.h"     // t_list
+# include "../btree/btree_bonus.h"     // t_btnode
+# include "../parser/aux_bonus.h"      // enum e_expand_type *expand_type);
+# include "../../libft/libft.h"     // t_list
 
 t_btnode	*create_basic_tree(t_list **token_list, t_btnode *parent,
 				enum e_expand_type expand_type);

@@ -12,8 +12,8 @@
 #ifndef HEREDOC_H
 # define HEREDOC_H
 
-# include "../btree/btree.h"
-# include "../minishell.h"
+# include "../btree/btree_bonus.h"
+# include "../minishell_bonus.h"
 
 int	check_tree_for_heredoc(t_shell *shell, t_btnode *node);
 

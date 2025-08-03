@@ -13,7 +13,7 @@
 #ifndef AUX_H
 # define AUX_H
 
-# include "../libft/libft.h"
+# include "../../libft/libft.h"
 # include "../btree/btree.h"
 # include "../cmd.h"
 

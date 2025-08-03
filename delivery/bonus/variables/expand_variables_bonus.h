@@ -13,8 +13,8 @@
 #ifndef EXPAND_VARIABLES_H
 # define EXPAND_VARIABLES_H
 
-# include "../libft/libft.h"
-# include "../minishell.h"
+# include "../../libft/libft.h"
+# include "../minishell_bonus.h"
 
 # define QUOTE_MARK  0x1D
 

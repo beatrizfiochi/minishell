@@ -12,10 +12,10 @@
 #ifndef DEBUG_H
 # define DEBUG_H
 
-# include "libft/libft.h"
-# include "btree/btree.h"
-# include "cmd.h"
-# include "minishell.h"
+# include "../libft/libft.h"
+# include "btree/btree_bonus.h"
+# include "cmd_bonus.h"
+# include "minishell_bonus.h"
 
 void		debug_print_tree(t_btnode *tree);
 void		debug_print_read_command(t_list *node, char *line);

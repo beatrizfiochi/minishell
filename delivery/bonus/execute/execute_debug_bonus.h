@@ -13,8 +13,8 @@
 #ifndef EXECUTE_DEBUG_H
 # define EXECUTE_DEBUG_H
 
-# include "../btree/btree.h"
-# include "../minishell.h"
+# include "../btree/btree_bonus.h"
+# include "../minishell_bonus.h"
 
 void	debug_btree_print(t_btnode *node);
 void	debug_execution_pos(t_shell *shell);

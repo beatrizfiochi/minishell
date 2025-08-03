@@ -13,7 +13,7 @@
 #ifndef VARIABLES_H
 # define VARIABLES_H
 
-# include "../libft/libft.h"
+# include "../../libft/libft.h"
 # include "../minishell.h"
 
 typedef struct s_content_var

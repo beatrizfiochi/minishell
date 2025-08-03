@@ -12,7 +12,7 @@
 #ifndef EXPAND_WILDCARDS_H
 # define EXPAND_WILDCARDS_H
 
-# include "../../libft/libft.h"
+# include "../../../libft/libft.h"
 
 int		ft_strcmp_insensitive(char *s1, char *s2);
 int		get_number_files(char *path, char *pattern);

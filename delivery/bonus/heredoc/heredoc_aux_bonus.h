@@ -13,7 +13,7 @@
 # define HEREDOC_AUX_H
 
 # include <stdbool.h>
-# include "../minishell.h"
+# include "../minishell_bonus.h"
 
 char	*get_heredoc_file_name(void);
 bool	should_expand(char **eof);

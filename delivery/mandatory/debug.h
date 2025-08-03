@@ -3,16 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   debug.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: djunho <djunho@student.42porto.com>        +#+  +:+       +#+        */
+/*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 18:34:16 by djunho            #+#    #+#             */
-/*   Updated: 2025/07/31 15:03:53 by djunho           ###   ########.fr       */
+/*   Updated: 2025/08/03 12:51:54 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 #ifndef DEBUG_H
 # define DEBUG_H
 
-# include "libft/libft.h"
+# include "../libft/libft.h"
 # include "btree/btree.h"
 # include "cmd.h"
 # include "minishell.h"

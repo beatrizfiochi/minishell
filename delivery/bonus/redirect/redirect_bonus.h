@@ -13,7 +13,7 @@
 #ifndef REDIRECT_H
 # define REDIRECT_H
 
-# include "../minishell.h"
+# include "../minishell_bonus.h"
 
 int		process_pipe(t_shell *shell, t_btnode *node);
 int		process_redirect(t_shell *shell, int ret, t_btnode *node,

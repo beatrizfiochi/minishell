@@ -13,9 +13,9 @@
 #ifndef BUILTINS_H
 # define BUILTINS_H
 
-# include "../cmd.h"
-# include "../libft/libft.h"
-# include "../minishell.h"
+# include "../cmd_bonus.h"
+# include "../../libft/libft.h"
+# include "../minishell_bonus.h"
 
 typedef int			(*t_builtin_func)(int argc, char *argv[], t_shell *shell);
 

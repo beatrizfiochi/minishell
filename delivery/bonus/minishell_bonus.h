@@ -15,9 +15,9 @@
 
 # include <stdbool.h>		// bool
 # include <sys/types.h>		// pid_t
-# include "libft/libft.h"
-# include "btree/btree.h"
-# include "cmd.h"
+# include "../libft/libft.h"
+# include "btree/btree_bonus.h"
+# include "cmd_bonus.h"
 
 # define EXIT_INCORRECT_USAGE	2
 # define EXIT_CMD_CANNOT_EXEC	126

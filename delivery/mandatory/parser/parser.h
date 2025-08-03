@@ -14,7 +14,7 @@
 # define PARSER_H
 
 # include "../btree/btree.h"
-# include "../libft/libft.h"
+# include "../../libft/libft.h"
 # include "../minishell.h"
 
 t_list	*create_token(const char *line, int len);

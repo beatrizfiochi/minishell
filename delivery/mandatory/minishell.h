@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 13:37:40 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/08/03 11:23:51 by djunho           ###   ########.fr       */
+/*   Updated: 2025/08/03 12:51:48 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 # include <stdbool.h>		// bool
 # include <sys/types.h>		// pid_t
-# include "libft/libft.h"
+# include "../libft/libft.h"
 # include "btree/btree.h"
 # include "cmd.h"
 

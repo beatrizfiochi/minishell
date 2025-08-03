@@ -13,9 +13,9 @@
 #ifndef EXEC_UTILS_H
 # define EXEC_UTILS_H
 
-# include "../cmd.h"
-# include "../btree/btree.h"
-# include "../minishell.h"
+# include "../cmd_bonus.h"
+# include "../btree/btree_bonus.h"
+# include "../minishell_bonus.h"
 
 void			free_join(char **args);
 bool			create_cmd_path(char *cmd, t_list *var_list, char **path);

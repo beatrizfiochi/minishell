@@ -13,7 +13,7 @@
 #ifndef ENV_UTILS_H
 # define ENV_UTILS_H
 
-# include "../libft/libft.h"
+# include "../../libft/libft.h"
 
 const char	*get_env(char *env, t_list *var_list);
 

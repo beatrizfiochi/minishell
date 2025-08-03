@@ -13,9 +13,9 @@
 #ifndef AUX_H
 # define AUX_H
 
-# include "../libft/libft.h"
-# include "../btree/btree.h"
-# include "../cmd.h"
+# include "../../libft/libft.h"
+# include "../btree/btree_bonus.h"
+# include "../cmd_bonus.h"
 
 // Find the previous item of the current_node
 t_list		*prev_list_item(t_list *first_node, t_list *current_node);

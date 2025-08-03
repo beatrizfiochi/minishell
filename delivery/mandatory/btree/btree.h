@@ -3,16 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   btree.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: djunho <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 11:40:35 by djunho            #+#    #+#             */
-/*   Updated: 2025/07/25 22:07:21 by djunho           ###   ########.fr       */
+/*   Updated: 2025/08/03 12:54:40 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 #ifndef BTREE_H
 # define BTREE_H
 
-# include "stdbool.h"
+# include <stdbool.h>
 
 typedef struct s_btnode
 {

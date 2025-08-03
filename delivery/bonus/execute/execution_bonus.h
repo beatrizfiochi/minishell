@@ -14,10 +14,10 @@
 # define EXECUTION_H
 
 # include <stdbool.h>
-# include "../libft/libft.h"
-# include "../btree/btree.h"
-# include "../minishell.h"
-# include "../cmd.h"
+# include "../../libft/libft.h"
+# include "../btree/btree_bonus.h"
+# include "../minishell_bonus.h"
+# include "../cmd_bonus.h"
 
 int		process(t_shell *shell);
 int		execute(t_shell *shell);

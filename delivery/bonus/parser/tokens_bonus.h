@@ -13,8 +13,8 @@
 #ifndef TOKENS_H
 # define TOKENS_H
 
-# include "../libft/libft.h"
-# include "aux.h"
+# include "../../libft/libft.h"
+# include "aux_bonus.h"
 
 struct s_split_token_list
 {

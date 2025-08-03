@@ -13,9 +13,9 @@
 #ifndef REDIRECT_AUX_H
 # define REDIRECT_AUX_H
 
-# include "../btree/btree.h"
-# include "../cmd.h"
-# include "../minishell.h"
+# include "../btree/btree_bonus.h"
+# include "../cmd_bonus.h"
+# include "../minishell_bonus.h"
 
 char			*get_redir_filename(t_shell *shell, t_btnode *file_node);
 t_node_op		get_next_operation(t_btnode *node);
