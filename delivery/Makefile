@@ -6,7 +6,7 @@
 #    By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/27 13:09:33 by djunho            #+#    #+#              #
-#    Updated: 2025/08/03 13:01:01 by bfiochi-         ###   ########.fr        #
+#    Updated: 2025/08/03 13:20:33 by bfiochi-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -34,9 +34,6 @@ SRCS = $(SRCS_DIR)/main.c \
 	$(SRCS_DIR)/parser/tokenization_utils2.c \
 	$(SRCS_DIR)/parser/tokenization_utils.c \
 	$(SRCS_DIR)/parser/tokenization_utils3.c \
-	$(SRCS_DIR)/parser/wildcards/expand_wildcards.c \
-	$(SRCS_DIR)/parser/wildcards/expand_wildcards2.c \
-	$(SRCS_DIR)/parser/wildcards/expand_wildcards3.c \
 	$(SRCS_DIR)/btree/btree.c \
 	$(SRCS_DIR)/btree/btree_count.c \
 	$(SRCS_DIR)/btree/debug.c \

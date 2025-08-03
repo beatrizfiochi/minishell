@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 14:14:02 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/07/14 11:39:43 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/08/03 13:20:14 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ int		create_tree(t_shell *shell, t_btnode **tree, t_list **token_list,
 t_list	*tokenization(char *line);
 
 void	free_var_content(void *var_content);
-void	expand_wildcards_token(t_list **token);
 void	expand_variable_string(char **cont, t_list *var_list, t_shell *shell);
 void	expand_variable_token(t_list **curr, t_list *var_list, t_shell *shell);
 void	search_and_expand(t_list **token_list, t_list *var_list,

@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/23 08:14:24 by djunho            #+#    #+#             */
-/*   Updated: 2025/08/03 11:26:05 by djunho           ###   ########.fr       */
+/*   Updated: 2025/08/03 13:17:40 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,6 @@ char	*get_redir_filename(t_shell *shell, t_btnode *file_node)
 
 	token = ((t_content_node *)(file_node->content))->cmd.tokens;
 	expand_variable_token(&token, shell->variable_list, shell);
-	expand_wildcards_token(&token);
 	remove_empty_token(&token);
 	clean_token_quotes(token);
 	((t_content_node *)(file_node->content))->cmd.tokens = token;

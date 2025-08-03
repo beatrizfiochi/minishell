@@ -6,7 +6,7 @@
 /*   By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/29 23:17:46 by bfiochi-          #+#    #+#             */
-/*   Updated: 2025/07/31 22:21:36 by bfiochi-         ###   ########.fr       */
+/*   Updated: 2025/08/03 13:11:26 by bfiochi-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,8 +52,8 @@ int	check_token(t_list *prev, t_list *curr)
 				|| (is_redirect_file_op(prev_op))
 				|| (prev_op == OP_PAREN_OPEN))))
 		return (EXIT_FAILURE);
-	else if ((curr_op == OP_PAREN_OPEN) && ((is_redirect_file_op(prev_op))
-			|| ((prev_op == OP_CMD))))
+	else if ((curr_op == OP_PAREN_OPEN) || (curr_op == OP_PAREN_CLOSE)
+		|| (curr_op == OP_AND) || (curr_op == OP_OR))
 		return (EXIT_FAILURE);
 	else if ((is_basic_op(curr_op)) && ((is_basic_op(prev_op))
 			|| (prev_op == OP_PAREN_OPEN) || (is_redirect_file_op(prev_op))
