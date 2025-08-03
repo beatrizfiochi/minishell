@@ -10,8 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef TOKENS_H
-# define TOKENS_H
+#ifndef TOKENS_BONUS_H
+# define TOKENS_BONUS_H
 
 # include "../../libft/libft.h"
 # include "aux_bonus.h"

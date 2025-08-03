@@ -9,8 +9,8 @@
 /*   Updated: 2025/07/10 23:08:48 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#ifndef HEREDOC_H
-# define HEREDOC_H
+#ifndef HEREDOC_BONUS_H
+# define HEREDOC_BONUS_H
 
 # include "../btree/btree_bonus.h"
 # include "../minishell_bonus.h"

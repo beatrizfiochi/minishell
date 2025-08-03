@@ -9,8 +9,8 @@
 /*   Updated: 2025/07/11 21:45:09 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#ifndef HEREDOC_AUX_H
-# define HEREDOC_AUX_H
+#ifndef HEREDOC_AUX_BONUS_H
+# define HEREDOC_AUX_BONUS_H
 
 # include <stdbool.h>
 # include "../minishell_bonus.h"

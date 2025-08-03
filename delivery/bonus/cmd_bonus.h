@@ -10,8 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef CMD_H
-# define CMD_H
+#ifndef CMD_BONUS_H
+# define CMD_BONUS_H
 
 # include "../libft/libft.h"
 # include "btree/btree_bonus.h"

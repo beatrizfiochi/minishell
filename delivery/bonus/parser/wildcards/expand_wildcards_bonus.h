@@ -9,8 +9,8 @@
 /*   Updated: 2025/07/13 21:58:03 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#ifndef EXPAND_WILDCARDS_H
-# define EXPAND_WILDCARDS_H
+#ifndef EXPAND_WILDCARDS_BONUS_H
+# define EXPAND_WILDCARDS_BONUS_H
 
 # include "../../../libft/libft.h"
 

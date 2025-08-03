@@ -10,8 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef TREE_CREATOR_H
-# define TREE_CREATOR_H
+#ifndef TREE_CREATOR_BONUS_H
+# define TREE_CREATOR_BONUS_H
 
 # include "../btree/btree_bonus.h"     // t_btnode
 # include "../parser/aux_bonus.h"      // enum e_expand_type *expand_type);

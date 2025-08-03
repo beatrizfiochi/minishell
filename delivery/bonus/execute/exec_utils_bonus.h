@@ -10,8 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef EXEC_UTILS_H
-# define EXEC_UTILS_H
+#ifndef EXEC_UTILS_BONUS_H
+# define EXEC_UTILS_BONUS_H
 
 # include "../cmd_bonus.h"
 # include "../btree/btree_bonus.h"

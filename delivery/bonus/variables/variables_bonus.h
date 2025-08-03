@@ -10,8 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef VARIABLES_H
-# define VARIABLES_H
+#ifndef VARIABLES_BONUS_H
+# define VARIABLES_BONUS_H
 
 # include "../../libft/libft.h"
 # include "../minishell_bonus.h"

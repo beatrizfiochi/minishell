@@ -10,8 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef AUX_H
-# define AUX_H
+#ifndef AUX_BONUS_H
+# define AUX_BONUS_H
 
 # include "../../libft/libft.h"
 # include "../btree/btree_bonus.h"

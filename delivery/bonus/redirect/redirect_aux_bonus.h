@@ -10,8 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef REDIRECT_AUX_H
-# define REDIRECT_AUX_H
+#ifndef REDIRECT_AUX_BONUS_H
+# define REDIRECT_AUX_BONUS_H
 
 # include "../btree/btree_bonus.h"
 # include "../cmd_bonus.h"

@@ -9,8 +9,8 @@
 /*   Updated: 2025/07/11 22:50:59 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#ifndef COLOR_H
-# define COLOR_H
+#ifndef COLOR_BONUS_H
+# define COLOR_BONUS_H
 
 // The \1 and the \2 are the RL_PROMPT_START_IGNORE and RL_PROMPT_END_IGNORE
 

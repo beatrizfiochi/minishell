@@ -9,8 +9,8 @@
 /*   Updated: 2025/07/31 15:03:53 by djunho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#ifndef DEBUG_H
-# define DEBUG_H
+#ifndef DEBUG_BONUS_H
+# define DEBUG_BONUS_H
 
 # include "../libft/libft.h"
 # include "btree/btree_bonus.h"

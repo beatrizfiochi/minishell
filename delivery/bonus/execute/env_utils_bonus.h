@@ -10,8 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef ENV_UTILS_H
-# define ENV_UTILS_H
+#ifndef ENV_UTILS_BONUS_H
+# define ENV_UTILS_BONUS_H
 
 # include "../../libft/libft.h"
 

@@ -10,8 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef BTREE_H
-# define BTREE_H
+#ifndef BTREE_BONUS_H
+# define BTREE_BONUS_H
 
 # include <stdbool.h>
 

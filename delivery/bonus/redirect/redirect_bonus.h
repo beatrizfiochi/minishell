@@ -10,8 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef REDIRECT_H
-# define REDIRECT_H
+#ifndef REDIRECT_BONUS_H
+# define REDIRECT_BONUS_H
 
 # include "../minishell_bonus.h"
 

@@ -10,8 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef EXECUTE_DEBUG_H
-# define EXECUTE_DEBUG_H
+#ifndef EXECUTE_DEBUG_BONUS_H
+# define EXECUTE_DEBUG_BONUS_H
 
 # include "../btree/btree_bonus.h"
 # include "../minishell_bonus.h"

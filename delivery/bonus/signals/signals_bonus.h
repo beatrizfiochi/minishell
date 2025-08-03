@@ -10,8 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef SIGNALS_H
-# define SIGNALS_H
+#ifndef SIGNALS_BONUS_H
+# define SIGNALS_BONUS_H
 
 # include "../minishell_bonus.h"
 
