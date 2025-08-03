@@ -12,7 +12,7 @@
 
 #include "../../minishell.h"
 #include "../../parser/parser.h"
-#include "../../libft/libft.h"
+#include "../../../libft/libft.h"
 #include "../../execute/execution.h"
 #include "../../variables/variables.h"
 #include "../../variables/expand_variables.h"

@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include <stdbool.h>
-#include "../libft/libft.h"
+#include "../../libft/libft.h"
 #include "../parser/aux.h"			// is_quote()
 #include "../parser/parser.h"		// clean_string_quotes()
 #include "../variables/expand_variables.h"

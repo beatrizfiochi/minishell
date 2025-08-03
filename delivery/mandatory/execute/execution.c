@@ -15,7 +15,7 @@
 #include <stdbool.h>
 #include <fcntl.h>			// open
 #include <unistd.h>			// close
-#include "../libft/libft.h"	// ft_printf
+#include "../../libft/libft.h"	// ft_printf
 #include "execution.h"
 #include "../parser/parser.h"
 #include "../builtins/builtins.h"

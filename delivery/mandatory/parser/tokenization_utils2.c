@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include "parser.h"
-#include "../libft/libft.h"
+#include "../../libft/libft.h"
 #include <stdbool.h>
 #include "aux.h"
 #include "../variables/expand_variables.h"

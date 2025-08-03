@@ -13,7 +13,7 @@
 #include <stdio.h>
 #include <stdlib.h>	// free
 #include <unistd.h>
-#include "../../libft/libft.h"
+#include "../../../libft/libft.h"
 #include "../../execute/env_utils.h"
 #include "../../minishell.h"
 #include "../../variables/variables.h"

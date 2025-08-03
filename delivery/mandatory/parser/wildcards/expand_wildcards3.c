@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../libft/libft.h"
+#include "../../../libft/libft.h"
 
 t_list	*replace_lst_item_by_lst(t_list **token_lst, t_list *new_lst,
 						t_list *prev, t_list *token)

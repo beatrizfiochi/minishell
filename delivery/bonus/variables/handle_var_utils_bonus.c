@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include <unistd.h>
-#include "../libft/libft.h"
+#include "../../libft/libft.h"
 #include "variables.h"
 
 int	get_variable_name_length(char *var)

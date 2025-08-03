@@ -15,7 +15,7 @@
 #include "../cmd.h"
 #include "../execute/exec_utils.h"
 #include "../execute/execution.h"
-#include "../libft/libft.h"
+#include "../../libft/libft.h"
 #include "../minishell.h"
 #include "builtins.h"
 

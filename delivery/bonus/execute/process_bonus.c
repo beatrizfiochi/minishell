@@ -15,7 +15,7 @@
 #include <stdbool.h>
 #include <unistd.h>			// pipe
 #include <sys/wait.h>		// wait
-#include "../libft/libft.h"
+#include "../../libft/libft.h"
 #include "../cmd.h"
 #include "../debug.h"
 #include "../minishell.h"

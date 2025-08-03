@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../libft/libft.h"
+#include "../../libft/libft.h"
 #include "../cmd.h"
 #include "../minishell.h"
 #include "../variables/variables.h"

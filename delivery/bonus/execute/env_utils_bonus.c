@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../libft/libft.h"		// ft_strlen()
+#include "../../libft/libft.h"		// ft_strlen()
 #include "../variables/variables.h"
 
 // Search for the environment variable at the var_list

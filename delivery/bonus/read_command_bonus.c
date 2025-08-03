@@ -13,7 +13,7 @@
 #include <stdlib.h>				//free
 #include <stdio.h>				//printf
 #include <unistd.h>				//write
-#include "libft/libft.h"
+#include "../libft/libft.h"
 #include "minishell.h"
 #include "parser/parser.h"
 #include "cmd.h"

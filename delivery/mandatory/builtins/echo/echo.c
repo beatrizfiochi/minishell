@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include <stdbool.h>
-#include "../../libft/libft.h"
+#include "../../../libft/libft.h"
 #include "../../minishell.h"
 
 static int	check_options(int argc, char *argv[], bool *no_nl)

@@ -16,7 +16,7 @@
 #include <fcntl.h>					// open()
 #include <readline/readline.h>		// readline()
 #include <unistd.h>					// write()
-#include "../libft/libft.h"
+#include "../../libft/libft.h"
 #include "../btree/btree.h"
 #include "../cmd.h"
 #include "../color.h"

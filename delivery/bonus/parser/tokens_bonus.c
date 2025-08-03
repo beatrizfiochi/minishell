@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include <unistd.h>
-#include "../libft/libft.h"
+#include "../../libft/libft.h"
 #include "../redirect/redirect_aux.h"	// is_a_redirect_file_op()
 #include "tokens.h"
 #include "aux.h"

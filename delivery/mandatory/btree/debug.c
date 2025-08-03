@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include <stdio.h>
-#include "../libft/libft.h"
+#include "../../libft/libft.h"
 #include "btree.h"
 #include "../cmd.h"
 #include "../debug.h"

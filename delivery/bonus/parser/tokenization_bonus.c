@@ -12,7 +12,7 @@
 
 #include <unistd.h>      //write
 #include <stdlib.h>
-#include "../libft/libft.h"
+#include "../../libft/libft.h"
 #include "parser.h"
 #include "aux.h"
 #include "../redirect/redirect_aux.h"

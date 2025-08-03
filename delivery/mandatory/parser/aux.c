@@ -12,7 +12,7 @@
 
 #include <stdio.h>
 #include <unistd.h>				// STDERR_FILENO
-#include "../libft/libft.h"
+#include "../../libft/libft.h"
 #include "../cmd.h"
 #include "aux.h"
 #include "tokens.h"	// struct s_split_token_list

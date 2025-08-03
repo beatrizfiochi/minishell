@@ -13,7 +13,7 @@
 #include "variables.h"
 #include "../parser/parser.h"
 #include "../cmd.h"
-#include "../libft/libft.h"
+#include "../../libft/libft.h"
 
 static void	free_name_value(char *name, char *value)
 {

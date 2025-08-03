@@ -12,7 +12,7 @@
 
 #include <unistd.h>				// isatty
 #include <stdio.h>				// printf
-#include "libft/libft.h"
+#include "../libft/libft.h"
 #include "minishell.h"
 #include "debug.h"
 #include "parser/parser.h"

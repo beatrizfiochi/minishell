@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include <stdbool.h>
-#include "../libft/libft.h"
+#include "../../libft/libft.h"
 #include "tokens.h"
 
 // 0 -> error | 1 -> success
