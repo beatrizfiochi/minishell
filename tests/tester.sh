@@ -102,7 +102,7 @@ function tester() {
 	echo -e "${GREEN}Running ./minishell $cmd${RESET}"
 	rm "$OUT_FILE" &> /dev/null || echo -n ""
 	clean_valgrind_logs
-	echo "$cmd" | valgrind --trace-children=yes --child-silent-after-fork=no --leak-check=full --show-leak-kinds=all --suppressions=$(pwd)/../delivery/valgrind-supression --log-file="$OUT_FILE_VALGRIND" ../delivery/minishell &> $OUT_FILE
+	echo "$cmd" | valgrind --trace-children=yes --child-silent-after-fork=no --leak-check=full --show-leak-kinds=all --suppressions=$(pwd)/../valgrind-suppression --log-file="$OUT_FILE_VALGRIND" ../delivery/minishell &> $OUT_FILE
 	if [ ! -f "$OUT_FILE" ]; then
 		echo -e "${RED}Test failed: $cmd${RESET}"
 		exit 1
@@ -193,7 +193,7 @@ function tester_grep() {
 	echo -e "${GREEN}Running ./minishell $cmd${RESET}"
 	rm "$OUT_FILE" &> /dev/null || echo -n ""
 	clean_valgrind_logs
-	echo "$cmd" | valgrind --trace-children=yes --child-silent-after-fork=no --leak-check=full --show-leak-kinds=all --suppressions=$(pwd)/../delivery/valgrind-supression --log-file="$OUT_FILE_VALGRIND" ../delivery/minishell &> $OUT_FILE
+	echo "$cmd" | valgrind --trace-children=yes --child-silent-after-fork=no --leak-check=full --show-leak-kinds=all --suppressions=$(pwd)/../valgrind-suppression --log-file="$OUT_FILE_VALGRIND" ../delivery/minishell &> $OUT_FILE
 	if [ ! -f "$OUT_FILE" ]; then
 		echo -e "${RED}Test failed: $cmd${RESET}"
 		exit 1
@@ -256,7 +256,7 @@ function tester_with_real() {
 
 	# Run minishell
 	clean_valgrind_logs
-	echo "$cmd" | valgrind --track-origins=yes --trace-children=yes --child-silent-after-fork=no --leak-check=full --show-leak-kinds=all --suppressions=$(pwd)/../delivery/valgrind-supression --log-file="$OUT_FILE_VALGRIND" ../delivery/minishell &> $OUT_FILE
+	echo "$cmd" | valgrind --track-origins=yes --trace-children=yes --child-silent-after-fork=no --leak-check=full --show-leak-kinds=all --suppressions=$(pwd)/../valgrind-suppression --log-file="$OUT_FILE_VALGRIND" ../delivery/minishell &> $OUT_FILE
 	EXIT_STATUS=$?
 	if [ ! -f "$OUT_FILE" ]; then
 		echo -e "${RED}Test failed: $cmd${RESET}"
@@ -550,7 +550,7 @@ tester_with_real 'rm /tmp/test && ls | grep mini > /tmp/test | echo 1'
 tester_with_real 'rm /tmp/test && ls | grep mini > /tmp/test | ls | grep mini'
 tester_with_real 'rm /tmp/test && ls | grep mini > /tmp/test && echo 1'
 tester_with_real 'cat < /tmp/nonexistentfile >> /tmp/nonexistentfile'
-touch /tmp/file2 
+touch /tmp/file2
 tester_with_real 'rm /tmp/file2 || echo -n && <../delivery/Makefile cat>/tmp/outfile -e | < ../delivery/cmd.h sort | >> /tmp/file2 wc && cat /tmp/file2'
 tester_grep      '> $invalid' 'Ambiguous redirect'
 tester_grep      '>> $invalid' 'Ambiguous redirect'

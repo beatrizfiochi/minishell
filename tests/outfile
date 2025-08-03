@@ -1,0 +1,9 @@
+Exec: Operator> 8
+Exec: Command > cmd: ls
+2
+btree
+grep
+nestedfile
+out
+outfile
+tester.sh

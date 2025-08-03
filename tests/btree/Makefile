@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: djunho <marvin@42.fr>                      +#+  +:+       +#+         #
+#    By: bfiochi- <bfiochi-@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/27 13:09:33 by djunho            #+#    #+#              #
-#    Updated: 2025/04/21 19:27:48 by djunho           ###   ########.fr        #
+#    Updated: 2025/08/03 11:56:35 by bfiochi-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -66,7 +66,7 @@ norminette:
 re: fclean all
 
 valgrind: all
-	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --suppressions=valgrind-supression ./$(NAME) $(RUN_ARGS)
+	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --suppressions=../valgrind-suppression ./$(NAME) $(RUN_ARGS)
 
 test: all
 	./$(NAME) $(RUN_ARGS)
