@@ -1,6 +1,6 @@
 # Minishell
 
-**Minishell** is a colaborative project developed as part of the **42 School** curriculum.  
+**Minishell** is a collaborative project developed as part of the **42 School** curriculum.  
 The goal is to build a simple Linux shell inspired by **bash**.  
 
 It provides a minimal but functional environment where users can run commands, handle pipes, redirections, environment variables, signals, and more — just like in a real shell.  
