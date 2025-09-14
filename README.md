@@ -49,7 +49,7 @@ It provides a minimal but functional environment where users can run commands, h
   - `exit` with no options  
 
 ### ✨ Bonus Features
-- **Logical operators** – `&&` and `||` with parenthesis for priorities.  
+- **Logical operators** – `&&` and `||` with parentheses for priorities.  
 - **Wildcards** – `*` works for the current working directory.  
 
 ---
@@ -89,9 +89,29 @@ minishell$ echo $NAME
 minishell$ ls | grep minishell > output.txt
 ```
 
+
+## 🔧 Points for Improvement
+
+- **Variable expansion in command execution** – currently requires retokenization.  
+  - Example:  
+    ```bash
+    My shell > ls="ls"
+    My shell > la=" -la"
+    My shell > $ls$la
+    ```
+
+- **Heredoc variable expansion** – variables inside single quotes are not being expanded, but should be.
+
 ---
+## ⚠️ Attention
+This project includes both mandatory and bonus features in the same codebase, without the `_bonus` suffix.  
+Depending on the evaluator, this could cause issues.  
+
+👉 One solution is to copy the files into separate folders and disable `&&`, `||`, and wildcard support for the mandatory version. 
+
+One option would be to copy and paste all the files into different folders and disable the `&&`, `||` operators and wildcards support for the mandatory part.
 
 ## 👤 Authors
-Developed by `@beatrizfiochi` and `@djunho`
+Developed by [`@beatrizfiochi`](https://github.com/beatrizfiochi) and [`@djunho`](https://github.com/djunho)
 
 
